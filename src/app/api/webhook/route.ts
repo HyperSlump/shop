@@ -24,34 +24,38 @@ export async function POST(req: Request) {
     if (event.type === 'checkout.session.completed') {
         const session = event.data.object as Stripe.Checkout.Session
         const customerEmail = session.customer_details?.email
-        const priceId = session.metadata?.priceId
 
-        if (customerEmail && priceId) {
+        // Fetch all line items for this session
+        const lineItems = await stripe.checkout.sessions.listLineItems(session.id)
+
+        if (customerEmail && lineItems.data.length > 0) {
             try {
-                // 1. Record purchase in Supabase
+                // 1. Record each item in Supabase
+                const purchases = lineItems.data.map(item => ({
+                    customer_email: customerEmail,
+                    stripe_session_id: session.id,
+                    price_id: item.price?.id || '',
+                    is_verified: true,
+                }))
+
+                // We use upsert or insert. If user hasn't run migration to drop unique constraint, 
+                // this might fail for multiple items.
                 const { error: dbError } = await supabaseAdmin
                     .from('purchases')
-                    .insert({
-                        customer_email: customerEmail,
-                        stripe_session_id: session.id,
-                        price_id: priceId,
-                        is_verified: true,
-                    })
+                    .insert(purchases)
 
                 if (dbError) {
                     console.error('Database Error:', dbError)
-                    // Don't throw here, we still want to try sending email if possible, or at least log it
                 }
 
                 // 2. Send email with verification link
-                // For now, we'll just send a placeholder email.
-                // In a real app, you'd generate a signed URL or link to a download page.
                 await resend.emails.send({
                     from: 'Acme <onboarding@resend.dev>', // Update this with your verified domain
                     to: customerEmail,
                     subject: 'Your Digital Download is Here',
                     html: `
             <h1>Thank you for your purchase!</h1>
+            <p>You bought ${lineItems.data.length} item(s).</p>
             <p>You can download your files here:</p>
             <a href="${process.env.NEXT_PUBLIC_APP_URL}/success?session_id=${session.id}">Download Now</a>
           `,

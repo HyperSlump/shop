@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import React from 'react';
+import { CartProvider } from "@/components/CartProvider";
+import CartDrawer from "@/components/CartDrawer";
 
 export const metadata: Metadata = {
   title: "HYPER$LUMP // DIGITAL ASSETS",
@@ -21,8 +24,10 @@ export default function RootLayout({
       </head>
       <body className="bg-background-light dark:bg-background-dark text-black dark:text-white font-mono selection:bg-primary selection:text-black">
         <div className="fixed inset-0 noise z-50 pointer-events-none"></div>
-
-        {children}
+        <CartProvider>
+          {children}
+          <CartDrawer />
+        </CartProvider>
       </body>
     </html>
   );

@@ -1,31 +1,15 @@
 'use client';
 
-import { useState } from 'react';
-
+import { useCart, Product } from './CartProvider';
 
 export default function ProductGrid({ products }: { products: any[] }) {
-    const [loadingId, setLoadingId] = useState<string | null>(null);
+    const { addToCart, cart } = useCart();
 
-    const handleBuy = async (priceId: string) => {
-        setLoadingId(priceId);
-        try {
-            const res = await fetch('/api/checkout', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ priceId }),
-            });
-            const data = await res.json();
-            if (data.url) {
-                window.location.href = data.url;
-            } else {
-                alert('Error initiating checkout');
-            }
-        } catch (e) {
-            console.error(e);
-            alert('Checkout failed');
-        } finally {
-            setLoadingId(null);
-        }
+    const isInCart = (id: string) => cart.some(item => item.id === id);
+
+    const handleAddToCart = (product: any) => {
+        // Cast to Product type for safety
+        addToCart(product as Product);
     };
 
     return (
@@ -42,8 +26,8 @@ export default function ProductGrid({ products }: { products: any[] }) {
                         src={product.image || 'https://via.placeholder.com/500'}
                     />
 
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity p-6 flex flex-col justify-between text-white">
+                    {/* Hover Overlay - Desktop: Hover, Mobile: Always visible but partial */}
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity p-6 flex flex-col justify-between text-white hidden md:flex">
                         <div className="space-y-1 text-xs font-mono">
                             <p>PRICE: {product.amount === 0 ? 'FREE' : `$${product.amount}`}</p>
                             <p>KEY: {product.metadata?.key || 'UNKNOWN'}</p>
@@ -51,16 +35,32 @@ export default function ProductGrid({ products }: { products: any[] }) {
                         </div>
 
                         <button
-                            onClick={() => handleBuy(product.id)}
-                            disabled={loadingId === product.id}
-                            className="bg-primary text-black px-4 py-2 text-xs font-bold uppercase w-full hover:scale-105 active:scale-95 transition-transform"
+                            onClick={() => handleAddToCart(product)}
+                            disabled={isInCart(product.id)}
+                            className="bg-primary text-black px-4 py-2 text-xs font-bold uppercase w-full hover:scale-105 active:scale-95 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            {loadingId === product.id ? 'PROCESSING...' : (product.amount === 0 ? 'DOWNLOAD NOW' : 'ADD TO RACK')}
+                            {isInCart(product.id) ? 'IN RACK' : (product.amount === 0 ? 'DOWNLOAD NOW' : 'ADD TO RACK')}
                         </button>
                     </div>
 
-                    {/* Default Title Label */}
-                    <div className="absolute bottom-4 left-4 right-4 group-hover:hidden transition-all">
+                    {/* Mobile Only Overlay */}
+                    <div className="md:hidden absolute bottom-0 left-0 right-0 bg-black/80 p-4 transition-all">
+                        <h3 className="font-gothic text-2xl leading-none text-white mb-2">{product.name}</h3>
+                        <div className="flex justify-between items-center mb-3 text-[10px] text-white/80 font-mono">
+                            <p>{product.amount === 0 ? 'FREE' : `$${product.amount}`}</p>
+                            <p>{product.metadata?.key}</p>
+                        </div>
+                        <button
+                            onClick={() => handleAddToCart(product)}
+                            disabled={isInCart(product.id)}
+                            className="bg-primary text-black px-4 py-3 text-xs font-bold uppercase w-full active:scale-95 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {isInCart(product.id) ? 'IN RACK' : (product.amount === 0 ? 'DOWNLOAD' : 'ADD')}
+                        </button>
+                    </div>
+
+                    {/* Default Title Label (Desktop Only) */}
+                    <div className="hidden md:block absolute bottom-4 left-4 right-4 group-hover:hidden transition-all">
                         <h3 className="font-gothic text-4xl leading-none text-white drop-shadow-lg">{product.name}</h3>
                     </div>
                 </div>

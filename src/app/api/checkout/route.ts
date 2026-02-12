@@ -4,26 +4,24 @@ import { headers } from 'next/headers'
 
 export async function POST(req: Request) {
     try {
-        const { priceId } = await req.json()
+        const { lineItems } = await req.json()
         const headersList = await headers()
         const origin = headersList.get('origin') || process.env.NEXT_PUBLIC_APP_URL
 
-        if (!priceId) {
-            return new NextResponse('Price ID is required', { status: 400 })
+        if (!lineItems || lineItems.length === 0) {
+            return new NextResponse('Line items are required', { status: 400 })
         }
 
         const session = await stripe.checkout.sessions.create({
-            line_items: [
-                {
-                    price: priceId,
-                    quantity: 1,
-                },
-            ],
+            line_items: lineItems.map((item: any) => ({
+                price: item.priceId,
+                quantity: 1,
+            })),
             mode: 'payment',
             success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${origin}/cancel`,
             metadata: {
-                priceId,
+                is_cart: 'true',
             },
         })
 
