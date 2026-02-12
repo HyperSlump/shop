@@ -67,11 +67,7 @@ export default async function Home() {
         </footer>
       </main>
 
-      <div className="fixed bottom-6 right-6 z-50">
-        <button className="bg-primary text-black w-14 h-14 flex items-center justify-center hover:scale-110 active:scale-95 transition-transform border-4 border-black dark:border-white shadow-[8px_8px_0px_0px_rgba(0,0,0,0.3)]">
-          <span className="material-icons font-bold">bolt</span>
-        </button>
-      </div>
+
     </div>
   );
 }
