@@ -1,5 +1,6 @@
 import { getActiveProducts } from '@/lib/stripe/products';
 import ProductGrid from '@/components/ProductGrid';
+import Navigation from '@/components/Navigation';
 
 export const revalidate = 60; // Re-fetch products every 60 seconds
 
@@ -8,28 +9,7 @@ export default async function Home() {
 
   return (
     <div className="relative min-h-screen flex flex-col md:flex-row">
-      <aside className="w-full md:w-20 md:h-screen sticky top-0 border-b md:border-b-0 md:border-r border-black/20 dark:border-white/20 flex flex-row md:flex-col items-center justify-between p-4 z-40 bg-background-light dark:bg-background-dark">
-        <div className="text-2xl font-bold tracking-tighter">
-          <span className="material-icons text-primary">radioactive</span>
-        </div>
-        <nav className="flex md:flex-col gap-6 items-center">
-          <button className="hover:text-primary transition-colors">
-            <span className="material-icons">search</span>
-          </button>
-          <button className="hover:text-primary transition-colors">
-            <span className="material-icons">filter_list</span>
-          </button>
-          <div className="hidden md:block vertical-text uppercase tracking-widest text-xs font-bold py-8 border-y border-black/10 dark:border-white/10">
-            Archives 2026
-          </div>
-          <button className="hover:text-primary transition-colors">
-            <span className="material-icons">shopping_cart</span>
-          </button>
-        </nav>
-        <div className="hidden md:block text-[10px] text-black/40 dark:text-white/40 vertical-text">
-          V.1.0_LIVE
-        </div>
-      </aside>
+      <Navigation />
 
       <main className="flex-1 flex flex-col">
         <header className="p-4 md:p-8 border-b-2 border-black/20 dark:border-white/20 flex flex-col md:flex-row justify-between items-end gap-6 bg-background-light dark:bg-background-dark">
