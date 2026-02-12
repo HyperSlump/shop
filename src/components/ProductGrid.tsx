@@ -30,8 +30,6 @@ export default function ProductGrid({ products }: { products: any[] }) {
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity p-6 flex flex-col justify-between text-white hidden md:flex">
                         <div className="space-y-1 text-xs font-mono">
                             <p>PRICE: {product.amount === 0 ? 'FREE' : `$${product.amount}`}</p>
-                            <p>KEY: {product.metadata?.key || 'UNKNOWN'}</p>
-                            <p>FILES: {product.metadata?.files || 'N/A'}</p>
                         </div>
 
                         <button
@@ -47,8 +45,7 @@ export default function ProductGrid({ products }: { products: any[] }) {
                     <div className="md:hidden absolute bottom-0 left-0 right-0 bg-black/80 p-4 transition-all">
                         <h3 className="font-gothic text-2xl leading-none text-white mb-2">{product.name}</h3>
                         <div className="flex justify-between items-center mb-3 text-[10px] text-white/80 font-mono">
-                            <p>{product.amount === 0 ? 'FREE' : `$${product.amount}`}</p>
-                            <p>{product.metadata?.key}</p>
+                            <p>PRICE: {product.amount === 0 ? 'FREE' : `$${product.amount}`}</p>
                         </div>
                         <button
                             onClick={() => handleAddToCart(product)}
