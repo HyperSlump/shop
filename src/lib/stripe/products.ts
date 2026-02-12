@@ -5,7 +5,7 @@ export async function getActiveProducts() {
     const prices = await stripe.prices.list({
         active: true,
         expand: ['data.product'],
-        limit: 10, // Adjust as needed
+        limit: 100, // Increased from 10 to support more products
     })
 
     // Filter out any prices with products that aren't marked as active
