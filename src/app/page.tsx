@@ -1,65 +1,97 @@
-import Image from "next/image";
+import { getActiveProducts } from '@/lib/stripe/products';
+import ProductGrid from '@/components/ProductGrid';
 
-export default function Home() {
+export const revalidate = 60; // Re-fetch products every 60 seconds
+
+export default async function Home() {
+  const products = await getActiveProducts();
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="relative min-h-screen flex flex-col md:flex-row">
+      <aside className="w-full md:w-20 md:h-screen sticky top-0 border-b md:border-b-0 md:border-r border-black/20 dark:border-white/20 flex flex-row md:flex-col items-center justify-between p-4 z-40 bg-background-light dark:bg-background-dark">
+        <div className="text-2xl font-bold tracking-tighter">
+          <span className="material-icons text-primary">radioactive</span>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <nav className="flex md:flex-col gap-6 items-center">
+          <button className="hover:text-primary transition-colors">
+            <span className="material-icons">search</span>
+          </button>
+          <button className="hover:text-primary transition-colors">
+            <span className="material-icons">filter_list</span>
+          </button>
+          <div className="hidden md:block vertical-text uppercase tracking-widest text-xs font-bold py-8 border-y border-black/10 dark:border-white/10">
+            Archives 2026
+          </div>
+          <button className="hover:text-primary transition-colors">
+            <span className="material-icons">shopping_cart</span>
+          </button>
+        </nav>
+        <div className="hidden md:block text-[10px] text-black/40 dark:text-white/40 vertical-text">
+          V.1.0_LIVE
         </div>
+      </aside>
+
+      <main className="flex-1 flex flex-col">
+        <header className="p-4 md:p-8 border-b-2 border-black/20 dark:border-white/20 flex flex-col md:flex-row justify-between items-end gap-6 bg-background-light dark:bg-background-dark">
+          <div>
+            <h1 className="font-display text-6xl md:text-9xl leading-none tracking-tight uppercase">
+              hyper$lump
+            </h1>
+            <p className="mt-2 text-sm max-w-md opacity-80">
+              Industrial sound design textures, raw synthesis, and broken percussion for the electronic avant-garde.
+            </p>
+          </div>
+          <div className="text-right">
+            <div className="text-xs uppercase font-bold tracking-widest text-primary">
+              Current Catalog
+            </div>
+            <div className="text-4xl font-display leading-none">
+              {products.length} Items
+            </div>
+          </div>
+        </header>
+
+        <ProductGrid products={products} />
+
+        <footer className="p-4 md:p-8 border-t border-black/20 dark:border-white/20 grid grid-cols-1 md:grid-cols-3 gap-8 bg-background-light dark:bg-background-dark">
+          <div className="text-[10px] space-y-1 opacity-60">
+            <p>&gt; INITIALIZING SYSTEM_CORE...</p>
+            <p>&gt; LOADING ASSETS [OK]</p>
+            <p>&gt; BUFFERING AUDIO ENGINE [OK]</p>
+            <p>&gt; STANDBY FOR SIGNAL...</p>
+          </div>
+          <div className="flex items-center justify-center">
+            <div className="border border-black dark:border-white p-4 text-center">
+              <div className="text-[8px] uppercase tracking-[0.4em] mb-2 opacity-50">
+                Authorized License
+              </div>
+              <div className="font-mono text-xs font-bold">#492-X-99-ALPHA</div>
+            </div>
+          </div>
+          <div className="flex flex-col items-end gap-2">
+            <div className="flex gap-4">
+              <a className="text-xs hover:text-primary underline" href="#">
+                INSTAGRAM
+              </a>
+              <a className="text-xs hover:text-primary underline" href="#">
+                DISCORD
+              </a>
+              <a className="text-xs hover:text-primary underline" href="#">
+                BANDCAMP
+              </a>
+            </div>
+            <p className="text-[10px] opacity-40">
+              ©2026 ACID GOTH LABS. ALL RIGHTS RESERVED.
+            </p>
+          </div>
+        </footer>
       </main>
+
+      <div className="fixed bottom-6 right-6 z-50">
+        <button className="bg-primary text-black w-14 h-14 flex items-center justify-center hover:scale-110 active:scale-95 transition-transform border-4 border-black dark:border-white shadow-[8px_8px_0px_0px_rgba(0,0,0,0.3)]">
+          <span className="material-icons font-bold">bolt</span>
+        </button>
+      </div>
     </div>
   );
 }
