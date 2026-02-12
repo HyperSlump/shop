@@ -12,7 +12,7 @@ export default async function Home() {
       <Navigation />
 
       <main className="flex-1 flex flex-col">
-        <header className="p-4 md:p-8 border-b-2 border-black/20 dark:border-white/20 flex flex-col md:flex-row justify-between items-end gap-6 bg-background-light dark:bg-background-dark">
+        <header className="p-4 md:p-8 border-b border-black/20 dark:border-white/20 flex flex-col md:flex-row justify-between items-end gap-6 bg-background-light dark:bg-background-dark">
           <div>
             <h1 className="font-display text-6xl md:text-9xl leading-none tracking-tight uppercase">
               hyper$lump

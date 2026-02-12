@@ -13,7 +13,7 @@ export default function ProductGrid({ products }: { products: any[] }) {
     };
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 md:gap-0 bg-background-light dark:bg-background-dark border-l border-t border-black/20 dark:border-white/20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 md:gap-0 bg-background-light dark:bg-background-dark border-l md:border-l-0 border-black/20 dark:border-white/20">
             {products.map((product, i) => (
                 <div
                     key={product.id}
