@@ -1,0 +1,50 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-primary: #c0ff00;
+  --color-background-light: #e5e5e5;
+  --color-background-dark: #080808;
+
+  --font-display: "Pirata One", system-ui;
+  --font-gothic: "UnifrakturMaguntia", serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --radius-DEFAULT: 0px;
+}
+
+/* Custom Utilities from code.html */
+@layer utilities {
+  .noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.04;
+    pointer-events: none;
+  }
+
+
+
+  .vertical-text {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+
+  .glitch-hover:hover .glitch-img {
+    filter: hue-rotate(90deg) contrast(150%);
+    transform: scale(1.05) translate(2px, -2px);
+  }
+}
+
+/* Base Styles */
+@layer base {
+  body {
+    @apply bg-background-light text-black font-mono;
+  }
+
+  .dark body {
+    @apply bg-background-dark text-white;
+  }
+
+  a,
+  button {
+    @apply cursor-pointer;
+  }
+}
