@@ -39,7 +39,7 @@ export default function ProductGrid({ products }: { products: any[] }) {
                             disabled={isInCart(product.id)}
                             className="bg-primary text-black px-4 py-2 text-xs font-bold uppercase w-full hover:scale-105 active:scale-95 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            {isInCart(product.id) ? 'IN CART' : (product.amount === 0 ? 'DOWNLOAD NOW' : 'ADD TO CART')}
+                            {isInCart(product.id) ? 'IN CART' : 'ADD TO CART'}
                         </button>
                     </div>
 
@@ -55,7 +55,7 @@ export default function ProductGrid({ products }: { products: any[] }) {
                             disabled={isInCart(product.id)}
                             className="bg-primary text-black px-4 py-3 text-xs font-bold uppercase w-full active:scale-95 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            {isInCart(product.id) ? 'IN CART' : (product.amount === 0 ? 'DOWNLOAD' : 'ADD')}
+                            {isInCart(product.id) ? 'IN CART' : 'ADD'}
                         </button>
                     </div>
 
