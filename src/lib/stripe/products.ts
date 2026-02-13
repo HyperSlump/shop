@@ -26,5 +26,7 @@ export async function getActiveProducts() {
             }
         })
 
+    products.forEach(p => console.log(`Product ${p.name} image:`, p.image));
+
     return products
 }
