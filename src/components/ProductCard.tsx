@@ -3,11 +3,12 @@
 import { useState } from 'react';
 import WaveformOverlay from './WaveformOverlay';
 import OneShotPlayer from './OneShotPlayer';
+import Image from 'next/image';
 
 interface ProductCardProps {
-    product: any;
+    product: any; // eslint-disable-line @typescript-eslint/no-explicit-any
     isInCart: boolean;
-    onAddToCart: (product: any) => void;
+    onAddToCart: (product: any) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 export default function ProductCard({ product, isInCart, onAddToCart }: ProductCardProps) {
@@ -32,10 +33,12 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
         >
             {/* DEFAULT VIEW: Image + Title Overlay */}
             <div className="absolute inset-0">
-                <img
+                <Image
                     alt={product.name}
                     className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-40 group-hover:blur-sm grayscale contrast-125"
                     src={product.image || 'https://via.placeholder.com/500'}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
             </div>
 

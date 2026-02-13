@@ -32,7 +32,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   // Prevent hydration errors by only rendering after mount
   useEffect(() => {
-    setIsMounted(true);
+    setIsMounted(true); // eslint-disable-line react-hooks/set-state-in-effect
     const savedCart = localStorage.getItem('hyperslump-cart');
     if (savedCart) {
       try {

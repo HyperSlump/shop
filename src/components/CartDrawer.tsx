@@ -2,6 +2,7 @@
 
 import { useCart } from './CartProvider';
 import { useState } from 'react';
+import NextImage from 'next/image';
 
 export default function CartDrawer() {
     const { cart, isCartOpen, toggleCart, removeFromCart, cartTotal } = useCart();
@@ -65,10 +66,12 @@ export default function CartDrawer() {
                                 key={item.id}
                                 className="flex gap-4 p-4 border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 transition-colors relative group"
                             >
-                                <img
+                                <NextImage
                                     src={item.image || 'https://via.placeholder.com/100'}
                                     alt={item.name}
-                                    className="w-20 h-20 object-cover grayscale contrast-125"
+                                    width={80}
+                                    height={80}
+                                    className="object-cover grayscale contrast-125"
                                 />
                                 <div className="flex-1 flex flex-col justify-between">
                                     <div>

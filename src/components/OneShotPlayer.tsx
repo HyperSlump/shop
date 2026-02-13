@@ -10,11 +10,11 @@ interface OneShotPlayerProps {
 
 export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlayerProps & { isActive: boolean }) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const wavesurferRef = useRef<any>(null);
+    const wavesurferRef = useRef<any>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
     const [isPlaying, setIsPlaying] = useState(false);
 
     useEffect(() => {
-        let ws: any = null;
+        let ws: any = null; // eslint-disable-line @typescript-eslint/no-explicit-any
 
         const init = async () => {
             if (!containerRef.current) return;
@@ -31,7 +31,7 @@ export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlay
                 normalize: true,
                 backend: 'WebAudio',
                 url: audioUrl,
-                interact: false, // Disable seeking on these tiny ones? Or allow? Let's allow but it's small.
+                interact: false,
             });
 
             ws.on('ready', () => {
@@ -51,13 +51,17 @@ export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlay
         }
 
         return () => {
-            if (ws) ws.destroy();
+            if (ws) {
+                ws.destroy();
+            }
         };
     }, [audioUrl]);
 
     useEffect(() => {
         if (!isActive && wavesurferRef.current) {
             wavesurferRef.current.pause();
+            wavesurferRef.current.seekTo(0);
+            setIsPlaying(false);
         }
     }, [isActive]);
 

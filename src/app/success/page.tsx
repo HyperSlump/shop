@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { stripe } from '@/lib/stripe/server';
-import { supabaseAdmin } from '@/lib/supabase/admin';
 
 export default async function SuccessPage({
     searchParams,
@@ -24,7 +23,7 @@ export default async function SuccessPage({
     let session;
     try {
         session = await stripe.checkout.sessions.retrieve(sessionId);
-    } catch (e) {
+    } catch {
         return (
             <div className="min-h-screen flex items-center justify-center bg-background-light dark:bg-background-dark text-black dark:text-white font-mono">
                 <div className="border border-red-500 p-8">

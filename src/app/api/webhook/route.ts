@@ -16,9 +16,9 @@ export async function POST(req: Request) {
     try {
         if (!sig || !webhookSecret) return new NextResponse('Missing signature or secret', { status: 400 })
         event = stripe.webhooks.constructEvent(body, sig, webhookSecret)
-    } catch (error: any) {
-        console.error(`Webhook Error: ${error.message}`)
-        return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 })
+    } catch (error: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
+        console.error(`Webhook Error: ${error instanceof Error ? error.message : 'Unknown error'}`)
+        return new NextResponse(`Webhook Error: ${error instanceof Error ? error.message : 'Unknown error'}`, { status: 400 })
     }
 
     if (event.type === 'checkout.session.completed') {

@@ -15,14 +15,14 @@ export default function WaveformOverlay({
     primaryColor = '#c0ff00'
 }: WaveformOverlayProps) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const wavesurferRef = useRef<any>(null);
+    const wavesurferRef = useRef<any>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
     const isMounted = useRef(false);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isReady, setIsReady] = useState(false);
 
     useEffect(() => {
         isMounted.current = true;
-        let ws: any = null;
+        let ws: any = null; // eslint-disable-line @typescript-eslint/no-explicit-any
 
         const init = async () => {
             if (!containerRef.current) return;
@@ -93,6 +93,8 @@ export default function WaveformOverlay({
     useEffect(() => {
         if (!isActive && wavesurferRef.current) {
             wavesurferRef.current.pause();
+            wavesurferRef.current.seekTo(0);
+            setIsPlaying(false);
         }
     }, [isActive]);
 

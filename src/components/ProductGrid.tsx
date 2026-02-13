@@ -3,14 +3,13 @@
 import { useCart, Product } from './CartProvider';
 import ProductCard from './ProductCard';
 
-export default function ProductGrid({ products }: { products: any[] }) {
+export default function ProductGrid({ products }: { products: Product[] }) {
     const { addToCart, cart } = useCart();
 
     const isInCart = (id: string) => cart.some(item => item.id === id);
 
-    const handleAddToCart = (product: any) => {
-        // Cast to Product type for safety
-        addToCart(product as Product);
+    const handleAddToCart = (product: Product) => {
+        addToCart(product);
     };
 
     return (
