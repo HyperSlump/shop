@@ -32,24 +32,20 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
             {/* Waveform Overlay - Only renders if URL exists */}
             {audioPreviewUrl && (
-                <div className={`absolute inset-0 transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-                    {/* Render Waveform - Passing isHovered to trigger play/pause */}
+                <div className={`absolute inset-0 transition-opacity duration-300 ${isHovered ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+                    {/* Render Waveform - Passing isHovered to trigger active state */}
                     <WaveformOverlay
                         audioUrl={audioPreviewUrl}
                         isActive={isHovered}
-                    // You can pass a prop for color if you want to override default
                     />
                 </div>
             )}
 
             {/* Info Overlay (Desktop) */}
             <div className={`absolute inset-0 p-6 flex flex-col justify-between z-30 pointer-events-none`}>
-                {/* Top Info - Always visible but styled differently on hover?? 
-                   Actually keeping it clean: Show info on hover or always? 
-                   Let's follow previous design: Info appears/changes on hover. 
-               */}
+                {/* Top Info - Push content to edges to leave center for play button */}
 
-                {/* Glitch Title - Hidden on Hover to show Waveform clearly? Or overlaying it? */}
+                {/* Glitch Title */}
                 <div className={`transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
                     <h3 className="font-gothic text-3xl leading-none text-white drop-shadow-[0_0_10px_rgba(192,255,0,0.8)]">
                         {product.name}
