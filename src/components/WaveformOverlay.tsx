@@ -37,7 +37,7 @@ export default function WaveformOverlay({
                 cursorColor: 'transparent',
                 barWidth: 3,
                 barGap: 3,
-                height: 100, // Slightly smaller to leave room for controls if needed
+                height: 60, // Smaller height
                 normalize: true,
                 backend: 'WebAudio',
             });
@@ -53,7 +53,12 @@ export default function WaveformOverlay({
 
             ws.on('play', () => setIsPlaying(true));
             ws.on('pause', () => setIsPlaying(false));
-            ws.on('finish', () => setIsPlaying(false));
+            ws.on('finish', () => {
+                // Loop functionality
+                if (isMounted.current) {
+                    ws.play();
+                }
+            });
 
             // Interaction with waveform should toggle play or seek
             ws.on('interaction', () => {
@@ -116,7 +121,7 @@ export default function WaveformOverlay({
             {/* Waveform Container */}
             <div
                 ref={containerRef}
-                className="w-full h-[100px] cursor-pointer opacity-80 hover:opacity-100 transition-opacity"
+                className="w-full h-[60px] cursor-pointer opacity-80 hover:opacity-100 transition-opacity"
             />
         </div>
     );
