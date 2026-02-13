@@ -26,90 +26,85 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
     return (
         <div
-            className="group relative border border-black/20 dark:border-white/20 bg-black flex flex-col md:grid md:grid-cols-2 overflow-hidden h-auto"
+            className="group relative border border-black/20 dark:border-white/20 bg-black overflow-hidden h-96 cursor-default transition-all duration-300"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            {/* LEFT COLUMN: Image & Main Waveform */}
-            <div className="relative aspect-square w-full h-full border-b md:border-b-0 md:border-r border-white/10">
-                {/* Background Image */}
-                <div className={`absolute inset-0 transition-all duration-500 ${isHovered && audioPreviewUrl ? 'opacity-80 blur-[2px]' : 'opacity-100 grayscale contrast-125'}`}>
-                    <img
-                        alt={product.name}
-                        className="w-full h-full object-cover"
-                        src={product.image || 'https://via.placeholder.com/500'}
-                    />
-                </div>
+            {/* DEFAULT VIEW: Image + Title Overlay */}
+            <div className="absolute inset-0">
+                <img
+                    alt={product.name}
+                    className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-40 group-hover:blur-sm grayscale contrast-125"
+                    src={product.image || 'https://via.placeholder.com/500'}
+                />
+            </div>
 
-                {/* Waveform Overlay - Only renders if URL exists */}
-                {audioPreviewUrl && (
-                    <div className={`absolute inset-0 transition-opacity duration-300 ${isHovered ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <WaveformOverlay
-                                audioUrl={audioPreviewUrl}
-                                isActive={isHovered}
-                            />
-                        </div>
-                    </div>
-                )}
-
-                {/* Mobile Title Overlay (Hidden on Desktop) */}
-                <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black to-transparent md:hidden pointer-events-none">
-                    <h3 className="font-gothic text-xl text-white">{product.name}</h3>
+            {/* Static Title/Price (Always Visible, but moves/fades on hover if we want?) 
+                Let's keep it visible but maybe move it up or hide it if we want full transformations.
+                The prompt says "original prod card will change into an informative prod card".
+                Let's keep the title visible as an anchor.
+            */}
+            <div className={`absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent transition-opacity duration-300 ${isHovered ? 'opacity-0' : 'opacity-100'}`}>
+                <div className="flex justify-between items-end">
+                    <h3 className="font-gothic text-3xl text-white mix-blend-difference">{product.name}</h3>
+                    <span className="font-mono text-primary text-xs bg-primary/10 px-2 py-1">{product.amount === 0 ? 'FREE' : `$${product.amount}`}</span>
                 </div>
             </div>
 
-            {/* RIGHT COLUMN: Details & Controls */}
-            <div className="flex flex-col p-4 h-full relative justify-between gap-4">
+            {/* HOVER OVERLAY: Informative Details */}
+            <div className={`absolute inset-0 bg-black/80 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
 
                 {/* Header */}
-                <div>
-                    <div className="flex justify-between items-start mb-2">
-                        <h3 className="hidden md:block font-gothic text-2xl leading-none text-white drop-shadow-md mix-blend-difference">
-                            {product.name}
-                        </h3>
-                        <div className="font-mono text-xs text-primary bg-primary/10 px-2 py-1 rounded">
-                            {product.amount === 0 ? 'FREE' : `$${product.amount}`}
-                        </div>
+                <div className="space-y-2">
+                    <div className="flex justify-between items-start">
+                        <h3 className="font-gothic text-2xl text-white">{product.name}</h3>
+                        <span className="font-mono text-primary text-xs">{product.amount === 0 ? 'FREE' : `$${product.amount}`}</span>
                     </div>
-
-                    {/* Description */}
-                    <div className="w-full">
-                        <p className="font-mono text-[10px] text-gray-300 leading-tight line-clamp-4">
-                            {product.description || "Heavy low-end frequencies, distorted textures, and industrial percussion. Raw audio for the underground."}
-                        </p>
-                    </div>
+                    <div className="w-full h-[1px] bg-white/20" />
+                    <p className="font-mono text-[10px] text-gray-300 leading-tight">
+                        {product.description || "Raw industrial audio assets."}
+                    </p>
                 </div>
 
-                {/* Samples Grid (One-Shots) */}
+                {/* Main Waveform */}
+                {audioPreviewUrl && isHovered && (
+                    <div className="relative w-full h-16 bg-white/5 border border-white/10 rounded overflow-hidden shrink-0">
+                        <div className="absolute top-1 left-2 text-[8px] text-primary uppercase tracking-widest">Main Preview</div>
+                        <WaveformOverlay
+                            audioUrl={audioPreviewUrl}
+                            isActive={isHovered}
+                        />
+                    </div>
+                )}
+
+                {/* One Shots Grid */}
                 {samples.length > 0 && (
-                    <div className="w-full">
-                        <p className="font-mono text-[9px] text-gray-500 mb-1 uppercase tracking-wider">Samples</p>
+                    <div className="space-y-1">
+                        <p className="font-mono text-[9px] text-gray-500 uppercase tracking-widest">One Shots</p>
                         <div className="grid grid-cols-2 gap-2">
                             {samples.map((url, index) => (
                                 <OneShotPlayer
                                     key={index}
                                     audioUrl={url}
-                                    label={`One Shot ${index + 1}`}
+                                    label={`Shot ${index + 1}`}
+                                    isActive={isHovered}
                                 />
                             ))}
                         </div>
                     </div>
                 )}
 
-                {/* Footer Action */}
-                <div className="mt-auto pt-2">
-                    <button
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            onAddToCart(product);
-                        }}
-                        disabled={isInCart}
-                        className="bg-primary text-black hover:bg-white transition-all px-4 py-3 text-xs font-bold uppercase w-full font-mono border border-black active:translate-y-[1px]"
-                    >
-                        {isInCart ? 'IN CART' : 'ADD TO CART'}
-                    </button>
-                </div>
+                {/* Action */}
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onAddToCart(product);
+                    }}
+                    disabled={isInCart}
+                    className="w-full bg-primary text-black font-bold uppercase py-3 text-xs hover:bg-white transition-colors"
+                >
+                    {isInCart ? 'Added to Cart' : 'Add to Cart'}
+                </button>
             </div>
         </div>
     );

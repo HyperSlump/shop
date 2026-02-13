@@ -8,74 +8,91 @@ interface OneShotPlayerProps {
     label?: string;
 }
 
-export default function OneShotPlayer({ audioUrl, label }: OneShotPlayerProps) {
+export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlayerProps & { isActive: boolean }) {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const wavesurferRef = useRef<any>(null);
     const [isPlaying, setIsPlaying] = useState(false);
-    const audioRef = useRef<HTMLAudioElement | null>(null);
 
     useEffect(() => {
-        // Create audio instance
-        const audio = new Audio(audioUrl);
-        audioRef.current = audio;
+        let ws: any = null;
 
-        // Cleanup
+        const init = async () => {
+            if (!containerRef.current) return;
+            const WaveSurfer = (await import('wavesurfer.js')).default;
+
+            ws = WaveSurfer.create({
+                container: containerRef.current,
+                waveColor: '#666',
+                progressColor: '#c0ff00', // Primary color
+                cursorColor: 'transparent',
+                barWidth: 2,
+                barGap: 1,
+                height: 24,
+                normalize: true,
+                backend: 'WebAudio',
+                url: audioUrl,
+                interact: false, // Disable seeking on these tiny ones? Or allow? Let's allow but it's small.
+            });
+
+            ws.on('ready', () => {
+                wavesurferRef.current = ws;
+            });
+
+            ws.on('play', () => setIsPlaying(true));
+            ws.on('pause', () => setIsPlaying(false));
+            ws.on('finish', () => {
+                setIsPlaying(false);
+                ws.seekTo(0);
+            });
+        };
+
+        if (audioUrl) {
+            init();
+        }
+
         return () => {
-            audio.pause();
-            audio.src = '';
+            if (ws) ws.destroy();
         };
     }, [audioUrl]);
 
     useEffect(() => {
-        const audio = audioRef.current;
-        if (!audio) return;
-
-        const handleEnded = () => setIsPlaying(false);
-        audio.addEventListener('ended', handleEnded);
-
-        return () => {
-            audio.removeEventListener('ended', handleEnded);
-        };
-    }, []);
+        if (!isActive && wavesurferRef.current) {
+            wavesurferRef.current.pause();
+        }
+    }, [isActive]);
 
     const togglePlay = (e: React.MouseEvent) => {
-        e.stopPropagation(); // Prevent card click
-        const audio = audioRef.current;
-        if (!audio) return;
-
-        if (isPlaying) {
-            audio.pause();
-            audio.currentTime = 0; // Reset to start for one-shots usually
-            setIsPlaying(false);
-        } else {
-            // Stop other audio if needed? For now just play.
-            audio.play().catch(err => console.error("Audio play failed", err));
-            setIsPlaying(true);
+        e.stopPropagation();
+        if (wavesurferRef.current) {
+            wavesurferRef.current.playPause();
         }
     };
 
     return (
-        <button
-            onClick={togglePlay}
-            className={`
-                group flex items-center justify-center gap-2 
-                w-full p-2 h-10
-                border-2 border-primary/20 hover:border-primary 
-                bg-black/50 hover:bg-primary/10 
-                transition-all duration-200 
-                rounded-sm
-                ${isPlaying ? 'border-primary bg-primary/20' : ''}
-            `}
-            title={label || 'Play Sample'}
-        >
-            {isPlaying ? (
-                <Pause size={16} className="text-primary fill-current" />
-            ) : (
-                <Play size={16} className="text-primary fill-current" />
-            )}
+        <div className="flex flex-col gap-1 w-full">
             {label && (
-                <span className="font-mono text-[10px] text-primary uppercase">
+                <span className="font-mono text-[8px] text-gray-500 uppercase tracking-widest truncate">
                     {label}
                 </span>
             )}
-        </button>
+            <div
+                className="relative bg-black/50 border border-white/10 rounded overflow-hidden hover:border-primary/50 transition-colors group cursor-pointer h-[26px]"
+                onClick={togglePlay}
+            >
+                {/* Play Icon - Absolute Left */}
+                <div className="absolute left-1 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
+                    {isPlaying ? (
+                        <Pause size={10} className="text-primary fill-current" />
+                    ) : (
+                        <Play size={10} className="text-white group-hover:text-primary fill-current transition-colors" />
+                    )}
+                </div>
+
+                {/* Waveform - Padded left to avoid icon */}
+                <div className="absolute inset-0 left-5 top-[1px]">
+                    <div ref={containerRef} className="w-full opacity-60 group-hover:opacity-100 transition-opacity" />
+                </div>
+            </div>
+        </div>
     );
 }

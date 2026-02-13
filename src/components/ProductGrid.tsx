@@ -14,7 +14,7 @@ export default function ProductGrid({ products }: { products: any[] }) {
     };
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 hover:grid-cols-2 gap-8 max-w-7xl mx-auto transition-all duration-300 ease-in-out">
             {products.map((product) => (
                 <ProductCard
                     key={product.id}
