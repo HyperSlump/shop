@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H$ Logo Concepts</title>
+    <style>
+        body {
+            background-color: #050505;
+            color: #fff;
+            font-family: monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 40px;
+        }
+        .logo-container {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .logo-card {
+            background: #111;
+            border: 1px solid #333;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+        }
+        .logo-card h2 {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #888;
+        }
+        svg {
+            width: 150px;
+            height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <h1>H$ LOGO CONCEPTS</h1>
+    <div class="logo-container">
+
+        <!-- CONCEPT 1: STRUCTURAL UNION -->
+        <div class="logo-card">
+            <svg viewBox="0 0 100 100" fill="none" stroke="#00ff00" stroke-width="8" stroke-linecap="square">
+                <!-- H Vertical Bars / $ Vertical Bars -->
+                <path d="M25 10 V90" />
+                <path d="M75 10 V90" />
+                
+                <!-- H Crossbar / $ S-Curve Integration -->
+                <!-- Top curve of S connects left to right -->
+                <path d="M75 25 C75 25, 50 10, 25 25" fill="none" />
+                <!-- Middle crossbar acting as center of S -->
+                <path d="M25 50 L75 50" />
+                <!-- Bottom curve of S connecting right to left -->
+                <path d="M25 75 C25 75, 50 90, 75 75" fill="none" />
+                
+                <!-- Connecting the flow for S shape slightly -->
+                <path d="M25 25 C10 40, 10 40, 25 50" />
+                <path d="M75 50 C90 60, 90 60, 75 75" />
+            </svg>
+            <h2>1. Structural Union</h2>
+        </div>
+
+        <!-- CONCEPT 2: GLITCH OVERLAY -->
+        <div class="logo-card">
+            <svg viewBox="0 0 100 100" fill="none">
+                <!-- Helper Grid/Noise -->
+                <rect x="10" y="10" width="80" height="80" stroke="#333" stroke-width="1" stroke-dasharray="2 2" />
+                
+                <!-- Base H -->
+                <path d="M20 10 V90 M80 10 V90 M20 50 H80" stroke="#fff" stroke-width="12" />
+                
+                <!-- Overlay $ in Acid Green with Mix Blend Mode effect simulation (opacity/offset) -->
+                <path d="M50 0 V100" stroke="#00ff00" stroke-width="6" opacity="0.8" />
+                <path d="M70 20 C40 20, 30 40, 50 50 C70 60, 60 80, 30 80" stroke="#00ff00" stroke-width="10" fill="none" opacity="0.8" />
+                
+                <!-- Glitch Rects -->
+                <rect x="15" y="45" width="10" height="5" fill="#00ff00" />
+                <rect x="75" y="55" width="15" height="2" fill="#00ff00" />
+            </svg>
+            <h2>2. Glitch Overlay</h2>
+        </div>
+
+        <!-- CONCEPT 3: ACID GOTH MONOGRAM -->
+        <div class="logo-card">
+            <svg viewBox="0 0 100 100" fill="#00ff00">
+                <!-- Sharp, Angular 'H' Base -->
+                <path d="M10,10 L30,10 L30,40 L70,40 L70,10 L90,10 L90,90 L70,90 L70,60 L30,60 L30,90 L10,90 Z" />
+                
+                <!-- 'S' overlaying as a sharp lightning-like strike -->
+                <path d="M60,0 L70,0 L55,45 L80,45 L40,100 L30,100 L45,55 L20,55 Z" fill="#000" stroke="#00ff00" stroke-width="2" />
+            </svg>
+            <h2>3. Acid Goth Monogram</h2>
+        </div>
+
+    </div>
+</body>
+</html>

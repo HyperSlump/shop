@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H$ - Glitch Overlay Refinements</title>
+    <style>
+        body {
+            background-color: #050505;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 40px;
+        }
+
+        h1 {
+            font-size: 24px;
+            letter-spacing: 4px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .logo-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 800px;
+        }
+
+        .logo-card {
+            background: #0a0a0a;
+            border: 1px solid #222;
+            padding: 30px;
+            text-align: center;
+            border-radius: 4px;
+            transition: border-color 0.2s;
+        }
+
+        .logo-card:hover {
+            border-color: #00ff00;
+        }
+
+        .logo-card h2 {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        svg {
+            width: 180px;
+            height: 180px;
+            filter: drop-shadow(0 0 10px rgba(0, 255, 0, 0.1));
+        }
+    </style>
+</head>
+
+<body>
+    <h1>GLITCH_OVERLAY_VARIANTS</h1>
+    <div class="logo-container">
+
+        <!-- VARIATION A: ORIGINAL (Baseline) -->
+        <div class="logo-card">
+            <svg viewBox="0 0 100 100" fill="none">
+                <!-- Helper Grid/Noise -->
+                <rect x="10" y="10" width="80" height="80" stroke="#333" stroke-width="0.5" stroke-dasharray="2 2"
+                    opacity="0.5" />
+
+                <!-- Base H -->
+                <path d="M25 15 V85 M75 15 V85 M25 50 H75" stroke="#eee" stroke-width="10" />
+
+                <!-- Overlay $ in Acid Green -->
+                <path d="M50 5 V95" stroke="#00ff00" stroke-width="4" opacity="0.8" />
+                <path d="M65 25 C40 25, 35 40, 50 50 C65 60, 60 75, 35 75" stroke="#00ff00" stroke-width="8" fill="none"
+                    opacity="0.8" />
+
+                <!-- Glitch Rects -->
+                <rect x="20" y="48" width="12" height="4" fill="#00ff00" />
+                <rect x="70" y="52" width="15" height="2" fill="#00ff00" />
+            </svg>
+            <h2>A. Original Baseline</h2>
+        </div>
+
+        <!-- VARIATION B: CHROMATIC OFFSET (RGB Split) -->
+        <div class="logo-card">
+            <svg viewBox="0 0 100 100" fill="none" style="mix-blend-mode: screen;">
+                <!-- Red Channel (Shifted Left) -->
+                <g transform="translate(-2, 0)" opacity="0.8">
+                    <path d="M25 15 V85 M75 15 V85 M25 50 H75" stroke="#ff0000" stroke-width="10" />
+                    <path d="M50 5 V95" stroke="#ff0000" stroke-width="4" />
+                    <path d="M65 25 C40 25, 35 40, 50 50 C65 60, 60 75, 35 75" stroke="#ff0000" stroke-width="8"
+                        fill="none" />
+                </g>
+
+                <!-- Blue Channel (Shifted Right) -->
+                <g transform="translate(2, 0)" opacity="0.8">
+                    <path d="M25 15 V85 M75 15 V85 M25 50 H75" stroke="#0000ff" stroke-width="10" />
+                    <path d="M50 5 V95" stroke="#0000ff" stroke-width="4" />
+                    <path d="M65 25 C40 25, 35 40, 50 50 C65 60, 60 75, 35 75" stroke="#0000ff" stroke-width="8"
+                        fill="none" />
+                </g>
+
+                <!-- Green Channel (Center/Main) -->
+                <g opacity="0.9">
+                    <path d="M25 15 V85 M75 15 V85 M25 50 H75" stroke="#00ff00" stroke-width="10" />
+                    <path d="M50 5 V95" stroke="#ffff00" stroke-width="4" />
+                    <path d="M65 25 C40 25, 35 40, 50 50 C65 60, 60 75, 35 75" stroke="#ffff00" stroke-width="8"
+                        fill="none" />
+                </g>
+            </svg>
+            <h2>B. Chromatic Shift</h2>
+        </div>
+
+        <!-- VARIATION C: SCANLINE TEAR (Horizontal Cuts) -->
+        <div class="logo-card">
+            <svg viewBox="0 0 100 100" fill="none">
+                <!-- Top Half (Normal) -->
+                <defs>
+                    <clipPath id="top-half">
+                        <rect x="0" y="0" width="100" height="45" />
+                    </clipPath>
+                    <clipPath id="mid-slice">
+                        <rect x="0" y="45" width="100" height="10" />
+                    </clipPath>
+                    <clipPath id="bot-half">
+                        <rect x="0" y="55" width="100" height="45" />
+                    </clipPath>
+                </defs>
+
+                <!-- Composition Group -->
+                <g stroke="#eee" stroke-width="10">
+                    <!-- Top Part -->
+                    <g clip-path="url(#top-half)">
+                        <path d="M25 15 V85 M75 15 V85 M25 50 H75" />
+                        <path d="M50 5 V95" stroke="#00ff00" stroke-width="4" />
+                        <path d="M65 25 C40 25, 35 40, 50 50 C65 60, 60 75, 35 75" stroke="#00ff00" stroke-width="8"
+                            fill="none" />
+                    </g>
+
+                    <!-- Middle Slice (Shifted RIGHT significantly) -->
+                    <g clip-path="url(#mid-slice)" transform="translate(10, 0)">
+                        <path d="M25 15 V85 M75 15 V85 M25 50 H75" stroke="#00ff00" /> <!-- Color change on slice -->
+                        <path d="M50 5 V95" stroke="#fff" stroke-width="4" />
+                        <path d="M65 25 C40 25, 35 40, 50 50 C65 60, 60 75, 35 75" stroke="#fff" stroke-width="8"
+                            fill="none" />
+                    </g>
+
+                    <!-- Bottom Part (Shifted LEFT slightly) -->
+                    <g clip-path="url(#bot-half)" transform="translate(-5, 0)">
+                        <path d="M25 15 V85 M75 15 V85 M25 50 H75" />
+                        <path d="M50 5 V95" stroke="#00ff00" stroke-width="4" />
+                        <path d="M65 25 C40 25, 35 40, 50 50 C65 60, 60 75, 35 75" stroke="#00ff00" stroke-width="8"
+                            fill="none" />
+                    </g>
+                </g>
+
+                <!-- Noise Lines -->
+                <line x1="0" y1="45" x2="100" y2="45" stroke="#00ff00" stroke-width="0.5" />
+                <line x1="0" y1="55" x2="100" y2="55" stroke="#00ff00" stroke-width="0.5" />
+            </svg>
+            <h2>C. Scanline Tear</h2>
+        </div>
+
+        <!-- VARIATION D: DATA DECAY (Pixel/Block Noise) -->
+        <div class="logo-card">
+            <svg viewBox="0 0 100 100" fill="none">
+                <!-- Base Shape (Dotted/Corrupted Stroke) -->
+                <path d="M25 15 V85 M75 15 V85 M25 50 H75" stroke="#444" stroke-width="10" />
+
+                <!-- Functional High-Contrast Blocks over H path -->
+                <rect x="20" y="15" width="10" height="20" fill="#eee" />
+                <rect x="20" y="65" width="10" height="20" fill="#eee" />
+                <rect x="70" y="15" width="10" height="20" fill="#eee" />
+                <!-- Missing bottom right leg block to simulate decay -->
+
+                <!-- The Dollar Sign constructed of digital blocks -->
+                <rect x="48" y="5" width="4" height="90" fill="#00ff00" opacity="0.5" />
+
+                <!-- S curves made of small rects -->
+                <rect x="55" y="20" width="5" height="5" fill="#00ff00" />
+                <rect x="50" y="18" width="5" height="5" fill="#00ff00" />
+                <rect x="45" y="20" width="5" height="5" fill="#00ff00" />
+                <rect x="42" y="25" width="5" height="5" fill="#00ff00" />
+
+                <rect x="45" y="45" width="5" height="5" fill="#00ff00" />
+                <rect x="50" y="48" width="5" height="5" fill="#00ff00" />
+
+                <rect x="58" y="65" width="5" height="5" fill="#00ff00" />
+                <rect x="53" y="70" width="5" height="5" fill="#00ff00" />
+                <rect x="40" y="70" width="5" height="5" fill="#00ff00" />
+
+                <!-- Random noise blocks -->
+                <rect x="80" y="40" width="2" height="10" fill="#00ff00" />
+                <rect x="10" y="60" width="4" height="4" fill="#00ff00" />
+                <rect x="35" y="85" width="30" height="2" fill="#00ff00" />
+            </svg>
+            <h2>D. Data Decay</h2>
+        </div>
+
+    </div>
+</body>
+
+</html>

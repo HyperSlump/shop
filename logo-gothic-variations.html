@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H$ - Gothic Blade Refinements</title>
+    <style>
+        body {
+            background-color: #050505;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 40px;
+        }
+
+        h1 {
+            font-size: 24px;
+            letter-spacing: 4px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .logo-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 800px;
+        }
+
+        .logo-card {
+            background: #0a0a0a;
+            border: 1px solid #222;
+            padding: 30px;
+            text-align: center;
+            border-radius: 4px;
+            transition: border-color 0.2s;
+        }
+
+        .logo-card:hover {
+            border-color: #00ff00;
+        }
+
+        .logo-card h2 {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* CHROMATIC SHIFT BASE STYLES */
+        .chromatic-svg {
+            width: 180px;
+            height: 180px;
+            mix-blend-mode: screen;
+        }
+
+        .shift-red {
+            transform: translate(-3px, 0);
+            opacity: 0.8;
+        }
+
+        .shift-blue {
+            transform: translate(3px, 0);
+            opacity: 0.8;
+        }
+
+        .shift-green {
+            opacity: 0.9;
+        }
+
+        .shift-red path {
+            stroke: #ff0000;
+            fill: #ff0000;
+        }
+
+        .shift-blue path {
+            stroke: #0000ff;
+            fill: #0000ff;
+        }
+
+        .shift-green path {
+            stroke: #00ff00;
+            fill: #00ff00;
+        }
+
+        /* Override fill/stroke behavior for specific paths */
+        .no-fill {
+            fill: none !important;
+        }
+
+        .fill-only {
+            stroke: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>GOTHIC_BLADE_VARIANTS</h1>
+    <div class="logo-container">
+
+        <!-- VARIATION A: STANDARD BLADE (Refined Original) -->
+        <div class="logo-card">
+            <svg class="chromatic-svg" viewBox="0 0 100 100" fill="none">
+                <g class="shift-red">
+                    <path class="fill-only"
+                        d="M20 10 L35 10 L30 45 L70 45 L75 10 L90 10 L80 90 L65 90 L70 55 L30 55 L25 90 L10 90 Z" />
+                    <path class="no-fill" d="M65 15 L40 20 L30 45 L50 50 L70 55 L60 80 L35 85" stroke-width="5"
+                        stroke-linejoin="miter" stroke-miterlimit="10" />
+                    <path class="no-fill" d="M50 0 V100" stroke-width="2" />
+                    <path class="no-fill" d="M65 15 L75 10 M35 85 L25 90" stroke-width="3" />
+                </g>
+                <g class="shift-blue">
+                    <path class="fill-only"
+                        d="M20 10 L35 10 L30 45 L70 45 L75 10 L90 10 L80 90 L65 90 L70 55 L30 55 L25 90 L10 90 Z" />
+                    <path class="no-fill" d="M65 15 L40 20 L30 45 L50 50 L70 55 L60 80 L35 85" stroke-width="5"
+                        stroke-linejoin="miter" stroke-miterlimit="10" />
+                    <path class="no-fill" d="M50 0 V100" stroke-width="2" />
+                    <path class="no-fill" d="M65 15 L75 10 M35 85 L25 90" stroke-width="3" />
+                </g>
+                <g class="shift-green">
+                    <path class="fill-only"
+                        d="M20 10 L35 10 L30 45 L70 45 L75 10 L90 10 L80 90 L65 90 L70 55 L30 55 L25 90 L10 90 Z" />
+                    <path class="no-fill" d="M65 15 L40 20 L30 45 L50 50 L70 55 L60 80 L35 85" stroke-width="5"
+                        stroke-linejoin="miter" stroke-miterlimit="10" />
+                    <path class="no-fill" d="M50 0 V100" stroke-width="2" />
+                    <path class="no-fill" d="M65 15 L75 10 M35 85 L25 90" stroke-width="3" />
+                </g>
+            </svg>
+            <h2>A. Standard Blade</h2>
+        </div>
+
+        <!-- VARIATION B: SERRATED EDGE (More Thorn-like) -->
+        <div class="logo-card">
+            <svg class="chromatic-svg" viewBox="0 0 100 100" fill="none">
+                <g class="shift-red">
+                    <path class="fill-only"
+                        d="M20 10 L35 10 L34 25 L36 30 L30 45 L70 45 L74 30 L76 25 L75 10 L90 10 L80 90 L65 90 L66 75 L64 70 L70 55 L30 55 L26 70 L24 75 L25 90 L10 90 Z" />
+                    <path class="no-fill" d="M60 20 L35 25 L30 45 L40 50 L60 55 L70 75 L45 80" stroke-width="4"
+                        stroke-linejoin="bevel" />
+                    <path class="no-fill" d="M50 0 V100" stroke-width="2" />
+                    <path class="fill-only"
+                        d="M35 25 L25 15 L38 28 Z M60 20 L70 10 L58 23 Z M70 75 L80 85 L67 72 Z M45 80 L35 90 L48 77 Z" />
+                </g>
+                <g class="shift-blue">
+                    <path class="fill-only"
+                        d="M20 10 L35 10 L34 25 L36 30 L30 45 L70 45 L74 30 L76 25 L75 10 L90 10 L80 90 L65 90 L66 75 L64 70 L70 55 L30 55 L26 70 L24 75 L25 90 L10 90 Z" />
+                    <path class="no-fill" d="M60 20 L35 25 L30 45 L40 50 L60 55 L70 75 L45 80" stroke-width="4"
+                        stroke-linejoin="bevel" />
+                    <path class="no-fill" d="M50 0 V100" stroke-width="2" />
+                    <path class="fill-only"
+                        d="M35 25 L25 15 L38 28 Z M60 20 L70 10 L58 23 Z M70 75 L80 85 L67 72 Z M45 80 L35 90 L48 77 Z" />
+                </g>
+                <g class="shift-green">
+                    <path class="fill-only"
+                        d="M20 10 L35 10 L34 25 L36 30 L30 45 L70 45 L74 30 L76 25 L75 10 L90 10 L80 90 L65 90 L66 75 L64 70 L70 55 L30 55 L26 70 L24 75 L25 90 L10 90 Z" />
+                    <path class="no-fill" d="M60 20 L35 25 L30 45 L40 50 L60 55 L70 75 L45 80" stroke-width="4"
+                        stroke-linejoin="bevel" />
+                    <path class="no-fill" d="M50 0 V100" stroke-width="2" />
+                    <path class="fill-only"
+                        d="M35 25 L25 15 L38 28 Z M60 20 L70 10 L58 23 Z M70 75 L80 85 L67 72 Z M45 80 L35 90 L48 77 Z" />
+                </g>
+            </svg>
+            <h2>B. Serrated Edge</h2>
+        </div>
+
+        <!-- VARIATION C: MINIMAL KATANA (Cleaner, Sleek) -->
+        <div class="logo-card">
+            <svg class="chromatic-svg" viewBox="0 0 100 100" fill="none">
+                <g class="shift-red">
+                    <path class="no-fill" d="M25 10 L25 90 M75 10 L75 90 M25 50 L75 50" stroke-width="8"
+                        stroke-linecap="square" />
+                    <path class="no-fill" d="M65 20 L35 40 L50 50 L65 60 L35 80" stroke-width="4"
+                        stroke-linejoin="miter" stroke-miterlimit="20" />
+                    <path class="no-fill" d="M50 0 V100" stroke-width="1" />
+                </g>
+                <g class="shift-blue">
+                    <path class="no-fill" d="M25 10 L25 90 M75 10 L75 90 M25 50 L75 50" stroke-width="8"
+                        stroke-linecap="square" />
+                    <path class="no-fill" d="M65 20 L35 40 L50 50 L65 60 L35 80" stroke-width="4"
+                        stroke-linejoin="miter" stroke-miterlimit="20" />
+                    <path class="no-fill" d="M50 0 V100" stroke-width="1" />
+                </g>
+                <g class="shift-green">
+                    <path class="no-fill" d="M25 10 L25 90 M75 10 L75 90 M25 50 L75 50" stroke-width="8"
+                        stroke-linecap="square" />
+                    <path class="no-fill" d="M65 20 L35 40 L50 50 L65 60 L35 80" stroke-width="4"
+                        stroke-linejoin="miter" stroke-miterlimit="20" />
+                    <path class="no-fill" d="M50 0 V100" stroke-width="1" />
+                </g>
+            </svg>
+            <h2>C. Minimal Katana</h2>
+        </div>
+
+        <!-- VARIATION D: FRACTURED STEEL (Broken/Floating Parts) -->
+        <div class="logo-card">
+            <svg class="chromatic-svg" viewBox="0 0 100 100" fill="none">
+                <g class="shift-red">
+                    <path class="fill-only"
+                        d="M20 10 L30 10 L25 40 Z M25 60 L30 90 L20 90 Z M80 10 L70 10 L75 40 Z M75 60 L70 90 L80 90 Z" />
+                    <rect x="35" y="48" width="30" height="4" class="fill-only" />
+                    <path class="fill-only" d="M60 20 L40 20 L30 40 L40 35 Z" />
+                    <path class="fill-only" d="M40 80 L60 80 L70 60 L60 65 Z" />
+                    <path class="fill-only" d="M48 45 L52 45 L50 55 Z" />
+                    <rect x="49" y="0" width="2" height="100" class="fill-only" />
+                </g>
+                <g class="shift-blue">
+                    <path class="fill-only"
+                        d="M20 10 L30 10 L25 40 Z M25 60 L30 90 L20 90 Z M80 10 L70 10 L75 40 Z M75 60 L70 90 L80 90 Z" />
+                    <rect x="35" y="48" width="30" height="4" class="fill-only" />
+                    <path class="fill-only" d="M60 20 L40 20 L30 40 L40 35 Z" />
+                    <path class="fill-only" d="M40 80 L60 80 L70 60 L60 65 Z" />
+                    <path class="fill-only" d="M48 45 L52 45 L50 55 Z" />
+                    <rect x="49" y="0" width="2" height="100" class="fill-only" />
+                </g>
+                <g class="shift-green">
+                    <path class="fill-only"
+                        d="M20 10 L30 10 L25 40 Z M25 60 L30 90 L20 90 Z M80 10 L70 10 L75 40 Z M75 60 L70 90 L80 90 Z" />
+                    <rect x="35" y="48" width="30" height="4" class="fill-only" />
+                    <path class="fill-only" d="M60 20 L40 20 L30 40 L40 35 Z" />
+                    <path class="fill-only" d="M40 80 L60 80 L70 60 L60 65 Z" />
+                    <path class="fill-only" d="M48 45 L52 45 L50 55 Z" />
+                    <rect x="49" y="0" width="2" height="100" class="fill-only" />
+                </g>
+            </svg>
+            <h2>D. Fractured Steel</h2>
+        </div>
+
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H$ - Chromatic Shift Fonts</title>
+    <style>
+        body {
+            background-color: #050505;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 40px;
+        }
+
+        h1 {
+            font-size: 24px;
+            letter-spacing: 4px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .logo-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 800px;
+        }
+
+        .logo-card {
+            background: #0a0a0a;
+            border: 1px solid #222;
+            padding: 30px;
+            text-align: center;
+            border-radius: 4px;
+            transition: border-color 0.2s;
+        }
+
+        .logo-card:hover {
+            border-color: #00ff00;
+        }
+
+        .logo-card h2 {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* The Chromatic Shift CSS Effect */
+        .chromatic-svg {
+            width: 180px;
+            height: 180px;
+            mix-blend-mode: screen;
+        }
+
+        /* Base group styles for shifting */
+        .shift-red {
+            transform: translate(-3px, 0);
+            opacity: 0.8;
+        }
+
+        .shift-blue {
+            transform: translate(3px, 0);
+            opacity: 0.8;
+        }
+
+        .shift-green {
+            opacity: 0.9;
+        }
+
+        .shift-red path {
+            stroke: #ff0000;
+        }
+
+        .shift-blue path {
+            stroke: #0000ff;
+        }
+
+        .shift-green path {
+            stroke: #00ff00;
+        }
+
+        /* Specific overrides for fills if needed */
+        .shift-red path[fill="none"] {
+            fill: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>CHROMATIC_SHIFT_FONTS</h1>
+    <div class="logo-container">
+
+        <!-- VARIATION 1: SHARP SANS (Clean, Modern) -->
+        <div class="logo-card">
+            <svg class="chromatic-svg" viewBox="0 0 100 100" fill="none">
+                <!-- Red Channel -->
+                <g class="shift-red">
+                    <path d="M25 15 V85 M75 15 V85 M25 50 H75" stroke-width="10" />
+                    <!-- Sharp S shape manually drawn -->
+                    <path d="M50 5 V95" stroke-width="4" />
+                    <path d="M70 20 H40 V45 H60 V75 H30" stroke-width="8" fill="none" stroke-linejoin="bevel" />
+                </g>
+                <!-- Blue Channel -->
+                <g class="shift-blue">
+                    <path d="M25 15 V85 M75 15 V85 M25 50 H75" stroke-width="10" />
+                    <path d="M50 5 V95" stroke-width="4" />
+                    <path d="M70 20 H40 V45 H60 V75 H30" stroke-width="8" fill="none" stroke-linejoin="bevel" />
+                </g>
+                <!-- Green Channel -->
+                <g class="shift-green">
+                    <path d="M25 15 V85 M75 15 V85 M25 50 H75" stroke-width="10" />
+                    <path d="M50 5 V95" stroke="#ffff00" stroke-width="4" />
+                    <path d="M70 20 H40 V45 H60 V75 H30" stroke="#ffff00" stroke-width="8" fill="none"
+                        stroke-linejoin="bevel" />
+                </g>
+            </svg>
+            <h2>1. Sharp Sans (Angular)</h2>
+        </div>
+
+        <!-- VARIATION 2: TRADITIONAL SERIF (Money/Classic) -->
+        <div class="logo-card">
+            <svg class="chromatic-svg" viewBox="0 0 100 100" fill="none">
+                <!-- Red -->
+                <g class="shift-red">
+                    <path d="M25 15 V85 M75 15 V85 M25 50 H75" stroke-width="10" />
+                    <!-- Double vertical bars -->
+                    <path d="M45 5 V95 M55 5 V95" stroke-width="3" />
+                    <!-- Serif Style S -->
+                    <path d="M65 25 C40 25, 30 35, 50 50 C70 65, 60 75, 35 75" stroke-width="8" fill="none"
+                        stroke-linecap="round" />
+                    <path d="M65 25 L65 30 M35 75 L35 70" stroke-width="8" stroke-linecap="square" />
+                </g>
+                <!-- Blue -->
+                <g class="shift-blue">
+                    <path d="M25 15 V85 M75 15 V85 M25 50 H75" stroke-width="10" />
+                    <path d="M45 5 V95 M55 5 V95" stroke-width="3" />
+                    <path d="M65 25 C40 25, 30 35, 50 50 C70 65, 60 75, 35 75" stroke-width="8" fill="none"
+                        stroke-linecap="round" />
+                    <path d="M65 25 L65 30 M35 75 L35 70" stroke-width="8" stroke-linecap="square" />
+                </g>
+                <!-- Green -->
+                <g class="shift-green">
+                    <path d="M25 15 V85 M75 15 V85 M25 50 H75" stroke-width="10" />
+                    <path d="M45 5 V95 M55 5 V95" stroke="#ffff00" stroke-width="3" />
+                    <path d="M65 25 C40 25, 30 35, 50 50 C70 65, 60 75, 35 75" stroke="#ffff00" stroke-width="8"
+                        fill="none" stroke-linecap="round" />
+                    <path d="M65 25 L65 30 M35 75 L35 70" stroke="#ffff00" stroke-width="8" stroke-linecap="square" />
+                </g>
+            </svg>
+            <h2>2. Classic Serif (Double Bar)</h2>
+        </div>
+
+        <!-- VARIATION 3: GOTHIC BLADE (Blackletter inspired) -->
+        <div class="logo-card">
+            <svg class="chromatic-svg" viewBox="0 0 100 100" fill="none">
+                <!-- Red -->
+                <g class="shift-red">
+                    <path d="M25 10 L30 10 L30 90 L25 90 Z M75 10 L70 10 L70 90 L75 90 Z M25 50 L75 50 L75 55 L25 55 Z"
+                        fill="#ff0000" stroke="none" />
+                    <!-- Gothic S: Diamond shapes and sharp points -->
+                    <path d="M60 20 L40 20 L35 40 L50 50 L65 60 L60 80 L40 80" stroke-width="6" fill="none"
+                        stroke-linejoin="miter" />
+                    <path d="M50 0 V100" stroke-width="2" />
+                    <!-- Tines/Spikes -->
+                    <path d="M60 20 L65 15 M40 80 L35 85" stroke-width="4" />
+                </g>
+                <!-- Blue -->
+                <g class="shift-blue">
+                    <path d="M25 10 L30 10 L30 90 L25 90 Z M75 10 L70 10 L70 90 L75 90 Z M25 50 L75 50 L75 55 L25 55 Z"
+                        fill="#0000ff" stroke="none" />
+                    <path d="M60 20 L40 20 L35 40 L50 50 L65 60 L60 80 L40 80" stroke-width="6" fill="none"
+                        stroke-linejoin="miter" />
+                    <path d="M50 0 V100" stroke-width="2" />
+                    <path d="M60 20 L65 15 M40 80 L35 85" stroke-width="4" />
+                </g>
+                <!-- Green -->
+                <g class="shift-green">
+                    <path d="M25 10 L30 10 L30 90 L25 90 Z M75 10 L70 10 L70 90 L75 90 Z M25 50 L75 50 L75 55 L25 55 Z"
+                        fill="#00ff00" stroke="none" />
+                    <path d="M60 20 L40 20 L35 40 L50 50 L65 60 L60 80 L40 80" stroke="#ffff00" stroke-width="6"
+                        fill="none" stroke-linejoin="miter" />
+                    <path d="M50 0 V100" stroke="#ffff00" stroke-width="2" />
+                    <path d="M60 20 L65 15 M40 80 L35 85" stroke="#ffff00" stroke-width="4" />
+                </g>
+            </svg>
+            <h2>3. Gothic Blade</h2>
+        </div>
+
+        <!-- VARIATION 4: GRUNGE SCRATCH (Hand-drawn/Chaotic) -->
+        <div class="logo-card">
+            <svg class="chromatic-svg" viewBox="0 0 100 100" fill="none" stroke-linecap="round">
+                <!-- Red -->
+                <g class="shift-red">
+                    <path d="M25 15 V85 M70 15 V85 M25 55 H75" stroke-width="8" stroke-dasharray="10 5" />
+                    <!-- Scribbled S -->
+                    <path d="M65 25 C50 20, 40 30, 50 45 C60 60, 50 75, 40 75" stroke-width="5" fill="none" />
+                    <path d="M52 10 L48 90" stroke-width="3" />
+                </g>
+                <!-- Blue -->
+                <g class="shift-blue">
+                    <path d="M25 15 V85 M70 15 V85 M25 55 H75" stroke-width="8" stroke-dasharray="10 5" />
+                    <path d="M65 25 C50 20, 40 30, 50 45 C60 60, 50 75, 40 75" stroke-width="5" fill="none" />
+                    <path d="M52 10 L48 90" stroke-width="3" />
+                </g>
+                <!-- Green -->
+                <g class="shift-green">
+                    <path d="M25 15 V85 M70 15 V85 M25 55 H75" stroke-width="8" stroke-dasharray="10 5" />
+                    <path d="M65 25 C50 20, 40 30, 50 45 C60 60, 50 75, 40 75" stroke="#ffff00" stroke-width="5"
+                        fill="none" />
+                    <path d="M52 10 L48 90" stroke="#ffff00" stroke-width="3" />
+                </g>
+            </svg>
+            <h2>4. Grunge Scratch</h2>
+        </div>
+
+    </div>
+</body>
+
+</html>
