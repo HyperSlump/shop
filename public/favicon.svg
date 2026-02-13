@@ -1,0 +1,6 @@
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100" height="100" rx="20" fill="#ccff00"/>
+  <path d="M25 10 L25 90 M75 10 L75 90 M25 50 L75 50" stroke="black" stroke-width="8" stroke-linecap="square"/>
+  <path d="M65 20 L35 40 L50 50 L65 60 L35 80" stroke="black" stroke-width="4" stroke-linejoin="miter" stroke-miterlimit="20"/>
+  <path d="M50 0 V100" stroke="black" stroke-width="1"/>
+</svg>

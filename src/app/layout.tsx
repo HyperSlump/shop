@@ -7,6 +7,9 @@ import CartDrawer from "@/components/CartDrawer";
 export const metadata: Metadata = {
   title: "HYPER$LUMP // DIGITAL ASSETS",
   description: "Industrial sound design textures, raw synthesis, and broken percussion.",
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({
