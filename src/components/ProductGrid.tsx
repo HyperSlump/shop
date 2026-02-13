@@ -23,7 +23,7 @@ export default function ProductGrid({ products }: { products: any[] }) {
                     onAddToCart={handleAddToCart}
                 />
             ))}
-            ))}
+
         </div>
     );
 }
