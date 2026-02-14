@@ -73,7 +73,7 @@ export default function CartDrawer() {
                         <p className="font-mono text-xs tracking-[0.5em]">BUFFER_EMPTY</p>
                     </div>
                 ) : (
-                    <div className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
+                    <div className="flex-1 overflow-y-auto space-y-4 px-6 custom-scrollbar">
                         {cart.map((item) => (
                             <div
                                 key={item.id}
