@@ -20,21 +20,21 @@ export default function IndustrialTicker() {
         if (!row1Ref.current || !row2Ref.current) return;
 
         // Ensure row contents are cloned for seamless looping
-        // Row 1: Right to Left (Slowed Down)
+        // Row 1: Right to Left (Extremely Slow Crawl)
         row1AnimRef.current = gsap.to(row1Ref.current, {
             xPercent: -50,
-            duration: 120,
+            duration: 300,
             ease: "none",
             repeat: -1,
             paused: false
         });
 
-        // Row 2: Left to Right (Slowed Down)
+        // Row 2: Left to Right (Extremely Slow Crawl)
         // We set initial xPercent to -50 and animate back to 0
         gsap.set(row2Ref.current, { xPercent: -50 });
         row2AnimRef.current = gsap.to(row2Ref.current, {
             xPercent: 0,
-            duration: 90,
+            duration: 240,
             ease: "none",
             repeat: -1,
             paused: false

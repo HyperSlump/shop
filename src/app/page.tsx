@@ -2,6 +2,7 @@ import { getActiveProducts } from '@/lib/stripe/products';
 import ProductGrid from '@/components/ProductGrid';
 import Navigation from '@/components/Navigation';
 import ThemeToggle from '@/components/ThemeToggle';
+import EncryptText from '@/components/EncryptText';
 import IndustrialTicker from '@/components/IndustrialTicker';
 
 export const revalidate = 60; // Re-fetch products every 60 seconds
@@ -22,9 +23,7 @@ export default async function Home() {
               <h1 className="hidden md:block font-gothic text-7xl md:text-8xl lg:text-9xl leading-[0.8] tracking-tight mb-6 lowercase">
                 hyper$lump
               </h1>
-              <p className="text-sm md:text-base max-w-xl opacity-80 font-mono leading-relaxed">
-                Industrial sound design textures, raw synthesis, and broken percussion for the electronic avant-garde. Optimized for professional digital production.
-              </p>
+              <EncryptText />
             </div>
             <div className="text-left md:text-right border-l md:border-l-0 md:border-r border-primary/20 pl-4 md:pl-0 md:pr-4 py-2">
               <div className="text-[10px] md:text-xs uppercase font-bold tracking-[0.3em] text-primary mb-1">
