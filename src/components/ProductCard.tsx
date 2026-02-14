@@ -49,7 +49,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     {/* Full Background Matrix Effect */}
                     <div className="absolute inset-0 z-0">
                         <MatrixSpace isVisible={isHovered} />
-                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/20 to-[var(--background)]" />
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/5 to-[var(--background)]" />
                     </div>
 
                     <div className="relative z-10 flex-1 overflow-hidden p-4 flex flex-col items-center gap-2 custom-scrollbar">
