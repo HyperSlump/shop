@@ -126,7 +126,7 @@ export default function WaveformOverlay({
                         {isPlaying ? (
                             <Pause size={18} className="text-primary fill-current" />
                         ) : (
-                            <Play size={18} className="text-black dark:text-white hover:text-primary fill-current transition-colors" />
+                            <Play size={18} className="text-foreground hover:text-primary fill-current transition-colors" />
                         )}
                     </div>
                 </div>
