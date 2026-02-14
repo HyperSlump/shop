@@ -125,9 +125,9 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 onAddToCart(product);
                             }}
                             disabled={isInCart}
-                            className="w-full py-2 relative group/buy cursor-pointer overflow-hidden border border-[#570e0e] bg-[#570e0e] hover:bg-transparent transition-all duration-300 shadow-[0_0_10px_rgba(87,14,14,0.3)] hover:shadow-[0_0_15px_rgba(117,27,27,0.5)] disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-[85%] mx-auto block py-2 relative group/buy cursor-pointer overflow-hidden border border-[#570e0e] bg-transparent hover:bg-transparent transition-all duration-300 shadow-[0_0_10px_rgba(87,14,14,0.1)] hover:shadow-[0_0_15px_rgba(117,27,27,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            <span className="relative z-10 font-mono font-bold text-[10px] uppercase tracking-[0.2em] text-stone-300 group-hover/buy:text-[#8a2525] transition-colors duration-300 flex items-center justify-center gap-2">
+                            <span className="relative z-10 font-mono font-bold text-[10px] uppercase tracking-[0.2em] text-[#570e0e]/70 dark:text-red-500/70 group-hover/buy:text-[#570e0e] dark:group-hover/buy:text-red-500 transition-colors duration-300 flex items-center justify-center gap-2">
                                 {isInCart ? '[ IN CART ]' : '[ BUY NOW ]'}
                             </span>
                         </button>
@@ -219,9 +219,9 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         onAddToCart(product);
                     }}
                     disabled={isInCart}
-                    className="w-full py-4 relative group/btn cursor-pointer overflow-hidden border border-primary bg-primary hover:bg-transparent transition-all duration-300"
+                    className="w-[85%] mx-auto block py-4 relative group/btn cursor-pointer overflow-hidden border border-primary bg-transparent hover:bg-transparent transition-all duration-300"
                 >
-                    <span className="relative z-10 font-mono font-bold uppercase tracking-[0.2em] text-xs text-black dark:text-black group-hover/btn:text-primary dark:group-hover/btn:text-primary transition-colors duration-300 flex items-center justify-center gap-2">
+                    <span className="relative z-10 font-mono font-bold uppercase tracking-[0.2em] text-xs text-primary/80 group-hover/btn:text-primary transition-colors duration-300 flex items-center justify-center gap-2">
                         {isInCart ? '[ ADDED ]' : '[ ADD TO CART ]'}
                     </span>
                 </button>
