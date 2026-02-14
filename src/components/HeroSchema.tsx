@@ -9,7 +9,7 @@ interface HeroSchemaProps {
 
 export default function HeroSchema({ productCount }: HeroSchemaProps) {
     return (
-        <section className="relative w-full overflow-hidden bg-[var(--background)] px-4 py-4 md:px-12 md:py-6 border-b-2 border-primary/20 animate-fade-in">
+        <section className="relative w-full overflow-hidden bg-[var(--background)] px-4 pt-4 pb-2 md:px-12 md:pt-6 md:pb-3 border-b-2 border-primary/20 animate-fade-in">
             {/* MAIN CONTAINER FOR WRAPPED CONTENT */}
             <div className="max-w-[1400px] mx-auto relative flex flex-col">
 
@@ -25,7 +25,7 @@ export default function HeroSchema({ productCount }: HeroSchemaProps) {
                         <div className="absolute -top-[2px] -left-[2px] w-8 h-8 border-t-2 border-l-2 border-primary z-20" />
                         <div className="absolute -bottom-[2px] -right-[2px] w-8 h-8 border-b-2 border-r-2 border-primary z-20" />
 
-                        <h1 className="font-gothic text-6xl md:text-8xl tracking-tighter lowercase leading-[0.8] mb-4 drop-shadow-[0_0_15px_rgba(var(--primary-rgb),0.2)]">
+                        <h1 className="font-gothic text-6xl md:text-8xl tracking-tighter lowercase leading-[0.8] mb-2 drop-shadow-[0_0_15px_rgba(var(--primary-rgb),0.2)]">
                             hyper$lump
                         </h1>
                         <div className="relative">
@@ -45,7 +45,7 @@ export default function HeroSchema({ productCount }: HeroSchemaProps) {
                 </div>
 
                 {/* 2. SECONDARY DATA AREA (Schematic Frame) */}
-                <div className="relative mt-0 ml-10 md:ml-20 flex flex-col md:flex-row items-start md:items-end gap-12 border-l-2 border-primary/20 pl-8 md:pl-16 py-4">
+                <div className="relative mt-0 ml-10 md:ml-20 flex flex-col md:flex-row items-start md:items-end gap-12 border-l-2 border-primary/20 pl-8 md:pl-16 py-1">
                     {/* Horizontal separator line */}
                     <div className="absolute top-0 left-0 w-full h-[1px] bg-primary/10" />
 
@@ -86,7 +86,7 @@ export default function HeroSchema({ productCount }: HeroSchemaProps) {
                     </div>
 
                     {/* 3. CATALOG MODULE (Integrated into frame) */}
-                    <div className="self-end md:self-auto bg-[var(--background)] px-8 py-6 border-2 border-primary shadow-[4px_4px_0px_rgba(var(--primary-rgb),0.2)]">
+                    <div className="self-end md:self-auto bg-[var(--background)] px-8 py-4 border-2 border-primary shadow-[4px_4px_0px_rgba(var(--primary-rgb),0.2)]">
                         <div className="text-[10px] uppercase font-bold tracking-[0.4em] text-primary mb-2 text-right opacity-60">
                             Current Catalog_
                         </div>
@@ -97,7 +97,7 @@ export default function HeroSchema({ productCount }: HeroSchemaProps) {
                 </div>
 
                 {/* Decorative Tech Legend */}
-                <div className="mt-4 flex items-center justify-between font-mono text-[8px] opacity-20 uppercase tracking-[0.4em]">
+                <div className="mt-1 flex items-center justify-between font-mono text-[8px] opacity-20 uppercase tracking-[0.4em]">
                     <div className="flex items-center gap-4">
                         <span>Antifreeze_Synthesis_Hub</span>
                         <div className="h-[1px] w-12 bg-primary" />
