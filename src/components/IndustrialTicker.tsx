@@ -99,54 +99,56 @@ export default function IndustrialTicker() {
     const row2Text = "$ $ $ $ /// REF_ID: 0x8823 /// ANALOG_ACTIVE /// $$$ /// 120.00_BPM /// SIGNAL_LOST /// ";
 
     return (
-        <div ref={containerRef} className="w-full border-y border-foreground/10 bg-[var(--background)] overflow-hidden py-12 select-none relative z-20 pointer-events-auto px-4 md:px-8">
-            <div className="w-full overflow-hidden border-x border-primary/10">
-                {/* Row 1 / Gothic */}
-                <div
-                    className="overflow-hidden w-full cursor-pointer"
-                    onMouseEnter={() => onMouseEnter(row1Ref)}
-                    onMouseLeave={() => onMouseLeave(row1Ref)}
-                >
-                    <div ref={row1Ref} className="flex whitespace-nowrap py-2 border-b border-primary/5 w-fit">
-                        {/* Double the content for a seamless GSAP loop */}
-                        {[...Array(2)].map((_, i) => (
-                            <div key={i} className="flex">
-                                {[...Array(6)].map((_, j) => (
-                                    <span key={j} className="font-gothic text-5xl md:text-7xl text-primary px-12 tracking-wider">
-                                        {row1Text}
-                                    </span>
-                                ))}
-                            </div>
-                        ))}
+        <div ref={containerRef} className="w-full py-16 px-6 md:px-12 select-none relative z-20 pointer-events-auto">
+            <div className="border-y border-foreground/10 bg-[var(--background)] relative">
+                <div className="w-full overflow-hidden border-x border-primary/5">
+                    {/* Row 1 / Gothic */}
+                    <div
+                        className="overflow-hidden w-full cursor-pointer"
+                        onMouseEnter={() => onMouseEnter(row1Ref)}
+                        onMouseLeave={() => onMouseLeave(row1Ref)}
+                    >
+                        <div ref={row1Ref} className="flex whitespace-nowrap py-2 border-b border-primary/5 w-fit">
+                            {/* Double the content for a seamless GSAP loop */}
+                            {[...Array(2)].map((_, i) => (
+                                <div key={i} className="flex">
+                                    {[...Array(6)].map((_, j) => (
+                                        <span key={j} className="font-gothic text-5xl md:text-7xl text-primary px-12 tracking-wider">
+                                            {row1Text}
+                                        </span>
+                                    ))}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Row 2 / Mono */}
+                    <div
+                        className="overflow-hidden w-full cursor-pointer"
+                        onMouseEnter={() => onMouseEnter(row2Ref)}
+                        onMouseLeave={() => onMouseLeave(row2Ref)}
+                    >
+                        <div ref={row2Ref} className="flex whitespace-nowrap py-1 w-fit">
+                            {[...Array(2)].map((_, i) => (
+                                <div key={i} className="flex">
+                                    {[...Array(8)].map((_, j) => (
+                                        <span key={j} className="font-mono text-xs md:text-sm text-foreground/50 px-16 tracking-[0.4em] uppercase">
+                                            {row2Text}
+                                        </span>
+                                    ))}
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
 
-                {/* Row 2 / Mono */}
-                <div
-                    className="overflow-hidden w-full cursor-pointer"
-                    onMouseEnter={() => onMouseEnter(row2Ref)}
-                    onMouseLeave={() => onMouseLeave(row2Ref)}
-                >
-                    <div ref={row2Ref} className="flex whitespace-nowrap py-1 w-fit">
-                        {[...Array(2)].map((_, i) => (
-                            <div key={i} className="flex">
-                                {[...Array(8)].map((_, j) => (
-                                    <span key={j} className="font-mono text-xs md:text-sm text-foreground/50 px-16 tracking-[0.4em] uppercase">
-                                        {row2Text}
-                                    </span>
-                                ))}
-                            </div>
-                        ))}
-                    </div>
+                {/* Technical Detail Overlays */}
+                <div className="absolute top-0 right-4 md:right-8 px-2 bg-[var(--background)] border-x border-primary/20 -translate-y-1/2">
+                    <span className="font-mono text-[8px] text-primary/40 uppercase tracking-tighter">Tape_Feed.v1</span>
                 </div>
+                <div className="absolute top-0 left-0 w-8 md:w-16 h-[1px] bg-primary/30 -translate-y-1/2" />
+                <div className="absolute bottom-0 right-0 w-8 md:w-16 h-[1px] bg-primary/30 translate-y-1/2" />
             </div>
-
-            {/* Technical Detail Overlays */}
-            <div className="absolute top-0 right-12 px-2 bg-[var(--background)] border-x border-primary/20">
-                <span className="font-mono text-[8px] text-primary/40 uppercase tracking-tighter">Tape_Feed.v1</span>
-            </div>
-            <div className="absolute top-0 left-0 w-12 h-[1px] bg-primary/30" />
-            <div className="absolute bottom-0 right-0 w-12 h-[1px] bg-primary/30" />
         </div>
     );
 }
