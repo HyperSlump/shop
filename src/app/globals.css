@@ -11,7 +11,7 @@
 
   --radius-DEFAULT: 0px;
 
-  /* Force dark mode to be class-based for the toggle to work regardless of system preference */
+  /* Use a more robust selector for theme switching in Tailwind v4 */
   --variant-dark: .dark &;
 }
 
@@ -35,16 +35,18 @@
 
 /* Base Styles */
 @layer base {
-  :root {
+  html {
     --background: var(--color-background-light);
     --foreground: #000000;
+    --border: rgba(0, 0, 0, 0.1);
     --noise-opacity: 0.03;
     --noise-blend: multiply;
   }
 
-  :root.dark {
+  html.dark {
     --background: var(--color-background-dark);
     --foreground: #ffffff;
+    --border: rgba(255, 255, 255, 0.1);
     --noise-opacity: 0.05;
     --noise-blend: overlay;
   }

@@ -13,7 +13,7 @@ export default async function Home() {
       <Navigation />
 
       <main className="flex-1 flex flex-col">
-        <header className="p-4 md:p-8 border-b border-black/20 dark:border-white/20 flex flex-col md:flex-row justify-between items-end gap-6 bg-background-light dark:bg-background-dark">
+        <header className="p-4 md:p-8 border-b border-[var(--border)] flex flex-col md:flex-row justify-between items-end gap-6 bg-[var(--background)]">
           <div className="flex flex-col">
             <h1 className="hidden md:block font-gothic text-7xl md:text-8xl lg:text-9xl leading-none tracking-tight mb-4 lowercase">
               hyper$lump
@@ -34,7 +34,7 @@ export default async function Home() {
 
         <ProductGrid products={products} />
 
-        <footer className="p-8 md:p-8 border-t border-black/20 dark:border-white/20 flex flex-col md:grid md:grid-cols-3 gap-8 bg-background-light dark:bg-background-dark items-center md:items-end text-center md:text-left">
+        <footer className="p-8 md:p-8 border-t border-[var(--border)] flex flex-col md:grid md:grid-cols-3 gap-8 bg-[var(--background)] items-center md:items-end text-center md:text-left">
           <div className="text-[10px] space-y-1 opacity-60 hidden md:block">
             <p>&gt; INITIALIZING SYSTEM_CORE...</p>
             <p>&gt; LOADING ASSETS [OK]</p>
