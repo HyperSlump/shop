@@ -65,10 +65,11 @@ export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlay
         }
     }, [isActive]);
 
-    const togglePlay = (e: React.MouseEvent) => {
+    const handleTrigger = (e: React.MouseEvent) => {
         e.stopPropagation();
         if (wavesurferRef.current) {
-            wavesurferRef.current.playPause();
+            wavesurferRef.current.seekTo(0);
+            wavesurferRef.current.play();
         }
     };
 
@@ -81,7 +82,7 @@ export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlay
             )}
             <div
                 className="relative bg-black/50 border border-white/10 rounded overflow-hidden hover:border-primary/50 transition-colors group cursor-pointer h-[26px]"
-                onClick={togglePlay}
+                onClick={handleTrigger}
             >
                 {/* Play Icon - Absolute Left */}
                 <div className="absolute left-1 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
