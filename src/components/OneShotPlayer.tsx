@@ -86,7 +86,7 @@ export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlay
                 </span>
             )}
             <div
-                className="relative bg-transparent dark:bg-black border border-black/10 dark:border-white/10 rounded overflow-hidden hover:border-primary/50 transition-colors group cursor-pointer h-[26px]"
+                className="relative bg-[var(--background)] dark:bg-black border border-black/10 dark:border-white/10 rounded overflow-hidden hover:border-primary/50 transition-colors group cursor-pointer h-[26px]"
                 onClick={handleTrigger}
             >
                 {/* Play Icon - Absolute Left */}
