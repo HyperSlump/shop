@@ -93,7 +93,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                     e.stopPropagation();
                                     setShowPreview(true);
                                 }}
-                                className="w-full py-2 border border-primary/30 bg-primary/5 hover:bg-primary hover:text-black transition-all duration-200 group/play flex items-center justify-center gap-2"
+                                className="w-full py-2 border border-primary/30 bg-transparent hover:bg-transparent text-primary/70 hover:text-primary transition-all duration-200 group/play flex items-center justify-center gap-2"
                             >
                                 <span className="material-icons text-sm group-hover/play:scale-110 transition-transform">play_circle</span>
                                 <span className="font-mono text-[8px] uppercase tracking-[0.2em] font-bold">PREVIEW</span>
