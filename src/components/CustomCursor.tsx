@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 
+// Custom cursor component - Updated 2026-02-14
 export default function CustomCursor() {
     const cursorRef = useRef<HTMLDivElement>(null);
     const trailRefs = useRef<(HTMLDivElement | null)[]>([]);
