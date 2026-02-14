@@ -90,16 +90,27 @@ export default function CustomCursor() {
                 className="fixed top-0 left-0 w-5 h-5 -ml-1 -mt-1 z-[9999] pointer-events-none"
                 style={{ opacity: isVisible ? 1 : 0 }}
             >
-                {/* Classic Pointer Shape: Black with White Border */}
-                <div
-                    className={`transition-all duration-300 transform ${isHovering
-                            ? 'w-6 h-6 bg-primary rounded-full scale-125'
-                            : 'w-0 h-0 border-l-[10px] border-l-black border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent transform rotate-[25deg]'
-                        }`}
-                    style={{
-                        filter: isHovering ? 'none' : 'drop-shadow(1px 1px 0px white) drop-shadow(-1px -1px 0px white) drop-shadow(1px -1px 0px white) drop-shadow(-1px 1px 0px white)'
-                    }}
-                />
+                {/* Custom Cursor Content */}
+                <div className="transition-all duration-300 transform scale-100">
+                    {isHovering ? (
+                        /* AI / Gemini Sparkle Symbol */
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="w-10 h-10 -ml-4 -mt-4 text-primary animate-pulse drop-shadow-[0_0_8px_var(--primary)]"
+                        >
+                            <path d="M12 0C12 0 12.5 8.5 21 11.5C21 11.5 12.5 14 12 24C12 24 11.5 14 3 11.5C3 11.5 11.5 9 12 0Z" />
+                        </svg>
+                    ) : (
+                        /* Classic Pointer Shape: Black with White Border */
+                        <div
+                            className="w-0 h-0 border-l-[10px] border-l-black border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent transform rotate-[25deg]"
+                            style={{
+                                filter: 'drop-shadow(1px 1px 0px white) drop-shadow(-1px -1px 0px white) drop-shadow(1px -1px 0px white) drop-shadow(-1px 1px 0px white)'
+                            }}
+                        />
+                    )}
+                </div>
             </div>
 
             {/* Glitchy Multi-Trail */}
