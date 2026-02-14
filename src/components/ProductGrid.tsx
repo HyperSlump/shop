@@ -14,12 +14,16 @@ export default function ProductGrid({ products }: { products: Product[] }) {
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full p-4 md:p-8">
-            {products.map((product) => (
-                <div key={product.id} className="w-full">
+            {products.map((product, index) => (
+                <div
+                    key={product.id}
+                    className="w-full animate-fade-in"
+                    style={{ animationDelay: `${200 + index * 100}ms` }}
+                >
                     <ProductCard
                         product={product}
                         isInCart={isInCart(product.id)}
-                        onAddToCart={handleAddToCart}
+                        onAddToCart={(p) => addToCart(p)}
                     />
                 </div>
             ))}
