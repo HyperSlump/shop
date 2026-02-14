@@ -41,44 +41,61 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
             {/* DEFAULT VIEW: Image + Artistic Overlays */}
             {/* DEFAULT VIEW: Structured Technical Layout */}
             <div className={`absolute inset-0 flex flex-col transition-all duration-300 ${isHovered ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
-                {/* Top Section: Technical Image Display */}
-                <div className="flex-1 relative bg-black/5 dark:bg-white/5 flex items-center justify-center overflow-hidden p-8 border-b border-primary/20 group-hover:border-primary/50 transition-colors duration-500">
-                    {/* Dynamic Grid Background */}
-                    <div
-                        className="absolute inset-0 opacity-[0.15] pointer-events-none"
-                        style={{
-                            backgroundImage: `
-                                linear-gradient(to right, var(--primary) 1px, transparent 1px),
-                                linear-gradient(to bottom, var(--primary) 1px, transparent 1px)
-                            `,
-                            backgroundSize: '40px 40px',
-                            maskImage: 'radial-gradient(circle at center, black, transparent 80%)'
-                        }}
-                    />
+                {/* Top Section: Split Layout (Image Left / Tech Right) */}
+                <div className="flex-1 flex relative border-b border-primary/20 bg-black/5 dark:bg-white/5 group-hover:border-primary/50 transition-colors duration-500">
 
-                    {/* Image Container with Brutalist Frame */}
-                    <div className="relative w-48 h-48 md:w-56 md:h-56 transition-transform duration-500 group-hover:scale-105 group-hover:rotate-1">
-                        {/* Shadow Offset */}
-                        <div className="absolute inset-0 bg-primary translate-x-2 translate-y-2 opacity-20 group-hover:translate-x-3 group-hover:translate-y-3 transition-all duration-300" />
-
-                        {/* Main Image Frame */}
-                        <div className="relative w-full h-full border border-primary/40 bg-black/20 backdrop-blur-sm p-2">
+                    {/* Left Column: Image */}
+                    <div className="w-1/2 relative p-4 flex items-center justify-center border-r border-primary/10">
+                        {/* Centered Image with specialized frame */}
+                        <div className="relative w-full aspect-square shadow-xl transition-transform duration-500 group-hover:scale-105">
+                            {/* Frame Borders */}
+                            <div className="absolute inset-0 border border-primary/30 z-20 pointer-events-none" />
                             {/* Corner Accents */}
-                            <div className="absolute -top-[1px] -left-[1px] w-1.5 h-1.5 bg-primary" />
-                            <div className="absolute -top-[1px] -right-[1px] w-1.5 h-1.5 bg-primary" />
-                            <div className="absolute -bottom-[1px] -left-[1px] w-1.5 h-1.5 bg-primary" />
-                            <div className="absolute -bottom-[1px] -right-[1px] w-1.5 h-1.5 bg-primary" />
+                            <div className="absolute -top-[1px] -left-[1px] w-1 h-1 bg-primary z-30" />
+                            <div className="absolute -top-[1px] -right-[1px] w-1 h-1 bg-primary z-30" />
+                            <div className="absolute -bottom-[1px] -left-[1px] w-1 h-1 bg-primary z-30" />
+                            <div className="absolute -bottom-[1px] -right-[1px] w-1 h-1 bg-primary z-30" />
 
-                            <div className="relative w-full h-full overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
+                            <div className="relative w-full h-full overflow-hidden bg-black">
                                 <Image
                                     alt={product.name}
-                                    className="w-full h-full object-cover contrast-125 hover:contrast-100 transition-all duration-500"
+                                    className="w-full h-full object-cover opacity-80 contrast-125 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
                                     src={product.image || 'https://via.placeholder.com/500'}
                                     fill
                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 />
-                                {/* Image Scanline Overlay */}
-                                <div className="absolute inset-0 bg-[url('/scanlines.png')] opacity-20 pointer-events-none mix-blend-overlay" />
+                                <div className="absolute inset-0 bg-primary/10 mix-blend-overlay" />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right Column: Tech Specs & CTA */}
+                    <div className="w-1/2 relative flex flex-col justify-between p-4 overflow-hidden">
+                        {/* Digital Line Noise Background */}
+                        <div
+                            className="absolute inset-0 opacity-[0.05] pointer-events-none"
+                            style={{
+                                backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, var(--primary) 2px, var(--primary) 4px)'
+                            }}
+                        />
+
+                        {/* Top: Tech Label */}
+                        <div className="relative z-10">
+                            <p className="font-mono text-[8px] text-primary/60 uppercase tracking-widest leading-tight">
+                                // AUDIO_ASSET<br />
+                                // ID: {product.id.slice(0, 6)}...
+                            </p>
+                        </div>
+
+                        {/* Center/Bottom: Interactive CTA */}
+                        <div className="relative z-10 flex-1 flex items-center justify-center">
+                            <div className="group/cta flex flex-col items-center gap-2 opacity-60 group-hover:opacity-100 transition-opacity duration-300">
+                                <div className="w-8 h-8 rounded-full border border-primary/40 flex items-center justify-center group-hover/cta:bg-primary group-hover/cta:text-black transition-all duration-300">
+                                    <span className="material-icons text-sm">play_arrow</span>
+                                </div>
+                                <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-center text-primary/80 group-hover/cta:text-primary">
+                                    HOVER<br />PREVIEW
+                                </span>
                             </div>
                         </div>
                     </div>
