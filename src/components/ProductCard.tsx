@@ -234,7 +234,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     <div className="absolute -top-[2px] right-8 w-12 h-[2px] bg-red-500 z-20" />
                     {/* Header Row */}
                     <div className="flex justify-between items-start">
-                        <h3 className="font-gothic text-2xl text-foreground leading-none tracking-wide">
+                        <h3 className="font-gothic text-2xl text-foreground leading-none tracking-wide max-w-[70%]">
                             {product.name}
                         </h3>
                         <span className="font-mono text-primary font-bold border border-primary/30 px-2 py-0.5 text-[10px]">
