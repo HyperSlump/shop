@@ -77,9 +77,9 @@ export default function CartDrawer() {
                         {cart.map((item) => (
                             <div
                                 key={item.id}
-                                className="flex gap-4 p-4 border border-black/10 dark:border-white/10 bg-white/40 dark:bg-black/40 backdrop-blur-sm shadow-sm hover:shadow-md hover:border-primary/30 transition-all relative group"
+                                className="flex gap-4 p-4 border border-primary/40 hover:border-primary hover:bg-primary/5 transition-all duration-300 relative group bg-transparent"
                             >
-                                <div className="relative w-24 h-24 shrink-0 overflow-hidden border border-black/10 dark:border-white/10 bg-white/5">
+                                <div className="relative w-24 h-24 shrink-0 overflow-hidden border border-primary/20 bg-black/20">
                                     <NextImage
                                         src={item.image || 'https://via.placeholder.com/100'}
                                         alt={item.name}
