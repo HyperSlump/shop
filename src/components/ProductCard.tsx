@@ -4,6 +4,7 @@ import { useState } from 'react';
 import WaveformOverlay from './WaveformOverlay';
 import OneShotPlayer from './OneShotPlayer';
 import Image from 'next/image';
+import MatrixSpace from './MatrixSpace';
 
 interface ProductCardProps {
     product: any; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -70,6 +71,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, var(--primary) 2px, var(--primary) 4px)'
                             }}
                         />
+                        <MatrixSpace />
 
                         {/* Top: Tech Label */}
                         <div className="relative z-10 mb-2 font-mono text-[8px] uppercase tracking-widest leading-tight">
@@ -127,10 +129,12 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
             {/* PREVIEW OVERLAY: Informative Details + Player */}
             <div className={`absolute inset-0 bg-[var(--background)] backdrop-blur-md p-6 flex flex-col justify-between transition-all duration-300 z-30 ${showPreview ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
-                {/* Internal Noise for Hover State */}
+                {/* Digital Line Noise Background (Cart Style) */}
                 <div
-                    className="absolute inset-0 noise pointer-events-none opacity-[var(--noise-opacity)]"
-                    style={{ mixBlendMode: 'var(--noise-blend)' as any }}
+                    className="absolute inset-0 opacity-[0.03] dark:opacity-5 pointer-events-none z-0"
+                    style={{
+                        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, var(--primary) 2px, var(--primary) 4px)'
+                    }}
                 />
                 {/* Neon Decorative Corners */}
                 <div className="absolute top-0 left-0 w-8 h-8 border-t border-l border-primary/40 pointer-events-none" />

@@ -89,12 +89,12 @@ export default function CartDrawer() {
                                 className={`flex gap-4 p-4 border border-primary/40 hover:border-primary hover:bg-primary/5 transition-all duration-500 relative group bg-transparent ${exitingItems.includes(item.id) ? 'opacity-0 translate-x-12' : 'opacity-100 translate-x-0'
                                     }`}
                             >
-                                <div className="relative w-24 h-24 shrink-0 overflow-hidden border border-primary/20 bg-black/20">
+                                <div className="relative w-24 h-24 shrink-0 overflow-hidden border border-primary/20 bg-transparent">
                                     <NextImage
                                         src={item.image || 'https://via.placeholder.com/100'}
                                         alt={item.name}
                                         fill
-                                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                        className="object-cover opacity-80 contrast-125 grayscale group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"
                                     />
                                 </div>
                                 <div className="flex-1 flex flex-col justify-between">
