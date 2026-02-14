@@ -113,7 +113,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 </div>
 
                 {/* Bottom Section: Info - New Industrial Design */}
-                <div className="h-auto border-t-2 border-primary/30 bg-[var(--background)] pt-4 px-4 pb-6 relative flex flex-col gap-2">
+                <div className="min-h-[140px] border-t-2 border-primary/30 bg-[var(--background)] pt-4 px-4 pb-6 relative flex flex-col gap-2">
                     {/* Top Notch decorative element */}
                     <div className="absolute -top-[2px] right-8 w-12 h-[2px] bg-red-500 z-20" />
 
@@ -229,7 +229,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 </div>
 
                 {/* Bottom Section: Info - Consistent with Front */}
-                <div className="h-auto border-t-2 border-primary/30 bg-[var(--background)] pt-4 px-4 pb-6 relative flex flex-col gap-2">
+                <div className="min-h-[140px] border-t-2 border-primary/30 bg-[var(--background)] pt-4 px-4 pb-6 relative flex flex-col gap-2">
                     {/* Top Notch decorative element */}
                     <div className="absolute -top-[2px] right-8 w-12 h-[2px] bg-red-500 z-20" />
                     {/* Header Row */}
