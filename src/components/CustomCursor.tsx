@@ -87,14 +87,19 @@ export default function CustomCursor() {
             {/* Main Interactive Cursor */}
             <div
                 ref={cursorRef}
-                className="fixed top-0 left-0 w-4 h-4 -ml-2 -mt-2 z-[9999] pointer-events-none"
+                className="fixed top-0 left-0 w-5 h-5 -ml-1 -mt-1 z-[9999] pointer-events-none"
                 style={{ opacity: isVisible ? 1 : 0 }}
             >
-                <div className={`w-full h-full border-2 transition-all duration-300 transform ${isHovering ? 'scale-[2.5] bg-primary border-primary rounded-full' : 'scale-100 rotate-45 border-black'}`} />
-
-                {/* Technical Crosshairs */}
-                <div className={`absolute top-1/2 left-[-4px] right-[-4px] h-[1px] bg-black/40 transition-opacity ${isHovering ? 'opacity-0' : 'opacity-100'}`} />
-                <div className={`absolute left-1/2 top-[-4px] bottom-[-4px] w-[1px] bg-black/40 transition-opacity ${isHovering ? 'opacity-0' : 'opacity-100'}`} />
+                {/* Classic Pointer Shape: Black with White Border */}
+                <div
+                    className={`transition-all duration-300 transform ${isHovering
+                            ? 'w-6 h-6 bg-primary rounded-full scale-125'
+                            : 'w-0 h-0 border-l-[10px] border-l-black border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent transform rotate-[25deg]'
+                        }`}
+                    style={{
+                        filter: isHovering ? 'none' : 'drop-shadow(1px 1px 0px white) drop-shadow(-1px -1px 0px white) drop-shadow(1px -1px 0px white) drop-shadow(-1px 1px 0px white)'
+                    }}
+                />
             </div>
 
             {/* Glitchy Multi-Trail */}
