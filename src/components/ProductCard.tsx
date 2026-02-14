@@ -178,105 +178,110 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
             </div>
 
             {/* PREVIEW OVERLAY: Informative Details + Player */}
-            <div className={`absolute inset-0 bg-[var(--background)] backdrop-blur-md p-6 flex flex-col justify-between transition-all duration-300 z-30 ${showPreview ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
-                {/* Digital Line Noise Background (Cart Style) */}
+            <div className={`absolute inset-0 bg-[var(--background)] backdrop-blur-md flex flex-col transition-all duration-300 z-30 ${showPreview ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
+                {/* Background Decoration */}
                 <div
                     className="absolute inset-0 opacity-[0.03] dark:opacity-5 pointer-events-none z-0"
                     style={{
                         backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, var(--primary) 2px, var(--primary) 4px)'
                     }}
                 />
-                {/* Neon Decorative Corners */}
-                <div className="absolute top-0 left-0 w-8 h-8 border-t border-l border-primary/40 pointer-events-none" />
-                <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-primary/40 pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-8 h-8 border-b border-l border-primary/40 pointer-events-none" />
-                <div className="absolute bottom-0 right-0 w-8 h-8 border-b border-r border-primary/40 pointer-events-none" />
 
-                {/* Header */}
-                <div className="space-y-2 relative">
-                    <div className="flex justify-between items-start">
-                        <h3 className="font-gothic text-2xl text-foreground">{product.name}</h3>
-                        <div className="flex items-start gap-4">
-                            <div className="flex flex-col items-end gap-1 mt-1">
-                                <span className="font-mono text-primary text-xs mb-1">{product.amount === 0 ? 'FREE' : `$${product.amount}`}</span>
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        onAddToCart(product);
-                                    }}
-                                    disabled={isInCart}
-                                    className="hidden md:block font-mono text-xs text-primary uppercase hover:opacity-70 transition-opacity whitespace-nowrap text-right"
-                                >
-                                    {isInCart ? '[ ADDED ]' : '[ ADD TO CART ]'}
-                                </button>
+                {/* Top Section: Split Layout (Waveform | One-Shots) */}
+                <div className="flex-1 flex relative border-b border-primary/20 bg-black/5 dark:bg-white/5">
+                    {/* Left Column: Main Waveform */}
+                    <div className="w-1/2 relative p-4 flex flex-col justify-center border-r border-primary/10">
+                        {audioPreviewUrl && showPreview && (
+                            <div className="relative w-full h-32 bg-[var(--background)] border border-primary/30 rounded overflow-hidden group/wave shadow-xl">
+                                <div className="absolute top-2 left-2 text-[8px] text-primary/60 uppercase tracking-[0.2em] font-bold z-10 flex items-center gap-1">
+                                    <div className="w-1 h-1 bg-red-500 rounded-full animate-pulse" />
+                                    MAIN_PREVIEW.WAV
+                                </div>
+                                <WaveformOverlay
+                                    audioUrl={audioPreviewUrl}
+                                    isActive={showPreview}
+                                />
                             </div>
-                            {/* Close Button - Always visible now */}
+                        )}
+                    </div>
+
+                    {/* Right Column: One-Shots */}
+                    <div className="w-1/2 p-4 flex flex-col gap-2 overflow-hidden relative">
+                        <div className="flex justify-between items-center mb-1">
+                            <span className="font-mono text-[8px] text-primary/40 uppercase tracking-widest">// SAMPLES</span>
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setShowPreview(false);
                                 }}
-                                className="text-foreground/50 hover:text-foreground transition-colors"
+                                className="text-foreground/30 hover:text-red-500 transition-colors"
                             >
-                                <span className="material-icons text-xl">close</span>
+                                <span className="material-icons text-base">close</span>
                             </button>
                         </div>
-                    </div>
-                    <div className="w-full h-[1px] bg-primary/30" />
-                    <p className="font-mono text-[10px] text-foreground/70 leading-tight">
-                        {product.description || "Raw industrial audio assets."}
-                    </p>
-                </div>
-
-                {/* Main Waveform */}
-                {audioPreviewUrl && showPreview && (
-                    <div className="relative w-full h-16 bg-[var(--background)] border border-primary/50 dark:border-white/10 rounded overflow-hidden shrink-0 group/wave">
-                        {/* Technical accents for waveform */}
-                        <div className="absolute top-0 left-0 w-2 h-[1px] bg-primary/20 dark:bg-primary/60" />
-                        <div className="absolute bottom-0 right-0 w-2 h-[1px] bg-primary/20 dark:bg-primary/60" />
-
-                        <div className="absolute top-1 left-2 text-[8px] text-foreground/50 dark:text-primary/80 uppercase tracking-widest flex items-center gap-1">
-                            <div className="w-1 h-1 bg-primary animate-pulse rounded-full" />
-                            Main Preview
-                        </div>
-                        <WaveformOverlay
-                            audioUrl={audioPreviewUrl}
-                            isActive={showPreview}
-                        />
-                    </div>
-                )}
-
-                {/* One Shots Grid */}
-                {showPreview && samples.length > 0 && (
-                    <div className="space-y-1 relative">
-                        <div className="flex items-center gap-2">
-                            <p className="font-mono text-[9px] text-gray-500/50 dark:text-gray-400/50 uppercase tracking-widest">One Shots</p>
-                            <div className="flex-1 h-[1px] bg-black/5 dark:bg-white/5" />
-                        </div>
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="flex-1 overflow-y-auto pr-1 space-y-2 custom-scrollbar">
                             {samples.map((url, index) => (
                                 <OneShotPlayer
                                     key={index}
                                     audioUrl={url}
-                                    label={`Shot ${index + 1}`}
+                                    label={`S_${index + 1}`}
                                     isActive={showPreview}
                                 />
                             ))}
                         </div>
                     </div>
-                )}
+                </div>
 
-                {/* Action - Mobile Only */}
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onAddToCart(product);
-                    }}
-                    disabled={isInCart}
-                    className="md:hidden w-full py-4 font-mono text-xs text-primary uppercase hover:opacity-70 transition-opacity"
-                >
-                    {isInCart ? '[ ADDED ]' : '[ ADD TO CART ]'}
-                </button>
+                {/* Bottom Section: Info - Consistent with Front */}
+                <div className="h-auto border-t border-primary/10 bg-[var(--background)] pt-4 px-4 pb-6 relative flex flex-col gap-2">
+                    {/* Header Row */}
+                    <div className="flex justify-between items-start">
+                        <h3 className="font-gothic text-2xl text-foreground leading-none tracking-wide">
+                            {product.name}
+                        </h3>
+                        <span className="font-mono text-primary font-bold border border-primary/30 px-2 py-0.5 text-[10px]">
+                            {product.amount === 0 ? 'FREE' : `$${product.amount}`}
+                        </span>
+                    </div>
+
+                    {/* Meta Data (Brief) */}
+                    <div className="flex items-center gap-2 opacity-60">
+                        <div className="w-1 h-1 bg-primary rounded-full" />
+                        <span className="font-mono text-[8px] text-primary uppercase whitespace-nowrap">
+                            PREVIEW_MODE // {product.id.slice(0, 6)}
+                        </span>
+                        <div className="h-[1px] flex-1 bg-primary/20" />
+                    </div>
+
+                    {/* Action Row */}
+                    <div className="flex items-center justify-between mt-1 pt-2 border-t border-primary/10">
+                        {/* Back Button */}
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setShowPreview(false);
+                            }}
+                            className="text-left font-mono text-[11px] uppercase tracking-widest text-foreground/40 hover:text-foreground transition-colors flex items-center gap-2 group/back"
+                        >
+                            <span className="w-2 h-2 border border-current group-hover/back:bg-foreground transition-all rounded-[1px]" />
+                            [ BACK ]
+                        </button>
+
+                        {/* Cart Button */}
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onAddToCart(product);
+                            }}
+                            disabled={isInCart}
+                            className="text-right font-mono text-[12px] text-primary uppercase hover:opacity-70 transition-opacity font-bold"
+                        >
+                            {isInCart ? '[ IN CART ]' : '[ ADD TO CART ]'}
+                        </button>
+                    </div>
+
+                    <div className="absolute bottom-0 right-0 w-2 h-2 border-r border-b border-primary/40" />
+                </div>
 
             </div>
         </div>
