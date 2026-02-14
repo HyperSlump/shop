@@ -83,9 +83,8 @@ export default function CartDrawer() {
                 </header>
 
                 {cart.length === 0 ? (
-                    <div className="flex-1 flex flex-col items-center justify-center opacity-30 space-y-4 relative z-10">
-                        <span className="material-icons text-8xl">shopping_bag</span>
-                        <p className="font-mono text-xs tracking-[0.5em]">BUFFER_EMPTY</p>
+                    <div className="flex-1 flex flex-col items-center justify-center opacity-20 relative z-10">
+                        <span className="material-icons text-9xl">shopping_cart</span>
                     </div>
                 ) : (
                     <div className="flex-1 overflow-y-auto overflow-x-hidden space-y-4 px-6 custom-scrollbar relative z-10">
