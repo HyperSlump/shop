@@ -91,24 +91,25 @@ export default function CustomCursor() {
                 style={{ opacity: isVisible ? 1 : 0 }}
             >
                 {/* Custom Cursor Content */}
-                <div className="transition-all duration-300 transform scale-100">
+                <div className="transition-all duration-300 transform">
                     {isHovering ? (
-                        /* AI / Gemini Sparkle Symbol */
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                            className="w-10 h-10 -ml-4 -mt-4 text-primary animate-pulse drop-shadow-[0_0_8px_var(--primary)]"
-                        >
-                            <path d="M12 0C12 0 12.5 8.5 21 11.5C21 11.5 12.5 14 12 24C12 24 11.5 14 3 11.5C3 11.5 11.5 9 12 0Z" />
-                        </svg>
+                        /* Target Lock / Digital Crosshair */
+                        <div className="relative w-6 h-6 -ml-3 -mt-3">
+                            {/* Four Corner Brackets */}
+                            <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-primary" />
+                            <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-primary" />
+                            <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-primary" />
+                            <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-primary" />
+                            {/* Center Dot */}
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-1 bg-primary rounded-full animate-ping" />
+                        </div>
                     ) : (
-                        /* Classic Pointer Shape: Black with White Border */
-                        <div
-                            className="w-0 h-0 border-l-[10px] border-l-black border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent transform rotate-[25deg]"
-                            style={{
-                                filter: 'drop-shadow(1px 1px 0px white) drop-shadow(-1px -1px 0px white) drop-shadow(1px -1px 0px white) drop-shadow(-1px 1px 0px white)'
-                            }}
-                        />
+                        /* Technical Sharp Pointer */
+                        <div className="group">
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 1V15L5 11L9 15L11 13L7 9L11 5L1 1Z" fill="black" stroke="white" strokeWidth="1" />
+                            </svg>
+                        </div>
                     )}
                 </div>
             </div>
