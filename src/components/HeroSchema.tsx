@@ -8,7 +8,7 @@ interface HeroSchemaProps {
 
 export default function HeroSchema({ productCount }: HeroSchemaProps) {
     return (
-        <section className="relative w-full overflow-hidden bg-[var(--background)] border-b-2 border-primary/20 animate-fade-in px-0 pt-0 pb-0">
+        <section className="relative w-full overflow-hidden bg-[var(--background)] animate-fade-in px-0 pt-0 pb-0">
             {/* MAIN CONTAINER - 100% WIDTH ZERO GAPS */}
             <div className="w-full relative flex flex-col p-4 md:p-6 lg:p-10">
 
