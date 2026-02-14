@@ -41,7 +41,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
             <div className="absolute inset-0">
                 <Image
                     alt={product.name}
-                    className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-40 group-hover:blur-sm dark:grayscale dark:contrast-125"
+                    className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-40 group-hover:blur-sm saturated dark:grayscale dark:contrast-125"
                     src={product.image || 'https://via.placeholder.com/500'}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -68,7 +68,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
             <div className={`absolute bottom-0 left-0 right-0 p-4 transition-opacity duration-300 z-20 ${isHovered ? 'opacity-0' : 'opacity-100'}`}>
                 <div className="flex justify-between items-end">
-                    <h3 className="font-gothic text-3xl text-white mix-blend-difference">{product.name}</h3>
+                    <h3 className="font-gothic text-3xl text-black dark:text-white dark:mix-blend-difference">{product.name}</h3>
                     <span className="font-mono text-primary text-xs bg-primary/10 px-2 py-1">{product.amount === 0 ? 'FREE' : `$${product.amount}`}</span>
                 </div>
             </div>
@@ -112,12 +112,12 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
                 {/* Main Waveform */}
                 {audioPreviewUrl && isHovered && (
-                    <div className="relative w-full h-16 bg-black border border-white/10 rounded overflow-hidden shrink-0 group/wave">
+                    <div className="relative w-full h-16 bg-white dark:bg-black border border-black/10 dark:border-white/10 rounded overflow-hidden shrink-0 group/wave">
                         {/* Technical accents for waveform */}
                         <div className="absolute top-0 left-0 w-2 h-[1px] bg-primary/60" />
                         <div className="absolute bottom-0 right-0 w-2 h-[1px] bg-primary/60" />
 
-                        <div className="absolute top-1 left-2 text-[8px] text-primary/80 uppercase tracking-widest flex items-center gap-1">
+                        <div className="absolute top-1 left-2 text-[8px] text-primary/80 dark:text-primary/80 uppercase tracking-widest flex items-center gap-1">
                             <div className="w-1 h-1 bg-primary animate-pulse rounded-full" />
                             Main Preview
                         </div>
@@ -133,7 +133,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     <div className="space-y-1 relative">
                         <div className="flex items-center gap-2">
                             <p className="font-mono text-[9px] text-gray-500 uppercase tracking-widest">One Shots</p>
-                            <div className="flex-1 h-[1px] bg-white/5" />
+                            <div className="flex-1 h-[1px] bg-black/5 dark:bg-white/5" />
                         </div>
                         <div className="grid grid-cols-2 gap-2">
                             {samples.map((url, index) => (

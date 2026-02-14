@@ -30,9 +30,12 @@ export default function WaveformOverlay({
 
             if (!isMounted.current) return;
 
+            const isDark = document.documentElement.classList.contains('dark');
+            const waveColor = isDark ? '#333333' : '#e0e0e0';
+
             ws = WaveSurfer.create({
                 container: containerRef.current,
-                waveColor: '#333333',
+                waveColor: waveColor,
                 progressColor: primaryColor,
                 cursorColor: primaryColor,
                 barWidth: 3,

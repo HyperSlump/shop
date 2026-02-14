@@ -42,18 +42,18 @@ export default function CartDrawer() {
 
             {/* Drawer */}
             <aside
-                className={`fixed top-0 right-0 h-full w-full md:w-[480px] bg-background-light dark:bg-background-dark border-l border-black/20 dark:border-white/20 z-[70] flex flex-col p-6 shadow-2xl transition-all duration-500 ease-out ${isCartOpen
+                className={`fixed top-0 right-0 h-full w-full md:w-[480px] bg-[var(--background)] border-l border-black/10 dark:border-white/10 z-[70] flex flex-col shadow-2xl transition-all duration-500 ease-out ${isCartOpen
                     ? 'opacity-100 translate-y-0 translate-x-0'
                     : 'opacity-0 translate-y-8 translate-x-4 pointer-events-none'
                     }`}
             >
-                <header className="flex justify-between items-center mb-8 border-b border-black/10 dark:border-white/10 pb-4">
+                <header className="flex justify-between items-center mb-8 border-b border-black/10 dark:border-white/10 p-6 pb-4">
                     <h2 className="font-gothic text-4xl uppercase tracking-tighter text-primary">Your Crate ({cart.length})</h2>
                     <button
                         onClick={toggleCart}
-                        className="hover:rotate-90 active:scale-95 transition-transform text-2xl font-mono text-primary/70 hover:text-primary p-2"
+                        className="hover:rotate-90 active:scale-95 transition-all text-3xl font-gothic text-primary/70 hover:text-primary px-4"
                     >
-                        ✕
+                        X
                     </button>
                 </header>
 
@@ -69,18 +69,18 @@ export default function CartDrawer() {
                                 key={item.id}
                                 className="flex gap-4 p-4 border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 transition-all relative group"
                             >
-                                <div className="relative w-24 h-24 shrink-0 overflow-hidden border border-black/10 dark:border-white/10">
+                                <div className="relative w-24 h-24 shrink-0 overflow-hidden border border-black/10 dark:border-white/10 bg-white/5">
                                     <NextImage
                                         src={item.image || 'https://via.placeholder.com/100'}
                                         alt={item.name}
                                         fill
-                                        className="object-cover grayscale contrast-125 group-hover:scale-110 transition-transform duration-500"
+                                        className="object-cover grayscale-0 dark:grayscale contrast-100 dark:contrast-125 group-hover:scale-110 transition-transform duration-500"
                                     />
                                 </div>
                                 <div className="flex-1 flex flex-col justify-between">
                                     <div className="space-y-1">
-                                        <h3 className="font-gothic text-xl leading-none tracking-tight">{item.name}</h3>
-                                        <p className="text-[9px] font-mono opacity-50 uppercase tracking-widest">
+                                        <h3 className="font-gothic text-xl leading-none tracking-tight text-black dark:text-white">{item.name}</h3>
+                                        <p className="text-[9px] font-mono text-black/50 dark:text-white/50 uppercase tracking-widest">
                                             {item.metadata?.key && `KEY_${item.metadata.key} // `}
                                             PTR_{item.id.slice(-6)}
                                         </p>
@@ -102,15 +102,15 @@ export default function CartDrawer() {
                     </div>
                 )}
 
-                <div className="mt-8 border-t border-black/20 dark:border-white/20 pt-6 space-y-4 bg-background-light dark:bg-background-dark">
+                <div className="mt-8 border-t border-black/20 dark:border-white/20 p-6 pt-6 space-y-4">
                     <div className="flex justify-between font-mono text-xl font-bold tracking-tighter">
-                        <span className="opacity-60">SUBTOTAL_</span>
+                        <span className="opacity-60 text-black dark:text-white">SUBTOTAL_</span>
                         <span className="text-primary">${cartTotal.toFixed(2)}</span>
                     </div>
                     <button
                         onClick={handleCheckout}
                         disabled={cart.length === 0 || loading}
-                        className="w-full bg-primary text-black font-bold uppercase py-5 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-30 disabled:grayscale disabled:cursor-not-allowed flex items-center justify-center gap-3 text-sm tracking-widest"
+                        className="w-full bg-primary text-primary-foreground font-bold uppercase py-5 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-30 disabled:grayscale disabled:cursor-not-allowed flex items-center justify-center gap-3 text-sm tracking-widest"
                     >
                         {loading ? (
                             <>

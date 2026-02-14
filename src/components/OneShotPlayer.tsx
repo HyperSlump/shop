@@ -20,11 +20,13 @@ export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlay
             if (!containerRef.current) return;
             const WaveSurfer = (await import('wavesurfer.js')).default;
 
+            const isDark = document.documentElement.classList.contains('dark');
+            const waveColor = isDark ? '#333333' : '#e0e0e0';
             const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#ccff00';
 
             ws = WaveSurfer.create({
                 container: containerRef.current,
-                waveColor: '#333333',
+                waveColor: waveColor,
                 progressColor: primaryColor,
                 cursorColor: primaryColor,
                 barWidth: 3,
@@ -84,7 +86,7 @@ export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlay
                 </span>
             )}
             <div
-                className="relative bg-black border border-white/10 rounded overflow-hidden hover:border-primary/50 transition-colors group cursor-pointer h-[26px]"
+                className="relative bg-white dark:bg-black border border-black/10 dark:border-white/10 rounded overflow-hidden hover:border-primary/50 transition-colors group cursor-pointer h-[26px]"
                 onClick={handleTrigger}
             >
                 {/* Play Icon - Absolute Left */}
@@ -92,7 +94,7 @@ export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlay
                     {isPlaying ? (
                         <Pause size={10} className="text-primary fill-current" />
                     ) : (
-                        <Play size={10} className="text-white group-hover:text-primary fill-current transition-colors" />
+                        <Play size={10} className="text-black dark:text-white group-hover:text-primary fill-current transition-colors" />
                     )}
                 </div>
 
