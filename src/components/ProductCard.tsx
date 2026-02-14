@@ -49,12 +49,9 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/40 to-[var(--background)]" />
                     </div>
 
-                    <div className="relative z-10 flex-1 overflow-y-auto p-4 flex flex-col items-center gap-4 custom-scrollbar">
+                    <div className="relative z-10 flex-1 overflow-hidden p-4 flex flex-col items-center gap-2 custom-scrollbar">
                         {/* Centered Image Frame */}
-                        <div className="relative w-40 h-40 shrink-0 shadow-2xl transition-transform duration-500 group-hover:scale-105">
-                            {/* Detailed Specimen Brackets */}
-                            <div className="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-red-500 z-30" />
-                            <div className="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-red-500 z-30" />
+                        <div className="relative w-36 h-36 shrink-0 shadow-2xl transition-transform duration-500 group-hover:scale-105">
 
                             {/* Technical Label */}
                             <div className="absolute bottom-1 left-1 z-30 font-mono text-[6px] text-white/40 bg-black/40 px-1">
@@ -74,9 +71,9 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         </div>
 
                         {/* Technical Metadata Stack */}
-                        <div className="w-full space-y-3">
+                        <div className="w-full space-y-2">
                             {/* Status Label */}
-                            <div className="flex items-center justify-between border-b border-primary/10 pb-2 text-[8px]">
+                            <div className="flex items-center justify-between border-b border-primary/10 pb-1.5 text-[8px]">
                                 <div className="flex items-center gap-1.5 font-mono uppercase tracking-widest leading-tight">
                                     <span className="w-1 h-1 bg-red-500 rounded-sm animate-pulse" />
                                     <span className="text-red-500/90 font-bold">system.active</span>
@@ -90,7 +87,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                             </p>
 
                             {/* Info Grid - Full Width */}
-                            <div className="grid grid-cols-2 gap-x-4 gap-y-1 pt-2 border-t border-primary/10">
+                            <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 pt-1.5 border-t border-primary/10">
                                 <div className="flex justify-between items-center font-mono text-[9px] text-primary/40 uppercase">
                                     <span>fmt</span>
                                     <span className="text-foreground/60">{product.metadata?.format || "WAV"}</span>
@@ -163,8 +160,6 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         </button>
                     </div>
 
-                    {/* Decorative Corner */}
-                    <div className="absolute bottom-0 right-0 w-2 h-2 border-r border-b border-[#570e0e]/40" />
                 </div>
             </div>
 
@@ -281,30 +276,8 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         </button>
                     </div>
 
-                    <div className="absolute bottom-0 right-0 w-2 h-2 border-r border-b border-primary/40" />
                 </div>
 
-            </div>
-            {/* GLOBAL DECORATION LAYER (Always on top) */}
-            <div className="absolute inset-0 z-50 pointer-events-none border border-foreground/5">
-                {/* Corner Brackets */}
-                <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-primary/60 transition-all group-hover:w-6 group-hover:h-6" />
-                <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary/60 transition-all group-hover:w-6 group-hover:h-6" />
-                <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-primary/60 transition-all group-hover:w-6 group-hover:h-6" />
-                <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-primary/60 transition-all group-hover:w-6 group-hover:h-6" />
-
-                {/* Industrial Screws */}
-                <div className="absolute top-2 left-2 w-1 h-1 bg-primary/40 rounded-full shadow-[0_0_5px_rgba(var(--primary-rgb),0.5)]" />
-                <div className="absolute top-2 right-2 w-1 h-1 bg-primary/40 rounded-full shadow-[0_0_5px_rgba(var(--primary-rgb),0.5)]" />
-                <div className="absolute bottom-2 left-2 w-1 h-1 bg-primary/40 rounded-full shadow-[0_0_5px_rgba(var(--primary-rgb),0.5)]" />
-                <div className="absolute bottom-2 right-2 w-1 h-1 bg-primary/40 rounded-full shadow-[0_0_5px_rgba(var(--primary-rgb),0.5)]" />
-
-                {/* Floating Unit ID */}
-                <div className="absolute top-[2px] right-10 px-2 bg-[var(--background)] border-x border-primary/10 flex items-center">
-                    <span className="font-mono text-[8px] text-primary/60 font-medium tracking-widest uppercase">
-                        REF_ID: // {product.id.slice(0, 8)}
-                    </span>
-                </div>
             </div>
         </div>
     );
