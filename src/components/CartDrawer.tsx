@@ -64,8 +64,15 @@ export default function CartDrawer() {
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/60 to-[var(--background)]" />
                 </div>
 
-                <header className="flex justify-between items-center mb-8 border-b border-black/10 dark:border-white/10 p-6 pb-4 relative z-10">
-                    <h2 className="font-gothic text-4xl uppercase tracking-tighter text-foreground">Your Crate ({cart.length})</h2>
+                <header className="flex justify-between items-center mb-0 border-b border-black/10 dark:border-white/10 p-6 pb-6 relative z-10">
+                    <div className="flex flex-col">
+                        <div className="text-sm uppercase font-bold tracking-[0.2em] text-primary">
+                            Current Cart
+                        </div>
+                        <div className="text-4xl font-gothic leading-none text-foreground mt-1">
+                            {cart.length} {cart.length === 1 ? 'Item' : 'Items'}
+                        </div>
+                    </div>
                     <button
                         onClick={toggleCart}
                         className="hover:translate-x-1 active:scale-95 transition-all text-primary/70 hover:text-primary px-4 flex items-center gap-2 group"
