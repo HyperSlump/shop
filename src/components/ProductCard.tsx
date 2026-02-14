@@ -97,7 +97,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 </div>
 
                 {/* Bottom Section: Info - Sparse but Technical */}
-                <div className="h-auto border-t border-[#570e0e]/20 bg-[var(--background)] p-4 relative flex flex-col gap-2">
+                <div className="h-auto border-t border-[#570e0e]/20 bg-[var(--background)] pt-4 px-4 pb-6 relative flex flex-col gap-2">
 
                     {/* Header Row */}
                     <div className="flex justify-between items-start">
