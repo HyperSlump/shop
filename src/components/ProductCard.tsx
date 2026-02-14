@@ -125,7 +125,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 onAddToCart(product);
                             }}
                             disabled={isInCart}
-                            className="w-full py-2 bg-red-600 hover:bg-red-500 disabled:bg-red-600/50 disabled:cursor-not-allowed text-white font-mono font-bold text-[10px] uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2 shadow-[0_0_10px_rgba(220,38,38,0.3)] hover:shadow-[0_0_15px_rgba(220,38,38,0.5)]"
+                            className="w-full py-2 bg-[#570e0e] hover:bg-[#751b1b] disabled:bg-[#570e0e]/50 disabled:cursor-not-allowed text-stone-300 font-mono font-bold text-[10px] uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2 shadow-[0_0_10px_rgba(87,14,14,0.3)] hover:shadow-[0_0_15px_rgba(117,27,27,0.5)] border border-red-900/30"
                         >
                             {isInCart ? 'IN CART' : 'BUY NOW'}
                         </button>
