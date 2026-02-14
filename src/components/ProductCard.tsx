@@ -197,7 +197,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                     <div className="w-1 h-1 bg-red-500 rounded-full animate-pulse" />
                                     <span className="font-mono text-[8px] text-primary/60 uppercase tracking-[0.2em]">MAIN_PREVIEW.WAV</span>
                                 </div>
-                                <div className="relative w-full h-[26px] bg-[var(--background)] border border-primary/30 rounded overflow-hidden group/wave shadow-xl">
+                                <div className="relative w-full h-[26px] bg-[var(--background)] border-2 border-primary/60 dark:border-white/30 rounded overflow-hidden group/wave">
                                     <WaveformOverlay
                                         audioUrl={audioPreviewUrl}
                                         isActive={showPreview}

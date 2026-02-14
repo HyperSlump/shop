@@ -41,7 +41,7 @@ export default function WaveformOverlay({
                 barWidth: 3,
                 barGap: 1,
                 barRadius: 2,
-                height: 48,
+                height: 24,
                 normalize: true,
                 backend: 'WebAudio',
             });
