@@ -10,12 +10,12 @@ export default async function Home() {
   const products = await getActiveProducts();
 
   return (
-    <div className="relative min-h-screen flex flex-col md:flex-row overflow-x-hidden bg-[var(--background)]">
+    <div className="relative min-h-screen flex flex-col md:flex-row bg-[var(--background)]">
       {/* Navigation Sidebar */}
       <Navigation />
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col min-w-0">
+      <main className="flex-1 flex flex-col min-w-0 pt-16 md:pt-0">
         <header className="p-6 md:p-12 border-b border-[var(--border)] flex flex-col md:flex-row justify-between items-start md:items-end gap-10 bg-[var(--background)] animate-fade-in delay-100">
           <div className="flex flex-col">
             <h1 className="hidden md:block font-gothic text-7xl md:text-8xl lg:text-9xl leading-[0.8] tracking-tight mb-6 lowercase">
