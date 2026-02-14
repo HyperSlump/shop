@@ -88,9 +88,12 @@ export default function EncryptText() {
                 We render all paragraphs invisibly to force the container to take the height 
                  of the largest possible paragraph, preventing layout shift. 
             */}
-            <div className="invisible aria-hidden pointer-events-none" aria-hidden="true">
+            <div className="invisible aria-hidden pointer-events-none relative" aria-hidden="true">
                 {PARAGRAPHS.map((p, i) => (
-                    <div key={i} className="text-sm md:text-base font-mono leading-relaxed pb-4">
+                    <div
+                        key={i}
+                        className={`text-sm md:text-base font-mono leading-relaxed ${i === 0 ? 'relative' : 'absolute inset-0'}`}
+                    >
                         {p}
                     </div>
                 ))}

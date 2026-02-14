@@ -20,7 +20,7 @@ export default function HeroSchema({ productCount }: HeroSchemaProps) {
                         <MatrixSpace isVisible={true} />
                     </div>
 
-                    <div className="relative z-10 p-4 md:p-6 border-2 border-primary/30 bg-black/5 dark:bg-white/5 backdrop-blur-sm max-w-2xl">
+                    <div className="relative z-10 p-4 border-2 border-primary/30 bg-black/5 dark:bg-white/5 backdrop-blur-sm max-w-2xl">
                         {/* Status Bits from ProductCard pattern */}
                         <div className="absolute -top-[2px] -left-[2px] w-8 h-8 border-t-2 border-l-2 border-primary z-20" />
                         <div className="absolute -bottom-[2px] -right-[2px] w-8 h-8 border-b-2 border-r-2 border-primary z-20" />
