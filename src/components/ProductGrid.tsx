@@ -13,16 +13,16 @@ export default function ProductGrid({ products }: { products: Product[] }) {
     };
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto transition-all duration-300 ease-in-out">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full p-4 md:p-8">
             {products.map((product) => (
-                <ProductCard
-                    key={product.id}
-                    product={product}
-                    isInCart={isInCart(product.id)}
-                    onAddToCart={handleAddToCart}
-                />
+                <div key={product.id} className="w-full">
+                    <ProductCard
+                        product={product}
+                        isInCart={isInCart(product.id)}
+                        onAddToCart={handleAddToCart}
+                    />
+                </div>
             ))}
-
         </div>
     );
 }
