@@ -84,7 +84,7 @@ export default function WaveformOverlay({
                 ws.destroy();
             }
         };
-    }, [audioUrl, primaryColor]);
+    }, [audioUrl, isActive, primaryColor]);
 
     // Cleanup when not hovering (isActive false) ? 
     // User wants manual control. If they mouse out, should it stop? 

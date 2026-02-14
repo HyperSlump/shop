@@ -60,7 +60,7 @@ export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlay
                 ws.destroy();
             }
         };
-    }, [audioUrl]);
+    }, [audioUrl, isActive]);
 
     useEffect(() => {
         if (!isActive && wavesurferRef.current) {

@@ -123,10 +123,10 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 )}
 
                 {/* One Shots Grid */}
-                {samples.length > 0 && (
+                {isHovered && samples.length > 0 && (
                     <div className="space-y-1 relative">
                         <div className="flex items-center gap-2">
-                            <p className="font-mono text-[9px] text-gray-500 uppercase tracking-widest">One Shots</p>
+                            <p className="font-mono text-[9px] text-gray-500/50 dark:text-gray-400/50 uppercase tracking-widest">One Shots</p>
                             <div className="flex-1 h-[1px] bg-black/5 dark:bg-white/5" />
                         </div>
                         <div className="grid grid-cols-2 gap-2">
