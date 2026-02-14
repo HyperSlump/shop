@@ -2,6 +2,7 @@ import { getActiveProducts } from '@/lib/stripe/products';
 import ProductGrid from '@/components/ProductGrid';
 import Navigation from '@/components/Navigation';
 import ThemeToggle from '@/components/ThemeToggle';
+import IndustrialTicker from '@/components/IndustrialTicker';
 
 export const revalidate = 60; // Re-fetch products every 60 seconds
 
@@ -32,7 +33,12 @@ export default async function Home() {
           </div>
         </header>
 
+
         <ProductGrid products={products} />
+
+        <div className="mt-16 mb-4">
+          <IndustrialTicker />
+        </div>
 
         <footer className="p-8 md:p-8 border-t border-[var(--border)] flex flex-col md:grid md:grid-cols-3 gap-8 bg-[var(--background)] items-center md:items-end text-center md:text-left animate-fade-in delay-300">
           <div className="text-[12px] space-y-1.5 opacity-60 hidden md:block">
