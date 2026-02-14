@@ -34,92 +34,70 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
             {/* DEFAULT VIEW: Image + Artistic Overlays */}
             {/* DEFAULT VIEW: Structured Technical Layout */}
             <div className={`absolute inset-0 flex flex-col transition-all duration-300 ${showPreview ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'}`}>
-                {/* Top Section: Split Layout (Image Left / Tech Right) */}
-                <div className="flex-1 flex relative border-b border-primary/20 bg-black/5 dark:bg-white/5 transition-colors duration-500">
-
-                    {/* Left Column: Image */}
-                    <div className="w-1/2 relative p-2 md:p-4 flex items-center justify-center border-r border-primary/10">
-                        {/* Centered Image with specialized frame */}
-                        <div className="relative w-full aspect-square shadow-xl transition-transform duration-500 group-hover:scale-105">
-                            {/* Frame Borders */}
-                            <div className="absolute inset-0 border border-primary/30 z-20 pointer-events-none" />
-                            {/* Corner Accents */}
-                            <div className="absolute -top-[1px] -left-[1px] w-1 h-1 bg-red-500 z-30" />
-                            <div className="absolute -top-[1px] -right-[1px] w-1 h-1 bg-primary z-30" />
-                            <div className="absolute -bottom-[1px] -left-[1px] w-1 h-1 bg-primary z-30" />
-                            <div className="absolute -bottom-[1px] -right-[1px] w-1 h-1 bg-red-500 z-30" />
-
-                            <div className="relative w-full h-full overflow-hidden bg-transparent">
-                                <Image
-                                    alt={product.name}
-                                    className="w-full h-full object-cover opacity-80 contrast-125 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
-                                    src={product.image || 'https://via.placeholder.com/500'}
-                                    fill
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                />
-                                <div className="absolute inset-0 bg-primary/10 mix-blend-overlay" />
-                            </div>
-                        </div>
+                {/* Top Section: Single Column Technical Dashboard */}
+                <div className="flex-1 flex flex-col relative border-b border-primary/20 bg-black/5 dark:bg-white/5 transition-colors duration-500 overflow-hidden">
+                    {/* Full Background Matrix Effect */}
+                    <div className="absolute inset-0 z-0">
+                        <MatrixSpace />
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/40 to-[var(--background)]" />
                     </div>
 
-                    {/* Right Column: Tech Specs & CTA */}
-                    <div className="w-1/2 relative flex flex-col p-2 md:p-4 overflow-hidden">
-                        {/* Digital Line Noise Background */}
-                        <div
-                            className="absolute inset-0 opacity-[0.05] pointer-events-none"
-                            style={{
-                                backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, var(--primary) 2px, var(--primary) 4px)'
-                            }}
-                        />
-                        <MatrixSpace />
+                    <div className="relative z-10 flex-1 overflow-y-auto p-4 flex flex-col items-center gap-4 custom-scrollbar">
+                        {/* Centered Image Frame */}
+                        <div className="relative w-40 h-40 shrink-0 shadow-2xl transition-transform duration-500 group-hover:scale-105">
+                            {/* Frame Borders matching technical style */}
+                            <div className="absolute inset-0 border border-primary/30 z-20 pointer-events-none" />
+                            <div className="absolute -top-[1px] -left-[1px] w-2 h-2 bg-red-500 z-30" />
+                            <div className="absolute -bottom-[1px] -right-[1px] w-2 h-2 bg-red-500 z-30" />
 
-                        {/* Top: Tech Label */}
-                        <div className="relative z-10 mb-2 font-mono text-[8px] uppercase tracking-widest leading-tight">
-                            <div className="flex items-center gap-1.5 mb-1">
-                                <span className="w-1 h-1 bg-red-500 rounded-sm animate-[pulse_1s_ease-in-out_infinite]" />
-                                <span className="text-red-500/90 font-bold">rec_asset</span>
-                            </div>
-                            <p className="text-primary/60">
-                                // ID: {product.id.slice(0, 6)}...
-                            </p>
-                        </div>
-
-                        {/* Description */}
-                        <div className="relative z-10 flex-col gap-3 hidden sm:flex">
-                            <p className="font-mono text-[9px] text-foreground/70 leading-relaxed line-clamp-3">
-                                {product.description || "Raw industrial audio assets. Contains high-fidelity stems and synthesis textures for production."}
-                            </p>
-
-                            {/* Detailed Info Grid */}
-                            <div className="grid grid-cols-1 gap-1 pt-2 border-t border-primary/10">
-                                <div className="flex justify-between items-center font-mono text-[7px] tracking-tighter text-primary/40 uppercase">
-                                    <span>format_type</span>
-                                    <span className="text-foreground/60">{product.metadata?.format || "24-bit WAV"}</span>
-                                </div>
-                                <div className="flex justify-between items-center font-mono text-[7px] tracking-tighter text-primary/40 uppercase">
-                                    <span>file_count</span>
-                                    <span className="text-foreground/60">{product.metadata?.count || "142 SAMPLES"}</span>
-                                </div>
-                                <div className="flex justify-between items-center font-mono text-[7px] tracking-tighter text-primary/40 uppercase">
-                                    <span>data_size</span>
-                                    <span className="text-foreground/60">{product.metadata?.size || "842 MB"}</span>
-                                </div>
-                                <div className="flex justify-between items-center font-mono text-[7px] tracking-tighter text-primary/40 uppercase">
-                                    <span>license_key</span>
-                                    <span className="text-foreground/60">RF_UNLIMITED</span>
-                                </div>
+                            <div className="relative w-full h-full overflow-hidden">
+                                <Image
+                                    alt={product.name}
+                                    className="w-full h-full object-cover opacity-90 contrast-125 grayscale group-hover:grayscale-0 transition-all duration-500"
+                                    src={product.image || 'https://via.placeholder.com/500'}
+                                    fill
+                                    sizes="160px"
+                                />
+                                <div className="absolute inset-0 bg-primary/5 mix-blend-overlay" />
                             </div>
                         </div>
 
-                        {/* Mobile Description (Shorter) */}
-                        <div className="relative z-10 sm:hidden">
-                            <p className="font-mono text-[8px] text-foreground/70 leading-tight line-clamp-2">
-                                {product.description}
+                        {/* Technical Metadata Stack */}
+                        <div className="w-full space-y-3">
+                            {/* Status Label */}
+                            <div className="flex items-center justify-between border-b border-primary/10 pb-2 text-[8px]">
+                                <div className="flex items-center gap-1.5 font-mono uppercase tracking-widest leading-tight">
+                                    <span className="w-1 h-1 bg-red-500 rounded-sm animate-pulse" />
+                                    <span className="text-red-500/90 font-bold">system.active</span>
+                                </div>
+                                <span className="font-mono text-primary/40">ID_{product.id.slice(0, 8)}</span>
+                            </div>
+
+                            {/* Description - Compact */}
+                            <p className="font-mono text-[9px] text-foreground/70 leading-relaxed text-center px-2">
+                                {product.description || "Raw industrial audio assets. Optimized for digital synthesis."}
                             </p>
+
+                            {/* Info Grid - Full Width */}
+                            <div className="grid grid-cols-2 gap-x-4 gap-y-1 pt-2 border-t border-primary/10">
+                                <div className="flex justify-between items-center font-mono text-[7px] text-primary/40 uppercase">
+                                    <span>fmt</span>
+                                    <span className="text-foreground/60">{product.metadata?.format || "WAV"}</span>
+                                </div>
+                                <div className="flex justify-between items-center font-mono text-[7px] text-primary/40 uppercase">
+                                    <span>cnt</span>
+                                    <span className="text-foreground/60">{product.metadata?.count || "140"}</span>
+                                </div>
+                                <div className="flex justify-between items-center font-mono text-[7px] text-primary/40 uppercase">
+                                    <span>size</span>
+                                    <span className="text-foreground/60">{product.metadata?.size || "840MB"}</span>
+                                </div>
+                                <div className="flex justify-between items-center font-mono text-[7px] text-primary/40 uppercase">
+                                    <span>type</span>
+                                    <span className="text-foreground/60">RF_TECH</span>
+                                </div>
+                            </div>
                         </div>
-
-                        {/* Bottom: Preview Button */}
-
                     </div>
                 </div>
 
