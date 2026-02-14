@@ -55,11 +55,11 @@ export default function HeroSchema({ productCount }: HeroSchemaProps) {
                     </div>
 
                     {/* 3. CATALOG MODULE */}
-                    <div className="bg-primary/5 px-8 py-4 border-2 border-primary/40 backdrop-blur-sm min-w-[200px] md:min-w-[300px]">
-                        <div className="text-[10px] uppercase font-bold tracking-[0.4em] text-primary mb-1 text-right opacity-70">
-                            Current Catalog_
+                    <div className="bg-primary/5 px-4 py-2 border border-primary/30 backdrop-blur-sm min-w-[120px] md:min-w-[200px]">
+                        <div className="text-[8px] uppercase font-bold tracking-[0.4em] text-primary mb-0.5 text-right opacity-60">
+                            Catalog_Status
                         </div>
-                        <div className="text-5xl md:text-8xl font-gothic leading-none text-right">
+                        <div className="text-3xl md:text-5xl font-gothic leading-none text-right">
                             {productCount} Items
                         </div>
                     </div>
