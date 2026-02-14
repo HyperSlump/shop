@@ -99,9 +99,9 @@ export default function IndustrialTicker() {
     const row2Text = "$ $ $ $ /// REF_ID: 0x8823 /// ANALOG_ACTIVE /// $$$ /// 120.00_BPM /// SIGNAL_LOST /// ";
 
     return (
-        <div ref={containerRef} className="w-full py-16 px-6 md:px-12 select-none relative z-20 pointer-events-auto">
-            <div className="border-y border-foreground/10 bg-[var(--background)] relative">
-                <div className="w-full overflow-hidden border-x border-foreground/10">
+        <div ref={containerRef} className="w-full py-0 px-0 select-none relative z-20 pointer-events-auto overflow-hidden">
+            <div className="border-y border-foreground/15 bg-[var(--background)] relative">
+                <div className="w-full">
                     {/* Row 1 / Gothic */}
                     <div
                         className="overflow-hidden w-full cursor-pointer"
@@ -143,11 +143,11 @@ export default function IndustrialTicker() {
                 </div>
 
                 {/* Technical Detail Overlays */}
-                <div className="absolute top-0 right-4 md:right-8 px-2 bg-[var(--background)] border-x border-primary/20 -translate-y-1/2">
+                <div className="absolute top-0 right-4 md:right-12 px-2 bg-[var(--background)] border-x border-primary/20 -translate-y-1/2">
                     <span className="font-mono text-[8px] text-primary/40 uppercase tracking-tighter">Tape_Feed.v1</span>
                 </div>
-                <div className="absolute top-0 left-0 w-8 md:w-16 h-[1px] bg-primary/30 -translate-y-1/2" />
-                <div className="absolute bottom-0 right-0 w-8 md:w-16 h-[1px] bg-primary/30 translate-y-1/2" />
+                <div className="absolute top-0 left-0 w-8 md:w-48 h-[1px] bg-primary/40 -translate-y-1/2" />
+                <div className="absolute bottom-0 right-0 w-8 md:w-48 h-[1px] bg-primary/40 translate-y-1/2" />
             </div>
         </div>
     );
