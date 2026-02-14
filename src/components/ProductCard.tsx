@@ -92,44 +92,61 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         </div>
 
                         {/* Bottom: Preview Button */}
-                        <div className="relative z-10 pt-2">
-                            <button
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setShowPreview(true);
-                                }}
-                                className="w-full py-2 border border-primary/30 bg-transparent hover:bg-transparent text-primary/70 hover:text-primary transition-all duration-200 group/play flex items-center justify-center gap-2"
-                            >
-                                <span className="material-icons text-sm group-hover/play:scale-110 transition-transform">play_circle</span>
-                                <span className="font-mono text-[8px] uppercase tracking-[0.2em] font-bold">PREVIEW</span>
-                            </button>
-                        </div>
+
                     </div>
                 </div>
 
-                {/* Bottom Section: Info */}
-                <div className="h-auto border-t border-primary/20 bg-[var(--background)] p-5 relative">
-                    <div className="flex justify-between items-start mb-2">
-                        <h3 className="font-gothic text-3xl text-foreground leading-none tracking-wide">
+                {/* Bottom Section: Info - Sparse but Technical */}
+                <div className="h-auto border-t border-[#570e0e]/20 bg-[var(--background)] p-4 relative flex flex-col gap-2">
+
+                    {/* Header Row */}
+                    <div className="flex justify-between items-start">
+                        <h3 className="font-gothic text-2xl text-foreground leading-none tracking-wide max-w-[70%]">
                             {product.name}
                         </h3>
-                        <span className="font-mono text-primary font-bold border border-primary/30 px-2 py-1 text-xs">
+                        <span className="font-mono text-[#570e0e] dark:text-red-500 font-bold border border-[#570e0e]/30 px-2 py-0.5 text-[10px]">
                             {product.amount === 0 ? 'FREE' : `$${product.amount}`}
                         </span>
                     </div>
 
-                    <div className="mt-2">
+                    {/* Tech Specs / Decor */}
+                    <div className="flex items-center gap-2 opacity-60 mb-2">
+                        <div className="w-1 h-1 bg-[#570e0e] rounded-full animate-pulse" />
+                        <span className="font-mono text-[8px] text-[#570e0e] uppercase whitespace-nowrap">
+                            ID: {product.id.slice(0, 6)} // V.1.0
+                        </span>
+                        <div className="h-[1px] flex-1 bg-[#570e0e]/20" />
+                    </div>
+
+                    {/* Action Row */}
+                    <div className="flex items-center justify-between mt-1 pt-2 border-t border-[#570e0e]/10">
+                        {/* Preview (moved from image) */}
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setShowPreview(true);
+                            }}
+                            className="text-left font-mono text-[9px] uppercase tracking-widest text-[#570e0e]/60 dark:text-red-500/60 hover:text-[#570e0e] dark:hover:text-red-500 transition-colors flex items-center gap-2 group/pbtn"
+                        >
+                            <span className="w-1.5 h-1.5 border border-current group-hover/pbtn:bg-[#570e0e] dark:group-hover/pbtn:bg-red-500 transition-all rounded-[1px]" />
+                            PREVIEW
+                        </button>
+
+                        {/* Buy Button */}
                         <button
                             onClick={(e) => {
                                 e.stopPropagation();
                                 onAddToCart(product);
                             }}
                             disabled={isInCart}
-                            className="w-full py-2 font-mono text-xs text-[#570e0e] dark:text-red-500 uppercase hover:opacity-70 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="text-right font-mono text-[10px] text-[#570e0e] dark:text-red-500 uppercase hover:text-[#751b1b] dark:hover:text-red-400 transition-colors disabled:opacity-50"
                         >
                             {isInCart ? '[ IN CART ]' : '[ BUY NOW ]'}
                         </button>
                     </div>
+
+                    {/* Decorative Corner */}
+                    <div className="absolute bottom-0 right-0 w-2 h-2 border-r border-b border-[#570e0e]/40" />
                 </div>
             </div>
 
