@@ -29,9 +29,16 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
     return (
         <div
-            className="group relative border border-[var(--border)] bg-[var(--background)] overflow-hidden h-[440px] md:h-[480px] cursor-default transition-all duration-300 shadow-sm dark:shadow-none"
+            className="group relative border border-foreground/10 bg-[var(--background)] overflow-hidden h-[440px] md:h-[480px] cursor-default transition-all duration-300 shadow-sm dark:shadow-none"
         >
-            {/* DEFAULT VIEW: Image + Artistic Overlays */}
+            {/* Side Status Bar */}
+            <div className="absolute left-0 top-1/4 bottom-1/4 w-[1px] bg-primary/20 z-20">
+                <div className="absolute top-0 left-0 w-[3px] h-8 bg-primary/60 -translate-x-[1px]" />
+            </div>
+
+            {/* Inner Inset Panel Border */}
+            <div className="absolute inset-[3px] border border-primary/5 pointer-events-none z-0" />
+
             {/* DEFAULT VIEW: Structured Technical Layout */}
             <div className={`absolute inset-0 flex flex-col transition-all duration-300 ${showPreview ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'}`}>
                 {/* Top Section: Single Column Technical Dashboard */}
@@ -45,10 +52,15 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     <div className="relative z-10 flex-1 overflow-y-auto p-4 flex flex-col items-center gap-4 custom-scrollbar">
                         {/* Centered Image Frame */}
                         <div className="relative w-40 h-40 shrink-0 shadow-2xl transition-transform duration-500 group-hover:scale-105">
-                            {/* Frame Borders matching technical style */}
-                            <div className="absolute inset-0 border border-primary/30 z-20 pointer-events-none" />
-                            <div className="absolute -top-[1px] -left-[1px] w-2 h-2 bg-red-500 z-30" />
-                            <div className="absolute -bottom-[1px] -right-[1px] w-2 h-2 bg-red-500 z-30" />
+                            {/* Detailed Specimen Brackets */}
+                            <div className="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-red-500 z-30" />
+                            <div className="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-red-500 z-30" />
+                            <div className="absolute inset-0 border border-primary/20 z-20 pointer-events-none" />
+
+                            {/* Technical Label */}
+                            <div className="absolute bottom-1 left-1 z-30 font-mono text-[6px] text-white/40 bg-black/40 px-1">
+                                IMG_SAMP._{product.id.slice(0, 4)}
+                            </div>
 
                             <div className="relative w-full h-full overflow-hidden">
                                 <Image
@@ -101,39 +113,41 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     </div>
                 </div>
 
-                {/* Bottom Section: Info - Sparse but Technical */}
-                <div className="h-auto border-t border-[#570e0e]/20 bg-[var(--background)] pt-4 px-4 pb-6 relative flex flex-col gap-2">
+                {/* Bottom Section: Info - New Industrial Design */}
+                <div className="h-auto border-t-2 border-primary/30 bg-[var(--background)] pt-4 px-4 pb-6 relative flex flex-col gap-2">
+                    {/* Top Notch decorative element */}
+                    <div className="absolute -top-[2px] right-8 w-12 h-[2px] bg-red-500 z-20" />
 
                     {/* Header Row */}
                     <div className="flex justify-between items-start">
                         <h3 className="font-gothic text-2xl text-foreground leading-none tracking-wide max-w-[70%]">
                             {product.name}
                         </h3>
-                        <span className="font-mono text-[#570e0e] dark:text-red-500 font-bold border border-[#570e0e]/30 px-2 py-0.5 text-[10px]">
+                        <span className="font-mono text-primary font-bold border border-primary/30 px-2 py-0.5 text-[10px]">
                             {product.amount === 0 ? 'FREE' : `$${product.amount}`}
                         </span>
                     </div>
 
                     {/* Tech Specs / Decor */}
                     <div className="flex items-center gap-2 opacity-60 mb-2">
-                        <div className="w-1 h-1 bg-[#570e0e] rounded-full animate-pulse" />
-                        <span className="font-mono text-[8px] text-[#570e0e] uppercase whitespace-nowrap">
+                        <div className="w-1 h-1 bg-primary rounded-full animate-pulse" />
+                        <span className="font-mono text-[8px] text-primary uppercase whitespace-nowrap">
                             ID: {product.id.slice(0, 6)} // V.1.0
                         </span>
-                        <div className="h-[1px] flex-1 bg-[#570e0e]/20" />
+                        <div className="h-[1px] flex-1 bg-primary/10" />
                     </div>
 
                     {/* Action Row */}
-                    <div className="flex items-center justify-between mt-1 pt-2 border-t border-[#570e0e]/10">
+                    <div className="flex items-center justify-between mt-1 pt-2 border-t border-primary/10">
                         {/* Preview (moved from image) */}
                         <button
                             onClick={(e) => {
                                 e.stopPropagation();
                                 setShowPreview(true);
                             }}
-                            className="text-left font-mono text-[11px] uppercase tracking-widest text-[#570e0e]/60 dark:text-red-500/60 hover:text-[#570e0e] dark:hover:text-red-500 transition-colors flex items-center gap-2 group/pbtn"
+                            className="text-left font-mono text-[11px] uppercase tracking-widest text-foreground/40 hover:text-primary transition-colors flex items-center gap-2 group/pbtn"
                         >
-                            <span className="w-2 h-2 border border-current group-hover/pbtn:bg-[#570e0e] dark:group-hover/pbtn:bg-red-500 transition-all rounded-[1px]" />
+                            <span className="w-2 h-2 border border-current group-hover/pbtn:bg-primary transition-all rounded-[1px]" />
                             PREVIEW
                         </button>
 
@@ -144,7 +158,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 onAddToCart(product);
                             }}
                             disabled={isInCart}
-                            className="text-right font-mono text-[12px] text-[#570e0e] dark:text-red-500 uppercase hover:text-[#751b1b] dark:hover:text-red-400 transition-colors disabled:opacity-50"
+                            className="text-right font-mono text-[12px] text-primary uppercase hover:text-primary/70 transition-colors disabled:opacity-50"
                         >
                             {isInCart ? '[ IN CART ]' : '[ BUY NOW ]'}
                         </button>
@@ -271,6 +285,27 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     <div className="absolute bottom-0 right-0 w-2 h-2 border-r border-b border-primary/40" />
                 </div>
 
+            </div>
+            {/* GLOBAL DECORATION LAYER (Always on top) */}
+            <div className="absolute inset-0 z-50 pointer-events-none border border-foreground/5">
+                {/* Corner Brackets */}
+                <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-primary/60 transition-all group-hover:w-6 group-hover:h-6" />
+                <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary/60 transition-all group-hover:w-6 group-hover:h-6" />
+                <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-primary/60 transition-all group-hover:w-6 group-hover:h-6" />
+                <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-primary/60 transition-all group-hover:w-6 group-hover:h-6" />
+
+                {/* Industrial Screws */}
+                <div className="absolute top-2 left-2 w-1 h-1 bg-primary/40 rounded-full shadow-[0_0_5px_rgba(var(--primary-rgb),0.5)]" />
+                <div className="absolute top-2 right-2 w-1 h-1 bg-primary/40 rounded-full shadow-[0_0_5px_rgba(var(--primary-rgb),0.5)]" />
+                <div className="absolute bottom-2 left-2 w-1 h-1 bg-primary/40 rounded-full shadow-[0_0_5px_rgba(var(--primary-rgb),0.5)]" />
+                <div className="absolute bottom-2 right-2 w-1 h-1 bg-primary/40 rounded-full shadow-[0_0_5px_rgba(var(--primary-rgb),0.5)]" />
+
+                {/* Floating Unit ID */}
+                <div className="absolute top-[2px] right-10 px-2 bg-[var(--background)] border-x border-primary/10 flex items-center">
+                    <span className="font-mono text-[6px] text-primary/60 font-medium tracking-widest uppercase">
+                        REF_ID: // {product.id.slice(0, 8)}
+                    </span>
+                </div>
             </div>
         </div>
     );

@@ -85,9 +85,27 @@ export default function CartDrawer() {
                         {cart.map((item) => (
                             <div
                                 key={item.id}
-                                className={`flex h-32 border border-primary/20 hover:border-primary/40 bg-black/5 dark:bg-white/5 transition-all duration-300 relative group shrink-0 ${exitingItems.includes(item.id) ? 'opacity-0 translate-x-12' : 'opacity-100 translate-x-0'
+                                className={`flex h-32 border border-foreground/10 bg-black/5 dark:bg-white/5 transition-all duration-300 relative group shrink-0 ${exitingItems.includes(item.id) ? 'opacity-0 translate-x-12' : 'opacity-100 translate-x-0'
                                     }`}
                             >
+                                {/* Item Decoration Layer */}
+                                <div className="absolute inset-0 z-50 pointer-events-none border border-foreground/5 overflow-hidden">
+                                    <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-primary/40 transition-all group-hover:w-4 group-hover:h-4" />
+                                    <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-primary/40 transition-all group-hover:w-4 group-hover:h-4" />
+                                    <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-primary/40 transition-all group-hover:w-4 group-hover:h-4" />
+                                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-primary/40 transition-all group-hover:w-4 group-hover:h-4" />
+
+                                    {/* Tiny Screws */}
+                                    <div className="absolute top-1 left-1 w-0.5 h-0.5 bg-primary/30 rounded-full" />
+                                    <div className="absolute top-1 right-1 w-0.5 h-0.5 bg-primary/30 rounded-full" />
+                                    <div className="absolute bottom-1 left-1 w-0.5 h-0.5 bg-primary/30 rounded-full" />
+                                    <div className="absolute bottom-1 right-1 w-0.5 h-0.5 bg-primary/30 rounded-full" />
+
+                                    {/* Unit Ref */}
+                                    <div className="absolute top-0 right-4 px-1.5 bg-[var(--background)] border-x border-foreground/5 h-2.5 flex items-center">
+                                        <span className="font-mono text-[5px] text-foreground/20 font-bold tracking-widest leading-none">ID_{item.id.slice(0, 4)}</span>
+                                    </div>
+                                </div>
                                 {/* Left Column: Static Thumbnail */}
                                 <div className="w-1/3 relative border-r border-primary/10 flex items-center justify-center bg-[var(--background)] p-2">
                                     <div className="relative w-full aspect-square border border-primary/30 overflow-hidden shadow-sm">
@@ -98,8 +116,9 @@ export default function CartDrawer() {
                                             className="object-cover opacity-80 contrast-125 grayscale group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"
                                         />
                                     </div>
-                                    {/* Tech Marker */}
-                                    <div className="absolute top-0 left-0 w-1 h-3 bg-red-500/40" />
+                                    {/* Detailed Specimen Brackets (Thumbnail) */}
+                                    <div className="absolute -top-[1px] -left-[1px] w-2 h-2 border-t border-l border-red-500/60 z-30" />
+                                    <div className="absolute -bottom-[1px] -right-[1px] w-2 h-2 border-b border-r border-red-500/60 z-30" />
                                 </div>
 
                                 {/* Right Column: Info & Action */}
