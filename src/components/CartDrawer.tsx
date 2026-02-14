@@ -48,7 +48,7 @@ export default function CartDrawer() {
                     }`}
             >
                 <header className="flex justify-between items-center mb-8 border-b border-black/10 dark:border-white/10 pb-4">
-                    <h2 className="font-display text-4xl uppercase tracking-tighter text-primary">Your Crate ({cart.length})</h2>
+                    <h2 className="font-gothic text-4xl uppercase tracking-tighter text-primary">Your Crate ({cart.length})</h2>
                     <button
                         onClick={toggleCart}
                         className="hover:rotate-90 active:scale-95 transition-transform p-2 bg-black/5 dark:bg-white/5 rounded-full"

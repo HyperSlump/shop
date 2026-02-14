@@ -14,7 +14,7 @@ export default async function Home() {
       <main className="flex-1 flex flex-col">
         <header className="p-4 md:p-8 border-b border-black/20 dark:border-white/20 flex flex-col md:flex-row justify-between items-end gap-6 bg-background-light dark:bg-background-dark">
           <div>
-            <h1 className="font-mono text-6xl md:text-9xl leading-none tracking-tight uppercase font-black">
+            <h1 className="font-gothic text-6xl md:text-9xl leading-none tracking-tight uppercase">
               hyper$lump
             </h1>
             <p className="mt-2 text-sm max-w-md opacity-80">
@@ -25,7 +25,7 @@ export default async function Home() {
             <div className="text-xs uppercase font-bold tracking-widest text-primary">
               Current Catalog
             </div>
-            <div className="text-4xl font-mono leading-none font-bold">
+            <div className="text-4xl font-gothic leading-none">
               {products.length} Items
             </div>
           </div>
