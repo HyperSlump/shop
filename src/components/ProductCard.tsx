@@ -41,29 +41,45 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
             {/* DEFAULT VIEW: Image + Artistic Overlays */}
             {/* DEFAULT VIEW: Structured Technical Layout */}
             <div className={`absolute inset-0 flex flex-col transition-all duration-300 ${isHovered ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
-                {/* Top Section: Image Display */}
-                <div className="flex-1 relative bg-black/5 dark:bg-white/5 flex items-center justify-center overflow-hidden p-6">
-                    {/* Background Grid */}
+                {/* Top Section: Technical Image Display */}
+                <div className="flex-1 relative bg-black/5 dark:bg-white/5 flex items-center justify-center overflow-hidden p-8 border-b border-primary/20 group-hover:border-primary/50 transition-colors duration-500">
+                    {/* Dynamic Grid Background */}
                     <div
-                        className="absolute inset-0 opacity-[0.1] pointer-events-none"
+                        className="absolute inset-0 opacity-[0.15] pointer-events-none"
                         style={{
-                            backgroundImage: 'linear-gradient(rgba(var(--primary-rgb), 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(var(--primary-rgb), 0.1) 1px, transparent 1px)',
-                            backgroundSize: '20px 20px'
+                            backgroundImage: `
+                                linear-gradient(to right, var(--primary) 1px, transparent 1px),
+                                linear-gradient(to bottom, var(--primary) 1px, transparent 1px)
+                            `,
+                            backgroundSize: '40px 40px',
+                            maskImage: 'radial-gradient(circle at center, black, transparent 80%)'
                         }}
                     />
 
-                    {/* Centered Image with specialized frame */}
-                    <div className="relative w-40 h-40 md:w-56 md:h-56 shadow-2xl transition-transform duration-500 group-hover:scale-105">
-                        <div className="absolute inset-0 border border-primary/20 bg-primary/5 z-0 transform rotate-3" />
-                        <div className="absolute inset-0 border border-primary/20 bg-primary/5 z-0 transform -rotate-3" />
-                        <div className="relative z-10 w-full h-full border border-primary/30 bg-black">
-                            <Image
-                                alt={product.name}
-                                className="w-full h-full object-cover opacity-90 contrast-125"
-                                src={product.image || 'https://via.placeholder.com/500'}
-                                fill
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            />
+                    {/* Image Container with Brutalist Frame */}
+                    <div className="relative w-48 h-48 md:w-56 md:h-56 transition-transform duration-500 group-hover:scale-105 group-hover:rotate-1">
+                        {/* Shadow Offset */}
+                        <div className="absolute inset-0 bg-primary translate-x-2 translate-y-2 opacity-20 group-hover:translate-x-3 group-hover:translate-y-3 transition-all duration-300" />
+
+                        {/* Main Image Frame */}
+                        <div className="relative w-full h-full border border-primary/40 bg-black/20 backdrop-blur-sm p-2">
+                            {/* Corner Accents */}
+                            <div className="absolute -top-[1px] -left-[1px] w-1.5 h-1.5 bg-primary" />
+                            <div className="absolute -top-[1px] -right-[1px] w-1.5 h-1.5 bg-primary" />
+                            <div className="absolute -bottom-[1px] -left-[1px] w-1.5 h-1.5 bg-primary" />
+                            <div className="absolute -bottom-[1px] -right-[1px] w-1.5 h-1.5 bg-primary" />
+
+                            <div className="relative w-full h-full overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
+                                <Image
+                                    alt={product.name}
+                                    className="w-full h-full object-cover contrast-125 hover:contrast-100 transition-all duration-500"
+                                    src={product.image || 'https://via.placeholder.com/500'}
+                                    fill
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                />
+                                {/* Image Scanline Overlay */}
+                                <div className="absolute inset-0 bg-[url('/scanlines.png')] opacity-20 pointer-events-none mix-blend-overlay" />
+                            </div>
                         </div>
                     </div>
                 </div>
