@@ -245,10 +245,10 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     {/* Meta Data (Brief) */}
                     <div className="flex items-center gap-2 opacity-60 mb-2">
                         <div className="w-1 h-1 bg-primary rounded-full animate-pulse" />
-                        <span className="font-mono text-[8px] text-primary uppercase whitespace-nowrap">
-                            PREVIEW_MODE // {product.id.slice(0, 6)}
+                        <span className="font-mono text-[10px] text-primary uppercase whitespace-nowrap">
+                            ID: {product.id.slice(0, 6)} // V.1.0
                         </span>
-                        <div className="h-[1px] flex-1 bg-primary/20" />
+                        <div className="h-[1px] flex-1 bg-primary/10" />
                     </div>
 
                     {/* Action Row */}
@@ -272,7 +272,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 onAddToCart(product);
                             }}
                             disabled={isInCart}
-                            className="text-right font-mono text-[12px] text-primary uppercase hover:opacity-70 transition-opacity font-bold"
+                            className="text-right font-mono text-[13px] text-primary uppercase hover:text-primary/70 transition-colors disabled:opacity-50"
                         >
                             {isInCart ? '[ IN CART ]' : '[ ADD TO CART ]'}
                         </button>
