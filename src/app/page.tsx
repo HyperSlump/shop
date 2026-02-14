@@ -3,6 +3,7 @@ import ProductGrid from '@/components/ProductGrid';
 import Navigation from '@/components/Navigation';
 import ThemeToggle from '@/components/ThemeToggle';
 import EncryptText from '@/components/EncryptText';
+import HeroSchema from '@/components/HeroSchema';
 import IndustrialTicker from '@/components/IndustrialTicker';
 
 export const revalidate = 60; // Re-fetch products every 60 seconds
@@ -18,22 +19,7 @@ export default async function Home() {
 
         {/* Main Content Area - Shifted for Nav */}
         <main className="flex-1 flex flex-col min-w-0 pt-16 md:pt-0 md:ml-20">
-          <header className="p-6 md:p-12 border-b-2 border-[var(--border)] flex flex-col md:flex-row justify-between items-start md:items-end gap-10 bg-[var(--background)] animate-fade-in delay-100">
-            <div className="flex flex-col">
-              <h1 className="hidden md:block font-gothic text-7xl md:text-8xl lg:text-9xl leading-[0.8] tracking-tight mb-6 lowercase">
-                hyper$lump
-              </h1>
-              <EncryptText />
-            </div>
-            <div className="text-left md:text-right border-l md:border-l-0 md:border-r border-primary/20 pl-4 md:pl-0 md:pr-4 py-2">
-              <div className="text-[10px] md:text-xs uppercase font-bold tracking-[0.3em] text-primary mb-1">
-                Current Catalog
-              </div>
-              <div className="text-3xl md:text-5xl font-gothic leading-none">
-                {products.length} Items
-              </div>
-            </div>
-          </header>
+          <HeroSchema productCount={products.length} />
 
           {/* Product Grid Centered */}
           <section className="flex-1 w-full mx-auto">
