@@ -4,6 +4,7 @@ import React from 'react';
 import { CartProvider } from "@/components/CartProvider";
 import CartDrawer from "@/components/CartDrawer";
 import SmoothScroll from "@/components/SmoothScroll";
+import CustomCursor from "@/components/CustomCursor";
 import { JetBrains_Mono, Pirata_One, UnifrakturMaguntia } from "next/font/google";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -65,6 +66,7 @@ export default function RootLayout({
         />
         <CartProvider>
           <SmoothScroll>
+            <CustomCursor />
             {children}
             <CartDrawer />
           </SmoothScroll>
