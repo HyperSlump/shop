@@ -125,9 +125,11 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 onAddToCart(product);
                             }}
                             disabled={isInCart}
-                            className="w-full py-2 bg-[#570e0e] hover:bg-[#751b1b] disabled:bg-[#570e0e]/50 disabled:cursor-not-allowed text-stone-300 font-mono font-bold text-[10px] uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2 shadow-[0_0_10px_rgba(87,14,14,0.3)] hover:shadow-[0_0_15px_rgba(117,27,27,0.5)] border border-red-900/30"
+                            className="w-full py-2 relative group/buy cursor-pointer overflow-hidden border border-[#570e0e] bg-[#570e0e] hover:bg-transparent transition-all duration-300 shadow-[0_0_10px_rgba(87,14,14,0.3)] hover:shadow-[0_0_15px_rgba(117,27,27,0.5)] disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            {isInCart ? 'IN CART' : 'BUY NOW'}
+                            <span className="relative z-10 font-mono font-bold text-[10px] uppercase tracking-[0.2em] text-stone-300 group-hover/buy:text-[#8a2525] transition-colors duration-300 flex items-center justify-center gap-2">
+                                {isInCart ? '[ IN CART ]' : '[ BUY NOW ]'}
+                            </span>
                         </button>
                     </div>
                 </div>
@@ -174,10 +176,10 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
                 {/* Main Waveform */}
                 {audioPreviewUrl && showPreview && (
-                    <div className="relative w-full h-16 bg-[var(--background)] border border-black/10 dark:border-white/10 rounded overflow-hidden shrink-0 group/wave">
+                    <div className="relative w-full h-16 bg-[var(--background)] border border-primary/50 dark:border-white/10 rounded overflow-hidden shrink-0 group/wave">
                         {/* Technical accents for waveform */}
-                        <div className="absolute top-0 left-0 w-2 h-[1px] bg-black/20 dark:bg-primary/60" />
-                        <div className="absolute bottom-0 right-0 w-2 h-[1px] bg-black/20 dark:bg-primary/60" />
+                        <div className="absolute top-0 left-0 w-2 h-[1px] bg-primary/20 dark:bg-primary/60" />
+                        <div className="absolute bottom-0 right-0 w-2 h-[1px] bg-primary/20 dark:bg-primary/60" />
 
                         <div className="absolute top-1 left-2 text-[8px] text-foreground/50 dark:text-primary/80 uppercase tracking-widest flex items-center gap-1">
                             <div className="w-1 h-1 bg-primary animate-pulse rounded-full" />
