@@ -95,7 +95,12 @@ export default function CustomCursor() {
                     {isHovering ? (
                         /* Hand Pointer */
                         <div className="relative w-6 h-6 -ml-3 -mt-3 flex items-center justify-center">
-                            <span className="text-2xl">👆</span>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10 3C10 2.44772 10.4477 2 11 2C11.5523 2 12 2.44772 12 3V10H13C13 9.44772 13.4477 9 14 9C14.5523 9 15 9.44772 15 10V11H16C16 10.4477 16.4477 10 17 10C17.5523 10 18 10.4477 18 11V12H19C19 11.4477 19.4477 11 20 11C20.5523 11 21 11.4477 21 12V17C21 19.7614 18.7614 22 16 22H13C10.2386 22 8 19.7614 8 17V11C8 10.4477 8.44772 10 9 10C9.55228 10 10 10.4477 10 11V3Z"
+                                    fill="var(--primary)"
+                                    stroke="var(--foreground)"
+                                    strokeWidth="1" />
+                            </svg>
                         </div>
                     ) : (
                         /* Technical Sharp Pointer */
