@@ -48,7 +48,15 @@ export default function CartDrawer() {
                     : 'opacity-0 translate-y-8 translate-x-4 pointer-events-none'
                     }`}
             >
-                <header className="flex justify-between items-center mb-8 border-b border-black/10 dark:border-white/10 p-6 pb-4">
+                {/* Scanline Background Texture */}
+                <div
+                    className="absolute inset-0 opacity-[0.03] dark:opacity-5 pointer-events-none z-0"
+                    style={{
+                        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, var(--primary) 2px, var(--primary) 4px)'
+                    }}
+                />
+
+                <header className="flex justify-between items-center mb-8 border-b border-black/10 dark:border-white/10 p-6 pb-4 relative z-10">
                     <h2 className="font-gothic text-4xl uppercase tracking-tighter text-primary">Your Crate ({cart.length})</h2>
                     <button
                         onClick={toggleCart}
