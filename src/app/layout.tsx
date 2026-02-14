@@ -36,12 +36,32 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var saved = localStorage.getItem('theme');
+                  var dark = saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                  if (dark) document.documentElement.classList.add('dark');
+                  else document.documentElement.classList.remove('dark');
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
       </head>
-      <body className={`${jetbrainsMono.variable} ${pirataOne.variable} ${unifrakturMaguntia.variable} bg-background-light dark:bg-background-dark text-black dark:text-white font-mono selection:bg-primary selection:text-black`}>
-        <div className="fixed inset-0 noise z-50 pointer-events-none"></div>
+      <body className={`${jetbrainsMono.variable} ${pirataOne.variable} ${unifrakturMaguntia.variable} antialiased transition-colors duration-300`}>
+        <div
+          className="fixed inset-0 noise z-[100] pointer-events-none"
+          style={{
+            opacity: 'var(--noise-opacity)',
+            mixBlendMode: 'var(--noise-blend)' as any
+          }}
+        />
         <CartProvider>
           {children}
           <CartDrawer />

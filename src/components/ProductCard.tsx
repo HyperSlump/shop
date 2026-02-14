@@ -27,7 +27,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
     return (
         <div
-            className="group relative border border-black/20 dark:border-white/20 bg-black overflow-hidden h-96 cursor-default transition-all duration-300"
+            className="group relative border border-black/10 dark:border-white/20 bg-white dark:bg-black overflow-hidden h-96 cursor-default transition-all duration-300 shadow-sm dark:shadow-none"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             onClick={() => {
@@ -68,7 +68,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
             </div>
 
             {/* HOVER OVERLAY: Informative Details */}
-            <div className={`absolute inset-0 bg-black backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
+            <div className={`absolute inset-0 bg-white dark:bg-black backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
                 {/* Neon Decorative Corners */}
                 <div className="absolute top-0 left-0 w-8 h-8 border-t border-l border-primary/40 pointer-events-none" />
                 <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-primary/40 pointer-events-none" />
@@ -78,7 +78,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 {/* Header */}
                 <div className="space-y-2 relative">
                     <div className="flex justify-between items-start">
-                        <h3 className="font-gothic text-2xl text-white">{product.name}</h3>
+                        <h3 className="font-gothic text-2xl text-black dark:text-white">{product.name}</h3>
                         <div className="flex items-center gap-3">
                             <span className="font-mono text-primary text-xs">{product.amount === 0 ? 'FREE' : `$${product.amount}`}</span>
                             {/* Mobile Close Button */}
@@ -94,7 +94,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         </div>
                     </div>
                     <div className="w-full h-[1px] bg-primary/30" />
-                    <p className="font-mono text-[10px] text-gray-300 leading-tight">
+                    <p className="font-mono text-[10px] text-gray-600 dark:text-gray-300 leading-tight">
                         {product.description || "Raw industrial audio assets."}
                     </p>
                 </div>
