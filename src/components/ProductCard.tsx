@@ -43,12 +43,12 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                             {/* Frame Borders */}
                             <div className="absolute inset-0 border border-primary/30 z-20 pointer-events-none" />
                             {/* Corner Accents */}
-                            <div className="absolute -top-[1px] -left-[1px] w-1 h-1 bg-primary z-30" />
+                            <div className="absolute -top-[1px] -left-[1px] w-1 h-1 bg-red-500 z-30" />
                             <div className="absolute -top-[1px] -right-[1px] w-1 h-1 bg-primary z-30" />
                             <div className="absolute -bottom-[1px] -left-[1px] w-1 h-1 bg-primary z-30" />
-                            <div className="absolute -bottom-[1px] -right-[1px] w-1 h-1 bg-primary z-30" />
+                            <div className="absolute -bottom-[1px] -right-[1px] w-1 h-1 bg-red-500 z-30" />
 
-                            <div className="relative w-full h-full overflow-hidden bg-black">
+                            <div className="relative w-full h-full overflow-hidden bg-transparent">
                                 <Image
                                     alt={product.name}
                                     className="w-full h-full object-cover opacity-80 contrast-125 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
@@ -72,9 +72,12 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         />
 
                         {/* Top: Tech Label */}
-                        <div className="relative z-10 mb-2">
-                            <p className="font-mono text-[8px] text-primary/60 uppercase tracking-widest leading-tight">
-                                // AUDIO_ASSET<br />
+                        <div className="relative z-10 mb-2 font-mono text-[8px] uppercase tracking-widest leading-tight">
+                            <div className="flex items-center gap-1.5 mb-1">
+                                <span className="w-1 h-1 bg-red-500 rounded-sm animate-[pulse_1s_ease-in-out_infinite]" />
+                                <span className="text-red-500/90 font-bold">rec_asset</span>
+                            </div>
+                            <p className="text-primary/60">
                                 // ID: {product.id.slice(0, 6)}...
                             </p>
                         </div>

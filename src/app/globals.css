@@ -90,7 +90,7 @@
   body {
     background-color: var(--background);
     color: var(--foreground);
-    @apply font-mono selection:bg-primary selection:text-black transition-colors duration-300;
+    @apply font-mono selection:bg-primary selection:text-black transition-colors duration-700 ease-in-out;
   }
 
   a,
