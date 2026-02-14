@@ -60,7 +60,7 @@ export default function CartDrawer() {
             >
                 {/* Matrix Background Texture */}
                 <div className="absolute inset-0 z-0 overflow-hidden opacity-[0.4] dark:opacity-[0.15] pointer-events-none">
-                    <MatrixSpace />
+                    <MatrixSpace isVisible={isCartOpen} />
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/60 to-[var(--background)]" />
                 </div>
 

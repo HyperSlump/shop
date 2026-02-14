@@ -3,81 +3,81 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
-export default function MatrixSpace() {
+export default function MatrixSpace({ isVisible = true }: { isVisible?: boolean }) {
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const container = containerRef.current;
-        if (!container) return;
+        if (!container || !isVisible) return;
 
-        // Ensure container has dimensions
-        const { width, height } = container.getBoundingClientRect();
-        if (width === 0 || height === 0) return;
+        // Small delay to ensure container has dimensions after transitions
+        const timer = setTimeout(() => {
+            const { width, height } = container.getBoundingClientRect();
+            if (width === 0 || height === 0) return;
 
-        const columns = Math.floor(width / 12); // ~12px spacing
+            const columns = Math.floor(width / 12); // ~12px spacing
 
-        // Clear previous content
-        container.innerHTML = '';
+            // Clear previous content
+            container.innerHTML = '';
 
-        const fontSize = 10;
-        const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ$#@&%';
+            const fontSize = 10;
+            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ$#@&%';
 
-        // Create streams
-        const streams: HTMLDivElement[] = [];
+            // Create streams
+            const streams: HTMLDivElement[] = [];
 
-        for (let i = 0; i < columns; i++) {
-            const stream = document.createElement('div');
-            stream.className = 'absolute top-0 font-mono leading-none text-primary/20 select-none pointer-events-none flex flex-col items-center gap-0';
-            stream.style.left = `${i * 12}px`;
-            stream.style.fontSize = `${fontSize}px`;
+            for (let i = 0; i < columns; i++) {
+                const stream = document.createElement('div');
+                stream.className = 'absolute top-0 font-mono leading-none text-primary/20 select-none pointer-events-none flex flex-col items-center gap-0';
+                stream.style.left = `${i * 12}px`;
+                stream.style.fontSize = `${fontSize}px`;
 
-            // Random stream content
-            const length = gsap.utils.random(10, 25, 1);
-            let content = '';
+                // Random stream content
+                const length = Math.floor(Math.random() * 15) + 10;
+                let content = '';
 
-            for (let j = 0; j < length; j++) {
-                const char = chars[Math.floor(Math.random() * chars.length)];
-                // Random opacity for "digital decay" look
-                content += `<span style="opacity: ${Math.random() * 0.6 + 0.1}">${char}</span>`;
-            }
-            stream.innerHTML = content;
-            container.appendChild(stream);
-            streams.push(stream);
-
-            // Animate falling
-            const duration = gsap.utils.random(2, 6);
-            const delay = gsap.utils.random(0, 5);
-
-            // Start above view (negative height of stream)
-            const streamHeight = length * fontSize;
-
-            gsap.fromTo(stream,
-                { y: -streamHeight - 50 },
-                {
-                    y: height + 50,
-                    duration: duration,
-                    repeat: -1,
-                    ease: 'none',
-                    delay: delay
+                for (let j = 0; j < length; j++) {
+                    const char = chars[Math.floor(Math.random() * chars.length)];
+                    content += `<span style="opacity: ${Math.random() * 0.6 + 0.1}">${char}</span>`;
                 }
-            );
+                stream.innerHTML = content;
+                container.appendChild(stream);
+                streams.push(stream);
 
-            // Glitch opacity flicker
-            gsap.to(stream, {
-                opacity: gsap.utils.random(0.3, 0.8),
-                duration: 0.1,
-                repeat: -1,
-                yoyo: true,
-                repeatDelay: gsap.utils.random(0, 2),
-                ease: "steps(1)"
-            });
-        }
+                const duration = Math.random() * 4 + 2;
+                const delay = Math.random() * 5;
+                const streamHeight = length * fontSize;
+
+                gsap.fromTo(stream,
+                    { y: -streamHeight - 50 },
+                    {
+                        y: height + 50,
+                        duration: duration,
+                        repeat: -1,
+                        ease: 'none',
+                        delay: delay
+                    }
+                );
+
+                gsap.to(stream, {
+                    opacity: 0.3 + Math.random() * 0.5,
+                    duration: 0.1,
+                    repeat: -1,
+                    yoyo: true,
+                    repeatDelay: Math.random() * 2,
+                    ease: "steps(1)"
+                });
+            }
+        }, 100);
 
         return () => {
-            gsap.killTweensOf(streams);
-            if (container) container.innerHTML = '';
+            clearTimeout(timer);
+            if (container) {
+                gsap.killTweensOf(container.querySelectorAll('div'));
+                container.innerHTML = '';
+            }
         };
-    }, []);
+    }, [isVisible]);
 
     return (
         <div
