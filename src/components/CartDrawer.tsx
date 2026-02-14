@@ -53,7 +53,7 @@ export default function CartDrawer() {
 
             {/* Drawer */}
             <aside
-                className={`fixed top-0 right-0 h-full w-full md:w-[480px] bg-[var(--background)] border-l border-black/20 dark:border-white/10 z-[70] flex flex-col shadow-2xl transition-all duration-500 ease-out ${isCartOpen
+                className={`fixed top-0 right-0 h-full w-full md:w-[480px] bg-[var(--background)] border-l border-black/80 dark:border-white/10 z-[70] flex flex-col shadow-2xl transition-all duration-500 ease-out ${isCartOpen
                     ? 'opacity-100 translate-y-0 translate-x-0'
                     : 'opacity-0 translate-y-8 translate-x-4 pointer-events-none'
                     }`}
@@ -64,7 +64,7 @@ export default function CartDrawer() {
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/60 to-[var(--background)]" />
                 </div>
 
-                <header className="flex justify-between items-center mb-0 border-b border-black/40 dark:border-white/10 p-6 pb-6 relative z-10">
+                <header className="flex justify-between items-center mb-0 border-b border-black/80 dark:border-white/20 p-6 pb-6 relative z-10">
                     <div className="flex flex-col">
                         <div className="text-sm uppercase font-bold tracking-[0.2em] text-primary">
                             Current Cart
@@ -92,11 +92,11 @@ export default function CartDrawer() {
                         {cart.map((item) => (
                             <div
                                 key={item.id}
-                                className={`flex h-32 border border-foreground/40 dark:border-foreground/10 bg-black/5 dark:bg-white/5 transition-all duration-300 relative group shrink-0 ${exitingItems.includes(item.id) ? 'opacity-0 translate-x-12' : 'opacity-100 translate-x-0'
+                                className={`flex h-32 border border-black/80 dark:border-foreground/20 bg-black/5 dark:bg-white/5 transition-all duration-300 relative group shrink-0 ${exitingItems.includes(item.id) ? 'opacity-0 translate-x-12' : 'opacity-100 translate-x-0'
                                     }`}
                             >
                                 {/* Item Decoration Layer */}
-                                <div className="absolute inset-0 z-50 pointer-events-none border border-foreground/5 overflow-hidden">
+                                <div className="absolute inset-0 z-50 pointer-events-none border border-foreground/10 overflow-hidden">
                                     <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-primary/40 transition-all group-hover:w-4 group-hover:h-4" />
                                     <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-primary/40 transition-all group-hover:w-4 group-hover:h-4" />
                                     <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-primary/40 transition-all group-hover:w-4 group-hover:h-4" />
@@ -109,8 +109,8 @@ export default function CartDrawer() {
                                     <div className="absolute bottom-1 right-1 w-0.5 h-0.5 bg-primary/30 rounded-full" />
 
                                     {/* Unit Ref */}
-                                    <div className="absolute top-0 right-4 px-1.5 bg-[var(--background)] border-x border-foreground/5 h-2.5 flex items-center">
-                                        <span className="font-mono text-[8px] text-foreground/20 font-bold tracking-widest leading-none">ID_{item.id.slice(0, 4)}</span>
+                                    <div className="absolute top-0 right-4 px-1.5 bg-[var(--background)] border-x border-foreground/10 h-2.5 flex items-center">
+                                        <span className="font-mono text-[8px] text-foreground/40 font-bold tracking-widest leading-none">ID_{item.id.slice(0, 4)}</span>
                                     </div>
                                 </div>
                                 {/* Left Column: Static Thumbnail */}
@@ -144,13 +144,13 @@ export default function CartDrawer() {
                                     <div className="flex-1" />
 
                                     {/* Action Footer */}
-                                    <div className="mt-auto p-3 pt-2 border-t border-primary/40 dark:border-primary/10 flex justify-between items-center bg-black/[0.02]">
+                                    <div className="mt-auto p-3 pt-2 border-t border-black/80 dark:border-primary/20 flex justify-between items-center bg-black/[0.02]">
                                         <span className="font-mono text-xs font-bold text-primary">
                                             {item.amount === 0 ? 'FREE' : `$${item.amount.toFixed(2)}`}
                                         </span>
                                         <button
                                             onClick={() => handleRemoveItem(item.id)}
-                                            className="font-mono text-[11px] text-foreground/30 hover:text-red-500 uppercase tracking-widest transition-colors flex items-center gap-1 group/del"
+                                            className="font-mono text-[11px] text-foreground/60 hover:text-red-500 uppercase tracking-widest transition-colors flex items-center gap-1 group/del"
                                         >
                                             <span className="w-1.5 h-1.5 border border-current group-hover/del:bg-red-500 transition-all" />
                                             [ REMOVE ]
@@ -162,7 +162,7 @@ export default function CartDrawer() {
                     </div>
                 )}
 
-                <div className="mt-8 border-t border-black/60 dark:border-white/20 p-6 pt-6 space-y-4">
+                <div className="mt-8 border-t border-black/80 dark:border-white/30 p-6 pt-6 space-y-4">
                     <div className="flex justify-between font-mono text-xl font-bold tracking-tighter text-foreground">
                         <span className="opacity-60 text-foreground">SUBTOTAL_</span>
                         <span className="text-primary">${cartTotal.toFixed(2)}</span>

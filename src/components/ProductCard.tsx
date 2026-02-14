@@ -168,13 +168,10 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
             {/* PREVIEW OVERLAY: Informative Details + Player */}
             <div className={`absolute inset-0 bg-[var(--background)] backdrop-blur-md flex flex-col transition-all duration-300 z-30 ${showPreview ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
-                {/* Background Decoration */}
-                <div
-                    className="absolute inset-0 opacity-[0.03] dark:opacity-5 pointer-events-none z-0"
-                    style={{
-                        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, var(--primary) 2px, var(--primary) 4px)'
-                    }}
-                />
+                {/* Background Decoration - Matrix Effect */}
+                <div className="absolute inset-0 opacity-10 dark:opacity-20 pointer-events-none z-0">
+                    <MatrixSpace isVisible={showPreview} />
+                </div>
 
                 {/* Top Section: Single Column Layout (Waveform + Samples Stacked) */}
                 <div className="flex-1 flex flex-col relative border-b border-primary/20 bg-black/5 dark:bg-white/5 overflow-hidden">

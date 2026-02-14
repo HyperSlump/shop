@@ -51,7 +51,7 @@ export default function IndustrialTicker() {
                 gsap.to([row1Ref.current, row2Ref.current], {
                     skewX: skew,
                     duration: 0.1,
-                    overwrite: true
+                    overwrite: 'auto'
                 });
 
                 // Apply Speed Multiplier
@@ -59,7 +59,7 @@ export default function IndustrialTicker() {
                     gsap.to([row1AnimRef.current, row2AnimRef.current], {
                         timeScale: speed,
                         duration: 0.2,
-                        overwrite: true
+                        overwrite: 'auto'
                     });
                 }
             }
@@ -102,6 +102,7 @@ export default function IndustrialTicker() {
         <div ref={containerRef} className="w-full py-0 px-0 select-none relative z-20 pointer-events-auto overflow-hidden">
             <div className="border-y border-foreground/15 bg-[var(--background)] relative">
                 <div className="w-full">
+
                     {/* Row 1 / Gothic */}
                     <div
                         className="overflow-hidden w-full cursor-pointer"
