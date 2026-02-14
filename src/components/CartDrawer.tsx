@@ -3,11 +3,20 @@
 import { useCart } from './CartProvider';
 import { useState } from 'react';
 import NextImage from 'next/image';
-import { ArrowRight } from 'lucide-react';
+import { X } from 'lucide-react';
 
 export default function CartDrawer() {
     const { cart, isCartOpen, toggleCart, removeFromCart, cartTotal } = useCart();
     const [loading, setLoading] = useState(false);
+    const [exitingItems, setExitingItems] = useState<string[]>([]);
+
+    const handleRemoveItem = (id: string) => {
+        setExitingItems(prev => [...prev, id]);
+        setTimeout(() => {
+            removeFromCart(id);
+            setExitingItems(prev => prev.filter(item => item !== id));
+        }, 500); // Match transition duration
+    };
 
     const handleCheckout = async () => {
         setLoading(true);
@@ -60,10 +69,10 @@ export default function CartDrawer() {
                     <h2 className="font-gothic text-4xl uppercase tracking-tighter text-primary">Your Crate ({cart.length})</h2>
                     <button
                         onClick={toggleCart}
-                        className="hover:translate-x-1 active:scale-95 transition-all text-primary/70 hover:text-primary px-4 flex items-center gap-2 group"
+                        className="hover:rotate-90 transition-all duration-300 text-foreground hover:text-primary px-4 flex items-center gap-2 group"
                     >
-                        <span className="font-mono text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Back</span>
-                        <ArrowRight size={24} />
+                        <span className="font-mono text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Close</span>
+                        <X size={24} />
                     </button>
                 </header>
 
@@ -77,7 +86,8 @@ export default function CartDrawer() {
                         {cart.map((item) => (
                             <div
                                 key={item.id}
-                                className="flex gap-4 p-4 border border-primary/40 hover:border-primary hover:bg-primary/5 transition-all duration-300 relative group bg-transparent"
+                                className={`flex gap-4 p-4 border border-primary/40 hover:border-primary hover:bg-primary/5 transition-all duration-500 relative group bg-transparent ${exitingItems.includes(item.id) ? 'opacity-0 translate-x-12' : 'opacity-100 translate-x-0'
+                                    }`}
                             >
                                 <div className="relative w-24 h-24 shrink-0 overflow-hidden border border-primary/20 bg-black/20">
                                     <NextImage
@@ -100,7 +110,7 @@ export default function CartDrawer() {
                                             {item.amount === 0 ? 'FREE' : `$${item.amount.toFixed(2)}`}
                                         </p>
                                         <button
-                                            onClick={() => removeFromCart(item.id)}
+                                            onClick={() => handleRemoveItem(item.id)}
                                             className="text-[9px] font-bold text-red-500/60 hover:text-red-500 underline uppercase tracking-widest transition-colors"
                                         >
                                             [Delete]
