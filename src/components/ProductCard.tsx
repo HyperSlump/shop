@@ -246,7 +246,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     <div className="flex items-center gap-2 opacity-60 mb-2">
                         <div className="w-1 h-1 bg-primary rounded-full animate-pulse" />
                         <span className="font-mono text-[10px] text-primary uppercase whitespace-nowrap">
-                            ID: {product.id.slice(0, 6)} // V.1.0
+                            PREVIEW_MODE // {product.id.slice(0, 6)}
                         </span>
                         <div className="h-[1px] flex-1 bg-primary/10" />
                     </div>
