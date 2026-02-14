@@ -14,6 +14,7 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, isInCart, onAddToCart }: ProductCardProps) {
     const [showPreview, setShowPreview] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
 
     // Check for the audio preview URL in metadata
     const audioPreviewUrl = product.metadata?.audio_preview;
@@ -30,6 +31,8 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
     return (
         <div
             className="group relative border border-foreground/10 bg-[var(--background)] overflow-hidden h-[440px] md:h-[480px] cursor-default transition-all duration-300 shadow-sm dark:shadow-none"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
         >
             {/* Side Status Bar */}
             <div className="absolute left-0 top-1/4 bottom-1/4 w-[1px] bg-primary/20 z-20">
@@ -45,7 +48,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 <div className="flex-1 flex flex-col relative border-b border-primary/20 bg-black/5 dark:bg-white/5 transition-colors duration-500 overflow-hidden">
                     {/* Full Background Matrix Effect */}
                     <div className="absolute inset-0 z-0">
-                        <MatrixSpace />
+                        <MatrixSpace isVisible={isHovered} />
                         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/40 to-[var(--background)]" />
                     </div>
 
