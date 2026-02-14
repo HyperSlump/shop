@@ -3,6 +3,7 @@
 import { useCart } from './CartProvider';
 import { useState } from 'react';
 import NextImage from 'next/image';
+import { ArrowRight } from 'lucide-react';
 
 export default function CartDrawer() {
     const { cart, isCartOpen, toggleCart, removeFromCart, cartTotal } = useCart();
@@ -51,9 +52,10 @@ export default function CartDrawer() {
                     <h2 className="font-gothic text-4xl uppercase tracking-tighter text-primary">Your Crate ({cart.length})</h2>
                     <button
                         onClick={toggleCart}
-                        className="hover:rotate-90 active:scale-95 transition-all text-3xl font-gothic text-primary/70 hover:text-primary px-4"
+                        className="hover:translate-x-1 active:scale-95 transition-all text-primary/70 hover:text-primary px-4 flex items-center gap-2 group"
                     >
-                        X
+                        <span className="font-mono text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Back</span>
+                        <ArrowRight size={24} />
                     </button>
                 </header>
 
@@ -103,7 +105,7 @@ export default function CartDrawer() {
                 )}
 
                 <div className="mt-8 border-t border-black/20 dark:border-white/20 p-6 pt-6 space-y-4">
-                    <div className="flex justify-between font-mono text-xl font-bold tracking-tighter">
+                    <div className="flex justify-between font-mono text-xl font-bold tracking-tighter text-black dark:text-white">
                         <span className="opacity-60 text-black dark:text-white">SUBTOTAL_</span>
                         <span className="text-primary">${cartTotal.toFixed(2)}</span>
                     </div>
@@ -123,7 +125,7 @@ export default function CartDrawer() {
                             </>
                         )}
                     </button>
-                    <div className="flex justify-center gap-4 opacity-30">
+                    <div className="flex justify-center gap-4 opacity-30 text-black dark:text-white">
                         <span className="text-[10px] font-mono uppercase">Stripe_Ready</span>
                         <span className="text-[10px] font-mono uppercase">SSL_Enabled</span>
                     </div>
