@@ -17,29 +17,31 @@ export default function IndustrialTicker() {
         if (!row1Ref.current || !row2Ref.current) return;
 
         const ctx = gsap.context(() => {
-            // Row 1: Slow Left
+            // Row 1: Move Left (0 to -50%)
             const r1 = gsap.to(row1Ref.current, {
-                x: '-50%',
-                duration: 40,
+                xPercent: -50,
+                duration: 30,
                 ease: 'none',
                 repeat: -1
             });
 
-            // Row 2: Faster Right
+            // Row 2: Move Right (-50% to 0)
+            gsap.set(row2Ref.current, { xPercent: -50 });
             const r2 = gsap.to(row2Ref.current, {
-                x: '0%',
-                duration: 20,
+                xPercent: 0,
+                duration: 15,
                 ease: 'none',
                 repeat: -1
             });
-            gsap.set(row2Ref.current, { x: '-50%' });
 
             // Velocity Skew & Speed boost
             ScrollTrigger.create({
+                trigger: containerRef.current,
+                start: "top bottom",
                 onUpdate: (self) => {
                     const velocity = self.getVelocity();
-                    const skew = velocity / 200;
-                    const speed = 1 + Math.abs(velocity / 500);
+                    const skew = velocity / 250;
+                    const speed = 1 + Math.abs(velocity / 600);
 
                     gsap.to([row1Ref.current, row2Ref.current], {
                         skewX: skew,
@@ -47,7 +49,6 @@ export default function IndustrialTicker() {
                         duration: 0.1
                     });
 
-                    // Tempo scale
                     gsap.to([r1, r2], {
                         timeScale: speed,
                         overwrite: true,
@@ -80,39 +81,54 @@ export default function IndustrialTicker() {
         if (anim) anim.play();
     };
 
+    // To make a seamless loop with GSAP, we only need the content repeated TWICE 
+    // and then animate from 0% left to -50% left.
     const row1Content = "NEW MERCH OUT NOW — HYPER$LUMP — INDUSTRIAL_CORE_V1 — READ BLOG — SYSTEM_ACTIVE — ";
     const row2Content = "$ $ $ $ /// REF_ID: 0x8823 /// ANALOG_ACTIVE /// $$$ /// 120.00_BPM /// SIGNAL_LOST /// ";
 
     return (
-        <div ref={containerRef} className="w-full max-w-full border-y border-foreground/10 bg-[var(--background)] overflow-hidden py-2 select-none relative z-20 box-border pointer-events-auto">
+        <div ref={containerRef} className="w-full max-w-full border-y border-foreground/10 bg-[var(--background)] overflow-hidden py-4 select-none relative z-20 group/ticker">
             {/* Row 1: Slow / Gothic */}
             <div
-                ref={row1Ref}
+                className="overflow-hidden w-full"
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                className="flex whitespace-nowrap py-2 border-b border-primary/5 cursor-pointer"
             >
-                <div className="flex shrink-0 items-center">
-                    {Array.from({ length: 15 }).map((_, i) => (
-                        <span key={i} className="font-gothic text-4xl md:text-5xl text-primary px-8 tracking-wider">
-                            {row1Content}
-                        </span>
+                <div
+                    ref={row1Ref}
+                    className="flex whitespace-nowrap py-2 border-b border-primary/5 cursor-pointer w-max"
+                >
+                    {/* Repeated twice for seamless loop */}
+                    {[1, 2].map((n) => (
+                        <div key={n} className="flex">
+                            {Array.from({ length: 4 }).map((_, i) => (
+                                <span key={i} className="font-gothic text-4xl md:text-5xl text-primary px-8 tracking-wider">
+                                    {row1Content}
+                                </span>
+                            ))}
+                        </div>
                     ))}
                 </div>
             </div>
 
             {/* Row 2: Fast / Mono */}
             <div
-                ref={row2Ref}
+                className="overflow-hidden w-full"
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                className="flex whitespace-nowrap py-1 cursor-pointer"
             >
-                <div className="flex shrink-0 items-center">
-                    {Array.from({ length: 20 }).map((_, i) => (
-                        <span key={i} className="font-mono text-[10px] md:text-xs text-foreground/40 px-12 tracking-[0.3em] uppercase">
-                            {row2Content}
-                        </span>
+                <div
+                    ref={row2Ref}
+                    className="flex whitespace-nowrap py-1 cursor-pointer w-max"
+                >
+                    {[1, 2].map((n) => (
+                        <div key={n} className="flex">
+                            {Array.from({ length: 6 }).map((_, i) => (
+                                <span key={i} className="font-mono text-[10px] md:text-xs text-foreground/40 px-12 tracking-[0.3em] uppercase">
+                                    {row2Content}
+                                </span>
+                            ))}
+                        </div>
                     ))}
                 </div>
             </div>
