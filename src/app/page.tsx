@@ -10,10 +10,10 @@ export default async function Home() {
   const products = await getActiveProducts();
 
   return (
-    <div className="relative min-h-screen flex flex-col md:flex-row">
+    <div className="relative min-h-screen flex flex-col md:flex-row overflow-x-hidden">
       <Navigation />
 
-      <main className="flex-1 flex flex-col">
+      <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <header className="p-4 md:p-8 border-b border-[var(--border)] flex flex-col md:flex-row justify-between items-end gap-6 bg-[var(--background)] animate-fade-in delay-100">
           <div className="flex flex-col">
             <h1 className="hidden md:block font-gothic text-7xl md:text-8xl lg:text-9xl leading-none tracking-tight mb-4 lowercase">
@@ -33,10 +33,9 @@ export default async function Home() {
           </div>
         </header>
 
-
         <ProductGrid products={products} />
 
-        <div className="mt-16 mb-4">
+        <div className="mt-16 mb-4 w-full overflow-hidden">
           <IndustrialTicker />
         </div>
 
@@ -63,13 +62,11 @@ export default async function Home() {
               </a>
             </div>
             <p className="text-[10px] opacity-40">
-              ©2026 ACID GOTH LABS. ALL RIGHTS RESERVED.
+              ©2026 HYPER$LUMP. ALL RIGHTS RESERVED.
             </p>
           </div>
         </footer>
       </main>
-
-
     </div>
   );
 }

@@ -17,7 +17,6 @@ export default function IndustrialTicker() {
         if (!row1Ref.current || !row2Ref.current) return;
 
         const ctx = gsap.context(() => {
-            // Setup loops using the standard twin-track marquee method
             // Row 1: Slow Left
             const r1 = gsap.to(row1Ref.current, {
                 x: '-50%',
@@ -33,7 +32,6 @@ export default function IndustrialTicker() {
                 ease: 'none',
                 repeat: -1
             });
-            // Start Row 2 at -50% to move it right
             gsap.set(row2Ref.current, { x: '-50%' });
 
             // Velocity Skew & Speed boost
@@ -64,11 +62,9 @@ export default function IndustrialTicker() {
 
     const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
         const row = e.currentTarget;
-        // Find the animation for this specific row
         const anim = gsap.getTweensOf(row)[0];
         if (anim) anim.pause();
 
-        // Flicker effect
         gsap.to(row, {
             opacity: 0.3,
             repeat: 5,
@@ -88,7 +84,7 @@ export default function IndustrialTicker() {
     const row2Content = "$ $ $ $ /// REF_ID: 0x8823 /// ANALOG_ACTIVE /// $$$ /// 120.00_BPM /// SIGNAL_LOST /// ";
 
     return (
-        <div ref={containerRef} className="w-full border-y border-foreground/10 bg-[var(--background)] overflow-hidden py-2 select-none relative z-20">
+        <div ref={containerRef} className="w-full max-w-full border-y border-foreground/10 bg-[var(--background)] overflow-hidden py-2 select-none relative z-20 box-border pointer-events-auto">
             {/* Row 1: Slow / Gothic */}
             <div
                 ref={row1Ref}
@@ -97,7 +93,7 @@ export default function IndustrialTicker() {
                 className="flex whitespace-nowrap py-2 border-b border-primary/5 cursor-pointer"
             >
                 <div className="flex shrink-0 items-center">
-                    {Array.from({ length: 10 }).map((_, i) => (
+                    {Array.from({ length: 15 }).map((_, i) => (
                         <span key={i} className="font-gothic text-4xl md:text-5xl text-primary px-8 tracking-wider">
                             {row1Content}
                         </span>
@@ -113,7 +109,7 @@ export default function IndustrialTicker() {
                 className="flex whitespace-nowrap py-1 cursor-pointer"
             >
                 <div className="flex shrink-0 items-center">
-                    {Array.from({ length: 15 }).map((_, i) => (
+                    {Array.from({ length: 20 }).map((_, i) => (
                         <span key={i} className="font-mono text-[10px] md:text-xs text-foreground/40 px-12 tracking-[0.3em] uppercase">
                             {row2Content}
                         </span>
