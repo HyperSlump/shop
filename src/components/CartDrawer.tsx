@@ -3,7 +3,7 @@
 import { useCart } from './CartProvider';
 import { useState } from 'react';
 import NextImage from 'next/image';
-import { X } from 'lucide-react';
+import { X, ArrowRight } from 'lucide-react';
 
 export default function CartDrawer() {
     const { cart, isCartOpen, toggleCart, removeFromCart, cartTotal } = useCart();
@@ -69,10 +69,10 @@ export default function CartDrawer() {
                     <h2 className="font-gothic text-4xl uppercase tracking-tighter text-primary">Your Crate ({cart.length})</h2>
                     <button
                         onClick={toggleCart}
-                        className="hover:rotate-90 transition-all duration-300 text-foreground hover:text-primary px-4 flex items-center gap-2 group"
+                        className="hover:translate-x-1 active:scale-95 transition-all text-primary/70 hover:text-primary px-4 flex items-center gap-2 group"
                     >
-                        <span className="font-mono text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Close</span>
-                        <X size={24} />
+                        <span className="font-mono text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Back</span>
+                        <ArrowRight size={24} />
                     </button>
                 </header>
 

@@ -128,7 +128,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                     e.stopPropagation();
                                     setIsHovered(false);
                                 }}
-                                className="md:hidden text-white/50 hover:text-white"
+                                className="md:hidden text-foreground/50 hover:text-foreground"
                             >
                                 <span className="material-icons text-xl">close</span>
                             </button>
