@@ -114,7 +114,7 @@ export default function IndustrialTicker() {
                             {[...Array(2)].map((_, i) => (
                                 <div key={i} className="flex">
                                     {[...Array(6)].map((_, j) => (
-                                        <span key={j} className="font-gothic text-5xl md:text-7xl text-primary px-12 tracking-wider">
+                                        <span key={j} className="font-gothic text-5xl md:text-7xl text-primary px-12 tracking-wider lowercase">
                                             {row1Text}
                                         </span>
                                     ))}
