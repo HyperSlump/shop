@@ -29,7 +29,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
     return (
         <div
-            className="group relative border border-[var(--border)] bg-[var(--background)] overflow-hidden h-96 cursor-default transition-all duration-300 shadow-sm dark:shadow-none"
+            className="group relative border border-[var(--border)] bg-[var(--background)] overflow-hidden h-[480px] cursor-default transition-all duration-300 shadow-sm dark:shadow-none"
         >
             {/* DEFAULT VIEW: Image + Artistic Overlays */}
             {/* DEFAULT VIEW: Structured Technical Layout */}
