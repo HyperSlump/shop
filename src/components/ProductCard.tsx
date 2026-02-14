@@ -229,7 +229,9 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 </div>
 
                 {/* Bottom Section: Info - Consistent with Front */}
-                <div className="h-auto border-t-2 border-primary/30 bg-[var(--background)] pt-4 px-4 pb-8 relative flex flex-col gap-2">
+                <div className="h-auto border-t-2 border-primary/30 bg-[var(--background)] pt-4 px-4 pb-6 relative flex flex-col gap-2">
+                    {/* Top Notch decorative element */}
+                    <div className="absolute -top-[2px] right-8 w-12 h-[2px] bg-red-500 z-20" />
                     {/* Header Row */}
                     <div className="flex justify-between items-start">
                         <h3 className="font-gothic text-2xl text-foreground leading-none tracking-wide">
@@ -241,8 +243,8 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     </div>
 
                     {/* Meta Data (Brief) */}
-                    <div className="flex items-center gap-2 opacity-60">
-                        <div className="w-1 h-1 bg-primary rounded-full" />
+                    <div className="flex items-center gap-2 opacity-60 mb-2">
+                        <div className="w-1 h-1 bg-primary rounded-full animate-pulse" />
                         <span className="font-mono text-[8px] text-primary uppercase whitespace-nowrap">
                             PREVIEW_MODE // {product.id.slice(0, 6)}
                         </span>
@@ -250,7 +252,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     </div>
 
                     {/* Action Row */}
-                    <div className="flex items-center justify-between mt-0.5 pt-2 border-t border-primary/10">
+                    <div className="flex items-center justify-between mt-1 pt-2 border-t-2 border-primary/10">
                         {/* Back Button */}
                         <button
                             onClick={(e) => {
