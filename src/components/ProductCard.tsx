@@ -126,9 +126,9 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 e.stopPropagation();
                                 setShowPreview(true);
                             }}
-                            className="text-left font-mono text-[9px] uppercase tracking-widest text-[#570e0e]/60 dark:text-red-500/60 hover:text-[#570e0e] dark:hover:text-red-500 transition-colors flex items-center gap-2 group/pbtn"
+                            className="text-left font-mono text-[11px] uppercase tracking-widest text-[#570e0e]/60 dark:text-red-500/60 hover:text-[#570e0e] dark:hover:text-red-500 transition-colors flex items-center gap-2 group/pbtn"
                         >
-                            <span className="w-1.5 h-1.5 border border-current group-hover/pbtn:bg-[#570e0e] dark:group-hover/pbtn:bg-red-500 transition-all rounded-[1px]" />
+                            <span className="w-2 h-2 border border-current group-hover/pbtn:bg-[#570e0e] dark:group-hover/pbtn:bg-red-500 transition-all rounded-[1px]" />
                             PREVIEW
                         </button>
 
@@ -139,7 +139,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 onAddToCart(product);
                             }}
                             disabled={isInCart}
-                            className="text-right font-mono text-[10px] text-[#570e0e] dark:text-red-500 uppercase hover:text-[#751b1b] dark:hover:text-red-400 transition-colors disabled:opacity-50"
+                            className="text-right font-mono text-[12px] text-[#570e0e] dark:text-red-500 uppercase hover:text-[#751b1b] dark:hover:text-red-400 transition-colors disabled:opacity-50"
                         >
                             {isInCart ? '[ IN CART ]' : '[ BUY NOW ]'}
                         </button>
