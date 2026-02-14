@@ -31,7 +31,7 @@ export default function ThemeToggle() {
     return (
         <button
             onClick={toggleTheme}
-            className="group border border-black dark:border-white p-4 text-center hover:border-primary transition-colors w-full max-w-[200px]"
+            className="group border-2 border-black dark:border-white p-4 text-center hover:border-primary transition-colors w-full max-w-[200px]"
         >
             <div className="text-[8px] uppercase tracking-[0.4em] mb-2 opacity-50 group-hover:text-primary group-hover:opacity-100 transition-all">
                 System Mode

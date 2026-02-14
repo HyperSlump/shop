@@ -53,7 +53,7 @@ export default function CartDrawer() {
 
             {/* Drawer */}
             <aside
-                className={`fixed top-0 right-0 h-full w-full md:w-[480px] bg-[var(--background)] border-l border-foreground/10 z-[70] flex flex-col shadow-2xl transition-all duration-500 ease-out ${isCartOpen
+                className={`fixed top-0 right-0 h-full w-full md:w-[480px] bg-[var(--background)] border-l-2 border-foreground/10 z-[70] flex flex-col shadow-2xl transition-all duration-500 ease-out ${isCartOpen
                     ? 'opacity-100 translate-y-0 translate-x-0'
                     : 'opacity-0 translate-y-8 translate-x-4 pointer-events-none'
                     }`}
@@ -64,7 +64,7 @@ export default function CartDrawer() {
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/60 to-[var(--background)]" />
                 </div>
 
-                <header className="flex justify-between items-center mb-0 border-b border-foreground/10 p-6 pb-6 relative z-10">
+                <header className="flex justify-between items-center mb-0 border-b-2 border-foreground/10 p-6 pb-6 relative z-10">
                     <div className="flex flex-col">
                         <div className="text-sm uppercase font-bold tracking-[0.2em] text-primary">
                             Current Cart
@@ -92,7 +92,7 @@ export default function CartDrawer() {
                         {cart.map((item) => (
                             <div
                                 key={item.id}
-                                className={`flex h-24 border-b border-foreground/10 items-center transition-all duration-300 relative group shrink-0 ${exitingItems.includes(item.id) ? 'opacity-0 translate-x-12' : 'opacity-100 translate-x-0'
+                                className={`flex h-24 border-b-2 border-foreground/10 items-center transition-all duration-300 relative group shrink-0 ${exitingItems.includes(item.id) ? 'opacity-0 translate-x-12' : 'opacity-100 translate-x-0'
                                     }`}
                             >
                                 {/* Left Column: Static Thumbnail */}
@@ -140,7 +140,7 @@ export default function CartDrawer() {
                     </div>
                 )}
 
-                <div className="mt-8 border-t border-foreground/10 p-6 pt-6 space-y-4">
+                <div className="mt-8 border-t-2 border-foreground/10 p-6 pt-6 space-y-4">
                     <div className="flex justify-between font-mono text-xl font-bold tracking-tighter text-foreground">
                         <span className="opacity-60 text-foreground">SUBTOTAL_</span>
                         <span className="text-primary">${cartTotal.toFixed(2)}</span>

@@ -7,7 +7,7 @@ export default function Navigation() {
     const { toggleCart, cart } = useCart();
 
     return (
-        <aside className="w-full md:w-20 h-16 md:h-screen fixed top-0 left-0 border-b md:border-b-0 md:border-r border-[var(--border)] flex flex-row md:flex-col items-center justify-between md:justify-center md:gap-12 px-4 md:p-4 z-50 bg-[var(--background)] animate-fade-in">
+        <aside className="w-full md:w-20 h-16 md:h-screen fixed top-0 left-0 border-b md:border-b-0 md:border-r-2 border-[var(--border)] flex flex-row md:flex-col items-center justify-between md:justify-center md:gap-12 px-4 md:p-4 z-50 bg-[var(--background)] animate-fade-in">
             <Link href="/" className="md:hidden text-xl font-gothic tracking-tighter hover:text-primary transition-colors leading-none">
                 <span>hyper$lump</span>
             </Link>

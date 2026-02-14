@@ -18,7 +18,7 @@ export default async function Home() {
 
         {/* Main Content Area - Shifted for Nav */}
         <main className="flex-1 flex flex-col min-w-0 pt-16 md:pt-0 md:ml-20">
-          <header className="p-6 md:p-12 border-b border-[var(--border)] flex flex-col md:flex-row justify-between items-start md:items-end gap-10 bg-[var(--background)] animate-fade-in delay-100">
+          <header className="p-6 md:p-12 border-b-2 border-[var(--border)] flex flex-col md:flex-row justify-between items-start md:items-end gap-10 bg-[var(--background)] animate-fade-in delay-100">
             <div className="flex flex-col">
               <h1 className="hidden md:block font-gothic text-7xl md:text-8xl lg:text-9xl leading-[0.8] tracking-tight mb-6 lowercase">
                 hyper$lump
@@ -48,7 +48,7 @@ export default async function Home() {
           </div>
 
           {/* Indented Footer Content */}
-          <div className="p-8 md:p-12 md:ml-20 bg-[var(--background)] border-t border-black/10 dark:border-white/5">
+          <div className="p-8 md:p-12 md:ml-20 bg-[var(--background)] border-t-2 border-black/10 dark:border-white/5">
             <div className="max-w-7xl mx-auto flex flex-col md:grid md:grid-cols-3 gap-12 items-center md:items-center">
               {/* System Status (Left) */}
               <div className="text-[10px] space-y-2 opacity-50 font-mono w-full text-center md:text-left">

@@ -30,7 +30,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
     return (
         <div
-            className="group relative border border-foreground/10 bg-[var(--background)] overflow-hidden h-[440px] md:h-[480px] cursor-default transition-all duration-300 shadow-sm dark:shadow-none"
+            className="group relative border-2 border-foreground/10 bg-[var(--background)] overflow-hidden h-[440px] md:h-[480px] cursor-default transition-all duration-300 shadow-sm dark:shadow-none"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
@@ -45,7 +45,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
             {/* DEFAULT VIEW: Structured Technical Layout */}
             <div className={`absolute inset-0 flex flex-col transition-all duration-300 ${showPreview ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'}`}>
                 {/* Top Section: Single Column Technical Dashboard */}
-                <div className="flex-1 flex flex-col relative border-b border-primary/20 bg-black/5 dark:bg-white/5 transition-colors duration-500 overflow-hidden">
+                <div className="flex-1 flex flex-col relative border-b-2 border-primary/20 bg-black/5 dark:bg-white/5 transition-colors duration-500 overflow-hidden">
                     {/* Full Background Matrix Effect */}
                     <div className="absolute inset-0 z-0">
                         <MatrixSpace isVisible={isHovered} />
@@ -137,7 +137,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     </div>
 
                     {/* Action Row */}
-                    <div className="flex items-center justify-between mt-1 pt-2 border-t border-primary/10">
+                    <div className="flex items-center justify-between mt-1 pt-2 border-t-2 border-primary/10">
                         {/* Preview (moved from image) */}
                         <button
                             onClick={(e) => {
@@ -174,7 +174,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 </div>
 
                 {/* Top Section: Single Column Layout (Waveform + Samples Stacked) */}
-                <div className="flex-1 flex flex-col relative border-b border-primary/20 bg-black/5 dark:bg-white/5 overflow-hidden">
+                <div className="flex-1 flex flex-col relative border-b-2 border-primary/20 bg-black/5 dark:bg-white/5 overflow-hidden">
                     <div className="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar">
                         {/* Header with Close */}
                         <div className="flex justify-between items-center">
