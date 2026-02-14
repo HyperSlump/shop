@@ -118,11 +118,17 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         </span>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-                        <p className="font-mono text-[10px] text-primary/60 uppercase tracking-[0.2em] font-bold">
-                            ELECTRONIC MUSIC SAMPLE PACK
-                        </p>
+                    <div className="mt-2">
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onAddToCart(product);
+                            }}
+                            disabled={isInCart}
+                            className="w-full py-2 bg-red-600 hover:bg-red-500 disabled:bg-red-600/50 disabled:cursor-not-allowed text-white font-mono font-bold text-[10px] uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2 shadow-[0_0_10px_rgba(220,38,38,0.3)] hover:shadow-[0_0_15px_rgba(220,38,38,0.5)]"
+                        >
+                            {isInCart ? 'IN CART' : 'BUY NOW'}
+                        </button>
                     </div>
                 </div>
             </div>
