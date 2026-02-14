@@ -30,7 +30,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
     return (
         <div
-            className="group relative bg-[var(--background)] overflow-hidden h-[440px] md:h-[480px] cursor-default transition-all duration-300 shadow-sm dark:shadow-none"
+            className="group relative bg-[var(--background)] overflow-hidden h-[440px] md:h-[480px] cursor-pointer transition-all duration-300 shadow-sm dark:shadow-none"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
