@@ -187,28 +187,12 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     }}
                 />
 
-                {/* Top Section: Split Layout (Waveform | One-Shots) */}
-                <div className="flex-1 flex relative border-b border-primary/20 bg-black/5 dark:bg-white/5">
-                    {/* Left Column: Main Waveform */}
-                    <div className="w-1/2 relative p-4 flex flex-col justify-center border-r border-primary/10">
-                        {audioPreviewUrl && showPreview && (
-                            <div className="relative w-full h-32 bg-[var(--background)] border border-primary/30 rounded overflow-hidden group/wave shadow-xl">
-                                <div className="absolute top-2 left-2 text-[8px] text-primary/60 uppercase tracking-[0.2em] font-bold z-10 flex items-center gap-1">
-                                    <div className="w-1 h-1 bg-red-500 rounded-full animate-pulse" />
-                                    MAIN_PREVIEW.WAV
-                                </div>
-                                <WaveformOverlay
-                                    audioUrl={audioPreviewUrl}
-                                    isActive={showPreview}
-                                />
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Right Column: One-Shots */}
-                    <div className="w-1/2 p-4 flex flex-col gap-2 overflow-hidden relative">
-                        <div className="flex justify-between items-center mb-1">
-                            <span className="font-mono text-[8px] text-primary/40 uppercase tracking-widest">// SAMPLES</span>
+                {/* Top Section: Single Column Layout (Waveform + Samples Stacked) */}
+                <div className="flex-1 flex flex-col relative border-b border-primary/20 bg-black/5 dark:bg-white/5 overflow-hidden">
+                    <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
+                        {/* Header with Close */}
+                        <div className="flex justify-between items-center">
+                            <span className="font-mono text-[8px] text-primary/40 uppercase tracking-widest">// PREVIEW_ANALYSIS</span>
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -219,15 +203,41 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 <span className="material-icons text-base">close</span>
                             </button>
                         </div>
-                        <div className="flex-1 overflow-y-auto pr-1 space-y-2 custom-scrollbar">
-                            {samples.map((url, index) => (
-                                <OneShotPlayer
-                                    key={index}
-                                    audioUrl={url}
-                                    label={`S_${index + 1}`}
-                                    isActive={showPreview}
-                                />
-                            ))}
+
+                        {/* Main Waveform - Now full width and prominent */}
+                        {audioPreviewUrl && showPreview && (
+                            <div className="space-y-2">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-1 h-1 bg-red-500 rounded-full animate-pulse" />
+                                    <span className="font-mono text-[8px] text-primary/60 uppercase tracking-[0.2em]">MAIN_PREVIEW.WAV</span>
+                                </div>
+                                <div className="relative w-full h-24 bg-[var(--background)] border border-primary/30 rounded overflow-hidden group/wave shadow-xl">
+                                    <WaveformOverlay
+                                        audioUrl={audioPreviewUrl}
+                                        isActive={showPreview}
+                                    />
+                                </div>
+                            </div>
+                        )}
+
+                        {/* One-Shots Section */}
+                        <div className="space-y-2">
+                            <span className="font-mono text-[8px] text-primary/40 uppercase tracking-widest">// ONE_SHOT_SAMPLES</span>
+                            <div className="grid grid-cols-1 gap-1.5">
+                                {samples.map((url, index) => (
+                                    <OneShotPlayer
+                                        key={index}
+                                        audioUrl={url}
+                                        label={`S_${index + 1}`}
+                                        isActive={showPreview}
+                                    />
+                                ))}
+                                {samples.length === 0 && (
+                                    <div className="py-8 border border-dashed border-primary/10 text-center">
+                                        <span className="font-mono text-[8px] text-primary/30 uppercase">NO_SAMPLES_AVAILABLE</span>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
