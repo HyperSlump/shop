@@ -38,6 +38,9 @@
   html {
     --background: var(--color-background-light);
     --foreground: #000000;
+    --primary: #7b00ff;
+    /* Electric Violet - WCAG AA (5.5:1) */
+    --primary-foreground: #ffffff;
     --border: rgba(0, 0, 0, 0.1);
     --noise-opacity: 0.03;
     --noise-blend: multiply;
@@ -46,6 +49,9 @@
   html.dark {
     --background: var(--color-background-dark);
     --foreground: #ffffff;
+    --primary: #ccff00;
+    /* Neon Yellow */
+    --primary-foreground: #000000;
     --border: rgba(255, 255, 255, 0.1);
     --noise-opacity: 0.05;
     --noise-blend: overlay;
@@ -61,4 +67,10 @@
   button {
     @apply cursor-pointer;
   }
+}
+
+/* Map Tailwind colors to our dynamic variables */
+@theme {
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
 }

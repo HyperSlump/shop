@@ -20,11 +20,13 @@ export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlay
             if (!containerRef.current) return;
             const WaveSurfer = (await import('wavesurfer.js')).default;
 
+            const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#ccff00';
+
             ws = WaveSurfer.create({
                 container: containerRef.current,
                 waveColor: '#333333',
-                progressColor: '#ccff00',
-                cursorColor: '#ccff00',
+                progressColor: primaryColor,
+                cursorColor: primaryColor,
                 barWidth: 3,
                 barGap: 1,
                 barRadius: 2,
