@@ -59,9 +59,9 @@ export default function CartDrawer() {
                     }`}
             >
                 {/* Matrix Background Texture */}
-                <div className="absolute inset-0 z-0 overflow-hidden opacity-[0.4] dark:opacity-[0.15] pointer-events-none">
+                <div className="absolute inset-0 z-0 opacity-[0.6] dark:opacity-[0.25] pointer-events-none">
                     <MatrixSpace isVisible={isCartOpen} />
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/60 to-[var(--background)]" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/40 to-[var(--background)]" />
                 </div>
 
                 <header className="flex justify-between items-center mb-8 border-b border-black/10 dark:border-white/10 p-6 pb-4 relative z-10">
@@ -76,12 +76,12 @@ export default function CartDrawer() {
                 </header>
 
                 {cart.length === 0 ? (
-                    <div className="flex-1 flex flex-col items-center justify-center opacity-30 space-y-4">
+                    <div className="flex-1 flex flex-col items-center justify-center opacity-30 space-y-4 relative z-10">
                         <span className="material-icons text-8xl">shopping_bag</span>
                         <p className="font-mono text-xs tracking-[0.5em]">BUFFER_EMPTY</p>
                     </div>
                 ) : (
-                    <div className="flex-1 overflow-y-auto overflow-x-hidden space-y-4 px-6 custom-scrollbar">
+                    <div className="flex-1 overflow-y-auto overflow-x-hidden space-y-4 px-6 custom-scrollbar relative z-10">
                         {cart.map((item) => (
                             <div
                                 key={item.id}
@@ -103,7 +103,7 @@ export default function CartDrawer() {
                                 </div>
 
                                 {/* Right Column: Info & Action */}
-                                <div className="flex-1 flex flex-col bg-[var(--background)]">
+                                <div className="flex-1 flex flex-col bg-[var(--background)]/90 backdrop-blur-sm">
                                     {/* Info Header */}
                                     <div className="p-3 pb-2 flex-col gap-0.5">
                                         <h3 className="font-gothic text-lg leading-none tracking-tight text-foreground truncate">{item.name}</h3>

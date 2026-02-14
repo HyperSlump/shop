@@ -10,12 +10,12 @@ export default function MatrixSpace({ isVisible = true }: { isVisible?: boolean 
         const container = containerRef.current;
         if (!container || !isVisible) return;
 
-        // Small delay to ensure container has dimensions after transitions
+        // Delay to ensure container has dimensions after transitions
         const timer = setTimeout(() => {
             const { width, height } = container.getBoundingClientRect();
             if (width === 0 || height === 0) return;
 
-            const columns = Math.floor(width / 12); // ~12px spacing
+            const columns = Math.floor(width / 10); // ~10px spacing (higher density)
 
             // Clear previous content
             container.innerHTML = '';
@@ -28,7 +28,7 @@ export default function MatrixSpace({ isVisible = true }: { isVisible?: boolean 
 
             for (let i = 0; i < columns; i++) {
                 const stream = document.createElement('div');
-                stream.className = 'absolute top-0 font-mono leading-none text-primary/20 select-none pointer-events-none flex flex-col items-center gap-0';
+                stream.className = 'absolute top-0 font-mono leading-none text-primary/40 select-none pointer-events-none flex flex-col items-center gap-0';
                 stream.style.left = `${i * 12}px`;
                 stream.style.fontSize = `${fontSize}px`;
 
