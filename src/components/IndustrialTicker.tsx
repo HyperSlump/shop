@@ -101,7 +101,7 @@ export default function IndustrialTicker() {
     return (
         <div ref={containerRef} className="w-full py-16 px-6 md:px-12 select-none relative z-20 pointer-events-auto">
             <div className="border-y border-foreground/10 bg-[var(--background)] relative">
-                <div className="w-full overflow-hidden border-x border-primary/5">
+                <div className="w-full overflow-hidden border-x border-foreground/10">
                     {/* Row 1 / Gothic */}
                     <div
                         className="overflow-hidden w-full cursor-pointer"
