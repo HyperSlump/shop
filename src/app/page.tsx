@@ -12,12 +12,12 @@ export default async function Home() {
 
   return (
     <>
-      <div className="relative min-h-screen flex flex-col md:flex-row bg-[var(--background)]">
-        {/* Navigation Sidebar */}
+      <div className="relative min-h-screen bg-[var(--background)]">
+        {/* Navigation Sidebar - Fixed and persistent */}
         <Navigation />
 
-        {/* Main Content Area */}
-        <main className="flex-1 flex flex-col min-w-0 pt-16 md:pt-0">
+        {/* Main Content Area - Shifted for Nav */}
+        <main className="flex-1 flex flex-col min-w-0 pt-16 md:pt-0 md:ml-20">
           <header className="p-6 md:p-12 border-b border-[var(--border)] flex flex-col md:flex-row justify-between items-start md:items-end gap-10 bg-[var(--background)] animate-fade-in delay-100">
             <div className="flex flex-col">
               <h1 className="hidden md:block font-gothic text-7xl md:text-8xl lg:text-9xl leading-[0.8] tracking-tight mb-6 lowercase">
@@ -39,51 +39,51 @@ export default async function Home() {
           <section className="flex-1 w-full mx-auto">
             <ProductGrid products={products} />
           </section>
-
         </main>
-      </div>
 
-      {/* Full Width Footer Section - Outside of Flex Row */}
-      <footer className="footer-unit animate-fade-in delay-300 relative z-10">
-        <div className="w-full">
-          <IndustrialTicker />
-        </div>
+        {/* Full Width Ticker - Outside the main margin to TUCK UNDER nav */}
+        <footer className="footer-unit animate-fade-in delay-300 relative z-10 w-full overflow-hidden">
+          <div className="w-full">
+            <IndustrialTicker />
+          </div>
 
-        <div className="p-8 md:p-12 bg-[var(--background)] border-t border-black/10 dark:border-white/5">
-          <div className="max-w-7xl mx-auto flex flex-col md:grid md:grid-cols-3 gap-12 items-center md:items-center">
-            {/* System Status (Left) */}
-            <div className="text-[10px] space-y-2 opacity-50 font-mono w-full text-center md:text-left">
-              <p>&gt; INITIALIZING SYSTEM_CORE...</p>
-              <p>&gt; ASSET_LOAD: 100% [OK]</p>
-              <p>&gt; AUDIO_BUFFER: CACHED [OK]</p>
-              <p>&gt; SIGNAL_STATE: BROADCASTING</p>
-            </div>
-
-            {/* Theme Control (Center) */}
-            <div className="flex justify-center w-full">
-              <ThemeToggle />
-            </div>
-
-            {/* Social & Credits (Right) */}
-            <div className="flex flex-col items-center md:items-end gap-6 w-full">
-              <div className="flex gap-6">
-                {['INSTAGRAM', 'DISCORD', 'BANDCAMP'].map((platform) => (
-                  <a
-                    key={platform}
-                    className="text-[10px] font-bold tracking-widest hover:text-primary transition-all underline decoration-primary/20 hover:decoration-primary"
-                    href="#"
-                  >
-                    {platform}
-                  </a>
-                ))}
+          {/* Indented Footer Content */}
+          <div className="p-8 md:p-12 md:ml-20 bg-[var(--background)] border-t border-black/10 dark:border-white/5">
+            <div className="max-w-7xl mx-auto flex flex-col md:grid md:grid-cols-3 gap-12 items-center md:items-center">
+              {/* System Status (Left) */}
+              <div className="text-[10px] space-y-2 opacity-50 font-mono w-full text-center md:text-left">
+                <p>&gt; INITIALIZING SYSTEM_CORE...</p>
+                <p>&gt; ASSET_LOAD: 100% [OK]</p>
+                <p>&gt; AUDIO_BUFFER: CACHED [OK]</p>
+                <p>&gt; SIGNAL_STATE: BROADCASTING</p>
               </div>
-              <p className="text-[9px] opacity-40 font-mono tracking-tighter uppercase">
-                ©2026 HYPER$LUMP // CORTEX_SYNTHESIS_HUB // ALL_RIGHTS_RESERVED
-              </p>
+
+              {/* Theme Control (Center) */}
+              <div className="flex justify-center w-full">
+                <ThemeToggle />
+              </div>
+
+              {/* Social & Credits (Right) */}
+              <div className="flex flex-col items-center md:items-end gap-6 w-full">
+                <div className="flex gap-6">
+                  {['INSTAGRAM', 'DISCORD', 'BANDCAMP'].map((platform) => (
+                    <a
+                      key={platform}
+                      className="text-[10px] font-bold tracking-widest hover:text-primary transition-all underline decoration-primary/20 hover:decoration-primary"
+                      href="#"
+                    >
+                      {platform}
+                    </a>
+                  ))}
+                </div>
+                <p className="text-[9px] opacity-40 font-mono tracking-tighter uppercase">
+                  ©2026 HYPER$LUMP // CORTEX_SYNTHESIS_HUB // ALL_RIGHTS_RESERVED
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      </footer>
+        </footer>
+      </div>
     </>
   );
 }
