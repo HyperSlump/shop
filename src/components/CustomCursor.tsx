@@ -93,20 +93,19 @@ export default function CustomCursor() {
                 {/* Custom Cursor Content */}
                 <div className="transition-all duration-300 transform">
                     {isHovering ? (
-                        /* Click Indicator - Simple Circle with Text */
+                        /* Hand Pointer Icon */
                         <div className="relative w-8 h-8 -ml-4 -mt-4 flex items-center justify-center">
-                            <div className="w-full h-full rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center">
-                                <span className="font-mono text-[8px] text-primary font-bold">CLICK</span>
-                            </div>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13 5C13 4.44772 13.4477 4 14 4C14.5523 4 15 4.44772 15 5V11H16V9C16 8.44772 16.4477 8 17 8C17.5523 8 18 8.44772 18 9V11H19V10C19 9.44772 19.4477 9 20 9C20.5523 9 21 9.44772 21 10V16C21 18.7614 18.7614 21 16 21H13.5C11.0147 21 9 18.9853 9 16.5V13C9 12.4477 9.44772 12 10 12C10.5523 12 11 12.4477 11 13V11C11 10.4477 11.4477 10 12 10C12.5523 10 13 10.4477 13 11V5Z"
+                                    fill="var(--primary)" />
+                            </svg>
                         </div>
                     ) : (
                         /* Simple Arrow Pointer */
                         <div className="group">
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M2 2L2 16L7 11L11 16L13 14L9 9L14 4L2 2Z"
-                                    fill="var(--foreground)"
-                                    stroke="var(--primary)"
-                                    strokeWidth="1.5" />
+                                    fill="var(--primary)" />
                             </svg>
                         </div>
                     )}
