@@ -93,15 +93,9 @@ export default function CustomCursor() {
                 {/* Custom Cursor Content */}
                 <div className="transition-all duration-300 transform">
                     {isHovering ? (
-                        /* Target Lock / Digital Crosshair */
-                        <div className="relative w-6 h-6 -ml-3 -mt-3">
-                            {/* Four Corner Brackets */}
-                            <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-primary" />
-                            <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-primary" />
-                            <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-primary" />
-                            <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-primary" />
-                            {/* Center Dot */}
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-1 bg-primary rounded-full animate-ping" />
+                        /* Hand Pointer */
+                        <div className="relative w-6 h-6 -ml-3 -mt-3 flex items-center justify-center">
+                            <span className="text-2xl">👆</span>
                         </div>
                     ) : (
                         /* Technical Sharp Pointer */
