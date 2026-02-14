@@ -229,7 +229,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 </div>
 
                 {/* Bottom Section: Info - Consistent with Front */}
-                <div className="h-auto border-t border-primary/10 bg-[var(--background)] pt-3 px-4 pb-4 relative flex flex-col gap-1.5">
+                <div className="h-auto border-t-2 border-primary/30 bg-[var(--background)] pt-4 px-4 pb-6 relative flex flex-col gap-2">
                     {/* Header Row */}
                     <div className="flex justify-between items-start">
                         <h3 className="font-gothic text-2xl text-foreground leading-none tracking-wide">

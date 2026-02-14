@@ -119,16 +119,14 @@ export default function WaveformOverlay({
                 }
             }}
         >
-            {/* Play/Pause Button - Larger Hitbox for Mobile */}
+            {/* Play/Pause Button - Match OneShotPlayer positioning */}
             {isReady && (
-                <div className="absolute left-0 top-0 bottom-0 w-12 flex items-center justify-center z-30 pointer-events-none">
-                    <div className="p-2 transition-all">
-                        {isPlaying ? (
-                            <Pause size={18} className="text-primary fill-current" />
-                        ) : (
-                            <Play size={18} className="text-foreground hover:text-primary fill-current transition-colors" />
-                        )}
-                    </div>
+                <div className="absolute left-1 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
+                    {isPlaying ? (
+                        <Pause size={10} className="text-primary fill-current" />
+                    ) : (
+                        <Play size={10} className="text-foreground hover:text-primary fill-current transition-colors" />
+                    )}
                 </div>
             )}
 
