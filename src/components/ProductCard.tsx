@@ -185,9 +185,9 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         onAddToCart(product);
                     }}
                     disabled={isInCart}
-                    className="w-full py-4 relative group cursor-pointer overflow-hidden border border-primary bg-primary hover:bg-transparent transition-all duration-300"
+                    className="w-full py-4 relative group/btn cursor-pointer overflow-hidden border border-primary bg-primary hover:bg-transparent transition-all duration-300"
                 >
-                    <span className="relative z-10 font-mono font-bold uppercase tracking-[0.2em] text-xs text-primary-foreground group-hover:text-primary transition-colors duration-300 flex items-center justify-center gap-2">
+                    <span className="relative z-10 font-mono font-bold uppercase tracking-[0.2em] text-xs text-black dark:text-black group-hover/btn:text-primary dark:group-hover/btn:text-primary transition-colors duration-300 flex items-center justify-center gap-2">
                         {isInCart ? '[ ADDED ]' : '[ ADD TO CART ]'}
                     </span>
                 </button>
