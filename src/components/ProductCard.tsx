@@ -110,7 +110,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
                 {/* Main Waveform */}
                 {audioPreviewUrl && isHovered && (
-                    <div className="relative w-full h-16 bg-black/5 dark:bg-black border border-black/10 dark:border-white/10 rounded overflow-hidden shrink-0 group/wave">
+                    <div className="relative w-full h-16 bg-transparent dark:bg-black border border-black/10 dark:border-white/10 rounded overflow-hidden shrink-0 group/wave">
                         {/* Technical accents for waveform */}
                         <div className="absolute top-0 left-0 w-2 h-[1px] bg-primary/60" />
                         <div className="absolute bottom-0 right-0 w-2 h-[1px] bg-primary/60" />
