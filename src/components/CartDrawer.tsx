@@ -81,8 +81,8 @@ export default function CartDrawer() {
                                 </div>
                                 <div className="flex-1 flex flex-col justify-between">
                                     <div className="space-y-1">
-                                        <h3 className="font-gothic text-xl leading-none tracking-tight text-black dark:text-white">{item.name}</h3>
-                                        <p className="text-[9px] font-mono text-black/50 dark:text-white/50 uppercase tracking-widest">
+                                        <h3 className="font-gothic text-xl leading-none tracking-tight text-foreground">{item.name}</h3>
+                                        <p className="text-[9px] font-mono text-foreground/50 uppercase tracking-widest">
                                             {item.metadata?.key && `KEY_${item.metadata.key} // `}
                                             PTR_{item.id.slice(-6)}
                                         </p>
@@ -105,8 +105,8 @@ export default function CartDrawer() {
                 )}
 
                 <div className="mt-8 border-t border-black/20 dark:border-white/20 p-6 pt-6 space-y-4">
-                    <div className="flex justify-between font-mono text-xl font-bold tracking-tighter text-black dark:text-white">
-                        <span className="opacity-60 text-black dark:text-white">SUBTOTAL_</span>
+                    <div className="flex justify-between font-mono text-xl font-bold tracking-tighter text-foreground">
+                        <span className="opacity-60 text-foreground">SUBTOTAL_</span>
                         <span className="text-primary">${cartTotal.toFixed(2)}</span>
                     </div>
                     <button
@@ -125,7 +125,7 @@ export default function CartDrawer() {
                             </>
                         )}
                     </button>
-                    <div className="flex justify-center gap-4 opacity-30 text-black dark:text-white">
+                    <div className="flex justify-center gap-4 opacity-30 text-foreground">
                         <span className="text-[10px] font-mono uppercase">Stripe_Ready</span>
                         <span className="text-[10px] font-mono uppercase">SSL_Enabled</span>
                     </div>

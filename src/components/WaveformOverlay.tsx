@@ -31,7 +31,7 @@ export default function WaveformOverlay({
             if (!isMounted.current) return;
 
             const isDark = document.documentElement.classList.contains('dark');
-            const waveColor = isDark ? '#333333' : '#000000'; // Black in light mode per request
+            const waveColor = isDark ? 'rgba(255, 255, 255, 0.2)' : '#000000';
 
             ws = WaveSurfer.create({
                 container: containerRef.current,

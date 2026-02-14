@@ -25,8 +25,6 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
         product.metadata?.sample_4,
     ].filter(Boolean); // Only keep existing URLs
 
-    const isDark = typeof document !== 'undefined' ? document.documentElement.classList.contains('dark') : false;
-    const waveColor = isDark ? '#333333' : '#000000'; // Black in light mode per request
 
     return (
         <div
@@ -59,9 +57,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
             </div>
 
             {/* Static Title/Price (Always Visible, but moves/fades on hover if we want?) 
-                Let's keep it visible but maybe move it up or hide it if we want full transformations.
-                The prompt says "original prod card will change into an informative prod card".
-                Let's keep the title visible as an anchor.
+                Let's keep it visible as an anchor.
             */}
 
             <div className={`absolute bottom-0 left-0 right-0 p-4 transition-opacity duration-300 z-20 ${isHovered ? 'opacity-0' : 'opacity-100'}`}>
@@ -103,19 +99,19 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         </div>
                     </div>
                     <div className="w-full h-[1px] bg-primary/30" />
-                    <p className="font-mono text-[10px] text-primary leading-tight">
+                    <p className="font-mono text-[10px] text-foreground/70 leading-tight">
                         {product.description || "Raw industrial audio assets."}
                     </p>
                 </div>
 
                 {/* Main Waveform */}
                 {audioPreviewUrl && isHovered && (
-                    <div className="relative w-full h-16 bg-[var(--background)] dark:bg-black border border-black/10 dark:border-white/10 rounded overflow-hidden shrink-0 group/wave">
+                    <div className="relative w-full h-16 bg-[var(--background)] border border-black/10 dark:border-white/10 rounded overflow-hidden shrink-0 group/wave">
                         {/* Technical accents for waveform */}
                         <div className="absolute top-0 left-0 w-2 h-[1px] bg-black/20 dark:bg-primary/60" />
                         <div className="absolute bottom-0 right-0 w-2 h-[1px] bg-black/20 dark:bg-primary/60" />
 
-                        <div className="absolute top-1 left-2 text-[8px] text-black/50 dark:text-primary/80 uppercase tracking-widest flex items-center gap-1">
+                        <div className="absolute top-1 left-2 text-[8px] text-foreground/50 dark:text-primary/80 uppercase tracking-widest flex items-center gap-1">
                             <div className="w-1 h-1 bg-primary animate-pulse rounded-full" />
                             Main Preview
                         </div>

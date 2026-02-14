@@ -21,7 +21,7 @@ export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlay
             const WaveSurfer = (await import('wavesurfer.js')).default;
 
             const isDark = document.documentElement.classList.contains('dark');
-            const waveColor = isDark ? '#333333' : '#000000'; // Black in light mode per request
+            const waveColor = isDark ? 'rgba(255, 255, 255, 0.2)' : '#000000';
             const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#ccff00';
 
             ws = WaveSurfer.create({
@@ -86,7 +86,7 @@ export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlay
                 </span>
             )}
             <div
-                className="relative bg-[var(--background)] dark:bg-black border border-black/10 dark:border-white/10 rounded overflow-hidden hover:border-primary/50 transition-colors group cursor-pointer h-[26px]"
+                className="relative bg-[var(--background)] border border-black/10 dark:border-white/10 rounded overflow-hidden hover:border-primary/50 transition-colors group cursor-pointer h-[26px]"
                 onClick={handleTrigger}
             >
                 {/* Play Icon - Absolute Left */}
