@@ -41,7 +41,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
             <div className="absolute inset-0">
                 <Image
                     alt={product.name}
-                    className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-40 group-hover:blur-sm grayscale contrast-125"
+                    className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-40 group-hover:blur-sm grayscale-0 dark:grayscale contrast-125"
                     src={product.image || 'https://via.placeholder.com/500'}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
