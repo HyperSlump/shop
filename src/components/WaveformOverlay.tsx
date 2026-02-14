@@ -108,23 +108,30 @@ export default function WaveformOverlay({
     return (
         <div
             className="absolute inset-0 group cursor-pointer"
-            onClick={togglePlay}
+            onClick={(e) => {
+                e.stopPropagation();
+                if (wavesurferRef.current) {
+                    wavesurferRef.current.playPause();
+                }
+            }}
         >
-            {/* Play/Pause Button - Small Icon to the left */}
+            {/* Play/Pause Button - Larger Hitbox for Mobile */}
             {isReady && (
-                <div className="absolute left-2 top-1/2 -translate-y-1/2 z-30 pointer-events-none">
-                    {isPlaying ? (
-                        <Pause size={16} className="text-primary fill-current" />
-                    ) : (
-                        <Play size={16} className="text-white group-hover:text-primary fill-current transition-colors" />
-                    )}
+                <div className="absolute left-0 top-0 bottom-0 w-12 flex items-center justify-center z-30 pointer-events-none">
+                    <div className="p-2 transition-all">
+                        {isPlaying ? (
+                            <Pause size={18} className="text-primary fill-current" />
+                        ) : (
+                            <Play size={18} className="text-white group-hover:text-primary fill-current transition-colors" />
+                        )}
+                    </div>
                 </div>
             )}
 
             {/* Waveform Container - Offset to the right of the button */}
             <div
                 ref={containerRef}
-                className="absolute inset-x-0 bottom-0 left-8 top-6 opacity-60 group-hover:opacity-100 transition-opacity"
+                className="absolute inset-x-0 bottom-0 left-10 top-6 opacity-60 group-hover:opacity-100 transition-opacity"
             />
         </div>
     );

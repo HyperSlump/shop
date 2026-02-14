@@ -30,6 +30,12 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
             className="group relative border border-black/20 dark:border-white/20 bg-black overflow-hidden h-96 cursor-default transition-all duration-300"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            onClick={() => {
+                // Toggle hover state on mobile click
+                if (window.matchMedia('(max-width: 768px)').matches) {
+                    setIsHovered(!isHovered);
+                }
+            }}
         >
             {/* DEFAULT VIEW: Image + Title Overlay */}
             <div className="absolute inset-0">
@@ -61,7 +67,19 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 <div className="space-y-2">
                     <div className="flex justify-between items-start">
                         <h3 className="font-gothic text-2xl text-white">{product.name}</h3>
-                        <span className="font-mono text-primary text-xs">{product.amount === 0 ? 'FREE' : `$${product.amount}`}</span>
+                        <div className="flex items-center gap-3">
+                            <span className="font-mono text-primary text-xs">{product.amount === 0 ? 'FREE' : `$${product.amount}`}</span>
+                            {/* Mobile Close Button */}
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setIsHovered(false);
+                                }}
+                                className="md:hidden text-white/50 hover:text-white"
+                            >
+                                <span className="material-icons text-xl">close</span>
+                            </button>
+                        </div>
                     </div>
                     <div className="w-full h-[1px] bg-white/20" />
                     <p className="font-mono text-[10px] text-gray-300 leading-tight">
