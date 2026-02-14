@@ -86,34 +86,49 @@ export default function CartDrawer() {
                         {cart.map((item) => (
                             <div
                                 key={item.id}
-                                className={`flex gap-4 p-4 border border-primary/40 hover:border-primary hover:bg-primary/5 transition-all duration-500 relative group bg-transparent ${exitingItems.includes(item.id) ? 'opacity-0 translate-x-12' : 'opacity-100 translate-x-0'
+                                className={`flex h-32 border border-primary/20 hover:border-primary/40 bg-black/5 dark:bg-white/5 transition-all duration-300 relative group shrink-0 ${exitingItems.includes(item.id) ? 'opacity-0 translate-x-12' : 'opacity-100 translate-x-0'
                                     }`}
                             >
-                                <div className="relative w-24 h-24 shrink-0 overflow-hidden border border-primary/20 bg-transparent">
-                                    <NextImage
-                                        src={item.image || 'https://via.placeholder.com/100'}
-                                        alt={item.name}
-                                        fill
-                                        className="object-cover opacity-80 contrast-125 grayscale group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"
-                                    />
-                                </div>
-                                <div className="flex-1 flex flex-col justify-between">
-                                    <div className="space-y-1">
-                                        <h3 className="font-gothic text-xl leading-none tracking-tight text-foreground">{item.name}</h3>
-                                        <p className="text-[9px] font-mono text-foreground/50 uppercase tracking-widest">
-                                            {item.metadata?.key && `KEY_${item.metadata.key} // `}
-                                            PTR_{item.id.slice(-6)}
-                                        </p>
+                                {/* Left Column: Static Thumbnail */}
+                                <div className="w-1/3 relative border-r border-primary/10 flex items-center justify-center bg-[var(--background)] p-2">
+                                    <div className="relative w-full aspect-square border border-primary/30 overflow-hidden shadow-sm">
+                                        <NextImage
+                                            src={item.image || 'https://via.placeholder.com/100'}
+                                            alt={item.name}
+                                            fill
+                                            className="object-cover opacity-80 contrast-125 grayscale group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"
+                                        />
                                     </div>
-                                    <div className="flex justify-between items-end mt-2">
-                                        <p className="font-mono font-bold text-primary">
+                                    {/* Tech Marker */}
+                                    <div className="absolute top-0 left-0 w-1 h-3 bg-red-500/40" />
+                                </div>
+
+                                {/* Right Column: Info & Action */}
+                                <div className="flex-1 flex flex-col bg-[var(--background)]">
+                                    {/* Info Header */}
+                                    <div className="p-3 pb-2 flex-col gap-0.5">
+                                        <h3 className="font-gothic text-lg leading-none tracking-tight text-foreground truncate">{item.name}</h3>
+                                        <div className="flex items-center gap-1.5 opacity-40">
+                                            <div className="w-[3px] h-[3px] bg-primary rounded-full" />
+                                            <span className="font-mono text-[7px] uppercase tracking-widest leading-tight whitespace-nowrap">
+                                                ID: {item.id.slice(0, 8)} // V.1
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex-1" />
+
+                                    {/* Action Footer */}
+                                    <div className="mt-auto p-3 pt-2 border-t border-primary/10 flex justify-between items-center bg-black/[0.02]">
+                                        <span className="font-mono text-xs font-bold text-primary">
                                             {item.amount === 0 ? 'FREE' : `$${item.amount.toFixed(2)}`}
-                                        </p>
+                                        </span>
                                         <button
                                             onClick={() => handleRemoveItem(item.id)}
-                                            className="text-[9px] font-bold text-red-500/60 hover:text-red-500 underline uppercase tracking-widest transition-colors"
+                                            className="font-mono text-[9px] text-foreground/30 hover:text-red-500 uppercase tracking-widest transition-colors flex items-center gap-1 group/del"
                                         >
-                                            [Delete]
+                                            <span className="w-1.5 h-1.5 border border-current group-hover/del:bg-red-500 transition-all" />
+                                            [ REMOVE ]
                                         </button>
                                     </div>
                                 </div>
