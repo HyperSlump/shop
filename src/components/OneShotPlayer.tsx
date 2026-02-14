@@ -22,7 +22,7 @@ export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlay
 
             ws = WaveSurfer.create({
                 container: containerRef.current,
-                waveColor: '#666',
+                waveColor: 'rgba(255, 255, 255, 0.2)',
                 progressColor: '#c0ff00', // Primary color
                 cursorColor: 'transparent',
                 barWidth: 2,
@@ -95,7 +95,7 @@ export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlay
 
                 {/* Waveform - Padded left to avoid icon */}
                 <div className="absolute inset-0 left-5 top-[1px]">
-                    <div ref={containerRef} className="w-full opacity-60 group-hover:opacity-100 transition-opacity" />
+                    <div ref={containerRef} className="w-full" />
                 </div>
             </div>
         </div>
