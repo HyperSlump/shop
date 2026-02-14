@@ -18,9 +18,6 @@ export default function Navigation() {
                 <button className="hover:text-primary transition-colors">
                     <span className="material-icons">filter_list</span>
                 </button>
-                <div className="hidden md:block vertical-text uppercase tracking-widest text-xs font-bold py-8 border-y border-black/10 dark:border-white/10">
-                    Archives 2026
-                </div>
                 <button
                     onClick={toggleCart}
                     className="hover:text-primary transition-colors relative"
