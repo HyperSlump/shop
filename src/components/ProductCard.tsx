@@ -167,7 +167,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
                 {/* Top Section: Single Column Layout (Waveform + Samples Stacked) */}
                 <div className="flex-1 flex flex-col relative border-b border-primary/20 bg-black/5 dark:bg-white/5 overflow-hidden">
-                    <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
+                    <div className="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar">
                         {/* Header with Close */}
                         <div className="flex justify-between items-center">
                             <span className="font-mono text-[8px] text-primary/40 uppercase tracking-widest">// PREVIEW_ANALYSIS</span>
@@ -189,7 +189,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                     <div className="w-1 h-1 bg-red-500 rounded-full animate-pulse" />
                                     <span className="font-mono text-[8px] text-primary/60 uppercase tracking-[0.2em]">MAIN_PREVIEW.WAV</span>
                                 </div>
-                                <div className="relative w-full h-24 bg-[var(--background)] border border-primary/30 rounded overflow-hidden group/wave shadow-xl">
+                                <div className="relative w-full h-16 bg-[var(--background)] border border-primary/30 rounded overflow-hidden group/wave shadow-xl">
                                     <WaveformOverlay
                                         audioUrl={audioPreviewUrl}
                                         isActive={showPreview}
@@ -221,7 +221,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 </div>
 
                 {/* Bottom Section: Info - Consistent with Front */}
-                <div className="h-auto border-t border-primary/10 bg-[var(--background)] pt-4 px-4 pb-6 relative flex flex-col gap-2">
+                <div className="h-auto border-t border-primary/10 bg-[var(--background)] pt-3 px-4 pb-4 relative flex flex-col gap-1.5">
                     {/* Header Row */}
                     <div className="flex justify-between items-start">
                         <h3 className="font-gothic text-2xl text-foreground leading-none tracking-wide">
@@ -242,7 +242,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     </div>
 
                     {/* Action Row */}
-                    <div className="flex items-center justify-between mt-1 pt-2 border-t border-primary/10">
+                    <div className="flex items-center justify-between mt-0.5 pt-2 border-t border-primary/10">
                         {/* Back Button */}
                         <button
                             onClick={(e) => {
