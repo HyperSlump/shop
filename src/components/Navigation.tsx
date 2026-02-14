@@ -1,16 +1,17 @@
 'use client';
 
+import Link from 'next/link';
 import { useCart } from './CartProvider';
-import { Logo } from './Logo';
 
 export default function Navigation() {
     const { toggleCart, cart } = useCart();
 
     return (
         <aside className="w-full md:w-20 md:h-screen sticky top-0 border-b md:border-b-0 md:border-r border-black/20 dark:border-white/20 flex flex-row md:flex-col items-center justify-between p-4 z-40 bg-background-light dark:bg-background-dark">
-            <div className="text-2xl font-bold tracking-tighter">
-                <Logo className="w-10 h-10" />
-            </div>
+            <Link href="/" className="text-xl md:text-3xl font-gothic tracking-tighter hover:text-primary transition-colors">
+                <span className="md:hidden">hyper$lump</span>
+                <span className="hidden md:block">H$</span>
+            </Link>
             <nav className="flex md:flex-col gap-6 items-center">
                 <button className="hover:text-primary transition-colors">
                     <span className="material-icons">search</span>
