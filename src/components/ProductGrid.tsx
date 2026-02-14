@@ -8,16 +8,12 @@ export default function ProductGrid({ products }: { products: Product[] }) {
 
     const isInCart = (id: string) => cart.some(item => item.id === id);
 
-    const handleAddToCart = (product: Product) => {
-        addToCart(product);
-    };
-
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full px-4 pb-4 md:px-8 md:pb-8 pt-0">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 w-full p-0 border-t border-l border-primary/20">
             {products.map((product, index) => (
                 <div
                     key={product.id}
-                    className="w-full animate-fade-in"
+                    className="w-full animate-fade-in border-r border-b border-primary/20"
                     style={{ animationDelay: `${200 + index * 100}ms` }}
                 >
                     <ProductCard
