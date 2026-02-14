@@ -23,14 +23,13 @@ export function Logo({ className, ...props }: LogoProps) {
                     className="text-white dark:text-white"
                 />
 
-                {/* Katana S - Neon Yellow Primary Accent */}
                 <path
                     d="M65 20 L35 40 L50 50 L65 60 L35 80"
                     stroke="currentColor"
                     strokeWidth="4"
                     strokeLinejoin="miter"
                     strokeMiterlimit="20"
-                    className="text-[#ccff00]"
+                    className="text-primary"
                 />
 
                 {/* Vertical Line - Neon Yellow */}
@@ -38,7 +37,7 @@ export function Logo({ className, ...props }: LogoProps) {
                     d="M50 0 V100"
                     stroke="currentColor"
                     strokeWidth="1"
-                    className="text-[#ccff00]"
+                    className="text-primary"
                 />
             </g>
         </svg>

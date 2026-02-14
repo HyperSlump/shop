@@ -74,7 +74,7 @@ export default function CartDrawer() {
                                         src={item.image || 'https://via.placeholder.com/100'}
                                         alt={item.name}
                                         fill
-                                        className="object-cover grayscale-0 dark:grayscale contrast-100 dark:contrast-125 group-hover:scale-110 transition-transform duration-500"
+                                        className="object-cover group-hover:scale-110 transition-transform duration-500"
                                     />
                                 </div>
                                 <div className="flex-1 flex flex-col justify-between">

@@ -41,7 +41,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
             <div className="absolute inset-0">
                 <Image
                     alt={product.name}
-                    className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-40 group-hover:blur-sm saturate-100 dark:grayscale dark:contrast-125"
+                    className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-40 group-hover:blur-sm"
                     src={product.image || 'https://via.placeholder.com/500'}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -60,11 +60,6 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 The prompt says "original prod card will change into an informative prod card".
                 Let's keep the title visible as an anchor.
             */}
-            {/* Grain Overlay - Webflow Style */}
-            <div
-                className="absolute inset-0 noise z-10 pointer-events-none opacity-[var(--noise-opacity)]"
-                style={{ mixBlendMode: 'var(--noise-blend)' as any }}
-            />
 
             <div className={`absolute bottom-0 left-0 right-0 p-4 transition-opacity duration-300 z-20 ${isHovered ? 'opacity-0' : 'opacity-100'}`}>
                 <div className="flex justify-between items-end">
