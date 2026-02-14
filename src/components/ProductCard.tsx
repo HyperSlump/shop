@@ -103,7 +103,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         </div>
                     </div>
                     <div className="w-full h-[1px] bg-primary/30" />
-                    <p className="font-mono text-[10px] text-black/70 dark:text-gray-300 leading-tight">
+                    <p className="font-mono text-[10px] text-primary leading-tight">
                         {product.description || "Raw industrial audio assets."}
                     </p>
                 </div>
