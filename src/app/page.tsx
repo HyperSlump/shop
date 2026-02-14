@@ -14,11 +14,8 @@ export default async function Home() {
       <main className="flex-1 flex flex-col">
         <header className="p-4 md:p-8 border-b border-black/20 dark:border-white/20 flex flex-col md:flex-row justify-between items-end gap-6 bg-background-light dark:bg-background-dark">
           <div>
-            <h1 className="font-gothic text-6xl md:text-9xl leading-none tracking-tight uppercase">
-              hyper$lump
-            </h1>
-            <p className="mt-4 text-sm max-w-xl opacity-80 leading-relaxed font-mono tracking-tight">
-              Industrial sound design textures, raw synthesis, and broken percussion for the electronic avant-garde. Currently serving a repository of high-fidelity sonic artifacts, processed through custom analog chains and digital decay. From crushing industrial drums to haunting granular pads, HYPER$LUMP provides the raw material for your next sonic transmission. Each collection is curated for maximum impact in heavy club music and experimental frameworks.
+            <p className="text-sm max-w-md opacity-80 font-mono">
+              Industrial sound design textures, raw synthesis, and broken percussion for the electronic avant-garde.
             </p>
           </div>
           <div className="text-right">
