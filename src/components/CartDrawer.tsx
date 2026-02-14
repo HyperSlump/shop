@@ -59,9 +59,9 @@ export default function CartDrawer() {
                     }`}
             >
                 {/* Matrix Background Texture */}
-                <div className="absolute inset-0 z-0 opacity-[0.6] dark:opacity-[0.25] pointer-events-none">
+                <div className="absolute inset-0 z-0 opacity-[0.9] dark:opacity-[0.6] pointer-events-none">
                     <MatrixSpace isVisible={isCartOpen} />
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/40 to-[var(--background)]" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/60 to-[var(--background)]" />
                 </div>
 
                 <header className="flex justify-between items-center mb-8 border-b border-black/10 dark:border-white/10 p-6 pb-4 relative z-10">

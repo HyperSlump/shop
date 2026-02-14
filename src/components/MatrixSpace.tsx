@@ -28,7 +28,7 @@ export default function MatrixSpace({ isVisible = true }: { isVisible?: boolean 
 
             for (let i = 0; i < columns; i++) {
                 const stream = document.createElement('div');
-                stream.className = 'absolute top-0 font-mono leading-none text-primary/40 select-none pointer-events-none flex flex-col items-center gap-0';
+                stream.className = 'absolute top-0 font-mono leading-none text-primary/70 select-none pointer-events-none flex flex-col items-center gap-0';
                 stream.style.left = `${i * 12}px`;
                 stream.style.fontSize = `${fontSize}px`;
 
@@ -38,7 +38,7 @@ export default function MatrixSpace({ isVisible = true }: { isVisible?: boolean 
 
                 for (let j = 0; j < length; j++) {
                     const char = chars[Math.floor(Math.random() * chars.length)];
-                    content += `<span style="opacity: ${Math.random() * 0.6 + 0.1}">${char}</span>`;
+                    content += `<span style="opacity: ${Math.random() * 0.7 + 0.3}">${char}</span>`;
                 }
                 stream.innerHTML = content;
                 container.appendChild(stream);
