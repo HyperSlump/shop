@@ -4,6 +4,7 @@ import { useCart } from './CartProvider';
 import { useState } from 'react';
 import NextImage from 'next/image';
 import { X, ArrowRight } from 'lucide-react';
+import MatrixSpace from './MatrixSpace';
 
 export default function CartDrawer() {
     const { cart, isCartOpen, toggleCart, removeFromCart, cartTotal } = useCart();
@@ -57,16 +58,14 @@ export default function CartDrawer() {
                     : 'opacity-0 translate-y-8 translate-x-4 pointer-events-none'
                     }`}
             >
-                {/* Scanline Background Texture */}
-                <div
-                    className="absolute inset-0 opacity-[0.03] dark:opacity-5 pointer-events-none z-0"
-                    style={{
-                        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, var(--primary) 2px, var(--primary) 4px)'
-                    }}
-                />
+                {/* Matrix Background Texture */}
+                <div className="absolute inset-0 z-0 overflow-hidden opacity-[0.4] dark:opacity-[0.15] pointer-events-none">
+                    <MatrixSpace />
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/60 to-[var(--background)]" />
+                </div>
 
                 <header className="flex justify-between items-center mb-8 border-b border-black/10 dark:border-white/10 p-6 pb-4 relative z-10">
-                    <h2 className="font-gothic text-4xl uppercase tracking-tighter text-primary">Your Crate ({cart.length})</h2>
+                    <h2 className="font-gothic text-4xl uppercase tracking-tighter text-black dark:text-white">Your Crate ({cart.length})</h2>
                     <button
                         onClick={toggleCart}
                         className="hover:translate-x-1 active:scale-95 transition-all text-primary/70 hover:text-primary px-4 flex items-center gap-2 group"
