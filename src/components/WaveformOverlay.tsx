@@ -135,7 +135,7 @@ export default function WaveformOverlay({
             {/* Waveform Container - Offset to the right of the button */}
             <div
                 ref={containerRef}
-                className="absolute inset-x-0 bottom-0 left-10 top-6"
+                className="absolute inset-0 left-5 top-[1px]"
             />
         </div>
     );
