@@ -55,7 +55,6 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                             {/* Detailed Specimen Brackets */}
                             <div className="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-red-500 z-30" />
                             <div className="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-red-500 z-30" />
-                            <div className="absolute inset-0 border border-primary/20 z-20 pointer-events-none" />
 
                             {/* Technical Label */}
                             <div className="absolute bottom-1 left-1 z-30 font-mono text-[6px] text-white/40 bg-black/40 px-1">

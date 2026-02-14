@@ -108,7 +108,7 @@ export default function CartDrawer() {
                                 </div>
                                 {/* Left Column: Static Thumbnail */}
                                 <div className="w-1/3 relative border-r border-primary/10 flex items-center justify-center bg-[var(--background)] p-2">
-                                    <div className="relative w-full aspect-square border border-primary/30 overflow-hidden shadow-sm">
+                                    <div className="relative w-full aspect-square overflow-hidden">
                                         <NextImage
                                             src={item.image || 'https://via.placeholder.com/100'}
                                             alt={item.name}
