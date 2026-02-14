@@ -1,7 +1,6 @@
 'use client';
 
 import MatrixSpace from './MatrixSpace';
-import EncryptText from './EncryptText';
 
 interface HeroSchemaProps {
     productCount: number;
@@ -13,14 +12,11 @@ export default function HeroSchema({ productCount }: HeroSchemaProps) {
             {/* MAIN CONTAINER */}
             <div className="max-w-[1400px] mx-auto relative flex flex-col">
 
-                {/* 1. BRANDING SECTION (NO BOX) */}
-                <div className="relative self-start mb-2">
-                    <h1 className="font-gothic text-6xl md:text-8xl tracking-tighter lowercase leading-[0.8] mb-4 drop-shadow-[0_0_15px_rgba(var(--primary-rgb),0.1)]">
+                {/* 1. BRANDING SECTION */}
+                <div className="relative self-start">
+                    <h1 className="font-gothic text-6xl md:text-8xl tracking-tighter lowercase leading-[0.8] mb-1 drop-shadow-[0_0_15px_rgba(var(--primary-rgb),0.1)]">
                         hyper$lump
                     </h1>
-                    <div className="relative max-w-2xl">
-                        <EncryptText />
-                    </div>
                 </div>
 
                 {/* 2. SECONDARY DATA AREA (PULLED TIGHT) */}
@@ -54,7 +50,7 @@ export default function HeroSchema({ productCount }: HeroSchemaProps) {
                         </div>
                     </div>
 
-                    {/* 3. CATALOG MODULE (Integrated and smaller) */}
+                    {/* 3. CATALOG MODULE */}
                     <div className="self-end md:self-auto bg-primary/5 px-6 py-3 border-2 border-primary/40 backdrop-blur-sm">
                         <div className="text-[9px] uppercase font-bold tracking-[0.3em] text-primary mb-1 text-right opacity-70">
                             Current Catalog_
@@ -65,7 +61,7 @@ export default function HeroSchema({ productCount }: HeroSchemaProps) {
                     </div>
                 </div>
 
-                {/* Decorative Tech Legend (Pulled closer) */}
+                {/* Decorative Tech Legend */}
                 <div className="mt-4 flex items-center justify-between font-mono text-[7px] opacity-20 uppercase tracking-[0.3em]">
                     <div className="flex items-center gap-4">
                         <span>Antifreeze_Synthesis_Hub</span>
