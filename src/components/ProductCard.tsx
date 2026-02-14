@@ -125,11 +125,9 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 onAddToCart(product);
                             }}
                             disabled={isInCart}
-                            className="w-[85%] mx-auto block py-2 relative group/buy cursor-pointer overflow-hidden border border-[#570e0e] bg-transparent hover:bg-transparent transition-all duration-300 shadow-[0_0_10px_rgba(87,14,14,0.1)] hover:shadow-[0_0_15px_rgba(117,27,27,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full py-2 font-mono text-xs text-[#570e0e] dark:text-red-500 uppercase hover:opacity-70 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            <span className="relative z-10 font-mono font-bold text-[10px] uppercase tracking-[0.2em] text-[#570e0e]/70 dark:text-red-500/70 group-hover/buy:text-[#570e0e] dark:group-hover/buy:text-red-500 transition-colors duration-300 flex items-center justify-center gap-2">
-                                {isInCart ? '[ IN CART ]' : '[ BUY NOW ]'}
-                            </span>
+                            {isInCart ? '[ IN CART ]' : '[ BUY NOW ]'}
                         </button>
                     </div>
                 </div>
@@ -154,8 +152,20 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 <div className="space-y-2 relative">
                     <div className="flex justify-between items-start">
                         <h3 className="font-gothic text-2xl text-foreground">{product.name}</h3>
-                        <div className="flex items-center gap-3">
-                            <span className="font-mono text-primary text-xs">{product.amount === 0 ? 'FREE' : `$${product.amount}`}</span>
+                        <div className="flex items-start gap-4">
+                            <div className="flex flex-col items-end gap-1 mt-1">
+                                <span className="font-mono text-primary text-xs mb-1">{product.amount === 0 ? 'FREE' : `$${product.amount}`}</span>
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onAddToCart(product);
+                                    }}
+                                    disabled={isInCart}
+                                    className="hidden md:block font-mono text-xs text-primary uppercase hover:opacity-70 transition-opacity whitespace-nowrap text-right"
+                                >
+                                    {isInCart ? '[ ADDED ]' : '[ ADD TO CART ]'}
+                                </button>
+                            </div>
                             {/* Close Button - Always visible now */}
                             <button
                                 onClick={(e) => {
@@ -212,19 +222,18 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     </div>
                 )}
 
-                {/* Action */}
+                {/* Action - Mobile Only */}
                 <button
                     onClick={(e) => {
                         e.stopPropagation();
                         onAddToCart(product);
                     }}
                     disabled={isInCart}
-                    className="w-[85%] mx-auto block py-4 relative group/btn cursor-pointer overflow-hidden border border-primary bg-transparent hover:bg-transparent transition-all duration-300"
+                    className="md:hidden w-full py-4 font-mono text-xs text-primary uppercase hover:opacity-70 transition-opacity"
                 >
-                    <span className="relative z-10 font-mono font-bold uppercase tracking-[0.2em] text-xs text-primary/80 group-hover/btn:text-primary transition-colors duration-300 flex items-center justify-center gap-2">
-                        {isInCart ? '[ ADDED ]' : '[ ADD TO CART ]'}
-                    </span>
+                    {isInCart ? '[ ADDED ]' : '[ ADD TO CART ]'}
                 </button>
+
             </div>
         </div>
     );
