@@ -53,7 +53,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
                 {/* Scanline Effect */}
                 <div
-                    className="absolute inset-0 opacity-10 pointer-events-none"
+                    className="absolute inset-0 opacity-[0.03] dark:opacity-5 pointer-events-none"
                     style={{
                         backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, var(--primary) 2px, var(--primary) 4px)'
                     }}
