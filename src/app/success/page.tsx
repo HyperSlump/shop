@@ -57,7 +57,7 @@ export default async function SuccessPage({
                 <div className="absolute bottom-0 right-0 w-2 h-2 bg-black dark:bg-white"></div>
 
                 <div className="text-center space-y-6">
-                    <h1 className="font-display text-6xl text-primary">TRANSMISSON RECEIVED</h1>
+                    <h1 className="font-gothic text-6xl text-primary">TRANSMISSION RECEIVED</h1>
 
                     <div className="space-y-2 border-y border-dashed border-black/20 dark:border-white/20 py-6">
                         <p className="text-sm opacity-60">ORDER_ID: {session.id.slice(-8).toUpperCase()}</p>
