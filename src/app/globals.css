@@ -49,8 +49,8 @@
   html.dark {
     --background: var(--color-background-dark);
     --foreground: #ffffff;
-    --primary: #ccff00;
-    /* Neon Yellow */
+    --primary: #e5ff00;
+    /* Brighter Neon Yellow */
     --primary-foreground: #000000;
     --border: rgba(255, 255, 255, 0.1);
     --noise-opacity: 0.05;

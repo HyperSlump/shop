@@ -94,7 +94,7 @@ export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlay
                     {isPlaying ? (
                         <Pause size={10} className="text-primary fill-current" />
                     ) : (
-                        <Play size={10} className="text-black dark:text-white group-hover:text-primary fill-current transition-colors" />
+                        <Play size={10} className="text-black dark:text-white hover:text-primary fill-current transition-colors" />
                     )}
                 </div>
 
