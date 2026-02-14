@@ -199,9 +199,9 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         )}
 
                         {/* One-Shots Section */}
-                        <div className="space-y-2">
+                        <div className="space-y-1.5">
                             <span className="font-mono text-[8px] text-primary/40 uppercase tracking-widest">// ONE_SHOT_SAMPLES</span>
-                            <div className="grid grid-cols-1 gap-1.5">
+                            <div className="grid grid-cols-2 gap-x-2 gap-y-1">
                                 {samples.map((url, index) => (
                                     <OneShotPlayer
                                         key={index}
@@ -211,7 +211,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                     />
                                 ))}
                                 {samples.length === 0 && (
-                                    <div className="py-8 border border-dashed border-primary/10 text-center">
+                                    <div className="col-span-2 py-4 border border-dashed border-primary/10 text-center">
                                         <span className="font-mono text-[8px] text-primary/30 uppercase">NO_SAMPLES_AVAILABLE</span>
                                     </div>
                                 )}
