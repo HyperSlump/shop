@@ -12,7 +12,7 @@ interface WaveformOverlayProps {
 export default function WaveformOverlay({
     audioUrl,
     isActive,
-    primaryColor = '#c0ff00'
+    primaryColor = '#ccff00'
 }: WaveformOverlayProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const wavesurferRef = useRef<any>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -33,7 +33,7 @@ export default function WaveformOverlay({
             ws = WaveSurfer.create({
                 container: containerRef.current,
                 waveColor: 'rgba(255, 255, 255, 0.2)',
-                progressColor: '#c0ff00',
+                progressColor: '#ccff00',
                 cursorColor: 'transparent',
                 barWidth: 2,
                 barGap: 2,

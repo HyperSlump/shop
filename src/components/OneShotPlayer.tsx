@@ -23,7 +23,7 @@ export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlay
             ws = WaveSurfer.create({
                 container: containerRef.current,
                 waveColor: 'rgba(255, 255, 255, 0.2)',
-                progressColor: '#c0ff00', // Primary color
+                progressColor: '#ccff00', // Primary color
                 cursorColor: 'transparent',
                 barWidth: 2,
                 barGap: 1,
