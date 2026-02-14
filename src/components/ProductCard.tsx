@@ -12,7 +12,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, isInCart, onAddToCart }: ProductCardProps) {
-    const [isHovered, setIsHovered] = useState(false);
+    const [showPreview, setShowPreview] = useState(false);
 
     // Check for the audio preview URL in metadata
     const audioPreviewUrl = product.metadata?.audio_preview;
@@ -29,20 +29,12 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
     return (
         <div
             className="group relative border border-[var(--border)] bg-[var(--background)] overflow-hidden h-96 cursor-default transition-all duration-300 shadow-sm dark:shadow-none"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            onClick={() => {
-                // Toggle hover state on mobile click
-                if (window.matchMedia('(max-width: 768px)').matches) {
-                    setIsHovered(!isHovered);
-                }
-            }}
         >
             {/* DEFAULT VIEW: Image + Artistic Overlays */}
             {/* DEFAULT VIEW: Structured Technical Layout */}
-            <div className={`absolute inset-0 flex flex-col transition-all duration-300 ${isHovered ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
+            <div className={`absolute inset-0 flex flex-col transition-all duration-300 ${showPreview ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'}`}>
                 {/* Top Section: Split Layout (Image Left / Tech Right) */}
-                <div className="flex-1 flex relative border-b border-primary/20 bg-black/5 dark:bg-white/5 group-hover:border-primary/50 transition-colors duration-500">
+                <div className="flex-1 flex relative border-b border-primary/20 bg-black/5 dark:bg-white/5 transition-colors duration-500">
 
                     {/* Left Column: Image */}
                     <div className="w-1/2 relative p-4 flex items-center justify-center border-r border-primary/10">
@@ -70,7 +62,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     </div>
 
                     {/* Right Column: Tech Specs & CTA */}
-                    <div className="w-1/2 relative flex flex-col justify-between p-4 overflow-hidden">
+                    <div className="w-1/2 relative flex flex-col p-4 overflow-hidden">
                         {/* Digital Line Noise Background */}
                         <div
                             className="absolute inset-0 opacity-[0.05] pointer-events-none"
@@ -80,23 +72,32 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         />
 
                         {/* Top: Tech Label */}
-                        <div className="relative z-10">
+                        <div className="relative z-10 mb-2">
                             <p className="font-mono text-[8px] text-primary/60 uppercase tracking-widest leading-tight">
                                 // AUDIO_ASSET<br />
                                 // ID: {product.id.slice(0, 6)}...
                             </p>
                         </div>
 
-                        {/* Center/Bottom: Interactive CTA */}
-                        <div className="relative z-10 flex-1 flex items-center justify-center">
-                            <div className="group/cta flex flex-col items-center gap-2 opacity-60 group-hover:opacity-100 transition-opacity duration-300">
-                                <div className="w-8 h-8 rounded-full border border-primary/40 flex items-center justify-center group-hover/cta:bg-primary group-hover/cta:text-black transition-all duration-300">
-                                    <span className="material-icons text-sm">play_arrow</span>
-                                </div>
-                                <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-center text-primary/80 group-hover/cta:text-primary">
-                                    HOVER<br />PREVIEW
-                                </span>
-                            </div>
+                        {/* Description */}
+                        <div className="relative z-10 flex-1 overflow-hidden">
+                            <p className="font-mono text-[9px] text-foreground/70 leading-relaxed line-clamp-4">
+                                {product.description || "Raw industrial audio assets. Contains high-fidelity stems and synthesis textures for production."}
+                            </p>
+                        </div>
+
+                        {/* Bottom: Preview Button */}
+                        <div className="relative z-10 pt-2">
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setShowPreview(true);
+                                }}
+                                className="w-full py-2 border border-primary/30 bg-primary/5 hover:bg-primary hover:text-black transition-all duration-200 group/play flex items-center justify-center gap-2"
+                            >
+                                <span className="material-icons text-sm group-hover/play:scale-110 transition-transform">play_circle</span>
+                                <span className="font-mono text-[8px] uppercase tracking-[0.2em] font-bold">PREVIEW</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -112,24 +113,17 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         </span>
                     </div>
 
-                    <div className="flex items-center gap-2 mb-3">
+                    <div className="flex items-center gap-2">
                         <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
                         <p className="font-mono text-[10px] text-primary/60 uppercase tracking-[0.2em] font-bold">
                             ELECTRONIC MUSIC SAMPLE PACK
                         </p>
                     </div>
-
-                    {/* Decorative barcode/tech lines */}
-                    <div className="w-full h-4 flex gap-1 opacity-20">
-                        {[...Array(20)].map((_, i) => (
-                            <div key={i} className="flex-1 bg-foreground" style={{ opacity: Math.random() }} />
-                        ))}
-                    </div>
                 </div>
             </div>
 
-            {/* HOVER OVERLAY: Informative Details */}
-            <div className={`absolute inset-0 bg-[var(--background)] backdrop-blur-md p-6 flex flex-col justify-between transition-all duration-300 z-30 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
+            {/* PREVIEW OVERLAY: Informative Details + Player */}
+            <div className={`absolute inset-0 bg-[var(--background)] backdrop-blur-md p-6 flex flex-col justify-between transition-all duration-300 z-30 ${showPreview ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
                 {/* Internal Noise for Hover State */}
                 <div
                     className="absolute inset-0 noise pointer-events-none opacity-[var(--noise-opacity)]"
@@ -147,13 +141,13 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         <h3 className="font-gothic text-2xl text-foreground">{product.name}</h3>
                         <div className="flex items-center gap-3">
                             <span className="font-mono text-primary text-xs">{product.amount === 0 ? 'FREE' : `$${product.amount}`}</span>
-                            {/* Mobile Close Button */}
+                            {/* Close Button - Always visible now */}
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    setIsHovered(false);
+                                    setShowPreview(false);
                                 }}
-                                className="md:hidden text-foreground/50 hover:text-foreground"
+                                className="text-foreground/50 hover:text-foreground transition-colors"
                             >
                                 <span className="material-icons text-xl">close</span>
                             </button>
@@ -166,7 +160,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 </div>
 
                 {/* Main Waveform */}
-                {audioPreviewUrl && isHovered && (
+                {audioPreviewUrl && showPreview && (
                     <div className="relative w-full h-16 bg-[var(--background)] border border-black/10 dark:border-white/10 rounded overflow-hidden shrink-0 group/wave">
                         {/* Technical accents for waveform */}
                         <div className="absolute top-0 left-0 w-2 h-[1px] bg-black/20 dark:bg-primary/60" />
@@ -178,13 +172,13 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         </div>
                         <WaveformOverlay
                             audioUrl={audioPreviewUrl}
-                            isActive={isHovered}
+                            isActive={showPreview}
                         />
                     </div>
                 )}
 
                 {/* One Shots Grid */}
-                {isHovered && samples.length > 0 && (
+                {showPreview && samples.length > 0 && (
                     <div className="space-y-1 relative">
                         <div className="flex items-center gap-2">
                             <p className="font-mono text-[9px] text-gray-500/50 dark:text-gray-400/50 uppercase tracking-widest">One Shots</p>
@@ -196,7 +190,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                     key={index}
                                     audioUrl={url}
                                     label={`Shot ${index + 1}`}
-                                    isActive={isHovered}
+                                    isActive={showPreview}
                                 />
                             ))}
                         </div>
