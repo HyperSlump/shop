@@ -5,14 +5,14 @@ import { gsap } from 'gsap';
 
 export default function CustomCursor() {
     const cursorRef = useRef<HTMLDivElement>(null);
-    const trailRef = useRef<HTMLDivElement>(null);
+    const trailRefs = useRef<(HTMLDivElement | null)[]>([]);
     const [isHovering, setIsHovering] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
+    const trailSegments = [0, 1, 2, 3]; // 4 trail segments
 
     useEffect(() => {
         const cursor = cursorRef.current;
-        const trail = trailRef.current;
-        if (!cursor || !trail) return;
+        if (!cursor) return;
 
         // Mouse move tracking
         const handleMouseMove = (e: MouseEvent) => {
@@ -27,24 +27,29 @@ export default function CustomCursor() {
                 ease: "power2.out"
             });
 
-            // Trail Cursor - Glitchy follow
-            gsap.to(trail, {
-                x: clientX,
-                y: clientY,
-                duration: 0.6,
-                ease: "expo.out",
-                onUpdate: () => {
-                    // Random glitch offsets
-                    if (Math.random() > 0.95) {
-                        gsap.set(trail, {
-                            x: clientX + (Math.random() * 10 - 5),
-                            y: clientY + (Math.random() * 10 - 5),
-                            opacity: Math.random()
-                        });
-                    } else {
-                        gsap.set(trail, { opacity: 0.4 });
+            // Trail Segments - Each follows with more lag
+            trailRefs.current.forEach((trail, index) => {
+                if (!trail) return;
+                const lag = 0.2 + index * 0.15;
+
+                gsap.to(trail, {
+                    x: clientX,
+                    y: clientY,
+                    duration: lag,
+                    ease: "power2.out",
+                    onUpdate: () => {
+                        // High intensity glitch on trails
+                        if (Math.random() > 0.9) {
+                            gsap.set(trail, {
+                                x: clientX + (Math.random() * 20 - 10),
+                                y: clientY + (Math.random() * 20 - 10),
+                                opacity: Math.random() * 0.6
+                            });
+                        } else {
+                            gsap.set(trail, { opacity: 0.3 / (index + 1) });
+                        }
                     }
-                }
+                });
             });
         };
 
@@ -92,17 +97,17 @@ export default function CustomCursor() {
                 <div className={`absolute left-1/2 top-[-4px] bottom-[-4px] w-[1px] bg-black/40 transition-opacity ${isHovering ? 'opacity-0' : 'opacity-100'}`} />
             </div>
 
-            {/* Glitchy Trail */}
-            <div
-                ref={trailRef}
-                className="fixed top-0 left-0 w-8 h-8 -ml-4 -mt-4 z-[9998] pointer-events-none border border-primary opacity-40"
-                style={{ opacity: (isVisible && !isHovering) ? 0.4 : 0 }}
-            >
-                {/* Ghosting Layers */}
-                <div className="absolute inset-0 border border-primary/30 translate-x-[2px] translate-y-[-2px] animate-pulse" />
-                <div className="absolute inset-0 border border-primary/30 translate-x-[-2px] translate-y-[2px] animate-pulse delay-75" />
-            </div>
-
+            {/* Glitchy Multi-Trail */}
+            {trailSegments.map((_, i) => (
+                <div
+                    key={i}
+                    ref={el => { trailRefs.current[i] = el; }}
+                    className="fixed top-0 left-0 w-6 h-6 -ml-3 -mt-3 z-[9998] pointer-events-none border border-primary/40"
+                    style={{ opacity: (isVisible && !isHovering) ? 1 : 0 }}
+                >
+                    <div className="absolute inset-0 border border-primary/20 translate-x-[1px] translate-y-[-1px] animate-pulse" />
+                </div>
+            ))}
         </>
     );
 }
