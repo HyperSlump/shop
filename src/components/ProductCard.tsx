@@ -29,7 +29,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
     return (
         <div
-            className="group relative border border-[var(--border)] bg-[var(--background)] overflow-hidden h-[480px] cursor-default transition-all duration-300 shadow-sm dark:shadow-none"
+            className="group relative border border-[var(--border)] bg-[var(--background)] overflow-hidden h-[440px] md:h-[480px] cursor-default transition-all duration-300 shadow-sm dark:shadow-none"
         >
             {/* DEFAULT VIEW: Image + Artistic Overlays */}
             {/* DEFAULT VIEW: Structured Technical Layout */}
@@ -38,7 +38,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 <div className="flex-1 flex relative border-b border-primary/20 bg-black/5 dark:bg-white/5 transition-colors duration-500">
 
                     {/* Left Column: Image */}
-                    <div className="w-1/2 relative p-4 flex items-center justify-center border-r border-primary/10">
+                    <div className="w-1/2 relative p-2 md:p-4 flex items-center justify-center border-r border-primary/10">
                         {/* Centered Image with specialized frame */}
                         <div className="relative w-full aspect-square shadow-xl transition-transform duration-500 group-hover:scale-105">
                             {/* Frame Borders */}
@@ -63,7 +63,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     </div>
 
                     {/* Right Column: Tech Specs & CTA */}
-                    <div className="w-1/2 relative flex flex-col p-4 overflow-hidden">
+                    <div className="w-1/2 relative flex flex-col p-2 md:p-4 overflow-hidden">
                         {/* Digital Line Noise Background */}
                         <div
                             className="absolute inset-0 opacity-[0.05] pointer-events-none"
@@ -85,9 +85,36 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         </div>
 
                         {/* Description */}
-                        <div className="relative z-10 flex-1 overflow-hidden">
-                            <p className="font-mono text-[9px] text-foreground/70 leading-relaxed line-clamp-4">
+                        <div className="relative z-10 flex-col gap-3 hidden sm:flex">
+                            <p className="font-mono text-[9px] text-foreground/70 leading-relaxed line-clamp-3">
                                 {product.description || "Raw industrial audio assets. Contains high-fidelity stems and synthesis textures for production."}
+                            </p>
+
+                            {/* Detailed Info Grid */}
+                            <div className="grid grid-cols-1 gap-1 pt-2 border-t border-primary/10">
+                                <div className="flex justify-between items-center font-mono text-[7px] tracking-tighter text-primary/40 uppercase">
+                                    <span>format_type</span>
+                                    <span className="text-foreground/60">{product.metadata?.format || "24-bit WAV"}</span>
+                                </div>
+                                <div className="flex justify-between items-center font-mono text-[7px] tracking-tighter text-primary/40 uppercase">
+                                    <span>file_count</span>
+                                    <span className="text-foreground/60">{product.metadata?.count || "142 SAMPLES"}</span>
+                                </div>
+                                <div className="flex justify-between items-center font-mono text-[7px] tracking-tighter text-primary/40 uppercase">
+                                    <span>data_size</span>
+                                    <span className="text-foreground/60">{product.metadata?.size || "842 MB"}</span>
+                                </div>
+                                <div className="flex justify-between items-center font-mono text-[7px] tracking-tighter text-primary/40 uppercase">
+                                    <span>license_key</span>
+                                    <span className="text-foreground/60">RF_UNLIMITED</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Mobile Description (Shorter) */}
+                        <div className="relative z-10 sm:hidden">
+                            <p className="font-mono text-[8px] text-foreground/70 leading-tight line-clamp-2">
+                                {product.description}
                             </p>
                         </div>
 
