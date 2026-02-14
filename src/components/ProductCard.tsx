@@ -48,6 +48,13 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 />
             </div>
 
+            {/* Mobile Preview CTA */}
+            <div className={`md:hidden absolute top-4 right-4 z-20 transition-opacity duration-300 ${isHovered ? 'opacity-0' : 'opacity-100'}`}>
+                <div className="bg-primary/90 text-black text-[10px] font-bold px-2 py-1 uppercase tracking-widest flex items-center gap-1 animate-pulse border border-black/20">
+                    Preview <span className="material-icons text-xs">touch_app</span>
+                </div>
+            </div>
+
             {/* Static Title/Price (Always Visible, but moves/fades on hover if we want?) 
                 Let's keep it visible but maybe move it up or hide it if we want full transformations.
                 The prompt says "original prod card will change into an informative prod card".
