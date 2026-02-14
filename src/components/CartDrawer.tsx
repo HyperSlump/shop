@@ -53,7 +53,7 @@ export default function CartDrawer() {
 
             {/* Drawer */}
             <aside
-                className={`fixed top-0 right-0 h-full w-full md:w-[480px] bg-[var(--background)] border-l border-black/80 dark:border-white/10 z-[70] flex flex-col shadow-2xl transition-all duration-500 ease-out ${isCartOpen
+                className={`fixed top-0 right-0 h-full w-full md:w-[480px] bg-[var(--background)] border-l border-foreground/10 z-[70] flex flex-col shadow-2xl transition-all duration-500 ease-out ${isCartOpen
                     ? 'opacity-100 translate-y-0 translate-x-0'
                     : 'opacity-0 translate-y-8 translate-x-4 pointer-events-none'
                     }`}
@@ -64,7 +64,7 @@ export default function CartDrawer() {
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/60 to-[var(--background)]" />
                 </div>
 
-                <header className="flex justify-between items-center mb-0 border-b border-black/80 dark:border-white/20 p-6 pb-6 relative z-10">
+                <header className="flex justify-between items-center mb-0 border-b border-foreground/10 p-6 pb-6 relative z-10">
                     <div className="flex flex-col">
                         <div className="text-sm uppercase font-bold tracking-[0.2em] text-primary">
                             Current Cart
@@ -92,67 +92,45 @@ export default function CartDrawer() {
                         {cart.map((item) => (
                             <div
                                 key={item.id}
-                                className={`flex h-32 border border-black/80 dark:border-foreground/20 bg-black/5 dark:bg-white/5 transition-all duration-300 relative group shrink-0 ${exitingItems.includes(item.id) ? 'opacity-0 translate-x-12' : 'opacity-100 translate-x-0'
+                                className={`flex h-24 border-b border-foreground/10 items-center transition-all duration-300 relative group shrink-0 ${exitingItems.includes(item.id) ? 'opacity-0 translate-x-12' : 'opacity-100 translate-x-0'
                                     }`}
                             >
-                                {/* Item Decoration Layer */}
-                                <div className="absolute inset-0 z-50 pointer-events-none border border-foreground/10 overflow-hidden">
-                                    <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-primary/40 transition-all group-hover:w-4 group-hover:h-4" />
-                                    <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-primary/40 transition-all group-hover:w-4 group-hover:h-4" />
-                                    <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-primary/40 transition-all group-hover:w-4 group-hover:h-4" />
-                                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-primary/40 transition-all group-hover:w-4 group-hover:h-4" />
-
-                                    {/* Tiny Screws */}
-                                    <div className="absolute top-1 left-1 w-0.5 h-0.5 bg-primary/30 rounded-full" />
-                                    <div className="absolute top-1 right-1 w-0.5 h-0.5 bg-primary/30 rounded-full" />
-                                    <div className="absolute bottom-1 left-1 w-0.5 h-0.5 bg-primary/30 rounded-full" />
-                                    <div className="absolute bottom-1 right-1 w-0.5 h-0.5 bg-primary/30 rounded-full" />
-
-                                    {/* Unit Ref */}
-                                    <div className="absolute top-0 right-4 px-1.5 bg-[var(--background)] border-x border-foreground/10 h-2.5 flex items-center">
-                                        <span className="font-mono text-[8px] text-foreground/40 font-bold tracking-widest leading-none">ID_{item.id.slice(0, 4)}</span>
-                                    </div>
-                                </div>
                                 {/* Left Column: Static Thumbnail */}
-                                <div className="w-1/3 relative border-r border-primary/10 flex items-center justify-center bg-[var(--background)] p-2">
-                                    <div className="relative w-full aspect-square overflow-hidden">
+                                <div className="w-16 h-16 relative flex items-center justify-center bg-[var(--background)] p-0">
+                                    <div className="relative w-full h-full overflow-hidden">
                                         <NextImage
                                             src={item.image || 'https://via.placeholder.com/100'}
                                             alt={item.name}
                                             fill
-                                            className="object-cover opacity-80 contrast-125 grayscale group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"
+                                            className="object-cover opacity-80 contrast-125 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
                                         />
                                     </div>
-                                    {/* Detailed Specimen Brackets (Thumbnail) */}
-                                    <div className="absolute -top-[1px] -left-[1px] w-2 h-2 border-t border-l border-red-500/60 z-30" />
-                                    <div className="absolute -bottom-[1px] -right-[1px] w-2 h-2 border-b border-r border-red-500/60 z-30" />
                                 </div>
 
                                 {/* Right Column: Info & Action */}
-                                <div className="flex-1 flex flex-col bg-[var(--background)]/90 backdrop-blur-sm">
+                                <div className="flex-1 flex flex-col pl-4">
                                     {/* Info Header */}
-                                    <div className="p-3 pb-2 flex-col gap-0.5">
-                                        <h3 className="font-gothic text-lg leading-none tracking-tight text-foreground truncate">{item.name}</h3>
-                                        <div className="flex items-center gap-1.5 opacity-40">
-                                            <div className="w-[3px] h-[3px] bg-primary rounded-full" />
-                                            <span className="font-mono text-[10px] uppercase tracking-widest leading-tight whitespace-nowrap">
-                                                ID: {item.id.slice(0, 8)} // V.1
+                                    <div className="flex justify-between items-start">
+                                        <div className="flex flex-col">
+                                            <h3 className="font-gothic text-lg leading-none tracking-tight text-foreground truncate">{item.name}</h3>
+                                            <span className="font-mono text-[9px] uppercase tracking-widest leading-tight opacity-40 mt-1">
+                                                ID: {item.id.slice(0, 8)}
                                             </span>
                                         </div>
+                                        <span className="font-mono text-xs font-bold text-primary">
+                                            {item.amount === 0 ? 'FREE' : `$${item.amount.toFixed(2)}`}
+                                        </span>
                                     </div>
 
                                     <div className="flex-1" />
 
                                     {/* Action Footer */}
-                                    <div className="mt-auto p-3 pt-2 border-t border-black/80 dark:border-primary/20 flex justify-between items-center bg-black/[0.02]">
-                                        <span className="font-mono text-xs font-bold text-primary">
-                                            {item.amount === 0 ? 'FREE' : `$${item.amount.toFixed(2)}`}
-                                        </span>
+                                    <div className="flex justify-start items-center pb-1">
                                         <button
                                             onClick={() => handleRemoveItem(item.id)}
-                                            className="font-mono text-[11px] text-foreground/60 hover:text-red-500 uppercase tracking-widest transition-colors flex items-center gap-1 group/del"
+                                            className="font-mono text-[9px] text-foreground/40 hover:text-red-500 uppercase tracking-[0.2em] transition-colors flex items-center gap-2 group/del"
                                         >
-                                            <span className="w-1.5 h-1.5 border border-current group-hover/del:bg-red-500 transition-all" />
+                                            <span className="w-1 h-1 bg-foreground/20 group-hover/del:bg-red-500 transition-all" />
                                             [ REMOVE ]
                                         </button>
                                     </div>
@@ -162,7 +140,7 @@ export default function CartDrawer() {
                     </div>
                 )}
 
-                <div className="mt-8 border-t border-black/80 dark:border-white/30 p-6 pt-6 space-y-4">
+                <div className="mt-8 border-t border-foreground/10 p-6 pt-6 space-y-4">
                     <div className="flex justify-between font-mono text-xl font-bold tracking-tighter text-foreground">
                         <span className="opacity-60 text-foreground">SUBTOTAL_</span>
                         <span className="text-primary">${cartTotal.toFixed(2)}</span>
