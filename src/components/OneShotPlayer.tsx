@@ -22,11 +22,12 @@ export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlay
 
             ws = WaveSurfer.create({
                 container: containerRef.current,
-                waveColor: 'rgba(255, 255, 255, 0.2)',
-                progressColor: '#ccff00', // Primary color
-                cursorColor: 'transparent',
-                barWidth: 2,
+                waveColor: '#333333',
+                progressColor: '#ccff00',
+                cursorColor: '#ccff00',
+                barWidth: 3,
                 barGap: 1,
+                barRadius: 2,
                 height: 24,
                 normalize: true,
                 backend: 'WebAudio',
@@ -81,7 +82,7 @@ export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlay
                 </span>
             )}
             <div
-                className="relative bg-black/50 border border-white/10 rounded overflow-hidden hover:border-primary/50 transition-colors group cursor-pointer h-[26px]"
+                className="relative bg-black border border-white/10 rounded overflow-hidden hover:border-primary/50 transition-colors group cursor-pointer h-[26px]"
                 onClick={handleTrigger}
             >
                 {/* Play Icon - Absolute Left */}

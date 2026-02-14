@@ -32,12 +32,13 @@ export default function WaveformOverlay({
 
             ws = WaveSurfer.create({
                 container: containerRef.current,
-                waveColor: 'rgba(255, 255, 255, 0.2)',
+                waveColor: '#333333',
                 progressColor: '#ccff00',
-                cursorColor: 'transparent',
-                barWidth: 2,
-                barGap: 2,
-                height: 40, // More compact height
+                cursorColor: '#ccff00',
+                barWidth: 3,
+                barGap: 1,
+                barRadius: 2,
+                height: 48,
                 normalize: true,
                 backend: 'WebAudio',
             });

@@ -68,7 +68,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
             </div>
 
             {/* HOVER OVERLAY: Informative Details */}
-            <div className={`absolute inset-0 bg-black/90 backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
+            <div className={`absolute inset-0 bg-black backdrop-blur-sm p-6 flex flex-col justify-between transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
                 {/* Neon Decorative Corners */}
                 <div className="absolute top-0 left-0 w-8 h-8 border-t border-l border-primary/40 pointer-events-none" />
                 <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-primary/40 pointer-events-none" />
@@ -101,7 +101,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
                 {/* Main Waveform */}
                 {audioPreviewUrl && isHovered && (
-                    <div className="relative w-full h-16 bg-black/50 border border-white/10 rounded overflow-hidden shrink-0 group/wave">
+                    <div className="relative w-full h-16 bg-black border border-white/10 rounded overflow-hidden shrink-0 group/wave">
                         {/* Technical accents for waveform */}
                         <div className="absolute top-0 left-0 w-2 h-[1px] bg-primary/60" />
                         <div className="absolute bottom-0 right-0 w-2 h-[1px] bg-primary/60" />
