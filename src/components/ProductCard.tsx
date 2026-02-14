@@ -66,7 +66,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
             <div className={`absolute bottom-0 left-0 right-0 p-4 transition-opacity duration-300 z-20 ${isHovered ? 'opacity-0' : 'opacity-100'}`}>
                 <div className="flex justify-between items-end">
-                    <h3 className="font-gothic text-3xl text-black dark:text-white dark:mix-blend-difference">{product.name}</h3>
+                    <h3 className="font-gothic text-3xl text-foreground">{product.name}</h3>
                     <span className="font-mono text-primary text-xs bg-primary/10 px-2 py-1">{product.amount === 0 ? 'FREE' : `$${product.amount}`}</span>
                 </div>
             </div>
@@ -87,7 +87,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 {/* Header */}
                 <div className="space-y-2 relative">
                     <div className="flex justify-between items-start">
-                        <h3 className="font-gothic text-2xl text-black dark:text-white">{product.name}</h3>
+                        <h3 className="font-gothic text-2xl text-foreground">{product.name}</h3>
                         <div className="flex items-center gap-3">
                             <span className="font-mono text-primary text-xs">{product.amount === 0 ? 'FREE' : `$${product.amount}`}</span>
                             {/* Mobile Close Button */}

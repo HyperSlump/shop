@@ -73,4 +73,5 @@
 @theme {
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-foreground: var(--foreground);
 }
