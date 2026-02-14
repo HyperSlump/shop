@@ -25,6 +25,9 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
         product.metadata?.sample_4,
     ].filter(Boolean); // Only keep existing URLs
 
+    const isDark = typeof document !== 'undefined' ? document.documentElement.classList.contains('dark') : false;
+    const waveColor = isDark ? '#333333' : '#000000'; // Black in light mode per request
+
     return (
         <div
             className="group relative border border-[var(--border)] bg-[var(--background)] overflow-hidden h-96 cursor-default transition-all duration-300 shadow-sm dark:shadow-none"
@@ -100,14 +103,14 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         </div>
                     </div>
                     <div className="w-full h-[1px] bg-primary/30" />
-                    <p className="font-mono text-[10px] text-gray-600 dark:text-gray-300 leading-tight">
+                    <p className="font-mono text-[10px] text-black/70 dark:text-gray-300 leading-tight">
                         {product.description || "Raw industrial audio assets."}
                     </p>
                 </div>
 
                 {/* Main Waveform */}
                 {audioPreviewUrl && isHovered && (
-                    <div className="relative w-full h-16 bg-white dark:bg-black border border-black/10 dark:border-white/10 rounded overflow-hidden shrink-0 group/wave">
+                    <div className="relative w-full h-16 bg-black/5 dark:bg-black border border-black/10 dark:border-white/10 rounded overflow-hidden shrink-0 group/wave">
                         {/* Technical accents for waveform */}
                         <div className="absolute top-0 left-0 w-2 h-[1px] bg-primary/60" />
                         <div className="absolute bottom-0 right-0 w-2 h-[1px] bg-primary/60" />
