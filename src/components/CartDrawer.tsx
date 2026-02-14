@@ -51,7 +51,7 @@ export default function CartDrawer() {
                     <h2 className="font-gothic text-4xl uppercase tracking-tighter text-primary">Your Crate ({cart.length})</h2>
                     <button
                         onClick={toggleCart}
-                        className="hover:rotate-90 active:scale-95 transition-transform text-2xl font-mono opacity-50 hover:opacity-100 p-2"
+                        className="hover:rotate-90 active:scale-95 transition-transform text-2xl font-mono text-primary/70 hover:text-primary p-2"
                     >
                         ✕
                     </button>

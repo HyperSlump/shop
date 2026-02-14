@@ -32,8 +32,8 @@ export default function WaveformOverlay({
 
             ws = WaveSurfer.create({
                 container: containerRef.current,
-                waveColor: 'rgba(255, 255, 255, 0.4)',
-                progressColor: primaryColor,
+                waveColor: 'rgba(255, 255, 255, 0.2)',
+                progressColor: '#c0ff00',
                 cursorColor: 'transparent',
                 barWidth: 2,
                 barGap: 2,

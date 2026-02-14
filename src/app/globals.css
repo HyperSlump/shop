@@ -2,7 +2,7 @@
 
 @theme {
   --color-primary: #c0ff00;
-  --color-background-light: #e5e5e5;
+  --color-background-light: #ffffff;
   --color-background-dark: #080808;
 
   --font-display: "Pirata One", system-ui;
@@ -20,8 +20,6 @@
     pointer-events: none;
   }
 
-
-
   .vertical-text {
     writing-mode: vertical-rl;
     text-orientation: mixed;
@@ -36,7 +34,14 @@
 /* Base Styles */
 @layer base {
   body {
-    @apply bg-background-light text-black font-mono;
+    @apply bg-background-light text-black font-mono selection:bg-primary selection:text-black;
+  }
+
+  /* Support for dark mode via class or media query */
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light) body {
+      @apply bg-background-dark text-white;
+    }
   }
 
   .dark body {
