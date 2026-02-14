@@ -86,7 +86,7 @@ export default function IndustrialTicker() {
             repeat: 7,
             yoyo: true,
             duration: 0.04,
-            onComplete: () => gsap.set(row, { opacity: 1 })
+            onComplete: () => { gsap.set(row, { opacity: 1 }); }
         });
     };
 
