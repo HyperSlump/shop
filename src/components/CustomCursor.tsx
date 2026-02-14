@@ -93,20 +93,20 @@ export default function CustomCursor() {
                 {/* Custom Cursor Content */}
                 <div className="transition-all duration-300 transform">
                     {isHovering ? (
-                        /* Hand Pointer */
-                        <div className="relative w-6 h-6 -ml-3 -mt-3 flex items-center justify-center">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M10 3C10 2.44772 10.4477 2 11 2C11.5523 2 12 2.44772 12 3V10H13C13 9.44772 13.4477 9 14 9C14.5523 9 15 9.44772 15 10V11H16C16 10.4477 16.4477 10 17 10C17.5523 10 18 10.4477 18 11V12H19C19 11.4477 19.4477 11 20 11C20.5523 11 21 11.4477 21 12V17C21 19.7614 18.7614 22 16 22H13C10.2386 22 8 19.7614 8 17V11C8 10.4477 8.44772 10 9 10C9.55228 10 10 10.4477 10 11V3Z"
-                                    fill="var(--primary)"
-                                    stroke="var(--foreground)"
-                                    strokeWidth="1" />
-                            </svg>
+                        /* Click Indicator - Simple Circle with Text */
+                        <div className="relative w-8 h-8 -ml-4 -mt-4 flex items-center justify-center">
+                            <div className="w-full h-full rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center">
+                                <span className="font-mono text-[8px] text-primary font-bold">CLICK</span>
+                            </div>
                         </div>
                     ) : (
-                        /* Technical Sharp Pointer */
+                        /* Simple Arrow Pointer */
                         <div className="group">
-                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M1 1V15L5 11L9 15L11 13L7 9L11 5L1 1Z" fill="black" stroke="white" strokeWidth="1" />
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M2 2L2 16L7 11L11 16L13 14L9 9L14 4L2 2Z"
+                                    fill="var(--foreground)"
+                                    stroke="var(--primary)"
+                                    strokeWidth="1.5" />
                             </svg>
                         </div>
                     )}
