@@ -71,7 +71,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
                 {/* Main Waveform */}
                 {audioPreviewUrl && isHovered && (
-                    <div className="relative w-full h-16 bg-white/5 border border-white/10 rounded overflow-hidden shrink-0">
+                    <div className="relative w-full h-16 bg-black/50 border border-white/10 rounded overflow-hidden shrink-0">
                         <div className="absolute top-1 left-2 text-[8px] text-primary uppercase tracking-widest">Main Preview</div>
                         <WaveformOverlay
                             audioUrl={audioPreviewUrl}

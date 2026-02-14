@@ -35,9 +35,9 @@ export default function WaveformOverlay({
                 waveColor: primaryColor,
                 progressColor: 'white',
                 cursorColor: 'transparent',
-                barWidth: 3,
-                barGap: 3,
-                height: 60, // Smaller height
+                barWidth: 2,
+                barGap: 2,
+                height: 40, // More compact height
                 normalize: true,
                 backend: 'WebAudio',
             });
@@ -107,23 +107,24 @@ export default function WaveformOverlay({
 
     return (
         <div
-            className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[2px] z-20 transition-opacity duration-300"
-            onClick={(e) => e.stopPropagation()} // Stop propagation on entire overlay to allow seeking/clicking
+            className="absolute inset-0 group cursor-pointer"
+            onClick={togglePlay}
         >
-            {/* Play/Pause Button */}
+            {/* Play/Pause Button - Small Icon to the left */}
             {isReady && (
-                <button
-                    onClick={togglePlay}
-                    className="mb-4 p-4 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-black transition-all transform hover:scale-110 active:scale-95 z-30"
-                >
-                    {isPlaying ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" />}
-                </button>
+                <div className="absolute left-2 top-1/2 -translate-y-1/2 z-30 pointer-events-none">
+                    {isPlaying ? (
+                        <Pause size={16} className="text-primary fill-current" />
+                    ) : (
+                        <Play size={16} className="text-white group-hover:text-primary fill-current transition-colors" />
+                    )}
+                </div>
             )}
 
-            {/* Waveform Container */}
+            {/* Waveform Container - Offset to the right of the button */}
             <div
                 ref={containerRef}
-                className="w-full h-[60px] cursor-pointer opacity-80 hover:opacity-100 transition-opacity"
+                className="absolute inset-x-0 bottom-0 left-8 top-6 opacity-60 group-hover:opacity-100 transition-opacity"
             />
         </div>
     );
