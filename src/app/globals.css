@@ -10,6 +10,9 @@
   --font-mono: "JetBrains Mono", monospace;
 
   --radius-DEFAULT: 0px;
+
+  /* Force dark mode to be class-based for the toggle to work regardless of system preference */
+  --variant-dark: .dark &;
 }
 
 /* Custom Utilities from code.html */
@@ -33,19 +36,20 @@
 
 /* Base Styles */
 @layer base {
+  :root {
+    --background: var(--color-background-light);
+    --foreground: #000000;
+  }
+
+  :root.dark {
+    --background: var(--color-background-dark);
+    --foreground: #ffffff;
+  }
+
   body {
-    @apply bg-background-light text-black font-mono selection:bg-primary selection:text-black;
-  }
-
-  /* Support for dark mode via class or media query */
-  @media (prefers-color-scheme: dark) {
-    :root:not(.light) body {
-      @apply bg-background-dark text-white;
-    }
-  }
-
-  .dark body {
-    @apply bg-background-dark text-white;
+    background-color: var(--background);
+    color: var(--foreground);
+    @apply font-mono selection:bg-primary selection:text-black transition-colors duration-300;
   }
 
   a,
