@@ -185,7 +185,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         onAddToCart(product);
                     }}
                     disabled={isInCart}
-                    className="w-full bg-primary text-primary-foreground font-bold uppercase py-3 text-xs hover:bg-black hover:text-white hover:border hover:border-primary dark:hover:bg-white dark:hover:text-black dark:hover:border-primary transition-all duration-300 relative group overflow-hidden"
+                    className="w-full bg-primary text-primary-foreground font-bold uppercase py-3 text-xs border border-transparent hover:!bg-black hover:!text-white hover:!border-primary dark:hover:!bg-white dark:hover:!text-black dark:hover:!border-primary transition-all duration-300 relative group overflow-hidden"
                 >
                     <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 pointer-events-none" />
                     <span className="relative z-10">{isInCart ? 'Added to Cart' : 'Add to Cart'}</span>
