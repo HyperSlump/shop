@@ -14,7 +14,7 @@ export default async function Home() {
       <main className="flex-1 flex flex-col">
         <header className="p-4 md:p-8 border-b border-black/20 dark:border-white/20 flex flex-col md:flex-row justify-between items-end gap-6 bg-background-light dark:bg-background-dark">
           <div className="flex flex-col">
-            <h1 className="hidden md:block font-gothic text-7xl md:text-8xl lg:text-9xl leading-none tracking-tight uppercase mb-4">
+            <h1 className="hidden md:block font-gothic text-7xl md:text-8xl lg:text-9xl leading-none tracking-tight mb-4 lowercase">
               hyper$lump
             </h1>
             <p className="text-sm max-w-md opacity-80 font-mono">

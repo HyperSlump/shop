@@ -49,9 +49,9 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
             </div>
 
             {/* Mobile Preview CTA */}
-            <div className={`md:hidden absolute top-4 right-4 z-20 transition-opacity duration-300 ${isHovered ? 'opacity-0' : 'opacity-100'}`}>
-                <div className="bg-primary/90 text-black text-[10px] font-bold px-2 py-1 uppercase tracking-widest flex items-center gap-1 animate-pulse border border-black/20">
-                    Preview <span className="material-icons text-xs">touch_app</span>
+            <div className={`md:hidden absolute top-2 right-2 z-20 transition-opacity duration-300 ${isHovered ? 'opacity-0' : 'opacity-100'}`}>
+                <div className="bg-primary/90 text-black text-[8px] font-bold px-1.5 py-0.5 uppercase tracking-widest flex items-center gap-1 animate-pulse border border-black/20">
+                    Preview <span className="material-icons text-[10px]">touch_app</span>
                 </div>
             </div>
 
