@@ -50,13 +50,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [cart, isMounted]);
 
   const addToCart = (product: Product) => {
+    // Only open the cart if it's the first item being added
+    if (cart.length === 0) {
+      setIsCartOpen(true);
+    }
+
     setCart((prev) => {
       // For digital products, we usually only want 1 of each
       const exists = prev.find((item) => item.id === product.id);
       if (exists) return prev;
       return [...prev, product];
     });
-    setIsCartOpen(true);
   };
 
   const removeFromCart = (priceId: string) => {
