@@ -18,12 +18,12 @@ export default async function Home() {
             <h1 className="hidden md:block font-gothic text-7xl md:text-8xl lg:text-9xl leading-none tracking-tight mb-4 lowercase">
               hyper$lump
             </h1>
-            <p className="text-sm max-w-md opacity-80 font-mono">
+            <p className="text-base max-w-lg opacity-80 font-mono">
               Industrial sound design textures, raw synthesis, and broken percussion for the electronic avant-garde.
             </p>
           </div>
           <div className="text-right">
-            <div className="text-xs uppercase font-bold tracking-widest text-primary">
+            <div className="text-sm uppercase font-bold tracking-[0.2em] text-primary">
               Current Catalog
             </div>
             <div className="text-4xl font-gothic leading-none">
@@ -35,7 +35,7 @@ export default async function Home() {
         <ProductGrid products={products} />
 
         <footer className="p-8 md:p-8 border-t border-[var(--border)] flex flex-col md:grid md:grid-cols-3 gap-8 bg-[var(--background)] items-center md:items-end text-center md:text-left animate-fade-in delay-300">
-          <div className="text-[10px] space-y-1 opacity-60 hidden md:block">
+          <div className="text-[12px] space-y-1.5 opacity-60 hidden md:block">
             <p>&gt; INITIALIZING SYSTEM_CORE...</p>
             <p>&gt; LOADING ASSETS [OK]</p>
             <p>&gt; BUFFERING AUDIO ENGINE [OK]</p>

@@ -85,25 +85,25 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                             </div>
 
                             {/* Description - Compact */}
-                            <p className="font-mono text-[9px] text-foreground/70 leading-relaxed text-center px-2">
+                            <p className="font-mono text-[11px] text-foreground/70 leading-relaxed text-center px-2">
                                 {product.description || "Raw industrial audio assets. Optimized for digital synthesis."}
                             </p>
 
                             {/* Info Grid - Full Width */}
                             <div className="grid grid-cols-2 gap-x-4 gap-y-1 pt-2 border-t border-primary/10">
-                                <div className="flex justify-between items-center font-mono text-[7px] text-primary/40 uppercase">
+                                <div className="flex justify-between items-center font-mono text-[9px] text-primary/40 uppercase">
                                     <span>fmt</span>
                                     <span className="text-foreground/60">{product.metadata?.format || "WAV"}</span>
                                 </div>
-                                <div className="flex justify-between items-center font-mono text-[7px] text-primary/40 uppercase">
+                                <div className="flex justify-between items-center font-mono text-[9px] text-primary/40 uppercase">
                                     <span>cnt</span>
                                     <span className="text-foreground/60">{product.metadata?.count || "140"}</span>
                                 </div>
-                                <div className="flex justify-between items-center font-mono text-[7px] text-primary/40 uppercase">
+                                <div className="flex justify-between items-center font-mono text-[9px] text-primary/40 uppercase">
                                     <span>size</span>
                                     <span className="text-foreground/60">{product.metadata?.size || "840MB"}</span>
                                 </div>
-                                <div className="flex justify-between items-center font-mono text-[7px] text-primary/40 uppercase">
+                                <div className="flex justify-between items-center font-mono text-[9px] text-primary/40 uppercase">
                                     <span>type</span>
                                     <span className="text-foreground/60">RF_TECH</span>
                                 </div>
@@ -130,7 +130,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     {/* Tech Specs / Decor */}
                     <div className="flex items-center gap-2 opacity-60 mb-2">
                         <div className="w-1 h-1 bg-primary rounded-full animate-pulse" />
-                        <span className="font-mono text-[8px] text-primary uppercase whitespace-nowrap">
+                        <span className="font-mono text-[10px] text-primary uppercase whitespace-nowrap">
                             ID: {product.id.slice(0, 6)} // V.1.0
                         </span>
                         <div className="h-[1px] flex-1 bg-primary/10" />
@@ -157,7 +157,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 onAddToCart(product);
                             }}
                             disabled={isInCart}
-                            className="text-right font-mono text-[12px] text-primary uppercase hover:text-primary/70 transition-colors disabled:opacity-50"
+                            className="text-right font-mono text-[13px] text-primary uppercase hover:text-primary/70 transition-colors disabled:opacity-50"
                         >
                             {isInCart ? '[ IN CART ]' : '[ BUY NOW ]'}
                         </button>
@@ -301,7 +301,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
                 {/* Floating Unit ID */}
                 <div className="absolute top-[2px] right-10 px-2 bg-[var(--background)] border-x border-primary/10 flex items-center">
-                    <span className="font-mono text-[6px] text-primary/60 font-medium tracking-widest uppercase">
+                    <span className="font-mono text-[8px] text-primary/60 font-medium tracking-widest uppercase">
                         REF_ID: // {product.id.slice(0, 8)}
                     </span>
                 </div>

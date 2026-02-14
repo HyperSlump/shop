@@ -103,7 +103,7 @@ export default function CartDrawer() {
 
                                     {/* Unit Ref */}
                                     <div className="absolute top-0 right-4 px-1.5 bg-[var(--background)] border-x border-foreground/5 h-2.5 flex items-center">
-                                        <span className="font-mono text-[5px] text-foreground/20 font-bold tracking-widest leading-none">ID_{item.id.slice(0, 4)}</span>
+                                        <span className="font-mono text-[8px] text-foreground/20 font-bold tracking-widest leading-none">ID_{item.id.slice(0, 4)}</span>
                                     </div>
                                 </div>
                                 {/* Left Column: Static Thumbnail */}
@@ -128,7 +128,7 @@ export default function CartDrawer() {
                                         <h3 className="font-gothic text-lg leading-none tracking-tight text-foreground truncate">{item.name}</h3>
                                         <div className="flex items-center gap-1.5 opacity-40">
                                             <div className="w-[3px] h-[3px] bg-primary rounded-full" />
-                                            <span className="font-mono text-[7px] uppercase tracking-widest leading-tight whitespace-nowrap">
+                                            <span className="font-mono text-[10px] uppercase tracking-widest leading-tight whitespace-nowrap">
                                                 ID: {item.id.slice(0, 8)} // V.1
                                             </span>
                                         </div>
@@ -143,7 +143,7 @@ export default function CartDrawer() {
                                         </span>
                                         <button
                                             onClick={() => handleRemoveItem(item.id)}
-                                            className="font-mono text-[9px] text-foreground/30 hover:text-red-500 uppercase tracking-widest transition-colors flex items-center gap-1 group/del"
+                                            className="font-mono text-[11px] text-foreground/30 hover:text-red-500 uppercase tracking-widest transition-colors flex items-center gap-1 group/del"
                                         >
                                             <span className="w-1.5 h-1.5 border border-current group-hover/del:bg-red-500 transition-all" />
                                             [ REMOVE ]
