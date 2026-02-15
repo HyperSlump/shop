@@ -9,7 +9,7 @@ export default async function Home() {
 
   return (
     <>
-      <div className="relative min-h-screen bg-[var(--background)]">
+      <div className="relative bg-[var(--background)]">
         {/* Product Grid Centered */}
         <section className="flex-1 w-full mx-auto">
           <ProductGrid products={products} />

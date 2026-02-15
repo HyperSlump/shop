@@ -87,53 +87,53 @@ export default function RootLayout({
                 {/* PAGE CONTENT */}
                 <div className="flex-1 w-full min-h-0 overflow-y-auto custom-scrollbar">
                   {children}
-                </div>
 
-                {/* GLOBAL FOOTER */}
-                <footer className="footer-unit animate-fade-in delay-300 relative z-10 w-full overflow-hidden mt-auto">
-                  <div className="w-full">
-                    <IndustrialTicker />
-                  </div>
+                  {/* GLOBAL FOOTER */}
+                  <footer className="footer-unit animate-fade-in delay-300 relative z-10 w-full overflow-hidden mt-auto">
+                    <div className="w-full">
+                      <IndustrialTicker />
+                    </div>
 
-                  {/* Indented Footer Content */}
-                  <div className="p-8 md:p-12 bg-[var(--background)] border-t-2 border-black/10 dark:border-white/5">
-                    <div className="max-w-7xl mx-auto flex flex-col md:grid md:grid-cols-3 gap-12 items-center md:items-center">
-                      {/* System Status (Left) */}
-                      <div className="flex flex-col gap-4 font-mono w-full text-center md:text-left">
-                        <div className="text-[10px] space-y-2 opacity-50 uppercase">
-                          <p>&gt; INITIALIZING SYSTEM_CORE...</p>
-                          <p>&gt; ASSET_LOAD: 100% [OK]</p>
-                          <p>&gt; AUDIO_BUFFER: CACHED [OK]</p>
-                          <p>&gt; SIGNAL_STATE: BROADCASTING</p>
+                    {/* Indented Footer Content */}
+                    <div className="p-8 md:p-12 bg-[var(--background)] border-t-2 border-black/10 dark:border-white/5">
+                      <div className="max-w-7xl mx-auto flex flex-col md:grid md:grid-cols-3 gap-12 items-center md:items-center">
+                        {/* System Status (Left) */}
+                        <div className="flex flex-col gap-4 font-mono w-full text-center md:text-left">
+                          <div className="text-[10px] space-y-2 opacity-50 uppercase">
+                            <p>&gt; INITIALIZING SYSTEM_CORE...</p>
+                            <p>&gt; ASSET_LOAD: 100% [OK]</p>
+                            <p>&gt; AUDIO_BUFFER: CACHED [OK]</p>
+                            <p>&gt; SIGNAL_STATE: BROADCASTING</p>
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Spacer (Center) */}
-                      <div className="hidden md:block" />
+                        {/* Spacer (Center) */}
+                        <div className="hidden md:block" />
 
-                      {/* Social & Credits (Right) */}
-                      <div className="flex flex-col items-center md:items-end gap-3 w-full">
-                        <div className="flex gap-6 mb-3">
-                          {['INSTAGRAM', 'DISCORD', 'BANDCAMP'].map((platform) => (
-                            <a
-                              key={platform}
-                              className="text-[10px] font-bold tracking-widest hover:text-primary transition-all underline decoration-primary/20 hover:decoration-primary"
-                              href="#"
-                            >
-                              {platform}
-                            </a>
-                          ))}
-                        </div>
-                        <p className="text-[9px] opacity-40 font-mono tracking-tighter uppercase text-center md:text-right">
-                          ©2026 HYPER$LUMP // CORTEX_SYNTHESIS_HUB // ALL_RIGHTS_RESERVED
-                        </p>
-                        <div className="pt-1">
-                          <ThemeToggle />
+                        {/* Social & Credits (Right) */}
+                        <div className="flex flex-col items-center md:items-end gap-3 w-full">
+                          <div className="flex gap-6 mb-3">
+                            {['INSTAGRAM', 'DISCORD', 'BANDCAMP'].map((platform) => (
+                              <a
+                                key={platform}
+                                className="text-[10px] font-bold tracking-widest hover:text-primary transition-all underline decoration-primary/20 hover:decoration-primary"
+                                href="#"
+                              >
+                                {platform}
+                              </a>
+                            ))}
+                          </div>
+                          <p className="text-[9px] opacity-40 font-mono tracking-tighter uppercase text-center md:text-right">
+                            ©2026 HYPER$LUMP // CORTEX_SYNTHESIS_HUB // ALL_RIGHTS_RESERVED
+                          </p>
+                          <div className="pt-1">
+                            <ThemeToggle />
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </footer>
+                  </footer>
+                </div>
               </main>
             </div>
 
