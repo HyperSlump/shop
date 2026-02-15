@@ -49,7 +49,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
             variants={containerVariants}
             initial="initial"
             animate="animate"
-            className="relative h-full w-full overflow-hidden flex flex-col md:flex-row"
+            className="relative min-h-screen w-full flex flex-col md:flex-row"
         >
             {/* LEFT SIDE: PRODUCT VISUAL (Compact Frame) */}
             <motion.div
@@ -87,7 +87,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
             </motion.div>
 
             {/* RIGHT SIDE: CONTROL CENTER */}
-            <div className="flex-1 h-full flex flex-col bg-black/[0.02] dark:bg-white/[0.02]">
+            <div className="flex-1 flex flex-col bg-black/[0.02] dark:bg-white/[0.02]">
                 {/* Header Section */}
                 <motion.div variants={itemVariants} className="p-6 md:p-10 border-b border-primary/10">
                     <div className="flex justify-between items-start mb-2">
@@ -108,8 +108,8 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                     </p>
                 </motion.div>
 
-                {/* Audio Console - Fixed Height / Scrollable inner */}
-                <motion.div variants={itemVariants} className="flex-1 overflow-y-auto custom-scrollbar p-6 md:p-10 flex flex-col gap-8">
+                {/* Audio Console - Natural Flow */}
+                <motion.div variants={itemVariants} className="flex-1 p-6 md:p-10 flex flex-col gap-8">
                     {/* Main Stream */}
                     <div className="space-y-3">
                         <div className="flex items-center gap-2">
