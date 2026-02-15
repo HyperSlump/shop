@@ -81,7 +81,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                 </div>
 
                 {/* Return Link */}
-                <Link href="/" className="absolute top-6 left-6 md:top-10 md:left-10 lg:top-12 lg:left-12 z-50 font-mono text-[9px] text-foreground/40 hover:text-primary transition-colors flex items-center gap-2 px-2 py-1 border border-transparent hover:border-primary/20">
+                <Link href="/" className="absolute top-4 left-6 md:top-6 md:left-10 lg:top-8 lg:left-12 z-50 font-mono text-[9px] text-foreground/40 hover:text-primary transition-colors flex items-center gap-2 px-2 py-1 border border-transparent hover:border-primary/20">
                     <span>[ BACK_TO_DATABASE ]</span>
                 </Link>
             </motion.div>
@@ -89,7 +89,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
             {/* RIGHT SIDE: CONTROL CENTER */}
             <div className="flex-1 flex flex-col bg-black/[0.02] dark:bg-white/[0.02]">
                 {/* Header Section */}
-                <motion.div variants={itemVariants} className="p-6 md:p-10 lg:py-12 lg:pl-12 lg:pr-24 border-b border-primary/10">
+                <motion.div variants={itemVariants} className="p-6 md:p-10 lg:py-12 lg:pl-12 lg:pr-20 border-b border-primary/10">
                     <div className="flex justify-between items-start mb-2">
                         <div className="space-y-1">
                             <span className="font-mono text-[8px] text-primary/40 uppercase tracking-[0.3em]">
@@ -109,7 +109,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                 </motion.div>
 
                 {/* Audio Console - Natural Flow */}
-                <motion.div variants={itemVariants} className="flex-1 p-6 md:p-10 lg:py-12 lg:pl-12 lg:pr-24 flex flex-col gap-8">
+                <motion.div variants={itemVariants} className="flex-1 p-6 md:p-10 lg:py-12 lg:pl-12 lg:pr-20 flex flex-col gap-8">
                     {/* Main Stream */}
                     <div className="space-y-3">
                         <div className="flex items-center gap-2">
@@ -117,7 +117,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                             <span className="font-mono text-[9px] text-primary/60 uppercase tracking-[0.2em]">AUDIO_STREAM_MASTER</span>
                         </div>
                         {audioPreviewUrl ? (
-                            <div className="relative w-full h-24 md:h-32 bg-black/5 dark:bg-white/5 border border-primary/30 rounded overflow-hidden">
+                            <div className="relative w-full h-16 bg-black/5 dark:bg-white/5 border border-primary/30 rounded overflow-hidden">
                                 <WaveformOverlay audioUrl={audioPreviewUrl} isActive={true} />
                             </div>
                         ) : (
@@ -164,7 +164,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                 </motion.div>
 
                 {/* Footer Action */}
-                <motion.div variants={itemVariants} className="p-6 md:p-10 lg:py-12 lg:pl-12 lg:pr-24 border-t border-primary/10 bg-[var(--background)]">
+                <motion.div variants={itemVariants} className="p-6 md:p-10 lg:py-12 lg:pl-12 lg:pr-20 border-t border-primary/10 bg-[var(--background)]">
                     <button
                         onClick={() => !isInCart && addToCart(product)}
                         disabled={isInCart}
