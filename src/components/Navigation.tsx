@@ -16,25 +16,25 @@ export default function Navigation() {
 
     return (
         <>
-            <aside className="w-full md:w-20 h-16 md:h-screen sticky top-0 left-0 md:border-r border-foreground/15 flex flex-row md:flex-col items-center justify-between px-4 md:p-6 z-50 bg-transparent md:bg-[var(--background)] animate-fade-in pointer-events-none md:pointer-events-auto">
-                {/* Mobile Floating Action Bar */}
-                <div className="flex w-full items-center justify-between md:hidden pointer-events-none fixed top-0 left-0 p-4 z-[110]">
-                    <Link href="/" className="text-xl font-gothic tracking-tighter hover:text-primary transition-colors leading-none font-bold pointer-events-auto drop-shadow-md">
+            <aside className="w-full md:w-20 md:h-screen sticky top-0 left-0 md:border-r border-foreground/15 flex flex-row md:flex-col items-center justify-between px-0 md:p-6 z-[110] bg-[var(--background)] md:bg-[var(--background)] animate-fade-in">
+                {/* Mobile Sticky Control Bar */}
+                <div className="flex md:hidden w-full items-center justify-between p-4 border-b border-foreground/15 bg-[var(--background)] relative z-[110]">
+                    <Link href="/" className="text-xl font-gothic tracking-tighter hover:text-primary transition-colors leading-none font-bold">
                         <span>hyper$lump</span>
                     </Link>
 
-                    <div className="flex gap-2 pointer-events-auto">
+                    <div className="flex items-center gap-3">
                         {/* Mobile Dedicated Theme Switch */}
-                        <div className="flex items-center justify-center w-12 h-12 bg-[var(--background)]/80 backdrop-blur-sm border md:border-none border-foreground/10 rounded-full shadow-lg">
+                        <div className="flex items-center justify-center w-10 h-10 border border-foreground/10 rounded-full">
                             <ThemeToggle />
                         </div>
 
                         {/* Hamburger Button */}
                         <button
                             onClick={toggleMobileMenu}
-                            className="w-12 h-12 flex items-center justify-center bg-primary text-black rounded-full shadow-lg active:scale-90 transition-transform"
+                            className="w-10 h-10 flex items-center justify-center bg-primary text-black rounded-full active:scale-90 transition-transform"
                         >
-                            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
                         </button>
                     </div>
                 </div>

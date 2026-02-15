@@ -50,8 +50,8 @@ export default function HeroSchema() {
                     </div>
                 </div>
 
-                {/* Promotional Carousel - Now visible on mobile and taking center stage */}
-                <div className="md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 z-50 w-full py-8 md:py-0">
+                {/* Promotional Carousel - Restored horizontal centering for desktop */}
+                <div className="md:absolute md:left-0 md:top-1/2 md:-translate-y-1/2 z-50 w-full flex justify-center py-8 md:py-0">
                     <PromoCarousel />
                 </div>
 

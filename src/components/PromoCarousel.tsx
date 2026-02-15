@@ -181,7 +181,7 @@ export default function PromoCarousel() {
                 <div className="absolute bottom-0 right-0 w-3 h-3 border-r-2 border-b-2 border-primary/60" />
             </div>
 
-            <div className="flex flex-col items-center md:items-start text-center md:text-left flex-1 w-full">
+            <div className="flex flex-col items-center md:items-start text-center md:text-left md:flex-initial w-full md:w-auto min-w-0">
                 <Link
                     href={promos[index].href}
                     ref={textRef}
