@@ -20,7 +20,7 @@ export default function HeroSchema() {
 
     return (
         <section className="relative w-full bg-[var(--background)] animate-fade-in px-0 pt-0 pb-0 h-[calc(50vh-40px)] min-h-[300px]">
-            <div className="w-full h-full relative flex flex-col justify-between p-4 md:px-6 md:py-8 lg:px-10 lg:py-12">
+            <div className="w-full h-full relative flex flex-col justify-between p-6 md:px-10 md:py-8 lg:px-16 lg:py-12">
                 {/* 1. BRANDING SECTION */}
                 <div className="relative w-full flex justify-between items-center mb-4">
                     <div className="flex items-center gap-4">

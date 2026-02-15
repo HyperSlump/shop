@@ -68,156 +68,203 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
             variants={containerVariants}
             initial="initial"
             animate="animate"
-            className="relative min-h-screen w-full flex flex-col md:flex-row"
+            className="flex-1 w-full p-6 md:p-10 lg:p-16"
         >
-            {/* LEFT SIDE: PRODUCT VISUAL (Compact Frame) */}
-            <motion.div
-                variants={itemVariants}
-                className="relative w-full md:w-[45%] h-[40vh] md:h-full border-b md:border-b-0 md:border-r border-primary/20 bg-black/5"
-            >
-                {/* Image Frame - Smaller than before, centered */}
-                <div className="absolute inset-0 flex items-start justify-center px-4 md:px-10 lg:px-12 pt-24 md:pt-32">
-                    <div className="relative w-full aspect-square max-h-[500px] border border-primary/20 shadow-2xl overflow-hidden group">
-                        <Image
-                            alt={product.name}
-                            src={product.image || 'https://via.placeholder.com/1000'}
-                            fill
-                            className="object-cover opacity-90 contrast-125 grayscale group-hover:grayscale-0 transition-all duration-1000"
-                            priority
-                        />
-                        <div className="absolute inset-0 bg-primary/5 mix-blend-overlay" />
-
-                        {/* Technical Label */}
-                        <div className="absolute bottom-2 left-2 z-20 font-mono text-[8px] text-white/40 bg-black/40 px-1.5 py-0.5">
-                            SOURCE_IMG_V.01 // {product.id.slice(0, 8)}
+            <div className="max-w-6xl mx-auto space-y-12">
+                {/* 1. Header System Line (Synced with MockPages) */}
+                <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-primary/20 pb-8 gap-6">
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-3 text-primary/60 font-mono text-[10px] tracking-[0.3em]">
+                            <span className="w-2 h-2 bg-primary animate-pulse" />
+                            SYS_LOC // {product.name.toUpperCase()}
                         </div>
+                        <h1 className="text-5xl md:text-7xl font-gothic tracking-tighter leading-none lowercase">
+                            {product.name}
+                        </h1>
+                    </div>
+                    <div className="flex flex-col items-start md:items-end font-mono text-[10px] opacity-40">
+                        <p>ACCESS_CODE: {product.id.slice(0, 10).toUpperCase()}</p>
+                        <p>STATUS_ID: DATA_RECON_v7</p>
                     </div>
                 </div>
 
-                {/* Matrix Background - Subtler */}
-                <div className="absolute inset-0 z-0 opacity-10 pointer-events-none">
-                    <MatrixSpace isVisible={true} />
-                </div>
+                {/* 2. Primary Content Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                    {/* LEFT COLUMN: Lore & Audio Console */}
+                    <div className="lg:col-span-7 space-y-10">
+                        <div className="space-y-6">
+                            <p className="font-mono text-[13px] md:text-base leading-relaxed opacity-80 max-w-prose">
+                                {product.description}
+                            </p>
 
-                {/* Return Link */}
-                {/* Return Link - Replaced with Arrow */}
-                <Link href="/" className="absolute top-4 left-4 z-50 text-foreground/40 hover:text-primary transition-colors p-2 hover:bg-white/5 rounded-full group">
-                    <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
-                </Link>
-            </motion.div>
-
-            {/* RIGHT SIDE: CONTROL CENTER */}
-            <div className="flex-1 flex flex-col bg-black/[0.02] dark:bg-white/[0.02] mr-4 md:mr-6 lg:mr-10">
-                {/* Header Section */}
-                <motion.div variants={itemVariants} className="p-4 md:p-10 lg:py-12 lg:pl-12 lg:pr-12 border-b border-primary/10">
-                    <div className="flex justify-between items-start mb-2">
-                        <div className="space-y-1">
-                            <span className="font-mono text-[10px] text-primary/40 uppercase tracking-[0.3em]">
-                                {'//'} SYS_ENTRY: {product.id.slice(0, 8)}
-                            </span>
-                            <h1 className="font-gothic text-5xl md:text-6xl text-foreground leading-none tracking-tight">
-                                {product.name}
-                            </h1>
+                            <div className="mt-8 border-l-2 border-primary/20 pl-6 py-2">
+                                <h3 className="font-mono text-[10px] text-primary/50 uppercase tracking-widest mb-3">
+                                    SYSTEM_ANALYSIS //
+                                </h3>
+                                <p className="font-mono text-[12px] md:text-sm text-foreground/60 leading-relaxed italic">
+                                    {extendedDescription}
+                                </p>
+                            </div>
                         </div>
-                        <div className="font-mono text-xl font-bold text-primary border-b-2 border-primary/20 pb-1">
-                            {product.amount === 0 ? 'FREE' : `$${product.amount}`}
+
+                        {/* Audio Interface Container */}
+                        <div className="p-6 border border-primary/10 bg-primary/[0.02] space-y-8 relative overflow-hidden group">
+                            <div className="absolute top-0 right-0 p-2 font-mono text-[8px] opacity-20 uppercase tracking-widest">Console.active</div>
+
+                            {/* Main Stream */}
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-1 h-1 bg-red-500 animate-pulse rounded-full" />
+                                    <span className="font-mono text-[10px] text-primary/60 uppercase tracking-[0.2em]">MASTER_SIGNAL_STREAM</span>
+                                </div>
+                                {audioPreviewUrl ? (
+                                    <div className="relative w-full h-[40px] bg-black/20 dark:bg-white/5 border border-primary/20 rounded-sm overflow-hidden group-hover:border-primary/40 transition-colors">
+                                        <WaveformOverlay audioUrl={audioPreviewUrl} isActive={true} />
+                                    </div>
+                                ) : (
+                                    <div className="h-20 flex items-center justify-center border border-dashed border-primary/10 text-[11px] font-mono text-primary/20">
+                                        NO_SIGNAL_DETECTED
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Samples Utility Grid */}
+                            {samples.length > 0 && (
+                                <div className="space-y-4">
+                                    <div className="flex justify-between items-center border-b border-primary/10 pb-2">
+                                        <span className="font-mono text-[10px] text-primary/40 uppercase tracking-widest">DRUM_SUB_SAMPLES</span>
+                                        <span className="font-mono text-[9px] text-primary/20 opacity-50">{samples.length}_BANKS_ONLINE</span>
+                                    </div>
+                                    <div className="grid grid-cols-4 gap-3">
+                                        {samples.map((url, index) => (
+                                            <OneShotPlayer
+                                                key={index}
+                                                audioUrl={url}
+                                                label={`S_${index + 1}`}
+                                                isActive={true}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Technical Legend (Mock Style) */}
+                            <div className="pt-4 border-t border-primary/5 space-y-3">
+                                <div className="flex justify-between items-center text-[9px] font-mono opacity-50 uppercase tracking-widest">
+                                    <span>Signal_Flux_Density</span>
+                                    <span>[|||||||||||||---] 85%</span>
+                                </div>
+                                <div className="w-full h-[1px] bg-gradient-to-r from-primary/30 to-transparent" />
+                            </div>
+                        </div>
+
+                        {/* Action Bar */}
+                        <div className="pt-4">
+                            <button
+                                onClick={() => !isInCart && addToCart(product)}
+                                disabled={isInCart}
+                                className={`w-full h-16 flex items-center justify-center gap-6 font-mono text-sm font-bold tracking-[0.4em] uppercase transition-all duration-700
+                                    ${isInCart
+                                        ? 'bg-primary/5 border border-primary/10 text-primary/30 cursor-not-allowed'
+                                        : 'bg-primary text-black border-2 border-primary hover:bg-transparent hover:text-primary'
+                                    }`}
+                            >
+                                <span>{isInCart ? 'ACCESS_GRANTED' : 'DOWNLOAD_ACCESS'}</span>
+                                {!isInCart && <span className="text-xl">→</span>}
+                            </button>
+
+                            <div className="mt-6 flex flex-wrap gap-4 opacity-30 text-[9px] font-mono uppercase tracking-widest">
+                                <div className="flex items-center gap-2">
+                                    <span className="w-1 h-1 bg-primary rounded-full" />
+                                    <span>Trans_Encrypted</span>
+                                </div>
+                                <span>BPM: {product.metadata?.bpm || 'NONE'}</span>
+                                <span>KEY: {product.metadata?.key || 'NONE'}</span>
+                                <span>Format: {product.metadata?.format || 'WAV'}</span>
+                            </div>
                         </div>
                     </div>
-                    {/* Primary Description */}
-                    <p className="font-mono text-[11px] md:text-[13px] text-foreground/70 max-w-2xl leading-relaxed mt-4">
-                        {product.description}
-                    </p>
 
-                    {/* Extended "Verbage" / Lore Section */}
-                    <div className="mt-8 border-l-2 border-primary/20 pl-4 py-1">
-                        <h3 className="font-mono text-[10px] text-primary/50 uppercase tracking-widest mb-2">
-                            SYSTEM_ANALYSIS //
-                        </h3>
-                        <p className="font-mono text-[12px] md:text-base text-foreground/80 leading-relaxed max-w-3xl">
-                            {extendedDescription}
-                        </p>
-                    </div>
-                </motion.div>
+                    {/* RIGHT COLUMN: Visual Frame */}
+                    <div className="lg:col-span-5 flex flex-col gap-8">
+                        {/* Main Product Image Frame (Mock Style) */}
+                        <div className="relative aspect-square border-2 border-primary/10 overflow-hidden group bg-black/40">
+                            {/* Scanning Line Animation */}
+                            <div className="absolute top-0 left-0 w-full h-[2px] bg-primary/30 shadow-[0_0_20px_rgba(var(--primary-rgb),0.6)] animate-scan z-20 pointer-events-none" />
 
-                {/* Audio Console - Natural Flow */}
-                <motion.div variants={itemVariants} className="flex-1 p-4 md:p-10 lg:py-12 lg:pl-12 lg:pr-12 flex flex-col gap-8">
-                    {/* Main Stream */}
-                    <div className="space-y-3">
-                        <div className="flex items-center gap-2">
-                            <div className="w-1 h-1 bg-alert animate-pulse rounded-full" />
-                            <span className="font-mono text-[10px] text-primary/60 uppercase tracking-[0.2em]">AUDIO_STREAM_MASTER</span>
+                            <Image
+                                alt={product.name}
+                                src={product.image || 'https://via.placeholder.com/1000'}
+                                fill
+                                className="object-cover opacity-80 contrast-125 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 group-hover:scale-105"
+                                priority
+                            />
+
+                            {/* Matrix Overlay Overlay */}
+                            <div className="absolute inset-0 z-10 opacity-[0.03] pointer-events-none">
+                                <MatrixSpace isVisible={true} />
+                            </div>
+
+                            <div className="absolute inset-0 bg-primary/5 mix-blend-overlay z-10" />
+
+                            {/* Corner Accents */}
+                            <div className="absolute top-0 left-0 w-4 h-4 border-l border-t border-primary/40 z-30" />
+                            <div className="absolute bottom-0 right-0 w-4 h-4 border-r border-b border-primary/40 z-30" />
+
+                            {/* Technical Label */}
+                            <div className="absolute bottom-4 left-4 z-30 font-mono text-[9px] text-white/50 bg-black/60 px-2 py-1 border border-white/10 uppercase tracking-widest">
+                                SRC_VISUAL // {product.id.slice(0, 4)}:RENDER_EX
+                            </div>
                         </div>
-                        {audioPreviewUrl ? (
-                            <div className="relative w-full h-[26px] bg-black/5 dark:bg-white/5 border border-primary/30 rounded overflow-hidden">
-                                <WaveformOverlay audioUrl={audioPreviewUrl} isActive={true} />
-                            </div>
-                        ) : (
-                            <div className="h-16 flex items-center justify-center border border-dashed border-primary/10 text-[11px] font-mono text-primary/20">
-                                NO_SIGNAL_DETECTED
-                            </div>
-                        )}
-                    </div>
 
-                    {/* Samples Grid */}
-                    {samples.length > 0 && (
-                        <div className="space-y-3">
-                            <div className="flex justify-between items-center border-b border-primary/10 pb-1">
-                                <span className="font-mono text-[11px] text-primary/40 uppercase tracking-widest">SUB_SAMPLES</span>
-                                <span className="font-mono text-[10px] text-primary/20">{samples.length}_LOADED</span>
+                        {/* Technical Metadata Box */}
+                        <div className="p-5 border border-primary/10 bg-black/20 flex flex-col gap-4 font-mono">
+                            <div className="text-[10px] text-primary/40 flex justify-between uppercase border-b border-primary/10 pb-2">
+                                <span>Metadata_Package</span>
+                                <span>[Verified]</span>
                             </div>
-                            <div className="grid grid-cols-4 gap-4">
-                                {samples.map((url, index) => (
-                                    <OneShotPlayer
-                                        key={index}
-                                        audioUrl={url}
-                                        label={`S_${index + 1}`}
-                                        isActive={true}
-                                    />
+                            <div className="grid grid-cols-2 gap-4">
+                                {[
+                                    { k: 'OBJECT', v: 'WARP_CORE' },
+                                    { k: 'TYPE', v: product.metadata?.category || 'SAMPLE_PACK' },
+                                    { k: 'SIZE', v: product.metadata?.size || 'UNSPECIFIED' },
+                                    { k: 'BIT_DEPTH', v: '24-BIT / 96' }
+                                ].map((spec) => (
+                                    <div key={spec.k} className="flex flex-col gap-1">
+                                        <span className="text-[8px] text-primary/30 uppercase tracking-tighter">{spec.k}</span>
+                                        <span className="text-[11px] text-foreground/70 uppercase truncate">{spec.v}</span>
+                                    </div>
                                 ))}
                             </div>
                         </div>
-                    )}
 
-                    {/* Technical Specs */}
-                    <div className="mt-auto grid grid-cols-2 md:grid-cols-4 gap-4 py-4 border-t border-primary/10">
-                        {[
-                            { k: 'TYPE', v: 'WARP_CORE' },
-                            { k: 'FORMAT', v: product.metadata?.format || 'WAV' },
-                            { k: 'SIZE', v: product.metadata?.size || 'N/A' },
-                            { k: 'RATE', v: '48k/24b' }
-                        ].map((spec) => (
-                            <div key={spec.k} className="flex flex-col">
-                                <span className="text-[9px] font-mono text-primary/30 tracking-widest">{spec.k}</span>
-                                <span className="text-[11px] font-mono text-foreground/70 uppercase">{spec.v}</span>
-                            </div>
-                        ))}
+                        {/* Return Link Styled */}
+                        <Link href="/" className="inline-flex items-center gap-3 font-mono text-[10px] opacity-40 hover:opacity-100 transition-all hover:text-primary group mt-auto">
+                            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                            <span>RETURN_TO_BASE_TERMINAL</span>
+                        </Link>
                     </div>
-                </motion.div>
+                </div>
 
-                {/* Footer Action */}
-                <motion.div variants={itemVariants} className="p-4 md:p-10 lg:py-12 lg:pl-12 lg:pr-12 border-t border-primary/10 bg-[var(--background)]">
-                    <button
-                        onClick={() => !isInCart && addToCart(product)}
-                        disabled={isInCart}
-                        className={`w-full h-14 flex items-center justify-center gap-4 font-mono text-sm font-bold tracking-[0.3em] uppercase transition-all duration-500 border-2
-                            ${isInCart
-                                ? 'border-primary/20 text-primary/40 cursor-not-allowed'
-                                : 'border-primary bg-primary text-black hover:bg-[var(--background)] hover:text-primary'
-                            }`}
-                    >
-                        <span>{isInCart ? 'ALREADY_IN_DATABASE' : 'INITIALIZE_ACQUISITION'}</span>
-                        {!isInCart && <span className="text-xl">→</span>}
-                    </button>
-                    <div className="mt-4 flex justify-between items-center px-1 opacity-30 text-[9px] font-mono uppercase tracking-widest">
-                        <span>Transmission_Encrypted</span>
-                        <div className="flex gap-4">
-                            <span>BPM: {product.metadata?.bpm || 'NONE'}</span>
-                            <span>KEY: {product.metadata?.key || 'NONE'}</span>
+                {/* Footer Section Indicators (Synced with Mock) */}
+                <div className="flex flex-wrap gap-4 pt-8">
+                    {['X_PROTO', 'Y_ALGO', 'Z_CORE', 'H_SLUMP'].map((tag) => (
+                        <div key={tag} className="px-4 py-2 border border-foreground/10 text-[9px] font-mono opacity-30 hover:opacity-100 hover:border-primary/40 transition-all cursor-default uppercase tracking-widest">
+                            {tag}
                         </div>
-                        <span>Protocol_Secure</span>
-                    </div>
-                </motion.div>
+                    ))}
+                </div>
             </div>
+
+            <style jsx>{`
+                @keyframes scan {
+                    0% { top: 0%; }
+                    100% { top: 100%; }
+                }
+                .animate-scan {
+                    animation: scan 4s linear infinite;
+                }
+            `}</style>
         </motion.div>
     );
 }

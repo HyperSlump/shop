@@ -78,6 +78,7 @@ export default function PromoCarousel() {
                 sub: template.sub,
                 desc: product.description || template.desc,
                 href: `/product/${product.id}`,
+                image: product.image
             };
         });
     }, [products]);
@@ -155,13 +156,27 @@ export default function PromoCarousel() {
             ref={containerRef}
             className="flex items-center justify-center gap-12 px-8 min-w-[800px] max-w-[1400px] h-[220px]"
         >
-            {/* Massive Flash Frame Placeholder */}
+            {/* Real Product Image Frame */}
             <div
                 ref={placeholderRef}
-                className="relative w-32 h-32 border border-primary/20 bg-primary/5 flex items-center justify-center overflow-hidden shrink-0"
+                className="relative w-32 h-32 border border-primary/20 bg-primary/5 flex items-center justify-center overflow-hidden shrink-0 group shadow-[0_0_30px_rgba(0,0,0,0.5)]"
             >
-                <div className="absolute inset-0 bg-primary/10 animate-pulse" />
-                <div className="font-mono text-[10px] opacity-40 uppercase rotate-90 tracking-[0.5em] font-bold">CORTEX_SIGNAL_v4</div>
+                {promos[index].image ? (
+                    <img
+                        src={promos[index].image}
+                        alt={promos[index].text}
+                        className="w-full h-full object-cover filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-1000"
+                    />
+                ) : (
+                    <>
+                        <div className="absolute inset-0 bg-primary/10 animate-pulse" />
+                        <div className="font-mono text-[10px] opacity-40 uppercase rotate-90 tracking-[0.5em] font-bold">CORTEX_SIGNAL_v4</div>
+                    </>
+                )}
+
+                {/* Scanning Line Animation */}
+                <div className="absolute top-0 left-0 w-full h-[1px] bg-primary/40 shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)] animate-scan-slow pointer-events-none" />
+
                 <div className="absolute top-0 left-0 w-3 h-3 border-l-2 border-t-2 border-primary/60" />
                 <div className="absolute bottom-0 right-0 w-3 h-3 border-r-2 border-b-2 border-primary/60" />
             </div>
@@ -172,7 +187,7 @@ export default function PromoCarousel() {
                     ref={textRef}
                     className="group"
                 >
-                    <div className="font-gothic text-3xl md:text-4xl lg:text-5xl tracking-widest text-foreground group-hover:text-primary transition-colors duration-300 lowercase mb-4">
+                    <div className="font-gothic text-3xl md:text-4xl lg:text-5xl tracking-widest text-foreground group-hover:text-primary transition-colors duration-300 lowercase mb-2">
                         {promos[index].text}
                     </div>
                 </Link>
