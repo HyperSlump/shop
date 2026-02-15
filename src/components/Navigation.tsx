@@ -6,6 +6,7 @@ import ThemeToggle from './ThemeToggle';
 import CursorTooltip from './CursorTooltip';
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Navigation() {
     const { toggleCart, cart } = useCart();
@@ -66,63 +67,94 @@ export default function Navigation() {
             </aside>
 
             {/* MOBILE NAVIGATION MODAL */}
-            <div
-                className={`fixed inset-0 z-[100] bg-[var(--background)]/95 backdrop-blur-xl md:hidden transition-all duration-500 ease-in-out ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none py-10'
-                    }`}
-            >
-                <div className="flex flex-col h-full p-6 pt-24">
-                    {/* Primary Links */}
-                    <div className="flex-1 flex flex-col justify-center space-y-12 mb-12">
-                        {[
-                            { label: 'Shop', href: '/', id: 'shop' },
-                            { label: 'Blog', href: '/blog', id: 'blog' },
-                            { label: 'About', href: '/about', id: 'about' },
-                            { label: 'Archive', href: '/archive', id: 'archive' },
-                            { label: 'Contact', href: '/contact', id: 'contact' }
-                        ].map((link, i) => (
-                            <Link
-                                key={link.id}
-                                href={link.href}
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className={`text-5xl font-gothic tracking-tighter transition-all duration-300 ${isMobileMenuOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
-                                    }`}
-                                style={{ transitionDelay: `${i * 50}ms` }}
+            <AnimatePresence>
+                {isMobileMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, scale: 1.1, filter: "blur(20px)" }}
+                        animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                        exit={{ opacity: 0, scale: 1.1, filter: "blur(20px)" }}
+                        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                        className="fixed inset-0 z-[100] bg-[var(--background)]/95 backdrop-blur-xl md:hidden overflow-hidden"
+                    >
+                        <div className="flex flex-col h-full p-6 pt-24">
+                            {/* Primary Links */}
+                            <div className="flex-1 flex flex-col justify-center space-y-12 mb-12">
+                                {[
+                                    { label: 'Shop', href: '/', id: 'shop' },
+                                    { label: 'Blog', href: '/blog', id: 'blog' },
+                                    { label: 'About', href: '/about', id: 'about' },
+                                    { label: 'Archive', href: '/archive', id: 'archive' },
+                                    { label: 'Contact', href: '/contact', id: 'contact' }
+                                ].map((link, i) => (
+                                    <motion.div
+                                        key={link.id}
+                                        initial={{ opacity: 0, x: -30 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{
+                                            type: "spring",
+                                            stiffness: 300,
+                                            damping: 25,
+                                            delay: 0.1 + i * 0.05
+                                        }}
+                                    >
+                                        <Link
+                                            href={link.href}
+                                            onClick={() => setIsMobileMenuOpen(false)}
+                                            className="text-5xl font-gothic tracking-tighter transition-all duration-300 block"
+                                        >
+                                            <span className="hover:text-primary">{link.label}</span>
+                                        </Link>
+                                    </motion.div>
+                                ))}
+                            </div>
+
+                            {/* Mobile Trio: Controls & Links */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.4 }}
+                                className="grid grid-cols-2 gap-4 border-t border-foreground/10 pt-8"
                             >
-                                <span className="hover:text-primary">{link.label}</span>
-                            </Link>
-                        ))}
-                    </div>
+                                <button
+                                    onClick={() => { toggleCart(); setIsMobileMenuOpen(false); }}
+                                    className="flex flex-col items-center justify-center p-6 border border-primary/20 bg-primary/5 rounded-sm relative group active:scale-95 transition-transform"
+                                >
+                                    <span className="material-icons text-3xl mb-2">shopping_cart</span>
+                                    <span className="font-mono text-[10px] tracking-widest uppercase">CART</span>
+                                    <AnimatePresence>
+                                        {cart.length > 0 && (
+                                            <motion.span
+                                                initial={{ scale: 0 }}
+                                                animate={{ scale: 1 }}
+                                                exit={{ scale: 0 }}
+                                                className="absolute top-4 right-4 bg-primary text-black text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center"
+                                            >
+                                                {cart.length}
+                                            </motion.span>
+                                        )}
+                                    </AnimatePresence>
+                                </button>
 
-                    {/* Mobile Trio: Controls & Links */}
-                    <div className="grid grid-cols-2 gap-4 border-t border-foreground/10 pt-8">
-                        <button
-                            onClick={() => { toggleCart(); setIsMobileMenuOpen(false); }}
-                            className="flex flex-col items-center justify-center p-6 border border-primary/20 bg-primary/5 rounded-sm relative"
-                        >
-                            <span className="material-icons text-3xl mb-2">shopping_cart</span>
-                            <span className="font-mono text-[10px] tracking-widest uppercase">CART</span>
-                            {cart.length > 0 && (
-                                <span className="absolute top-4 right-4 bg-primary text-black text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
-                                    {cart.length}
-                                </span>
-                            )}
-                        </button>
-
-                        <div className="flex flex-col items-center justify-center p-6 border border-foreground/10 rounded-sm">
-                            <ThemeToggle />
-                            <span className="font-mono text-[10px] tracking-widest uppercase mt-2">THEME</span>
+                                <div className="flex flex-col items-center justify-center p-6 border border-foreground/10 rounded-sm">
+                                    <ThemeToggle />
+                                    <span className="font-mono text-[10px] tracking-widest uppercase mt-2">THEME</span>
+                                </div>
+                            </motion.div>
                         </div>
-                    </div>
-                </div>
 
-                {/* Bottom Close Bar */}
-                <button
-                    onClick={toggleMobileMenu}
-                    className="absolute bottom-12 left-1/2 -translate-x-1/2 w-16 h-16 border border-primary/40 rounded-full flex items-center justify-center text-primary active:scale-90 transition-transform"
-                >
-                    <X size={32} />
-                </button>
-            </div>
+                        {/* Bottom Close Bar */}
+                        <motion.button
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 20 }}
+                            onClick={toggleMobileMenu}
+                            className="absolute bottom-12 left-1/2 -translate-x-1/2 w-16 h-16 border border-primary/40 rounded-full flex items-center justify-center text-primary active:scale-90 transition-transform"
+                        >
+                            <X size={32} />
+                        </motion.button>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </>
     );
 }

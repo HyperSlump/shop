@@ -40,164 +40,171 @@ export default function CartDrawer() {
     };
 
     return (
-        <>
-            {/* Backdrop */}
-            <div
-                className={`fixed inset-0 bg-black/60 backdrop-blur-md z-[60] transition-opacity duration-500 ${isCartOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-                onClick={toggleCart}
-            />
-
-            {/* Drawer */}
-            <aside
-                className={`fixed top-0 right-0 h-full w-full md:w-[480px] bg-[var(--background)] border-l-2 border-foreground/10 z-[70] flex flex-col shadow-2xl transition-all duration-500 ease-out ${isCartOpen
-                    ? 'opacity-100 translate-y-0 translate-x-0'
-                    : 'opacity-0 translate-y-8 translate-x-4 pointer-events-none'
-                    }`}
-            >
-                {/* Matrix Background Texture */}
-                <div className="absolute inset-0 z-0 opacity-[0.9] dark:opacity-[0.6] pointer-events-none">
-                    <MatrixSpace isVisible={isCartOpen} />
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/60 to-[var(--background)]" />
-                </div>
-
-                <header className="flex justify-between items-center mb-0 border-b-2 border-foreground/10 p-6 pb-6 relative z-10">
-                    <div className="flex flex-col">
-                        <div className="text-base uppercase font-bold tracking-[0.2em] text-primary">
-                            Current Cart
-                        </div>
-                        <div className="text-4xl font-gothic leading-none text-foreground mt-1">
-                            {cart.length} {cart.length === 1 ? 'Item' : 'Items'}
-                        </div>
-                    </div>
-                    <button
+        <AnimatePresence>
+            {isCartOpen && (
+                <>
+                    {/* Backdrop */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black/60 backdrop-blur-md z-[60]"
                         onClick={toggleCart}
-                        className="hover:translate-x-1 active:scale-95 transition-all text-primary/70 hover:text-primary px-4 flex items-center gap-2 group"
+                    />
+
+                    {/* Drawer */}
+                    <motion.aside
+                        initial={{ x: "100%", opacity: 0.5 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        exit={{ x: "100%", opacity: 0.5 }}
+                        transition={{
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 30,
+                            mass: 0.8
+                        }}
+                        className="fixed top-0 right-0 h-full w-full md:w-[480px] bg-[var(--background)] border-l-2 border-foreground/10 z-[70] flex flex-col shadow-2xl overflow-hidden"
                     >
-                        <span className="font-mono text-[12px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Close</span>
-                        <ArrowRight size={24} />
-                    </button>
-                </header>
-
-                <div className="flex-1 overflow-y-auto overflow-x-hidden p-6 custom-scrollbar relative z-10">
-                    {cart.length === 0 ? (
-                        <div className="h-full flex flex-col items-center justify-center opacity-20">
-                            <span className="material-icons text-9xl">shopping_cart</span>
-                            <p className="font-mono text-sm uppercase tracking-widest mt-4">Buffer_Empty</p>
+                        {/* Matrix Background Texture */}
+                        <div className="absolute inset-0 z-0 opacity-[0.9] dark:opacity-[0.6] pointer-events-none">
+                            <MatrixSpace isVisible={isCartOpen} />
+                            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/60 to-[var(--background)]" />
                         </div>
-                    ) : (
-                        <div className="space-y-4">
-                            <AnimatePresence mode="popLayout">
-                                {cart.map((item) => (
-                                    <motion.div
-                                        key={item.id}
-                                        layout
-                                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                                        exit={cart.length === 1 ? {
-                                            opacity: 0,
-                                            x: -100,
-                                            transition: { duration: 0.4, ease: "easeOut" }
-                                        } : {
-                                            opacity: 0,
-                                            x: -40,
-                                            scale: 0.9,
-                                            height: 0,
-                                            marginBottom: 0,
-                                            paddingTop: 0,
-                                            paddingBottom: 0,
-                                            marginTop: 0,
-                                            overflow: 'hidden'
-                                        }}
-                                        transition={{
-                                            type: "spring",
-                                            damping: 25,
-                                            stiffness: 300,
-                                            opacity: { duration: 0.2 }
-                                        }}
-                                        drag="x"
-                                        dragConstraints={{ left: -100, right: 0 }}
-                                        onDragEnd={(_, info) => {
-                                            if (info.offset.x < -80) {
-                                                handleRemoveItem(item.id);
-                                            }
-                                        }}
-                                        className="relative group bg-foreground/[0.03] border border-foreground/10 rounded-sm p-4 h-32 flex items-center gap-4 touch-none"
-                                    >
-                                        {/* Swipe Indicator (Visible only on swipe) */}
-                                        <div className="absolute inset-0 right-0 bg-red-500/20 -z-10 flex items-center justify-end px-6 transition-opacity opacity-0 group-active:opacity-100 pointer-events-none">
-                                            <Trash2 className="text-red-500" size={24} />
-                                        </div>
 
-                                        {/* Thumbnail */}
-                                        <div className="w-20 h-20 relative shrink-0 border border-foreground/10 bg-[var(--background)]">
-                                            <NextImage
-                                                src={item.image || 'https://via.placeholder.com/100'}
-                                                alt={item.name}
-                                                fill
-                                                className="object-cover contrast-110 grayscale group-hover:grayscale-0 transition-all duration-500"
-                                            />
-                                        </div>
+                        <header className="flex justify-between items-center mb-0 border-b-2 border-foreground/10 p-6 pb-6 relative z-10">
+                            <div className="flex flex-col">
+                                <div className="text-base uppercase font-bold tracking-[0.2em] text-primary">
+                                    Current Cart
+                                </div>
+                                <div className="text-4xl font-gothic leading-none text-foreground mt-1">
+                                    {cart.length} {cart.length === 1 ? 'Item' : 'Items'}
+                                </div>
+                            </div>
+                            <button
+                                onClick={toggleCart}
+                                className="hover:translate-x-1 active:scale-95 transition-all text-primary/70 hover:text-primary px-4 flex items-center gap-2 group"
+                            >
+                                <span className="font-mono text-[12px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Close</span>
+                                <ArrowRight size={24} />
+                            </button>
+                        </header>
 
-                                        {/* Info */}
-                                        <div className="flex-1 min-w-0 flex flex-col justify-between h-full py-1">
-                                            <div className="flex justify-between items-start">
-                                                <div className="flex flex-col">
-                                                    <h3 className="font-gothic text-xl leading-none text-foreground truncate">{item.name}</h3>
-                                                    <span className="font-mono text-[10px] opacity-40 uppercase mt-1 tracking-widest">
-                                                        REF_{item.id.slice(0, 6)}
-                                                    </span>
+                        <div className="flex-1 overflow-y-auto overflow-x-hidden p-6 custom-scrollbar relative z-10">
+                            {cart.length === 0 ? (
+                                <div className="h-full flex flex-col items-center justify-center opacity-20">
+                                    <span className="material-icons text-9xl">shopping_cart</span>
+                                    <p className="font-mono text-sm uppercase tracking-widest mt-4">Buffer_Empty</p>
+                                </div>
+                            ) : (
+                                <div className="space-y-4">
+                                    <AnimatePresence mode="popLayout" initial={false}>
+                                        {cart.map((item) => (
+                                            <motion.div
+                                                key={item.id}
+                                                layout
+                                                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                exit={{
+                                                    opacity: 0,
+                                                    x: -40,
+                                                    scale: 0.9,
+                                                    transition: { duration: 0.2 }
+                                                }}
+                                                transition={{
+                                                    type: "spring",
+                                                    damping: 25,
+                                                    stiffness: 300,
+                                                    opacity: { duration: 0.2 }
+                                                }}
+                                                drag="x"
+                                                dragConstraints={{ left: -100, right: 0 }}
+                                                onDragEnd={(_, info) => {
+                                                    if (info.offset.x < -80) {
+                                                        handleRemoveItem(item.id);
+                                                    }
+                                                }}
+                                                className="relative group bg-foreground/[0.03] border border-foreground/10 rounded-sm p-4 h-32 flex items-center gap-4 touch-none"
+                                            >
+                                                {/* Swipe Indicator (Visible only on swipe) */}
+                                                <div className="absolute inset-0 right-0 bg-red-500/20 -z-10 flex items-center justify-end px-6 transition-opacity opacity-0 group-active:opacity-100 pointer-events-none">
+                                                    <Trash2 className="text-red-500" size={24} />
                                                 </div>
-                                                <span className="font-mono text-sm font-bold text-primary">
-                                                    ${(item.amount || 0).toFixed(2)}
-                                                </span>
-                                            </div>
 
-                                            {/* Prominent Desktop Action */}
-                                            <div className="flex justify-end pt-2">
-                                                <button
-                                                    onClick={() => handleRemoveItem(item.id)}
-                                                    className="flex items-center gap-2 p-2 px-3 bg-red-500/5 hover:bg-red-500/20 border border-red-500/20 text-red-500/60 hover:text-red-500 transition-all group/del"
-                                                >
-                                                    <span className="font-mono text-[10px] tracking-widest uppercase">Delete</span>
-                                                    <Trash2 size={14} className="group-hover/del:scale-110 transition-transform" />
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </AnimatePresence>
+                                                {/* Thumbnail */}
+                                                <div className="w-20 h-20 relative shrink-0 border border-foreground/10 bg-[var(--background)]">
+                                                    <NextImage
+                                                        src={item.image || 'https://via.placeholder.com/100'}
+                                                        alt={item.name}
+                                                        fill
+                                                        className="object-cover contrast-110 grayscale group-hover:grayscale-0 transition-all duration-500"
+                                                    />
+                                                </div>
+
+                                                {/* Info */}
+                                                <div className="flex-1 min-w-0 flex flex-col justify-between h-full py-1">
+                                                    <div className="flex justify-between items-start">
+                                                        <div className="flex flex-col">
+                                                            <h3 className="font-gothic text-xl leading-none text-foreground truncate">{item.name}</h3>
+                                                            <span className="font-mono text-[10px] opacity-40 uppercase mt-1 tracking-widest">
+                                                                REF_{item.id.slice(0, 6)}
+                                                            </span>
+                                                        </div>
+                                                        <span className="font-mono text-sm font-bold text-primary">
+                                                            ${(item.amount || 0).toFixed(2)}
+                                                        </span>
+                                                    </div>
+
+                                                    {/* Prominent Desktop Action */}
+                                                    <div className="flex justify-end pt-2">
+                                                        <button
+                                                            onClick={() => handleRemoveItem(item.id)}
+                                                            className="flex items-center gap-2 p-2 px-3 bg-red-500/5 hover:bg-red-500/20 border border-red-500/20 text-red-500/60 hover:text-red-500 transition-all group/del"
+                                                        >
+                                                            <span className="font-mono text-[10px] tracking-widest uppercase">Delete</span>
+                                                            <Trash2 size={14} className="group-hover/del:scale-110 transition-transform" />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </motion.div>
+                                        ))}
+                                    </AnimatePresence>
+                                </div>
+                            )}
                         </div>
-                    )}
-                </div>
 
 
-                <div className="mt-8 border-t-2 border-foreground/10 p-6 pt-6 space-y-4">
-                    <div className="flex justify-between font-mono text-xl font-bold tracking-tighter text-foreground">
-                        <span className="opacity-60 text-foreground">SUBTOTAL_</span>
-                        <span className="text-primary">${(cartTotal || 0).toFixed(2)}</span>
-                    </div>
-                    <button
-                        onClick={handleCheckout}
-                        disabled={cart.length === 0 || loading}
-                        className="w-full bg-primary text-primary-foreground font-bold uppercase py-5 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-30 disabled:grayscale disabled:cursor-not-allowed flex items-center justify-center gap-3 text-base tracking-widest"
-                    >
-                        {loading ? (
-                            <>
-                                <span className="material-icons animate-spin text-sm">refresh</span>
-                                SYNCING_PURCHASE...
-                            </>
-                        ) : (
-                            <>
-                                EXECUTE_CHECKOUT <span className="material-icons text-base">sensors</span>
-                            </>
-                        )}
-                    </button>
-                    <div className="flex justify-center gap-4 opacity-30 text-foreground">
-                        <span className="text-[12px] font-mono uppercase">Stripe_Ready</span>
-                        <span className="text-[12px] font-mono uppercase">SSL_Enabled</span>
-                    </div>
-                </div>
-            </aside>
-        </>
+                        <div className="mt-8 border-t-2 border-foreground/10 p-6 pt-6 space-y-4">
+                            <div className="flex justify-between font-mono text-xl font-bold tracking-tighter text-foreground">
+                                <span className="opacity-60 text-foreground">SUBTOTAL_</span>
+                                <span className="text-primary">${(cartTotal || 0).toFixed(2)}</span>
+                            </div>
+                            <button
+                                onClick={handleCheckout}
+                                disabled={cart.length === 0 || loading}
+                                className="group/checkout relative w-full bg-primary text-primary-foreground font-bold uppercase py-5 overflow-hidden transition-all disabled:opacity-30 disabled:grayscale disabled:cursor-not-allowed flex items-center justify-center gap-3 text-base tracking-widest"
+                            >
+                                <motion.div
+                                    className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover/checkout:translate-x-[100%] transition-transform duration-700 ease-in-out"
+                                />
+                                {loading ? (
+                                    <>
+                                        <span className="material-icons animate-spin text-sm">refresh</span>
+                                        SYNCING_PURCHASE...
+                                    </>
+                                ) : (
+                                    <>
+                                        EXECUTE_CHECKOUT <span className="material-icons text-base">sensors</span>
+                                    </>
+                                )}
+                            </button>
+                            <div className="flex justify-center gap-4 opacity-30 text-foreground">
+                                <span className="text-[12px] font-mono uppercase">Stripe_Ready</span>
+                                <span className="text-[12px] font-mono uppercase">SSL_Enabled</span>
+                            </div>
+                        </div>
+                    </motion.aside>
+                </>
+            )}
+        </AnimatePresence>
     );
 }

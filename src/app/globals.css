@@ -41,7 +41,7 @@
   }
 
   .animate-fade-in {
-    animation: fade-in-up 1.5s cubic-bezier(0.1, 1, 0.2, 1) forwards;
+    animation: fade-in-up 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     opacity: 0;
   }
 

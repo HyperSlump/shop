@@ -53,12 +53,12 @@ export default function HorizontalNav() {
                                     <motion.div
                                         layoutId="nav-highlight-top"
                                         className="absolute -top-[17px] left-0 right-0 h-[1px] bg-primary shadow-[0_0_10px_var(--primary)]"
-                                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                        transition={{ type: "spring", bounce: 0.4, duration: 0.6 }}
                                     />
                                     <motion.div
                                         layoutId="nav-highlight-bottom"
                                         className="absolute -bottom-[17px] left-0 right-0 h-[1px] bg-primary shadow-[0_0_10px_var(--primary)]"
-                                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                        transition={{ type: "spring", bounce: 0.4, duration: 0.6 }}
                                     />
                                 </>
                             )}

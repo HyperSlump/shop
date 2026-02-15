@@ -39,11 +39,18 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
     };
 
     const itemVariants = {
-        initial: { opacity: 0, y: 15 },
+        initial: { opacity: 0, y: 30, scale: 0.98 },
         animate: {
             opacity: 1,
             y: 0,
-            transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }
+            scale: 1,
+            transition: {
+                type: "spring",
+                stiffness: 300,
+                damping: 30,
+                mass: 0.8,
+                duration: 0.8
+            }
         }
     };
 

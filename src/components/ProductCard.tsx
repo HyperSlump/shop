@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import WaveformOverlay from './WaveformOverlay';
-import OneShotPlayer from './OneShotPlayer';
+import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import WaveformOverlay from './WaveformOverlay';
+import OneShotPlayer from './OneShotPlayer';
 import MatrixSpace from './MatrixSpace';
 
 interface ProductCardProps {
@@ -28,10 +29,9 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
         product.metadata?.sample_4,
     ].filter(Boolean); // Only keep existing URLs
 
-
     return (
         <div
-            className="group relative bg-[var(--background)] overflow-hidden h-[440px] md:h-[480px] cursor-pointer transition-all duration-300 shadow-sm dark:shadow-none"
+            className="group relative bg-[var(--background)] overflow-hidden h-[440px] md:h-[480px] cursor-pointer shadow-sm dark:shadow-none"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
@@ -43,248 +43,257 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
             {/* Inner Inset Panel Border */}
             <div className="absolute inset-[3px] border border-primary/5 pointer-events-none z-0" />
 
-            {/* DEFAULT VIEW: Structured Technical Layout */}
-            <div className={`absolute inset-0 flex flex-col transition-all duration-300 ${showPreview ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'}`}>
-                {/* Top Section: Single Column Technical Dashboard */}
-                <div className="flex-1 flex flex-col relative border-b-2 border-primary/20 bg-black/5 dark:bg-white/5 transition-colors duration-500 overflow-hidden">
-                    {/* Full Background Matrix Effect */}
-                    <div className="absolute inset-0 z-0">
-                        <MatrixSpace isVisible={isHovered} />
-                    </div>
-
-                    <Link
-                        href={`/product/${product.id}`}
-                        className="relative z-10 flex-1 w-full overflow-hidden p-4 flex flex-col items-center gap-2 custom-scrollbar hover:bg-primary/[0.02] transition-colors duration-300"
+            <AnimatePresence mode="wait">
+                {!showPreview ? (
+                    <motion.div
+                        key="default"
+                        initial={{ opacity: 0, scale: 0.98 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                        transition={{
+                            type: "spring", stiffness: 300, damping: 25, mass: 0.8
+                        }}
+                        className="absolute inset-0 flex flex-col"
                     >
-                        {/* Centered Image Frame */}
-                        <div className="relative w-36 h-36 shrink-0 shadow-2xl transition-transform duration-500 group-hover:scale-105">
-
-                            {/* Technical Label */}
-                            <div className="absolute bottom-1 left-1 z-30 font-mono text-[7px] text-white/40 bg-black/40 px-1">
-                                IMG_SAMP._{product.id.slice(0, 4)}
+                        {/* Top Section: Single Column Technical Dashboard */}
+                        <div className="flex-1 flex flex-col relative border-b-2 border-primary/20 bg-black/5 dark:bg-white/5 transition-colors duration-500 overflow-hidden">
+                            {/* Full Background Matrix Effect */}
+                            <div className="absolute inset-0 z-0">
+                                <MatrixSpace isVisible={isHovered} />
                             </div>
 
-                            <div className="relative block w-full h-full overflow-hidden">
-                                <Image
-                                    alt={product.name}
-                                    className="w-full h-full object-cover opacity-90 contrast-125 grayscale group-hover:grayscale-0 transition-all duration-500"
-                                    src={product.image || 'https://via.placeholder.com/500'}
-                                    fill
-                                    sizes="160px"
-                                />
-                                <div className="absolute inset-0 bg-primary/5 mix-blend-overlay" />
-                            </div>
-                        </div>
-
-                        {/* Technical Metadata Stack */}
-                        <div className="w-full space-y-2">
-                            {/* Status Label */}
-                            <div className="flex items-center justify-between border-b border-primary/10 pb-1.5 text-[9px]">
-                                <div className="flex items-center gap-1.5 font-mono uppercase tracking-widest leading-tight">
-                                    <span className="w-1 h-1 bg-alert rounded-sm animate-pulse" />
-                                    <span className="text-alert/90 font-bold">system.active</span>
-                                </div>
-                                <span className="font-mono text-primary/40 text-[10px]">ID_{product.id.slice(0, 8)}</span>
-                            </div>
-
-                            {/* Description - Compact */}
-                            <p className="font-mono text-[12px] text-foreground/70 leading-relaxed text-center px-2">
-                                {product.description || "Raw industrial audio assets. Optimized for digital synthesis."}
-                            </p>
-
-                            {/* Info Grid - Full Width */}
-                            <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 pt-1.5 border-t border-primary/10">
-                                <div className="flex justify-between items-center font-mono text-[10px] text-primary/40 uppercase">
-                                    <span>fmt</span>
-                                    <span className="text-foreground/60">{product.metadata?.format || "WAV"}</span>
-                                </div>
-                                <div className="flex justify-between items-center font-mono text-[10px] text-primary/40 uppercase">
-                                    <span>cnt</span>
-                                    <span className="text-foreground/60">{product.metadata?.count || "140"}</span>
-                                </div>
-                                <div className="flex justify-between items-center font-mono text-[10px] text-primary/40 uppercase">
-                                    <span>size</span>
-                                    <span className="text-foreground/60">{product.metadata?.size || "840MB"}</span>
-                                </div>
-                                <div className="flex justify-between items-center font-mono text-[10px] text-primary/40 uppercase">
-                                    <span>type</span>
-                                    <span className="text-foreground/60">RF_TECH</span>
-                                </div>
-                            </div>
-                        </div>
-                    </Link>
-                </div>
-
-                {/* Bottom Section: Info - New Industrial Design */}
-                <div className="min-h-[140px] border-t border-primary/30 bg-[var(--background)] pt-4 px-4 pb-6 relative flex flex-col gap-2">
-                    {/* Top Notch decorative element */}
-                    <div className="absolute -top-[2px] right-8 w-12 h-[2px] bg-accent z-20" />
-
-                    {/* Header Row */}
-                    <div className="flex justify-between items-start">
-                        <h3 className="font-gothic text-3xl text-foreground leading-none tracking-wide max-w-[70%]">
-                            <Link href={`/product/${product.id}`} className="hover:text-primary transition-colors">
-                                {product.name}
-                            </Link>
-                        </h3>
-                        <span className="font-mono text-primary font-bold border border-primary/30 px-2 py-0.5 text-[11px]">
-                            {product.amount === 0 ? 'FREE' : `$${product.amount}`}
-                        </span>
-                    </div>
-
-                    {/* Tech Specs / Decor */}
-                    <div className="flex items-center gap-2 opacity-60 mb-2">
-                        <div className="w-1 h-1 bg-primary rounded-full animate-pulse" />
-                        <span className="font-mono text-[11px] text-primary uppercase whitespace-nowrap">
-                            ID: {product.id.slice(0, 6)} {'//'} V.1.0
-                        </span>
-                        <div className="h-[1px] flex-1 bg-primary/10" />
-                    </div>
-
-                    {/* Action Row */}
-                    <div className="flex items-center justify-between mt-1 pt-2 border-t border-primary/10">
-                        {/* Preview (moved from image) */}
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setShowPreview(true);
-                            }}
-                            className="text-left font-mono text-[14px] font-bold uppercase tracking-[0.2em] text-foreground/50 hover:text-primary transition-colors flex items-center gap-2 group/pbtn"
-                        >
-                            <span className="w-3 h-3 border border-current group-hover/pbtn:bg-primary transition-all rounded-[1px]" />
-                            PREVIEW
-                        </button>
-
-                        {/* Buy Button */}
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                onAddToCart(product);
-                            }}
-                            disabled={isInCart}
-                            className="text-right font-mono text-[16px] font-bold text-primary uppercase hover:text-primary/70 transition-colors disabled:opacity-50 tracking-wider"
-                        >
-                            {isInCart ? '[ IN_CART ]' : '[ ACQUIRE ]'}
-                        </button>
-                    </div>
-
-                </div>
-            </div>
-
-            {/* PREVIEW OVERLAY: Informative Details + Player */}
-            <div className={`absolute inset-0 bg-[var(--background)] backdrop-blur-md flex flex-col transition-all duration-300 z-30 ${showPreview ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
-                {/* Background Decoration - Matrix Effect */}
-                <div className="absolute inset-0 opacity-10 dark:opacity-20 pointer-events-none z-0">
-                    <MatrixSpace isVisible={showPreview} />
-                </div>
-
-                {/* Top Section: Single Column Layout (Waveform + Samples Stacked) */}
-                <div className="flex-1 flex flex-col relative border-b-2 border-primary/20 bg-black/5 dark:bg-white/5 overflow-hidden">
-                    <div className="flex-1 overflow-hidden p-2 space-y-2">
-                        {/* Header with Close */}
-                        <div className="flex justify-between items-center">
-                            <span className="font-mono text-[10px] text-primary/40 uppercase tracking-widest">{'//'} PREVIEW_ANALYSIS</span>
-                            <button
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setShowPreview(false);
-                                }}
-                                className="text-foreground/30 hover:text-alert transition-colors"
+                            <Link
+                                href={`/product/${product.id}`}
+                                className="relative z-10 flex-1 w-full overflow-hidden p-4 flex flex-col items-center gap-2 custom-scrollbar hover:bg-primary/[0.02] transition-colors duration-300"
                             >
-                                <span className="material-icons text-base">close</span>
-                            </button>
+                                {/* Centered Image Frame */}
+                                <div className="relative w-36 h-36 shrink-0 shadow-2xl transition-transform duration-500 group-hover:scale-105">
+                                    {/* Technical Label */}
+                                    <div className="absolute bottom-1 left-1 z-30 font-mono text-[7px] text-white/40 bg-black/40 px-1">
+                                        IMG_SAMP._{product.id.slice(0, 4)}
+                                    </div>
+
+                                    <div className="relative block w-full h-full overflow-hidden">
+                                        <Image
+                                            alt={product.name}
+                                            className="w-full h-full object-cover opacity-90 contrast-125 grayscale group-hover:grayscale-0 transition-all duration-500"
+                                            src={product.image || 'https://via.placeholder.com/500'}
+                                            fill
+                                            sizes="160px"
+                                        />
+                                        <div className="absolute inset-0 bg-primary/5 mix-blend-overlay" />
+                                    </div>
+                                </div>
+
+                                {/* Technical Metadata Stack */}
+                                <div className="w-full space-y-2">
+                                    {/* Status Label */}
+                                    <div className="flex items-center justify-between border-b border-primary/10 pb-1.5 text-[9px]">
+                                        <div className="flex items-center gap-1.5 font-mono uppercase tracking-widest leading-tight">
+                                            <span className="w-1 h-1 bg-alert rounded-sm animate-pulse" />
+                                            <span className="text-alert/90 font-bold">system.active</span>
+                                        </div>
+                                        <span className="font-mono text-primary/40 text-[10px]">ID_{product.id.slice(0, 8)}</span>
+                                    </div>
+
+                                    {/* Description - Compact */}
+                                    <p className="font-mono text-[12px] text-foreground/70 leading-relaxed text-center px-2">
+                                        {product.description || "Raw industrial audio assets. Optimized for digital synthesis."}
+                                    </p>
+
+                                    {/* Info Grid - Full Width */}
+                                    <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 pt-1.5 border-t border-primary/10">
+                                        <div className="flex justify-between items-center font-mono text-[10px] text-primary/40 uppercase">
+                                            <span>fmt</span>
+                                            <span className="text-foreground/60">{product.metadata?.format || "WAV"}</span>
+                                        </div>
+                                        <div className="flex justify-between items-center font-mono text-[10px] text-primary/40 uppercase">
+                                            <span>cnt</span>
+                                            <span className="text-foreground/60">{product.metadata?.count || "140"}</span>
+                                        </div>
+                                        <div className="flex justify-between items-center font-mono text-[10px] text-primary/40 uppercase">
+                                            <span>size</span>
+                                            <span className="text-foreground/60">{product.metadata?.size || "840MB"}</span>
+                                        </div>
+                                        <div className="flex justify-between items-center font-mono text-[10px] text-primary/40 uppercase">
+                                            <span>type</span>
+                                            <span className="text-foreground/60">RF_TECH</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Link>
                         </div>
 
-                        {/* Main Waveform - Now full width and prominent */}
-                        {audioPreviewUrl && showPreview && (
-                            <div className="space-y-2">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-1 h-1 bg-alert rounded-full animate-pulse" />
-                                    <span className="font-mono text-[10px] text-primary/60 uppercase tracking-[0.2em]">MAIN_PREVIEW.WAV</span>
-                                </div>
-                                <div className="relative w-full h-[26px] bg-[var(--background)] border-2 border-primary/60 dark:border-white/30 rounded overflow-hidden group/wave">
-                                    <WaveformOverlay
-                                        audioUrl={audioPreviewUrl}
-                                        isActive={showPreview}
-                                    />
-                                </div>
-                            </div>
-                        )}
+                        {/* Bottom Section: Info - New Industrial Design */}
+                        <div className="min-h-[140px] border-t border-primary/30 bg-[var(--background)] pt-4 px-4 pb-6 relative flex flex-col gap-2">
+                            {/* Top Notch decorative element */}
+                            <div className="absolute -top-[2px] right-8 w-12 h-[2px] bg-accent z-20" />
 
-                        {/* One-Shots Section */}
-                        <div className="space-y-1.5">
-                            <span className="font-mono text-[10px] text-primary/40 uppercase tracking-widest">{'//'} ONE_SHOT_SAMPLES</span>
-                            <div className="grid grid-cols-2 gap-x-2 gap-y-1">
-                                {samples.map((url, index) => (
-                                    <OneShotPlayer
-                                        key={index}
-                                        audioUrl={url}
-                                        label={`S_${index + 1}`}
-                                        isActive={showPreview}
-                                    />
-                                ))}
-                                {samples.length === 0 && (
-                                    <div className="col-span-2 py-4 border border-dashed border-primary/10 text-center">
-                                        <span className="font-mono text-[8px] text-primary/30 uppercase">NO_SAMPLES_AVAILABLE</span>
+                            {/* Header Row */}
+                            <div className="flex justify-between items-start">
+                                <h3 className="font-gothic text-3xl text-foreground leading-none tracking-wide max-w-[70%]">
+                                    <Link href={`/product/${product.id}`} className="hover:text-primary transition-colors">
+                                        {product.name}
+                                    </Link>
+                                </h3>
+                                <span className="font-mono text-primary font-bold border border-primary/30 px-2 py-0.5 text-[11px]">
+                                    {product.amount === 0 ? 'FREE' : `$${product.amount}`}
+                                </span>
+                            </div>
+
+                            {/* Tech Specs / Decor */}
+                            <div className="flex items-center gap-2 opacity-60 mb-2">
+                                <div className="w-1 h-1 bg-primary rounded-full animate-pulse" />
+                                <span className="font-mono text-[11px] text-primary uppercase whitespace-nowrap">
+                                    ID: {product.id.slice(0, 6)} {'//'} V.1.0
+                                </span>
+                                <div className="h-[1px] flex-1 bg-primary/10" />
+                            </div>
+
+                            {/* Action Row */}
+                            <div className="flex items-center justify-between mt-1 pt-2 border-t border-primary/10">
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setShowPreview(true);
+                                    }}
+                                    className="text-left font-mono text-[14px] font-bold uppercase tracking-[0.2em] text-foreground/50 hover:text-primary transition-colors flex items-center gap-2 group/pbtn"
+                                >
+                                    <span className="w-3 h-3 border border-current group-hover/pbtn:bg-primary transition-all rounded-[1px]" />
+                                    PREVIEW
+                                </button>
+
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onAddToCart(product);
+                                    }}
+                                    disabled={isInCart}
+                                    className="text-right font-mono text-[16px] font-bold text-primary uppercase hover:text-primary/70 transition-colors disabled:opacity-50 tracking-wider"
+                                >
+                                    {isInCart ? '[ IN_CART ]' : '[ ACQUIRE ]'}
+                                </button>
+                            </div>
+                        </div>
+                    </motion.div>
+                ) : (
+                    <motion.div
+                        key="preview"
+                        initial={{ opacity: 0, scale: 1.05, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 1.05, y: 20 }}
+                        transition={{
+                            type: "spring", stiffness: 350, damping: 28, mass: 1
+                        }}
+                        className="absolute inset-0 bg-[var(--background)] backdrop-blur-md flex flex-col z-30"
+                    >
+                        {/* Background Decoration - Matrix Effect */}
+                        <div className="absolute inset-0 opacity-10 dark:opacity-20 pointer-events-none z-0">
+                            <MatrixSpace isVisible={showPreview} />
+                        </div>
+
+                        {/* Top Section */}
+                        <div className="flex-1 flex flex-col relative border-b-2 border-primary/20 bg-black/5 dark:bg-white/5 overflow-hidden">
+                            <div className="flex-1 overflow-hidden p-2 space-y-2">
+                                {/* Header with Close */}
+                                <div className="flex justify-between items-center">
+                                    <span className="font-mono text-[10px] text-primary/40 uppercase tracking-widest">{'//'} PREVIEW_ANALYSIS</span>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setShowPreview(false);
+                                        }}
+                                        className="text-foreground/30 hover:text-alert transition-colors"
+                                    >
+                                        <span className="material-icons text-base">close</span>
+                                    </button>
+                                </div>
+
+                                {/* Main Waveform */}
+                                {audioPreviewUrl && showPreview && (
+                                    <div className="space-y-2">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-1 h-1 bg-alert rounded-full animate-pulse" />
+                                            <span className="font-mono text-[10px] text-primary/60 uppercase tracking-[0.2em]">MAIN_PREVIEW.WAV</span>
+                                        </div>
+                                        <div className="relative w-full h-[26px] bg-[var(--background)] border-2 border-primary/60 dark:border-white/30 rounded overflow-hidden group/wave">
+                                            <WaveformOverlay
+                                                audioUrl={audioPreviewUrl}
+                                                isActive={showPreview}
+                                            />
+                                        </div>
                                     </div>
                                 )}
+
+                                {/* One-Shots Section */}
+                                <div className="space-y-1.5">
+                                    <span className="font-mono text-[10px] text-primary/40 uppercase tracking-widest">{'//'} ONE_SHOT_SAMPLES</span>
+                                    <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                        {samples.map((url, index) => (
+                                            <OneShotPlayer
+                                                key={index}
+                                                audioUrl={url}
+                                                label={`S_${index + 1}`}
+                                                isActive={showPreview}
+                                            />
+                                        ))}
+                                        {samples.length === 0 && (
+                                            <div className="col-span-2 py-4 border border-dashed border-primary/10 text-center">
+                                                <span className="font-mono text-[8px] text-primary/30 uppercase">NO_SAMPLES_AVAILABLE</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                {/* Bottom Section: Info - Consistent with Front */}
-                <div className="min-h-[140px] border-t border-primary/30 bg-[var(--background)] pt-4 px-4 pb-6 relative flex flex-col gap-2">
-                    {/* Top Notch decorative element */}
-                    <div className="absolute -top-[2px] right-8 w-12 h-[2px] bg-accent z-20" />
-                    {/* Header Row */}
-                    <div className="flex justify-between items-start">
-                        <h3 className="font-gothic text-3xl text-foreground leading-none tracking-wide max-w-[70%]">
-                            {product.name}
-                        </h3>
-                        <span className="font-mono text-primary font-bold border border-primary/30 px-2 py-0.5 text-[11px]">
-                            {product.amount === 0 ? 'FREE' : `$${product.amount}`}
-                        </span>
-                    </div>
+                        {/* Bottom Section */}
+                        <div className="min-h-[140px] border-t border-primary/30 bg-[var(--background)] pt-4 px-4 pb-6 relative flex flex-col gap-2">
+                            <div className="absolute -top-[2px] right-8 w-12 h-[2px] bg-accent z-20" />
+                            <div className="flex justify-between items-start">
+                                <h3 className="font-gothic text-3xl text-foreground leading-none tracking-wide max-w-[70%]">
+                                    {product.name}
+                                </h3>
+                                <span className="font-mono text-primary font-bold border border-primary/30 px-2 py-0.5 text-[11px]">
+                                    {product.amount === 0 ? 'FREE' : `$${product.amount}`}
+                                </span>
+                            </div>
 
-                    {/* Meta Data (Brief) */}
-                    <div className="flex items-center gap-2 opacity-60 mb-2">
-                        <div className="w-1 h-1 bg-primary rounded-full animate-pulse" />
-                        <span className="font-mono text-[11px] text-primary uppercase whitespace-nowrap">
-                            ID: {product.id.slice(0, 6)} {'//'} V.1.0
-                        </span>
-                        <div className="h-[1px] flex-1 bg-primary/10" />
-                    </div>
+                            <div className="flex items-center gap-2 opacity-60 mb-2">
+                                <div className="w-1 h-1 bg-primary rounded-full animate-pulse" />
+                                <span className="font-mono text-[11px] text-primary uppercase whitespace-nowrap">
+                                    ID: {product.id.slice(0, 6)} {'//'} V.1.0
+                                </span>
+                                <div className="h-[1px] flex-1 bg-primary/10" />
+                            </div>
 
-                    {/* Action Row */}
-                    <div className="flex items-center justify-between mt-1 pt-2 border-t border-primary/10">
-                        {/* Back Button */}
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setShowPreview(false);
-                            }}
-                            className="text-left font-mono text-[14px] uppercase tracking-[0.2em] text-foreground/40 hover:text-foreground transition-colors flex items-center gap-2 group/back"
-                        >
-                            <span className="w-3 h-3 border border-current group-hover/back:bg-foreground transition-all rounded-[1px]" />
-                            [ BACK ]
-                        </button>
+                            <div className="flex items-center justify-between mt-1 pt-2 border-t border-primary/10">
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setShowPreview(false);
+                                    }}
+                                    className="text-left font-mono text-[14px] uppercase tracking-[0.2em] text-foreground/40 hover:text-foreground transition-colors flex items-center gap-2 group/back"
+                                >
+                                    <span className="w-3 h-3 border border-current group-hover/back:bg-foreground transition-all rounded-[1px]" />
+                                    [ BACK ]
+                                </button>
 
-                        {/* Cart Button */}
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                onAddToCart(product);
-                            }}
-                            disabled={isInCart}
-                            className="text-right font-mono text-[16px] font-bold text-primary uppercase hover:text-primary/70 transition-colors disabled:opacity-50 tracking-wider"
-                        >
-                            {isInCart ? '[ IN CART ]' : '[ ADD TO CART ]'}
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-        </div >
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onAddToCart(product);
+                                    }}
+                                    disabled={isInCart}
+                                    className="text-right font-mono text-[16px] font-bold text-primary uppercase hover:text-primary/70 transition-colors disabled:opacity-50 tracking-wider"
+                                >
+                                    {isInCart ? '[ IN CART ]' : '[ ADD TO CART ]'}
+                                </button>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
     );
 }
