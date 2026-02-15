@@ -19,10 +19,10 @@ export default function HeroSchema() {
     }, []);
 
     return (
-        <section className="relative w-full bg-[var(--background)] animate-fade-in px-0 pt-0 pb-0 h-[calc(50vh-40px)] min-h-[300px]">
-            <div className="w-full h-full relative flex flex-col justify-between p-4 md:px-6 md:py-8 lg:px-8 lg:py-12">
-                {/* 1. BRANDING SECTION */}
-                <div className="relative w-full flex justify-between items-center mb-4">
+        <section className="relative w-full bg-[var(--background)] animate-fade-in px-0 pt-0 pb-0 min-h-[450px] md:h-[calc(50vh-40px)] md:min-h-[300px]">
+            <div className="w-full h-full relative flex flex-col justify-center md:justify-between p-4 md:px-6 md:py-8 lg:px-8 lg:py-12">
+                {/* 1. BRANDING SECTION - Hidden on mobile as per user request */}
+                <div className="relative w-full hidden md:flex justify-between items-center mb-4">
                     <div className="flex items-center gap-4">
                         <h1 className="font-gothic text-4xl md:text-5xl tracking-tight lowercase leading-none drop-shadow-[0_0_10px_rgba(var(--primary-rgb),0.2)]">
                             <Link href="/" className="hover:text-primary transition-colors duration-300" data-cursor-invert="true">
@@ -31,7 +31,7 @@ export default function HeroSchema() {
                         </h1>
                     </div>
 
-                    <div className="hidden md:flex flex-col items-end font-mono text-[9px] opacity-40 tracking-wider uppercase gap-0.5">
+                    <div className="flex flex-col items-end font-mono text-[9px] opacity-40 tracking-wider uppercase gap-0.5">
                         <div className="flex items-center gap-2 mb-1">
                             <span className="opacity-40">COORD:</span>
                             <span
@@ -50,13 +50,13 @@ export default function HeroSchema() {
                     </div>
                 </div>
 
-                {/* Promotional Carousel - Re-positioned and Centered on the "Red Line" Axis */}
-                <div className="absolute left-1/2 top-[180px] -translate-x-1/2 -translate-y-1/2 z-50 hidden lg:block">
+                {/* Promotional Carousel - Now visible on mobile and taking center stage */}
+                <div className="md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 z-50 w-full py-8 md:py-0">
                     <PromoCarousel />
                 </div>
 
-                {/* 2. SECONDARY DATA AREA */}
-                <div className="relative w-full flex flex-col md:flex-row items-start md:items-end justify-between gap-1 py-0 transition-all duration-300">
+                {/* 2. SECONDARY DATA AREA - Hidden on mobile */}
+                <div className="relative w-full hidden md:flex flex-col md:flex-row items-start md:items-end justify-between gap-1 py-0 transition-all duration-300">
                     <div className="flex flex-col gap-2 font-mono text-[9px] uppercase tracking-[0.3em] opacity-30 min-w-[250px]">
                         <div className="flex justify-between border-b border-primary/10 pb-1">
                             <span>Sys: V.4.0.ALPHA</span>
@@ -72,8 +72,8 @@ export default function HeroSchema() {
                     </div>
                 </div>
 
-                {/* Decorative Tech Legend */}
-                <div className="mt-8 flex items-center justify-between font-mono text-[8px] opacity-20 uppercase tracking-[0.4em] w-full border-t border-primary/10 pt-4">
+                {/* Decorative Tech Legend - Hidden on mobile */}
+                <div className="hidden md:flex mt-8 items-center justify-between font-mono text-[8px] opacity-20 uppercase tracking-[0.4em] w-full border-t border-primary/10 pt-4">
                     <div className="flex items-center gap-6">
                         <span className="flex items-center gap-2 pulse-slow">
                             <div className="w-1.5 h-1.5 rounded-full bg-primary" />

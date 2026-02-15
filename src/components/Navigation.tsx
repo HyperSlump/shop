@@ -16,19 +16,27 @@ export default function Navigation() {
 
     return (
         <>
-            <aside className="w-full md:w-20 h-16 md:h-screen sticky top-0 left-0 border-b md:border-b-0 md:border-r border-foreground/15 flex flex-row md:flex-col items-center justify-between px-4 md:p-6 z-50 bg-[var(--background)] animate-fade-in">
-                {/* Mobile Header: Title + Hamburger */}
-                <div className="flex w-full items-center justify-between md:hidden">
-                    <Link href="/" className="text-xl font-gothic tracking-tighter hover:text-primary transition-colors leading-none font-bold">
+            <aside className="w-full md:w-20 h-16 md:h-screen sticky top-0 left-0 md:border-r border-foreground/15 flex flex-row md:flex-col items-center justify-between px-4 md:p-6 z-50 bg-transparent md:bg-[var(--background)] animate-fade-in pointer-events-none md:pointer-events-auto">
+                {/* Mobile Floating Action Bar */}
+                <div className="flex w-full items-center justify-between md:hidden pointer-events-none fixed top-0 left-0 p-4 z-[110]">
+                    <Link href="/" className="text-xl font-gothic tracking-tighter hover:text-primary transition-colors leading-none font-bold pointer-events-auto drop-shadow-md">
                         <span>hyper$lump</span>
                     </Link>
 
-                    <button
-                        onClick={toggleMobileMenu}
-                        className="p-2 -mr-2 text-primary focus:outline-none transition-transform active:scale-95"
-                    >
-                        {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-                    </button>
+                    <div className="flex gap-2 pointer-events-auto">
+                        {/* Mobile Dedicated Theme Switch */}
+                        <div className="flex items-center justify-center w-12 h-12 bg-[var(--background)]/80 backdrop-blur-sm border md:border-none border-foreground/10 rounded-full shadow-lg">
+                            <ThemeToggle />
+                        </div>
+
+                        {/* Hamburger Button */}
+                        <button
+                            onClick={toggleMobileMenu}
+                            className="w-12 h-12 flex items-center justify-center bg-primary text-black rounded-full shadow-lg active:scale-90 transition-transform"
+                        >
+                            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                        </button>
+                    </div>
                 </div>
 
                 {/* DESKTOP SIDEBAR: PRECISION DISTRIBUTED TRIO */}
@@ -70,15 +78,15 @@ export default function Navigation() {
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
-                        initial={{ opacity: 0, scale: 1.1, filter: "blur(20px)" }}
-                        animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                        exit={{ opacity: 0, scale: 1.1, filter: "blur(20px)" }}
+                        initial={{ opacity: 0, scale: 1.1 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 1.1 }}
                         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                        className="fixed inset-0 z-[100] bg-[var(--background)]/95 backdrop-blur-xl md:hidden overflow-hidden"
+                        className="fixed inset-0 z-[100] bg-[var(--background)] dark:bg-black md:hidden flex flex-col justify-center overflow-hidden"
                     >
-                        <div className="flex flex-col h-full p-6 pt-24">
+                        <div className="flex flex-col h-full items-center justify-between p-8 py-20 overflow-y-auto">
                             {/* Primary Links */}
-                            <div className="flex-1 flex flex-col justify-center space-y-12 mb-12">
+                            <div className="flex flex-col items-center space-y-8 my-auto w-full">
                                 {[
                                     { label: 'Shop', href: '/', id: 'shop' },
                                     { label: 'Blog', href: '/blog', id: 'blog' },
@@ -88,70 +96,52 @@ export default function Navigation() {
                                 ].map((link, i) => (
                                     <motion.div
                                         key={link.id}
-                                        initial={{ opacity: 0, x: -30 }}
-                                        animate={{ opacity: 1, x: 0 }}
+                                        initial={{ opacity: 0, y: 30 }}
+                                        animate={{ opacity: 1, y: 0 }}
                                         transition={{
                                             type: "spring",
                                             stiffness: 300,
                                             damping: 25,
-                                            delay: 0.1 + i * 0.05
+                                            delay: i * 0.05
                                         }}
+                                        className="w-full text-center"
                                     >
                                         <Link
                                             href={link.href}
                                             onClick={() => setIsMobileMenuOpen(false)}
-                                            className="text-5xl font-gothic tracking-tighter transition-all duration-300 block"
+                                            className="text-5xl md:text-6xl font-gothic tracking-tighter transition-all hover:text-primary active:scale-95 block py-1"
                                         >
-                                            <span className="hover:text-primary">{link.label}</span>
+                                            {link.label}
                                         </Link>
                                     </motion.div>
                                 ))}
                             </div>
 
-                            {/* Mobile Trio: Controls & Links */}
+                            {/* Mobile Actions Overlay */}
                             <motion.div
-                                initial={{ opacity: 0, y: 20 }}
+                                initial={{ opacity: 0, y: 50 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.4 }}
-                                className="grid grid-cols-2 gap-4 border-t border-foreground/10 pt-8"
+                                transition={{ delay: 0.3 }}
+                                className="w-full grid grid-cols-1 gap-4 mt-12"
                             >
                                 <button
                                     onClick={() => { toggleCart(); setIsMobileMenuOpen(false); }}
-                                    className="flex flex-col items-center justify-center p-6 border border-primary/20 bg-primary/5 rounded-sm relative group active:scale-95 transition-transform"
+                                    className="flex items-center justify-center gap-4 p-6 bg-primary text-black font-bold uppercase tracking-widest text-lg rounded-sm active:scale-95 transition-transform"
                                 >
-                                    <span className="material-icons text-3xl mb-2">shopping_cart</span>
-                                    <span className="font-mono text-[10px] tracking-widest uppercase">CART</span>
-                                    <AnimatePresence>
-                                        {cart.length > 0 && (
-                                            <motion.span
-                                                initial={{ scale: 0 }}
-                                                animate={{ scale: 1 }}
-                                                exit={{ scale: 0 }}
-                                                className="absolute top-4 right-4 bg-primary text-black text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center"
-                                            >
-                                                {cart.length}
-                                            </motion.span>
-                                        )}
-                                    </AnimatePresence>
+                                    <span className="material-icons">shopping_cart</span>
+                                    VIEW_CART ({cart.length})
                                 </button>
-
-                                <div className="flex flex-col items-center justify-center p-6 border border-foreground/10 rounded-sm">
-                                    <ThemeToggle />
-                                    <span className="font-mono text-[10px] tracking-widest uppercase mt-2">THEME</span>
-                                </div>
                             </motion.div>
-                        </div>
 
-                        {/* Bottom Close Bar */}
-                        <motion.button
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 20 }}
-                            onClick={toggleMobileMenu}
-                            className="absolute bottom-12 left-1/2 -translate-x-1/2 w-16 h-16 border border-primary/40 rounded-full flex items-center justify-center text-primary active:scale-90 transition-transform"
-                        >
-                            <X size={32} />
-                        </motion.button>
+                            {/* Circular Close Button at bottom */}
+                            <motion.button
+                                whileTap={{ scale: 0.9 }}
+                                onClick={toggleMobileMenu}
+                                className="mt-12 w-16 h-16 rounded-full border border-foreground/20 flex items-center justify-center opacity-60 hover:opacity-100 transition-opacity"
+                            >
+                                <X size={32} />
+                            </motion.button>
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>

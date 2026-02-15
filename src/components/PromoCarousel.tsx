@@ -146,20 +146,20 @@ export default function PromoCarousel() {
     }, [index, promos]);
 
     if (loading || promos.length === 0) return (
-        <div className="flex items-center justify-center gap-12 px-8 min-w-[800px] max-w-[1400px] h-[220px] opacity-20">
-            <div className="font-mono text-[11px] animate-pulse uppercase tracking-[0.5em]">INITIALIZING_PROMO_FEED...</div>
+        <div className="flex items-center justify-center w-full h-[220px] opacity-20">
+            <div className="font-mono text-[10px] md:text-[11px] animate-pulse uppercase tracking-[0.5em]">INITIALIZING_PROMO_FEED...</div>
         </div>
     );
 
     return (
         <div
             ref={containerRef}
-            className="flex items-center justify-center gap-12 px-8 min-w-[800px] max-w-[1400px] h-[220px]"
+            className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 px-4 md:px-8 w-full max-w-[1400px] min-h-[220px] py-8 md:py-0 mx-auto"
         >
             {/* Real Product Image Frame */}
             <div
                 ref={placeholderRef}
-                className="relative w-32 h-32 border border-primary/20 bg-primary/5 flex items-center justify-center overflow-hidden shrink-0 group shadow-[0_0_30px_rgba(0,0,0,0.5)]"
+                className="relative w-32 h-32 md:w-40 md:h-40 border border-primary/20 bg-primary/5 flex items-center justify-center overflow-hidden shrink-0 group shadow-[0_0_30px_rgba(0,0,0,0.5)]"
             >
                 {promos[index].image ? (
                     <img
@@ -181,7 +181,7 @@ export default function PromoCarousel() {
                 <div className="absolute bottom-0 right-0 w-3 h-3 border-r-2 border-b-2 border-primary/60" />
             </div>
 
-            <div className="flex flex-col items-start text-left flex-1 py-6">
+            <div className="flex flex-col items-center md:items-start text-center md:text-left flex-1 w-full">
                 <Link
                     href={promos[index].href}
                     ref={textRef}
@@ -193,15 +193,19 @@ export default function PromoCarousel() {
                 </Link>
                 <div
                     ref={subRef}
-                    className="font-mono text-[10px] md:text-[11px] tracking-[0.5em] opacity-70 uppercase mb-4 border-l-2 border-primary/50 pl-6 leading-relaxed max-w-[800px]"
+                    className="font-mono text-[9px] md:text-[11px] tracking-[0.2em] md:tracking-[0.5em] opacity-70 uppercase mb-3 md:mb-4 border-l-0 md:border-l-2 border-primary/50 md:pl-6 leading-relaxed max-w-[800px]"
                 >
                     {promos[index].sub}
                 </div>
                 <div
                     ref={descRef}
-                    className="font-mono text-[9px] md:text-[10px] tracking-tight opacity-40 uppercase max-w-[800px] leading-relaxed"
+                    className="font-mono text-[8px] md:text-[10px] tracking-tight opacity-40 uppercase max-w-[800px] leading-relaxed hidden md:block"
                 >
                     {promos[index].desc}
+                </div>
+                {/* Mobile Description: Shorter or Same but visible if relevant */}
+                <div className="md:hidden font-mono text-[8px] tracking-tight opacity-40 uppercase max-w-[300px] leading-snug text-center">
+                    {promos[index].desc.slice(0, 80)}...
                 </div>
             </div>
         </div>
