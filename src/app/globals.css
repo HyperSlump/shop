@@ -85,20 +85,22 @@
   }
 
   html.dark {
-    --background: #0F1115;
-    /* Sligthly Darker Chassis */
-    --foreground: #D8CEB9;
-    /* RC-20 Label Text */
-    --primary: #89D9C6;
-    /* Digital Mint - High Contrast against Dark */
-    --primary-foreground: #0F1115;
-    --accent: #FF9500;
-    /* Analog Orange */
-    --status: #89D9C6;
-    --alert: #FB7185;
-    --border: rgba(216, 206, 185, 0.2);
-    --noise-opacity: 0.12;
-    /* Dialed back grain for dark mode */
+    --background: #0C0A09;
+    /* Warm Deep Chassis (Stone 950) */
+    --foreground: #E7E5E4;
+    /* Warm Light Text (Stone 200) */
+    --primary: #FF7F11;
+    /* Analog Searing Orange - Very Warm */
+    --primary-foreground: #0C0A09;
+    --accent: #FACC15;
+    /* Electronic Yellow */
+    --status: #BEF264;
+    /* Warm Lime Neon */
+    --alert: #FF3D00;
+    /* High Temp Red */
+    --border: rgba(255, 127, 17, 0.2);
+    --noise-opacity: 0.15;
+    /* Slightly more grain for heat effect */
     --noise-blend: screen;
   }
 
