@@ -146,7 +146,7 @@ export default function PromoCarousel() {
 
     if (loading || promos.length === 0) return (
         <div className="flex items-center justify-center gap-12 px-8 min-w-[800px] max-w-[1400px] h-[220px] opacity-20">
-            <div className="font-mono text-[10px] animate-pulse uppercase tracking-[0.5em]">INITIALIZING_PROMO_FEED...</div>
+            <div className="font-mono text-[11px] animate-pulse uppercase tracking-[0.5em]">INITIALIZING_PROMO_FEED...</div>
         </div>
     );
 
@@ -161,7 +161,7 @@ export default function PromoCarousel() {
                 className="relative w-32 h-32 border border-primary/20 bg-primary/5 flex items-center justify-center overflow-hidden shrink-0"
             >
                 <div className="absolute inset-0 bg-primary/10 animate-pulse" />
-                <div className="font-mono text-[9px] opacity-40 uppercase rotate-90 tracking-[0.5em] font-bold">CORTEX_SIGNAL_v4</div>
+                <div className="font-mono text-[10px] opacity-40 uppercase rotate-90 tracking-[0.5em] font-bold">CORTEX_SIGNAL_v4</div>
                 <div className="absolute top-0 left-0 w-3 h-3 border-l-2 border-t-2 border-primary/60" />
                 <div className="absolute bottom-0 right-0 w-3 h-3 border-r-2 border-b-2 border-primary/60" />
             </div>
@@ -172,19 +172,19 @@ export default function PromoCarousel() {
                     ref={textRef}
                     className="group"
                 >
-                    <div className="font-gothic text-2xl md:text-3xl lg:text-4xl tracking-widest text-foreground group-hover:text-primary transition-colors duration-300 lowercase mb-4">
+                    <div className="font-gothic text-3xl md:text-4xl lg:text-5xl tracking-widest text-foreground group-hover:text-primary transition-colors duration-300 lowercase mb-4">
                         {promos[index].text}
                     </div>
                 </Link>
                 <div
                     ref={subRef}
-                    className="font-mono text-[9px] md:text-[10px] tracking-[0.5em] opacity-70 uppercase mb-4 border-l-2 border-primary/50 pl-6 leading-relaxed max-w-[800px]"
+                    className="font-mono text-[10px] md:text-[11px] tracking-[0.5em] opacity-70 uppercase mb-4 border-l-2 border-primary/50 pl-6 leading-relaxed max-w-[800px]"
                 >
                     {promos[index].sub}
                 </div>
                 <div
                     ref={descRef}
-                    className="font-mono text-[8px] md:text-[9px] tracking-tight opacity-40 uppercase max-w-[800px] leading-relaxed"
+                    className="font-mono text-[9px] md:text-[10px] tracking-tight opacity-40 uppercase max-w-[800px] leading-relaxed"
                 >
                     {promos[index].desc}
                 </div>

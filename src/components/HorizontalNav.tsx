@@ -39,9 +39,9 @@ export default function HorizontalNav() {
                         >
                             <div className="absolute top-0 left-0 w-[2px] h-0 group-hover:h-full bg-primary transition-all duration-300" />
                             <div className="flex flex-col items-center z-10">
-                                <span className="font-mono text-xs tracking-widest uppercase group-hover:text-primary transition-colors">{link.label}</span>
+                                <span className="font-mono text-sm tracking-widest uppercase group-hover:text-primary transition-colors">{link.label}</span>
                                 {link.note && (
-                                    <span className="text-[8px] opacity-40 group-hover:opacity-80 font-mono scale-75">{link.note}</span>
+                                    <span className="text-[10px] opacity-40 group-hover:opacity-80 font-mono">{link.note}</span>
                                 )}
                             </div>
                             <div className="absolute bottom-1 right-1 w-1 h-1 bg-primary/0 group-hover:bg-primary transition-all duration-300" />

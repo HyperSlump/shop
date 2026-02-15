@@ -53,7 +53,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
                         ))}
                     </div>
                     <div className="h-[1px] w-12 bg-primary/20 hidden md:block" />
-                    <span className="font-mono text-[9px] uppercase tracking-widest opacity-60 hidden md:block">Catalog_Index_v4</span>
+                    <span className="font-mono text-[11px] uppercase tracking-widest opacity-60 hidden md:block">Catalog_Index_v5</span>
                 </div>
 
 

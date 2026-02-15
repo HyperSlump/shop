@@ -88,7 +88,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                         <div className="absolute inset-0 bg-primary/5 mix-blend-overlay" />
 
                         {/* Technical Label */}
-                        <div className="absolute bottom-2 left-2 z-20 font-mono text-[7px] text-white/40 bg-black/40 px-1 px-1.5 py-0.5">
+                        <div className="absolute bottom-2 left-2 z-20 font-mono text-[8px] text-white/40 bg-black/40 px-1.5 py-0.5">
                             SOURCE_IMG_V.01 // {product.id.slice(0, 8)}
                         </div>
                     </div>
@@ -112,10 +112,10 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                 <motion.div variants={itemVariants} className="p-4 md:p-10 lg:py-12 lg:pl-12 lg:pr-12 border-b border-primary/10">
                     <div className="flex justify-between items-start mb-2">
                         <div className="space-y-1">
-                            <span className="font-mono text-[8px] text-primary/40 uppercase tracking-[0.3em]">
+                            <span className="font-mono text-[10px] text-primary/40 uppercase tracking-[0.3em]">
                                 {'//'} SYS_ENTRY: {product.id.slice(0, 8)}
                             </span>
-                            <h1 className="font-gothic text-4xl md:text-5xl text-foreground leading-none tracking-tight">
+                            <h1 className="font-gothic text-5xl md:text-6xl text-foreground leading-none tracking-tight">
                                 {product.name}
                             </h1>
                         </div>
@@ -124,16 +124,16 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                         </div>
                     </div>
                     {/* Primary Description */}
-                    <p className="font-mono text-[10px] md:text-[11px] text-foreground/70 max-w-2xl leading-relaxed mt-4">
+                    <p className="font-mono text-[11px] md:text-[13px] text-foreground/70 max-w-2xl leading-relaxed mt-4">
                         {product.description}
                     </p>
 
                     {/* Extended "Verbage" / Lore Section */}
                     <div className="mt-8 border-l-2 border-primary/20 pl-4 py-1">
-                        <h3 className="font-mono text-[9px] text-primary/50 uppercase tracking-widest mb-2">
+                        <h3 className="font-mono text-[10px] text-primary/50 uppercase tracking-widest mb-2">
                             SYSTEM_ANALYSIS //
                         </h3>
-                        <p className="font-mono text-[11px] md:text-sm text-foreground/80 leading-relaxed max-w-3xl">
+                        <p className="font-mono text-[12px] md:text-base text-foreground/80 leading-relaxed max-w-3xl">
                             {extendedDescription}
                         </p>
                     </div>
@@ -145,14 +145,14 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                     <div className="space-y-3">
                         <div className="flex items-center gap-2">
                             <div className="w-1 h-1 bg-alert animate-pulse rounded-full" />
-                            <span className="font-mono text-[9px] text-primary/60 uppercase tracking-[0.2em]">AUDIO_STREAM_MASTER</span>
+                            <span className="font-mono text-[10px] text-primary/60 uppercase tracking-[0.2em]">AUDIO_STREAM_MASTER</span>
                         </div>
                         {audioPreviewUrl ? (
                             <div className="relative w-full h-[26px] bg-black/5 dark:bg-white/5 border border-primary/30 rounded overflow-hidden">
                                 <WaveformOverlay audioUrl={audioPreviewUrl} isActive={true} />
                             </div>
                         ) : (
-                            <div className="h-16 flex items-center justify-center border border-dashed border-primary/10 text-[9px] font-mono text-primary/20">
+                            <div className="h-16 flex items-center justify-center border border-dashed border-primary/10 text-[11px] font-mono text-primary/20">
                                 NO_SIGNAL_DETECTED
                             </div>
                         )}
@@ -162,8 +162,8 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                     {samples.length > 0 && (
                         <div className="space-y-3">
                             <div className="flex justify-between items-center border-b border-primary/10 pb-1">
-                                <span className="font-mono text-[9px] text-primary/40 uppercase tracking-widest">SUB_SAMPLES</span>
-                                <span className="font-mono text-[8px] text-primary/20">{samples.length}_LOADED</span>
+                                <span className="font-mono text-[11px] text-primary/40 uppercase tracking-widest">SUB_SAMPLES</span>
+                                <span className="font-mono text-[10px] text-primary/20">{samples.length}_LOADED</span>
                             </div>
                             <div className="grid grid-cols-4 gap-4">
                                 {samples.map((url, index) => (
@@ -187,8 +187,8 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                             { k: 'RATE', v: '48k/24b' }
                         ].map((spec) => (
                             <div key={spec.k} className="flex flex-col">
-                                <span className="text-[7px] font-mono text-primary/30 tracking-widest">{spec.k}</span>
-                                <span className="text-[10px] font-mono text-foreground/70 uppercase">{spec.v}</span>
+                                <span className="text-[9px] font-mono text-primary/30 tracking-widest">{spec.k}</span>
+                                <span className="text-[11px] font-mono text-foreground/70 uppercase">{spec.v}</span>
                             </div>
                         ))}
                     </div>
@@ -199,16 +199,16 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                     <button
                         onClick={() => !isInCart && addToCart(product)}
                         disabled={isInCart}
-                        className={`w-full h-12 flex items-center justify-center gap-4 font-mono text-xs font-bold tracking-[0.3em] uppercase transition-all duration-500 border-2
+                        className={`w-full h-14 flex items-center justify-center gap-4 font-mono text-sm font-bold tracking-[0.3em] uppercase transition-all duration-500 border-2
                             ${isInCart
                                 ? 'border-primary/20 text-primary/40 cursor-not-allowed'
                                 : 'border-primary bg-primary text-black hover:bg-[var(--background)] hover:text-primary'
                             }`}
                     >
                         <span>{isInCart ? 'ALREADY_IN_DATABASE' : 'INITIALIZE_ACQUISITION'}</span>
-                        {!isInCart && <span className="text-lg">→</span>}
+                        {!isInCart && <span className="text-xl">→</span>}
                     </button>
-                    <div className="mt-4 flex justify-between items-center px-1 opacity-30 text-[7px] font-mono uppercase tracking-widest">
+                    <div className="mt-4 flex justify-between items-center px-1 opacity-30 text-[9px] font-mono uppercase tracking-widest">
                         <span>Transmission_Encrypted</span>
                         <div className="flex gap-4">
                             <span>BPM: {product.metadata?.bpm || 'NONE'}</span>

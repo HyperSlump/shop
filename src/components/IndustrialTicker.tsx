@@ -116,7 +116,7 @@ export default function IndustrialTicker() {
                             {[...Array(2)].map((_, i) => (
                                 <div key={i} className="flex">
                                     {[...Array(6)].map((_, j) => (
-                                        <span key={j} className="font-gothic text-5xl md:text-7xl text-primary px-12 tracking-wider lowercase">
+                                        <span key={j} className="font-gothic text-6xl md:text-8xl text-primary px-12 tracking-wider lowercase">
                                             {row1Text}
                                         </span>
                                     ))}
@@ -135,7 +135,7 @@ export default function IndustrialTicker() {
                             {[...Array(2)].map((_, i) => (
                                 <div key={i} className="flex">
                                     {[...Array(8)].map((_, j) => (
-                                        <span key={j} className="font-mono text-xs md:text-sm text-foreground/50 px-16 tracking-[0.4em] uppercase">
+                                        <span key={j} className="font-mono text-sm md:text-base text-foreground/50 px-16 tracking-[0.4em] uppercase">
                                             {row2Text}
                                         </span>
                                     ))}
@@ -147,7 +147,7 @@ export default function IndustrialTicker() {
 
                 {/* Technical Detail Overlays */}
                 <div className="absolute top-0 right-4 md:right-12 px-2 bg-[var(--background)] border-x border-primary/20 -translate-y-1/2">
-                    <span className="font-mono text-[8px] text-primary/40 uppercase tracking-tighter">Tape_Feed.v1</span>
+                    <span className="font-mono text-[10px] text-primary/40 uppercase tracking-tighter">Tape_Feed.v1</span>
                 </div>
                 <div className="absolute top-0 left-0 w-8 md:w-48 h-[1px] bg-primary/40 -translate-y-1/2" />
                 <div className="absolute bottom-0 right-0 w-8 md:w-48 h-[1px] bg-primary/40 translate-y-1/2" />

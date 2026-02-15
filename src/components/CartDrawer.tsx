@@ -66,7 +66,7 @@ export default function CartDrawer() {
 
                 <header className="flex justify-between items-center mb-0 border-b-2 border-foreground/10 p-6 pb-6 relative z-10">
                     <div className="flex flex-col">
-                        <div className="text-sm uppercase font-bold tracking-[0.2em] text-primary">
+                        <div className="text-base uppercase font-bold tracking-[0.2em] text-primary">
                             Current Cart
                         </div>
                         <div className="text-4xl font-gothic leading-none text-foreground mt-1">
@@ -77,7 +77,7 @@ export default function CartDrawer() {
                         onClick={toggleCart}
                         className="hover:translate-x-1 active:scale-95 transition-all text-primary/70 hover:text-primary px-4 flex items-center gap-2 group"
                     >
-                        <span className="font-mono text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Back</span>
+                        <span className="font-mono text-[12px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Back</span>
                         <ArrowRight size={24} />
                     </button>
                 </header>
@@ -111,12 +111,12 @@ export default function CartDrawer() {
                                     {/* Info Header */}
                                     <div className="flex justify-between items-start">
                                         <div className="flex flex-col">
-                                            <h3 className="font-gothic text-lg leading-none tracking-tight text-foreground truncate">{item.name}</h3>
-                                            <span className="font-mono text-[9px] uppercase tracking-widest leading-tight opacity-40 mt-1">
+                                            <h3 className="font-gothic text-xl leading-none tracking-tight text-foreground truncate">{item.name}</h3>
+                                            <span className="font-mono text-[11px] uppercase tracking-widest leading-tight opacity-40 mt-1">
                                                 ID: {item.id.slice(0, 8)}
                                             </span>
                                         </div>
-                                        <span className="font-mono text-xs font-bold text-primary">
+                                        <span className="font-mono text-sm font-bold text-primary">
                                             {(!item.amount || item.amount === 0) ? 'FREE' : `$${(item.amount || 0).toFixed(2)}`}
                                         </span>
                                     </div>
@@ -127,9 +127,9 @@ export default function CartDrawer() {
                                     <div className="flex justify-start items-center pb-1">
                                         <button
                                             onClick={() => handleRemoveItem(item.id)}
-                                            className="font-mono text-[9px] text-foreground/40 hover:text-red-500 uppercase tracking-[0.2em] transition-colors flex items-center gap-2 group/del"
+                                            className="font-mono text-[12px] text-foreground/40 hover:text-red-500 uppercase tracking-[0.2em] transition-colors flex items-center gap-2 group/del"
                                         >
-                                            <span className="w-1 h-1 bg-foreground/20 group-hover/del:bg-red-500 transition-all" />
+                                            <span className="w-1.5 h-1.5 bg-foreground/20 group-hover/del:bg-red-500 transition-all" />
                                             [ REMOVE ]
                                         </button>
                                     </div>
@@ -147,7 +147,7 @@ export default function CartDrawer() {
                     <button
                         onClick={handleCheckout}
                         disabled={cart.length === 0 || loading}
-                        className="w-full bg-primary text-primary-foreground font-bold uppercase py-5 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-30 disabled:grayscale disabled:cursor-not-allowed flex items-center justify-center gap-3 text-sm tracking-widest"
+                        className="w-full bg-primary text-primary-foreground font-bold uppercase py-5 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-30 disabled:grayscale disabled:cursor-not-allowed flex items-center justify-center gap-3 text-base tracking-widest"
                     >
                         {loading ? (
                             <>
@@ -161,8 +161,8 @@ export default function CartDrawer() {
                         )}
                     </button>
                     <div className="flex justify-center gap-4 opacity-30 text-foreground">
-                        <span className="text-[10px] font-mono uppercase">Stripe_Ready</span>
-                        <span className="text-[10px] font-mono uppercase">SSL_Enabled</span>
+                        <span className="text-[12px] font-mono uppercase">Stripe_Ready</span>
+                        <span className="text-[12px] font-mono uppercase">SSL_Enabled</span>
                     </div>
                 </div>
             </aside>

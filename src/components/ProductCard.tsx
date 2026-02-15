@@ -60,7 +60,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         <div className="relative w-36 h-36 shrink-0 shadow-2xl transition-transform duration-500 group-hover:scale-105">
 
                             {/* Technical Label */}
-                            <div className="absolute bottom-1 left-1 z-30 font-mono text-[6px] text-white/40 bg-black/40 px-1">
+                            <div className="absolute bottom-1 left-1 z-30 font-mono text-[7px] text-white/40 bg-black/40 px-1">
                                 IMG_SAMP._{product.id.slice(0, 4)}
                             </div>
 
@@ -79,34 +79,34 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         {/* Technical Metadata Stack */}
                         <div className="w-full space-y-2">
                             {/* Status Label */}
-                            <div className="flex items-center justify-between border-b border-primary/10 pb-1.5 text-[8px]">
+                            <div className="flex items-center justify-between border-b border-primary/10 pb-1.5 text-[9px]">
                                 <div className="flex items-center gap-1.5 font-mono uppercase tracking-widest leading-tight">
                                     <span className="w-1 h-1 bg-alert rounded-sm animate-pulse" />
                                     <span className="text-alert/90 font-bold">system.active</span>
                                 </div>
-                                <span className="font-mono text-primary/40">ID_{product.id.slice(0, 8)}</span>
+                                <span className="font-mono text-primary/40 text-[10px]">ID_{product.id.slice(0, 8)}</span>
                             </div>
 
                             {/* Description - Compact */}
-                            <p className="font-mono text-[11px] text-foreground/70 leading-relaxed text-center px-2">
+                            <p className="font-mono text-[12px] text-foreground/70 leading-relaxed text-center px-2">
                                 {product.description || "Raw industrial audio assets. Optimized for digital synthesis."}
                             </p>
 
                             {/* Info Grid - Full Width */}
                             <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 pt-1.5 border-t border-primary/10">
-                                <div className="flex justify-between items-center font-mono text-[9px] text-primary/40 uppercase">
+                                <div className="flex justify-between items-center font-mono text-[10px] text-primary/40 uppercase">
                                     <span>fmt</span>
                                     <span className="text-foreground/60">{product.metadata?.format || "WAV"}</span>
                                 </div>
-                                <div className="flex justify-between items-center font-mono text-[9px] text-primary/40 uppercase">
+                                <div className="flex justify-between items-center font-mono text-[10px] text-primary/40 uppercase">
                                     <span>cnt</span>
                                     <span className="text-foreground/60">{product.metadata?.count || "140"}</span>
                                 </div>
-                                <div className="flex justify-between items-center font-mono text-[9px] text-primary/40 uppercase">
+                                <div className="flex justify-between items-center font-mono text-[10px] text-primary/40 uppercase">
                                     <span>size</span>
                                     <span className="text-foreground/60">{product.metadata?.size || "840MB"}</span>
                                 </div>
-                                <div className="flex justify-between items-center font-mono text-[9px] text-primary/40 uppercase">
+                                <div className="flex justify-between items-center font-mono text-[10px] text-primary/40 uppercase">
                                     <span>type</span>
                                     <span className="text-foreground/60">RF_TECH</span>
                                 </div>
@@ -122,12 +122,12 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
                     {/* Header Row */}
                     <div className="flex justify-between items-start">
-                        <h3 className="font-gothic text-2xl text-foreground leading-none tracking-wide max-w-[70%]">
+                        <h3 className="font-gothic text-3xl text-foreground leading-none tracking-wide max-w-[70%]">
                             <Link href={`/product/${product.id}`} className="hover:text-primary transition-colors">
                                 {product.name}
                             </Link>
                         </h3>
-                        <span className="font-mono text-primary font-bold border border-primary/30 px-2 py-0.5 text-[10px]">
+                        <span className="font-mono text-primary font-bold border border-primary/30 px-2 py-0.5 text-[11px]">
                             {product.amount === 0 ? 'FREE' : `$${product.amount}`}
                         </span>
                     </div>
@@ -135,7 +135,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     {/* Tech Specs / Decor */}
                     <div className="flex items-center gap-2 opacity-60 mb-2">
                         <div className="w-1 h-1 bg-primary rounded-full animate-pulse" />
-                        <span className="font-mono text-[10px] text-primary uppercase whitespace-nowrap">
+                        <span className="font-mono text-[11px] text-primary uppercase whitespace-nowrap">
                             ID: {product.id.slice(0, 6)} {'//'} V.1.0
                         </span>
                         <div className="h-[1px] flex-1 bg-primary/10" />
@@ -149,9 +149,9 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 e.stopPropagation();
                                 setShowPreview(true);
                             }}
-                            className="text-left font-mono text-[13px] font-bold uppercase tracking-[0.2em] text-foreground/50 hover:text-primary transition-colors flex items-center gap-2 group/pbtn"
+                            className="text-left font-mono text-[14px] font-bold uppercase tracking-[0.2em] text-foreground/50 hover:text-primary transition-colors flex items-center gap-2 group/pbtn"
                         >
-                            <span className="w-2.5 h-2.5 border border-current group-hover/pbtn:bg-primary transition-all rounded-[1px]" />
+                            <span className="w-3 h-3 border border-current group-hover/pbtn:bg-primary transition-all rounded-[1px]" />
                             PREVIEW
                         </button>
 
@@ -162,7 +162,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 onAddToCart(product);
                             }}
                             disabled={isInCart}
-                            className="text-right font-mono text-[15px] font-bold text-primary uppercase hover:text-primary/70 transition-colors disabled:opacity-50 tracking-wider"
+                            className="text-right font-mono text-[16px] font-bold text-primary uppercase hover:text-primary/70 transition-colors disabled:opacity-50 tracking-wider"
                         >
                             {isInCart ? '[ IN_CART ]' : '[ ACQUIRE ]'}
                         </button>
@@ -183,7 +183,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     <div className="flex-1 overflow-hidden p-2 space-y-2">
                         {/* Header with Close */}
                         <div className="flex justify-between items-center">
-                            <span className="font-mono text-[8px] text-primary/40 uppercase tracking-widest">{'//'} PREVIEW_ANALYSIS</span>
+                            <span className="font-mono text-[10px] text-primary/40 uppercase tracking-widest">{'//'} PREVIEW_ANALYSIS</span>
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -200,7 +200,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                             <div className="space-y-2">
                                 <div className="flex items-center gap-2">
                                     <div className="w-1 h-1 bg-alert rounded-full animate-pulse" />
-                                    <span className="font-mono text-[8px] text-primary/60 uppercase tracking-[0.2em]">MAIN_PREVIEW.WAV</span>
+                                    <span className="font-mono text-[10px] text-primary/60 uppercase tracking-[0.2em]">MAIN_PREVIEW.WAV</span>
                                 </div>
                                 <div className="relative w-full h-[26px] bg-[var(--background)] border-2 border-primary/60 dark:border-white/30 rounded overflow-hidden group/wave">
                                     <WaveformOverlay
@@ -213,7 +213,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
                         {/* One-Shots Section */}
                         <div className="space-y-1.5">
-                            <span className="font-mono text-[8px] text-primary/40 uppercase tracking-widest">{'//'} ONE_SHOT_SAMPLES</span>
+                            <span className="font-mono text-[10px] text-primary/40 uppercase tracking-widest">{'//'} ONE_SHOT_SAMPLES</span>
                             <div className="grid grid-cols-2 gap-x-2 gap-y-1">
                                 {samples.map((url, index) => (
                                     <OneShotPlayer
@@ -239,10 +239,10 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     <div className="absolute -top-[2px] right-8 w-12 h-[2px] bg-accent z-20" />
                     {/* Header Row */}
                     <div className="flex justify-between items-start">
-                        <h3 className="font-gothic text-2xl text-foreground leading-none tracking-wide max-w-[70%]">
+                        <h3 className="font-gothic text-3xl text-foreground leading-none tracking-wide max-w-[70%]">
                             {product.name}
                         </h3>
-                        <span className="font-mono text-primary font-bold border border-primary/30 px-2 py-0.5 text-[10px]">
+                        <span className="font-mono text-primary font-bold border border-primary/30 px-2 py-0.5 text-[11px]">
                             {product.amount === 0 ? 'FREE' : `$${product.amount}`}
                         </span>
                     </div>
@@ -250,7 +250,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     {/* Meta Data (Brief) */}
                     <div className="flex items-center gap-2 opacity-60 mb-2">
                         <div className="w-1 h-1 bg-primary rounded-full animate-pulse" />
-                        <span className="font-mono text-[10px] text-primary uppercase whitespace-nowrap">
+                        <span className="font-mono text-[11px] text-primary uppercase whitespace-nowrap">
                             ID: {product.id.slice(0, 6)} {'//'} V.1.0
                         </span>
                         <div className="h-[1px] flex-1 bg-primary/10" />
@@ -264,9 +264,9 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 e.stopPropagation();
                                 setShowPreview(false);
                             }}
-                            className="text-left font-mono text-[13px] uppercase tracking-[0.2em] text-foreground/40 hover:text-foreground transition-colors flex items-center gap-2 group/back"
+                            className="text-left font-mono text-[14px] uppercase tracking-[0.2em] text-foreground/40 hover:text-foreground transition-colors flex items-center gap-2 group/back"
                         >
-                            <span className="w-2.5 h-2.5 border border-current group-hover/back:bg-foreground transition-all rounded-[1px]" />
+                            <span className="w-3 h-3 border border-current group-hover/back:bg-foreground transition-all rounded-[1px]" />
                             [ BACK ]
                         </button>
 
@@ -277,7 +277,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 onAddToCart(product);
                             }}
                             disabled={isInCart}
-                            className="text-right font-mono text-[15px] font-bold text-primary uppercase hover:text-primary/70 transition-colors disabled:opacity-50 tracking-wider"
+                            className="text-right font-mono text-[16px] font-bold text-primary uppercase hover:text-primary/70 transition-colors disabled:opacity-50 tracking-wider"
                         >
                             {isInCart ? '[ IN CART ]' : '[ ADD TO CART ]'}
                         </button>
