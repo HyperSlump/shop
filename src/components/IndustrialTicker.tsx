@@ -20,57 +20,30 @@ export default function IndustrialTicker() {
         if (!row1Ref.current || !row2Ref.current) return;
 
         // Ensure row contents are cloned for seamless looping
-        // Row 1: Right to Left (Extremely Slow Crawl)
+        // Row 1: Right to Left (Steady 60BPM Pulse)
         row1AnimRef.current = gsap.to(row1Ref.current, {
             xPercent: -50,
-            duration: 1200,
+            duration: 240,
             ease: "none",
             repeat: -1,
             paused: false
         });
 
-        // Row 2: Left to Right (Extremely Slow Crawl)
+        // Row 2: Left to Right (Steady 60BPM Pulse)
         // We set initial xPercent to -50 and animate back to 0
         gsap.set(row2Ref.current, { xPercent: -50 });
         row2AnimRef.current = gsap.to(row2Ref.current, {
             xPercent: 0,
-            duration: 960,
+            duration: 200,
             ease: "none",
             repeat: -1,
             paused: false
         });
 
-        // Add Velocity Responsive Behavior
-        const trigger = ScrollTrigger.create({
-            onUpdate: (self) => {
-                const velocity = self.getVelocity();
-                const skew = velocity / 500;
-                // Cap the speed multiplier to prevent glitching on page load/fast scrolls
-                const rawSpeed = 1 + Math.abs(velocity / 1000);
-                const speed = Math.min(rawSpeed, 3); // Max 3x speed
-
-                // Apply Skew
-                gsap.to([row1Ref.current, row2Ref.current], {
-                    skewX: skew,
-                    duration: 0.1,
-                    overwrite: 'auto'
-                });
-
-                // Apply Speed Multiplier
-                if (row1AnimRef.current && row2AnimRef.current) {
-                    gsap.to([row1AnimRef.current, row2AnimRef.current], {
-                        timeScale: speed,
-                        duration: 0.2,
-                        overwrite: 'auto'
-                    });
-                }
-            }
-        });
-
+        // No ScrollTrigger needed for simple constant crawl
         return () => {
             if (row1AnimRef.current) row1AnimRef.current.kill();
             if (row2AnimRef.current) row2AnimRef.current.kill();
-            trigger.kill();
         };
     }, []);
 
@@ -81,15 +54,6 @@ export default function IndustrialTicker() {
         // Find the animation associated with this row
         const anim = rowRef === row1Ref ? row1AnimRef.current : row2AnimRef.current;
         if (anim) anim.pause();
-
-        // Glitch flicker
-        gsap.to(row, {
-            opacity: 0.2,
-            repeat: 7,
-            yoyo: true,
-            duration: 0.04,
-            onComplete: () => { gsap.set(row, { opacity: 1 }); }
-        });
     };
 
     const onMouseLeave = (rowRef: React.RefObject<HTMLDivElement | null>) => {
@@ -98,7 +62,7 @@ export default function IndustrialTicker() {
     };
 
     const row1Text = "NEW MERCH OUT NOW — HYPER$LUMP — INDUSTRIAL_CORE_V1 — READ BLOG — SYSTEM_ACTIVE — ";
-    const row2Text = "$ $ $ $ /// REF_ID: 0x8823 /// ANALOG_ACTIVE /// $$$ /// 120.00_BPM /// SIGNAL_LOST /// ";
+    const row2Text = "$ $ $ $ /// REF_ID: 0x8823 /// ANALOG_ACTIVE /// $$$ /// 60.00_BPM_SYNC /// SIGNAL_LOST /// ";
 
     return (
         <div ref={containerRef} className="w-full py-0 px-0 select-none relative z-20 pointer-events-auto overflow-hidden">

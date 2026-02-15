@@ -3,20 +3,16 @@
 import { useCart } from './CartProvider';
 import { useState } from 'react';
 import NextImage from 'next/image';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Trash2 } from 'lucide-react';
 import MatrixSpace from './MatrixSpace';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function CartDrawer() {
     const { cart, isCartOpen, toggleCart, removeFromCart, cartTotal } = useCart();
     const [loading, setLoading] = useState(false);
-    const [exitingItems, setExitingItems] = useState<string[]>([]);
 
     const handleRemoveItem = (id: string) => {
-        setExitingItems(prev => [...prev, id]);
-        setTimeout(() => {
-            removeFromCart(id);
-            setExitingItems(prev => prev.filter(item => item !== id));
-        }, 500); // Match transition duration
+        removeFromCart(id);
     };
 
     const handleCheckout = async () => {
@@ -77,67 +73,103 @@ export default function CartDrawer() {
                         onClick={toggleCart}
                         className="hover:translate-x-1 active:scale-95 transition-all text-primary/70 hover:text-primary px-4 flex items-center gap-2 group"
                     >
-                        <span className="font-mono text-[12px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Back</span>
+                        <span className="font-mono text-[12px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Close</span>
                         <ArrowRight size={24} />
                     </button>
                 </header>
 
-                {cart.length === 0 ? (
-                    <div className="flex-1 flex flex-col items-center justify-center opacity-20 relative z-10">
-                        <span className="material-icons text-9xl">shopping_cart</span>
-                    </div>
-                ) : (
-                    <div className="flex-1 overflow-y-auto overflow-x-hidden space-y-4 px-6 custom-scrollbar relative z-10">
-                        {cart.map((item) => (
-                            <div
-                                key={item.id}
-                                className={`flex h-24 border-b-2 border-foreground/10 items-center transition-all duration-300 relative group shrink-0 ${exitingItems.includes(item.id) ? 'opacity-0 translate-x-12' : 'opacity-100 translate-x-0'
-                                    }`}
-                            >
-                                {/* Left Column: Static Thumbnail */}
-                                <div className="w-16 h-16 relative flex items-center justify-center bg-[var(--background)] p-0">
-                                    <div className="relative w-full h-full overflow-hidden">
-                                        <NextImage
-                                            src={item.image || 'https://via.placeholder.com/100'}
-                                            alt={item.name}
-                                            fill
-                                            className="object-cover opacity-80 contrast-125 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Right Column: Info & Action */}
-                                <div className="flex-1 flex flex-col pl-4">
-                                    {/* Info Header */}
-                                    <div className="flex justify-between items-start">
-                                        <div className="flex flex-col">
-                                            <h3 className="font-gothic text-xl leading-none tracking-tight text-foreground truncate">{item.name}</h3>
-                                            <span className="font-mono text-[11px] uppercase tracking-widest leading-tight opacity-40 mt-1">
-                                                ID: {item.id.slice(0, 8)}
-                                            </span>
+                <div className="flex-1 overflow-y-auto overflow-x-hidden p-6 custom-scrollbar relative z-10">
+                    {cart.length === 0 ? (
+                        <div className="h-full flex flex-col items-center justify-center opacity-20">
+                            <span className="material-icons text-9xl">shopping_cart</span>
+                            <p className="font-mono text-sm uppercase tracking-widest mt-4">Buffer_Empty</p>
+                        </div>
+                    ) : (
+                        <div className="space-y-4">
+                            <AnimatePresence mode="popLayout">
+                                {cart.map((item) => (
+                                    <motion.div
+                                        key={item.id}
+                                        layout
+                                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        exit={cart.length === 1 ? {
+                                            opacity: 0,
+                                            x: -100,
+                                            transition: { duration: 0.4, ease: "easeOut" }
+                                        } : {
+                                            opacity: 0,
+                                            x: -40,
+                                            scale: 0.9,
+                                            height: 0,
+                                            marginBottom: 0,
+                                            paddingTop: 0,
+                                            paddingBottom: 0,
+                                            marginTop: 0,
+                                            overflow: 'hidden'
+                                        }}
+                                        transition={{
+                                            type: "spring",
+                                            damping: 25,
+                                            stiffness: 300,
+                                            opacity: { duration: 0.2 }
+                                        }}
+                                        drag="x"
+                                        dragConstraints={{ left: -100, right: 0 }}
+                                        onDragEnd={(_, info) => {
+                                            if (info.offset.x < -80) {
+                                                handleRemoveItem(item.id);
+                                            }
+                                        }}
+                                        className="relative group bg-foreground/[0.03] border border-foreground/10 rounded-sm p-4 h-32 flex items-center gap-4 touch-none"
+                                    >
+                                        {/* Swipe Indicator (Visible only on swipe) */}
+                                        <div className="absolute inset-0 right-0 bg-red-500/20 -z-10 flex items-center justify-end px-6 transition-opacity opacity-0 group-active:opacity-100 pointer-events-none">
+                                            <Trash2 className="text-red-500" size={24} />
                                         </div>
-                                        <span className="font-mono text-sm font-bold text-primary">
-                                            {(!item.amount || item.amount === 0) ? 'FREE' : `$${(item.amount || 0).toFixed(2)}`}
-                                        </span>
-                                    </div>
 
-                                    <div className="flex-1" />
+                                        {/* Thumbnail */}
+                                        <div className="w-20 h-20 relative shrink-0 border border-foreground/10 bg-[var(--background)]">
+                                            <NextImage
+                                                src={item.image || 'https://via.placeholder.com/100'}
+                                                alt={item.name}
+                                                fill
+                                                className="object-cover contrast-110 grayscale group-hover:grayscale-0 transition-all duration-500"
+                                            />
+                                        </div>
 
-                                    {/* Action Footer */}
-                                    <div className="flex justify-start items-center pb-1">
-                                        <button
-                                            onClick={() => handleRemoveItem(item.id)}
-                                            className="font-mono text-[12px] text-foreground/40 hover:text-red-500 uppercase tracking-[0.2em] transition-colors flex items-center gap-2 group/del"
-                                        >
-                                            <span className="w-1.5 h-1.5 bg-foreground/20 group-hover/del:bg-red-500 transition-all" />
-                                            [ REMOVE ]
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
+                                        {/* Info */}
+                                        <div className="flex-1 min-w-0 flex flex-col justify-between h-full py-1">
+                                            <div className="flex justify-between items-start">
+                                                <div className="flex flex-col">
+                                                    <h3 className="font-gothic text-xl leading-none text-foreground truncate">{item.name}</h3>
+                                                    <span className="font-mono text-[10px] opacity-40 uppercase mt-1 tracking-widest">
+                                                        REF_{item.id.slice(0, 6)}
+                                                    </span>
+                                                </div>
+                                                <span className="font-mono text-sm font-bold text-primary">
+                                                    ${(item.amount || 0).toFixed(2)}
+                                                </span>
+                                            </div>
+
+                                            {/* Prominent Desktop Action */}
+                                            <div className="flex justify-end pt-2">
+                                                <button
+                                                    onClick={() => handleRemoveItem(item.id)}
+                                                    className="flex items-center gap-2 p-2 px-3 bg-red-500/5 hover:bg-red-500/20 border border-red-500/20 text-red-500/60 hover:text-red-500 transition-all group/del"
+                                                >
+                                                    <span className="font-mono text-[10px] tracking-widest uppercase">Delete</span>
+                                                    <Trash2 size={14} className="group-hover/del:scale-110 transition-transform" />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </AnimatePresence>
+                        </div>
+                    )}
+                </div>
+
 
                 <div className="mt-8 border-t-2 border-foreground/10 p-6 pt-6 space-y-4">
                     <div className="flex justify-between font-mono text-xl font-bold tracking-tighter text-foreground">

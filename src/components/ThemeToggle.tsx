@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Brain } from 'lucide-react';
+import CursorTooltip from './CursorTooltip';
 
 export default function ThemeToggle() {
     const [mounted, setMounted] = useState(false);
@@ -33,15 +34,16 @@ export default function ThemeToggle() {
     if (!mounted) return <div className="h-6 w-24" />;
 
     return (
-        <button
-            onClick={toggleTheme}
-            className="flex items-center justify-center hover:text-primary transition-colors group"
-            title={isDark ? "SWITCH_TO_LIGHT_MODE" : "SWITCH_TO_DARK_MODE"}
-        >
-            <Brain
-                size={22}
-                className="transition-transform group-hover:scale-110"
-            />
-        </button>
+        <CursorTooltip text={isDark ? "LIGHT_MODE_SYNC" : "DARK_MODE_SYNC"}>
+            <button
+                onClick={toggleTheme}
+                className="flex items-center justify-center hover:text-primary transition-colors group"
+            >
+                <Brain
+                    size={22}
+                    className="transition-transform group-hover:scale-110"
+                />
+            </button>
+        </CursorTooltip>
     );
 }

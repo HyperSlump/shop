@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 const navLinks = [
-    { label: 'Shop', href: '/', id: 'shop' },
+    { label: 'Shop', href: '/', id: 'shop', note: '//MAIN' },
     { label: 'Blog', href: '/blog', id: 'blog', note: '//SOON' },
     { label: 'About', href: '/about', id: 'about', note: '//INFO' },
     { label: 'Archive', href: '/archive', id: 'archive', note: '//2026' },
@@ -30,7 +31,7 @@ export default function HorizontalNav() {
             <div className="w-full flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 relative">
                 {navLinks.map((link, i) => (
                     <div key={link.id} className="relative flex-1 flex items-center justify-center">
-                        <a
+                        <Link
                             href={link.href}
                             onMouseEnter={() => setHoveredLink(link.id)}
                             onFocus={() => setHoveredLink(link.id)}
@@ -61,7 +62,7 @@ export default function HorizontalNav() {
                                     />
                                 </>
                             )}
-                        </a>
+                        </Link>
 
                         {/* DIVIDER (except last) */}
                         {i < navLinks.length - 1 && (
