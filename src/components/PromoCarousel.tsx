@@ -53,7 +53,7 @@ export default function PromoCarousel() {
     const [index, setIndex] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
     const placeholderRef = useRef<HTMLDivElement>(null);
-    const textRef = useRef<HTMLDivElement>(null);
+    const textRef = useRef<HTMLAnchorElement>(null);
     const subRef = useRef<HTMLDivElement>(null);
     const descRef = useRef<HTMLDivElement>(null);
 
