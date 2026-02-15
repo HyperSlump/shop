@@ -133,7 +133,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     <div className="flex items-center gap-2 opacity-60 mb-2">
                         <div className="w-1 h-1 bg-primary rounded-full animate-pulse" />
                         <span className="font-mono text-[10px] text-primary uppercase whitespace-nowrap">
-                            ID: {product.id.slice(0, 6)} // V.1.0
+                            ID: {product.id.slice(0, 6)} {'//'} V.1.0
                         </span>
                         <div className="h-[1px] flex-1 bg-primary/10" />
                     </div>
@@ -180,7 +180,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     <div className="flex-1 overflow-hidden p-2 space-y-2">
                         {/* Header with Close */}
                         <div className="flex justify-between items-center">
-                            <span className="font-mono text-[8px] text-primary/40 uppercase tracking-widest">// PREVIEW_ANALYSIS</span>
+                            <span className="font-mono text-[8px] text-primary/40 uppercase tracking-widest">{'//'} PREVIEW_ANALYSIS</span>
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -210,7 +210,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
                         {/* One-Shots Section */}
                         <div className="space-y-1.5">
-                            <span className="font-mono text-[8px] text-primary/40 uppercase tracking-widest">// ONE_SHOT_SAMPLES</span>
+                            <span className="font-mono text-[8px] text-primary/40 uppercase tracking-widest">{'//'} ONE_SHOT_SAMPLES</span>
                             <div className="grid grid-cols-2 gap-x-2 gap-y-1">
                                 {samples.map((url, index) => (
                                     <OneShotPlayer
@@ -248,7 +248,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     <div className="flex items-center gap-2 opacity-60 mb-2">
                         <div className="w-1 h-1 bg-primary rounded-full animate-pulse" />
                         <span className="font-mono text-[10px] text-primary uppercase whitespace-nowrap">
-                            ID: {product.id.slice(0, 6)} // V.1.0
+                            ID: {product.id.slice(0, 6)} {'//'} V.1.0
                         </span>
                         <div className="h-[1px] flex-1 bg-primary/10" />
                     </div>

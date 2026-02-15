@@ -55,7 +55,7 @@ const Oscilloscope: React.FC = () => {
                 // We want mostly a flat line with sporadic "bursts" of activity.
 
                 // Use multiple sines for complex movement
-                const slowWave = Math.sin(x * 0.005 + offset * 0.5);
+
                 const fastWave = Math.sin(x * 0.05 + offset * 2);
                 const noise = Math.sin(x * 0.2 + offset * 5) * 0.5;
 

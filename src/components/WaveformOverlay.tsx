@@ -102,12 +102,7 @@ export default function WaveformOverlay({
         }
     }, [isActive]);
 
-    const togglePlay = (e: React.MouseEvent) => {
-        e.stopPropagation(); // Prevent card click
-        if (wavesurferRef.current) {
-            wavesurferRef.current.playPause();
-        }
-    };
+
 
     return (
         <div

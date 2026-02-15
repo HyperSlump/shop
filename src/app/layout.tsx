@@ -3,7 +3,7 @@ import "./globals.css";
 import React from 'react';
 import { CartProvider } from "@/components/CartProvider";
 import CartDrawer from "@/components/CartDrawer";
-import SmoothScroll from "@/components/SmoothScroll";
+
 import CustomCursor from "@/components/CustomCursor";
 import { JetBrains_Mono, Pirata_One, UnifrakturMaguntia } from "next/font/google";
 
@@ -68,7 +68,7 @@ export default function RootLayout({
           className="fixed inset-0 noise z-[100] pointer-events-none"
           style={{
             opacity: 'var(--noise-opacity)',
-            mixBlendMode: 'var(--noise-blend)' as any
+            mixBlendMode: 'var(--noise-blend)' as any // eslint-disable-line @typescript-eslint/no-explicit-any
           }}
         />
         <CartProvider>

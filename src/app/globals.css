@@ -41,7 +41,7 @@
   }
 
   .animate-fade-in {
-    animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: fade-in-up 1.5s cubic-bezier(0.1, 1, 0.2, 1) forwards;
     opacity: 0;
   }
 
@@ -74,10 +74,11 @@
 /* Base Styles & Theme Tokens */
 @layer base {
   html {
-    font-size: 125%;
+    font-size: 100%;
+
     --background: #D8CEB9;
     /* RC-20 Warm Hardware Beige */
-    --foreground: #1A1D23;
+    --foreground: #050505;
     /* RC-20 Deep Charcoal Panel */
     --primary: #4F46E5;
     /* Indigo - High Contrast against Beige */
@@ -91,6 +92,14 @@
     --border: rgba(26, 29, 35, 0.25);
     --noise-opacity: 0.1;
     --noise-blend: multiply;
+  }
+
+  @media (min-width: 768px) {
+    html {
+      font-size: 125%;
+    }
+
+
   }
 
   html.dark {

@@ -11,7 +11,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        setMounted(true);
+        setMounted(true); // eslint-disable-line react-hooks/set-state-in-effect
         setBarcodeOpacities(Array(12).fill(1));
     }, []);
 
@@ -24,7 +24,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
             }, 50);
             return () => clearInterval(interval);
         } else {
-            setBarcodeOpacities(Array(12).fill(1));
+            setBarcodeOpacities(Array(12).fill(1)); // eslint-disable-line react-hooks/set-state-in-effect
         }
     }, [barcodeHover, mounted]);
 

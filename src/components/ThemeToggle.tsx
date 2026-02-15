@@ -7,7 +7,7 @@ export default function ThemeToggle() {
     const [isDark, setIsDark] = useState(false);
 
     useEffect(() => {
-        setMounted(true);
+        setMounted(true); // eslint-disable-line react-hooks/set-state-in-effect
         const checkTheme = () => {
             setIsDark(document.documentElement.classList.contains('dark'));
         };

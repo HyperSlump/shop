@@ -1,6 +1,6 @@
 import { getActiveProducts } from '@/lib/stripe/products';
 import ProductGrid from '@/components/ProductGrid';
-import EncryptText from '@/components/EncryptText';
+
 
 export const revalidate = 60; // Re-fetch products every 60 seconds
 

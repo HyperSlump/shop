@@ -8,8 +8,10 @@ import OneShotPlayer from './OneShotPlayer';
 import MatrixSpace from './MatrixSpace';
 import { useCart } from './CartProvider';
 
+import { Product } from './CartProvider';
+
 interface ProductPageLayoutProps {
-    product: any;
+    product: Product;
 }
 
 export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
@@ -57,7 +59,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                 className="relative w-full md:w-[45%] h-[40vh] md:h-full border-b md:border-b-0 md:border-r border-primary/20 bg-black/5"
             >
                 {/* Image Frame - Smaller than before, centered */}
-                <div className="absolute inset-0 flex items-start justify-center px-6 md:px-10 lg:px-12 pt-24 md:pt-32">
+                <div className="absolute inset-0 flex items-start justify-center px-4 md:px-10 lg:px-12 pt-24 md:pt-32">
                     <div className="relative w-full aspect-square max-h-[500px] border border-primary/20 shadow-2xl overflow-hidden group">
                         <Image
                             alt={product.name}
@@ -81,7 +83,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                 </div>
 
                 {/* Return Link */}
-                <Link href="/" className="absolute top-0 left-6 md:top-0 md:left-10 lg:top-0 lg:left-12 z-50 font-mono text-[9px] text-foreground/40 hover:text-primary transition-colors flex items-center gap-2 px-2 py-1 border border-transparent hover:border-primary/20">
+                <Link href="/" className="absolute top-0 left-4 md:top-0 md:left-10 lg:top-0 lg:left-12 z-50 font-mono text-[9px] text-foreground/40 hover:text-primary transition-colors flex items-center gap-2 px-2 py-1 border border-transparent hover:border-primary/20">
                     <span>[ BACK_TO_DATABASE ]</span>
                 </Link>
             </motion.div>
@@ -89,11 +91,11 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
             {/* RIGHT SIDE: CONTROL CENTER */}
             <div className="flex-1 flex flex-col bg-black/[0.02] dark:bg-white/[0.02] mr-4 md:mr-6 lg:mr-10">
                 {/* Header Section */}
-                <motion.div variants={itemVariants} className="p-6 md:p-10 lg:py-12 lg:pl-12 lg:pr-12 border-b border-primary/10">
+                <motion.div variants={itemVariants} className="p-4 md:p-10 lg:py-12 lg:pl-12 lg:pr-12 border-b border-primary/10">
                     <div className="flex justify-between items-start mb-2">
                         <div className="space-y-1">
                             <span className="font-mono text-[8px] text-primary/40 uppercase tracking-[0.3em]">
-                                // SYS_ENTRY: {product.id.slice(0, 8)}
+                                {'//'} SYS_ENTRY: {product.id.slice(0, 8)}
                             </span>
                             <h1 className="font-gothic text-4xl md:text-5xl text-foreground leading-none tracking-tight">
                                 {product.name}
@@ -109,7 +111,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                 </motion.div>
 
                 {/* Audio Console - Natural Flow */}
-                <motion.div variants={itemVariants} className="flex-1 p-6 md:p-10 lg:py-12 lg:pl-12 lg:pr-12 flex flex-col gap-8">
+                <motion.div variants={itemVariants} className="flex-1 p-4 md:p-10 lg:py-12 lg:pl-12 lg:pr-12 flex flex-col gap-8">
                     {/* Main Stream */}
                     <div className="space-y-3">
                         <div className="flex items-center gap-2">
@@ -164,7 +166,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                 </motion.div>
 
                 {/* Footer Action */}
-                <motion.div variants={itemVariants} className="p-6 md:p-10 lg:py-12 lg:pl-12 lg:pr-12 border-t border-primary/10 bg-[var(--background)]">
+                <motion.div variants={itemVariants} className="p-4 md:p-10 lg:py-12 lg:pl-12 lg:pr-12 border-t border-primary/10 bg-[var(--background)]">
                     <button
                         onClick={() => !isInCart && addToCart(product)}
                         disabled={isInCart}

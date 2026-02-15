@@ -3,7 +3,7 @@
 import { useCart } from './CartProvider';
 import { useState } from 'react';
 import NextImage from 'next/image';
-import { X, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import MatrixSpace from './MatrixSpace';
 
 export default function CartDrawer() {

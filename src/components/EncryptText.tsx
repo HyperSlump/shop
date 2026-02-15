@@ -41,7 +41,7 @@ export default function EncryptText() {
         }
 
         // 2. PHASE TWO: Gradually resolve to target text (Smoother resolution)
-        let resolvedIndices = new Set<number>();
+        const resolvedIndices = new Set<number>();
         const totalChars = targetText.length;
 
         // Increase resolution granularity

@@ -23,7 +23,7 @@ export default function IndustrialTicker() {
         // Row 1: Right to Left (Extremely Slow Crawl)
         row1AnimRef.current = gsap.to(row1Ref.current, {
             xPercent: -50,
-            duration: 300,
+            duration: 1200,
             ease: "none",
             repeat: -1,
             paused: false
@@ -34,7 +34,7 @@ export default function IndustrialTicker() {
         gsap.set(row2Ref.current, { xPercent: -50 });
         row2AnimRef.current = gsap.to(row2Ref.current, {
             xPercent: 0,
-            duration: 240,
+            duration: 960,
             ease: "none",
             repeat: -1,
             paused: false
@@ -44,8 +44,10 @@ export default function IndustrialTicker() {
         const trigger = ScrollTrigger.create({
             onUpdate: (self) => {
                 const velocity = self.getVelocity();
-                const skew = velocity / 300;
-                const speed = 1 + Math.abs(velocity / 600);
+                const skew = velocity / 500;
+                // Cap the speed multiplier to prevent glitching on page load/fast scrolls
+                const rawSpeed = 1 + Math.abs(velocity / 1000);
+                const speed = Math.min(rawSpeed, 3); // Max 3x speed
 
                 // Apply Skew
                 gsap.to([row1Ref.current, row2Ref.current], {
