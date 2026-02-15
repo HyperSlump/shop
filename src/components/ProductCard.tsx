@@ -52,7 +52,10 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         <MatrixSpace isVisible={isHovered} />
                     </div>
 
-                    <div className="relative z-10 flex-1 overflow-hidden p-4 flex flex-col items-center gap-2 custom-scrollbar">
+                    <Link
+                        href={`/product/${product.id}`}
+                        className="relative z-10 flex-1 w-full overflow-hidden p-4 flex flex-col items-center gap-2 custom-scrollbar hover:bg-primary/[0.02] transition-colors duration-300"
+                    >
                         {/* Centered Image Frame */}
                         <div className="relative w-36 h-36 shrink-0 shadow-2xl transition-transform duration-500 group-hover:scale-105">
 
@@ -61,7 +64,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 IMG_SAMP._{product.id.slice(0, 4)}
                             </div>
 
-                            <Link href={`/product/${product.id}`} className="relative block w-full h-full overflow-hidden cursor-ne-resize">
+                            <div className="relative block w-full h-full overflow-hidden">
                                 <Image
                                     alt={product.name}
                                     className="w-full h-full object-cover opacity-90 contrast-125 grayscale group-hover:grayscale-0 transition-all duration-500"
@@ -70,7 +73,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                     sizes="160px"
                                 />
                                 <div className="absolute inset-0 bg-primary/5 mix-blend-overlay" />
-                            </Link>
+                            </div>
                         </div>
 
                         {/* Technical Metadata Stack */}
@@ -109,7 +112,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </Link>
                 </div>
 
                 {/* Bottom Section: Info - New Industrial Design */}
@@ -146,9 +149,9 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 e.stopPropagation();
                                 setShowPreview(true);
                             }}
-                            className="text-left font-mono text-[11px] font-bold uppercase tracking-widest text-foreground/50 hover:text-primary transition-colors flex items-center gap-2 group/pbtn"
+                            className="text-left font-mono text-[13px] font-bold uppercase tracking-[0.2em] text-foreground/50 hover:text-primary transition-colors flex items-center gap-2 group/pbtn"
                         >
-                            <span className="w-2 h-2 border border-current group-hover/pbtn:bg-primary transition-all rounded-[1px]" />
+                            <span className="w-2.5 h-2.5 border border-current group-hover/pbtn:bg-primary transition-all rounded-[1px]" />
                             PREVIEW
                         </button>
 
@@ -159,7 +162,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 onAddToCart(product);
                             }}
                             disabled={isInCart}
-                            className="text-right font-mono text-[13px] font-bold text-primary uppercase hover:text-primary/70 transition-colors disabled:opacity-50"
+                            className="text-right font-mono text-[15px] font-bold text-primary uppercase hover:text-primary/70 transition-colors disabled:opacity-50 tracking-wider"
                         >
                             {isInCart ? '[ IN_CART ]' : '[ ACQUIRE ]'}
                         </button>
@@ -261,9 +264,9 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 e.stopPropagation();
                                 setShowPreview(false);
                             }}
-                            className="text-left font-mono text-[11px] uppercase tracking-widest text-foreground/40 hover:text-foreground transition-colors flex items-center gap-2 group/back"
+                            className="text-left font-mono text-[13px] uppercase tracking-[0.2em] text-foreground/40 hover:text-foreground transition-colors flex items-center gap-2 group/back"
                         >
-                            <span className="w-2 h-2 border border-current group-hover/back:bg-foreground transition-all rounded-[1px]" />
+                            <span className="w-2.5 h-2.5 border border-current group-hover/back:bg-foreground transition-all rounded-[1px]" />
                             [ BACK ]
                         </button>
 
@@ -274,7 +277,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 onAddToCart(product);
                             }}
                             disabled={isInCart}
-                            className="text-right font-mono text-[13px] text-primary uppercase hover:text-primary/70 transition-colors disabled:opacity-50"
+                            className="text-right font-mono text-[15px] font-bold text-primary uppercase hover:text-primary/70 transition-colors disabled:opacity-50 tracking-wider"
                         >
                             {isInCart ? '[ IN CART ]' : '[ ADD TO CART ]'}
                         </button>
