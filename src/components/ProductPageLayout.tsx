@@ -58,7 +58,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
             >
                 {/* Image Frame - Smaller than before, centered */}
                 <div className="absolute inset-0 flex items-center justify-center p-8 md:p-12 lg:p-20">
-                    <div className="relative w-full h-full max-h-[500px] border border-primary/20 shadow-2xl overflow-hidden group">
+                    <div className="relative w-full aspect-square max-h-[500px] border border-primary/20 shadow-2xl overflow-hidden group">
                         <Image
                             alt={product.name}
                             src={product.image || 'https://via.placeholder.com/1000'}
@@ -117,7 +117,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                             <span className="font-mono text-[9px] text-primary/60 uppercase tracking-[0.2em]">AUDIO_STREAM_MASTER</span>
                         </div>
                         {audioPreviewUrl ? (
-                            <div className="relative w-full h-16 md:h-20 bg-black/5 dark:bg-white/5 border border-primary/30 rounded overflow-hidden">
+                            <div className="relative w-full h-24 md:h-32 bg-black/5 dark:bg-white/5 border border-primary/30 rounded overflow-hidden">
                                 <WaveformOverlay audioUrl={audioPreviewUrl} isActive={true} />
                             </div>
                         ) : (
@@ -134,7 +134,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                                 <span className="font-mono text-[9px] text-primary/40 uppercase tracking-widest">SUB_SAMPLES</span>
                                 <span className="font-mono text-[8px] text-primary/20">{samples.length}_LOADED</span>
                             </div>
-                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                            <div className="grid grid-cols-4 gap-4">
                                 {samples.map((url, index) => (
                                     <OneShotPlayer
                                         key={index}
