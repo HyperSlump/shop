@@ -2,42 +2,50 @@
 
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import Link from 'next/link';
 
 const promos = [
     {
         text: "NEURO_PATCH_v4.5 :: SYNTHETIC_TEXTURE_PACK",
         sub: "// IMMERSIVE_AUDIO_ENGINEERING // 400+ UNIQUE_SAMPLES // CORTEX_COMPATIBLE",
-        desc: "A DEEP_DIVE INTO THE ANALOG_ABYSS. RECONSTRUCT YOUR SONIC_ARCHITECTURE WITH VOID_BASS AND CRYSTALLINE_HIGHS."
+        desc: "A DEEP_DIVE INTO THE ANALOG_ABYSS. RECONSTRUCT YOUR SONIC_ARCHITECTURE WITH VOID_BASS AND CRYSTALLINE_HIGHS.",
+        href: "/product/neuro-patch-v4"
     },
     {
         text: "FREE_SIGNAL_BROADCAST :: GLOBAL_DELIVERY",
         sub: "// ZERO_LATENCY_Fulfillment // ENCRYPTED_DOWNLOAD_STREAMS",
-        desc: "ALL DIGITAL_ASSETS ARE DELIVERED VIA SECURE_LINK INSTANTLY AFTER PURCHASE. NO_WAITING // NO_FRICTION // ONLY_SPEED."
+        desc: "ALL DIGITAL_ASSETS ARE DELIVERED VIA SECURE_LINK INSTANTLY AFTER PURCHASE. NO_WAITING // NO_FRICTION // ONLY_SPEED.",
+        href: "/product/free-signal"
     },
     {
         text: "THE_CORTEX_COLLECTIVE :: DISCORD_SYNC",
         sub: "// COMMUNITY_DRIVEN_DEVELOPMENT // EXCLUSIVE_BETA_ACCESS",
-        desc: "JOIN 5000+ SYNTHESIS_ENTHUSIASTS. SHARE PATCHES // TROUBLESHOOT // COLLABORATE ON THE NEXT_GENERATION OF HYPER$LUMP TOOLS."
+        desc: "JOIN 5000+ SYNTHESIS_ENTHUSIASTS. SHARE PATCHES // TROUBLESHOOT // COLLABORATE ON THE NEXT_GENERATION OF HYPER$LUMP TOOLS.",
+        href: "https://discord.gg/hyperslump"
     },
     {
         text: "ANALOG_GRIME_v2 :: LIMITED_COLLECTION",
         sub: "// ORGANIC_DISTORTION_CURVES // 24-BIT_RESAMPLING",
-        desc: "RAW // UNFILTERED // INDUSTRIAL. CAPTURED FROM EXPERIMENTAL_OSCILLATORS AND DISTORTED THROUGH VINTAGE_HARDWARE."
+        desc: "RAW // UNFILTERED // INDUSTRIAL. CAPTURED FROM EXPERIMENTAL_OSCILLATORS AND DISTORTED THROUGH VINTAGE_HARDWARE.",
+        href: "/product/analog-grime-v2"
     },
     {
         text: "VOID_ENGINE_v1.0 :: GRANULAR_PROCESSOR",
         sub: "// REAL-TIME_DESTRUCTION // PHASE_MODULATION_ALGORITHMS",
-        desc: "DECONSTRUCT ANY INPUT SIGNAL INTO MICRO-PARTICULATES. ENGINEERED FOR CHAOS // REFINED FOR PRECISION."
+        desc: "DECONSTRUCT ANY INPUT SIGNAL INTO MICRO-PARTICULATES. ENGINEERED FOR CHAOS // REFINED FOR PRECISION.",
+        href: "/product/void-engine"
     },
     {
         text: "EARLY_ACCESS_RESERVE :: Q1_ROADMAP",
         sub: "// PROTOCOL_ENHANCEMENTS // NEW_WAVEFORM_GEOMETRY",
-        desc: "HOLDERS OF THE NEXUS_PASS RECEIVE PRIORITY ACCESS TO ALL UPCOMING MODULES AND EXPERIMENTAL KITS."
+        desc: "HOLDERS OF THE NEXUS_PASS RECEIVE PRIORITY ACCESS TO ALL UPCOMING MODULES AND EXPERIMENTAL KITS.",
+        href: "/product/early-access"
     },
     {
         text: "THERMAL_DYNAMICS :: KICK_DRUM_LABS",
         sub: "// SUB-SONIC_IMPACT // TRANSIENT_SHAPING_TOOLS",
-        desc: "DESIGNED TO SHAKE THE CHASSIS. DISCOVER THE LIMITS OF LOW-END THEORY WITH OUR CUSTOM DESIGNED TRANSIENT KITS."
+        desc: "DESIGNED TO SHAKE THE CHASSIS. DISCOVER THE LIMITS OF LOW-END THEORY WITH OUR CUSTOM DESIGNED TRANSIENT KITS.",
+        href: "/product/thermal-dynamics"
     }
 ];
 
@@ -124,12 +132,15 @@ export default function PromoCarousel() {
             </div>
 
             <div className="flex flex-col items-start text-left flex-1 py-6">
-                <div
+                <Link
+                    href={promos[index].href}
                     ref={textRef}
-                    className="font-gothic text-2xl md:text-3xl lg:text-4xl tracking-widest text-primary lowercase mb-4"
+                    className="group"
                 >
-                    {promos[index].text}
-                </div>
+                    <div className="font-gothic text-2xl md:text-3xl lg:text-4xl tracking-widest text-foreground hover:text-primary transition-colors duration-300 lowercase mb-4">
+                        {promos[index].text}
+                    </div>
+                </Link>
                 <div
                     ref={subRef}
                     className="font-mono text-[9px] md:text-[10px] tracking-[0.5em] opacity-70 uppercase mb-4 border-l-2 border-primary/50 pl-6 leading-relaxed max-w-[800px]"

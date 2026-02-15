@@ -51,7 +51,7 @@ export default function HeroSchema() {
                 </div>
 
                 {/* Promotional Carousel - Re-positioned and Centered on the "Red Line" Axis */}
-                <div className="absolute left-1/2 top-[180px] -translate-x-1/2 -translate-y-1/2 z-50 hidden lg:block pointer-events-none">
+                <div className="absolute left-1/2 top-[180px] -translate-x-1/2 -translate-y-1/2 z-50 hidden lg:block">
                     <PromoCarousel />
                 </div>
 
