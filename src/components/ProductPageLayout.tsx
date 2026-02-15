@@ -70,7 +70,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
             animate="animate"
             className="flex-1 w-full p-4 md:p-6 lg:p-8"
         >
-            <div className="max-w-6xl mx-auto space-y-12">
+            <div className="w-full space-y-12">
                 {/* 1. Header System Line (Synced with MockPages) */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-primary/20 pb-8 gap-6">
                     <div className="space-y-2">
