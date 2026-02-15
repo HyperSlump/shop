@@ -81,7 +81,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                 </div>
 
                 {/* Return Link */}
-                <Link href="/" className="absolute top-4 left-4 z-50 font-mono text-[9px] text-foreground/40 hover:text-primary transition-colors flex items-center gap-2 px-2 py-1 border border-transparent hover:border-primary/20">
+                <Link href="/" className="absolute top-6 left-6 md:top-10 md:left-10 lg:top-12 lg:left-12 z-50 font-mono text-[9px] text-foreground/40 hover:text-primary transition-colors flex items-center gap-2 px-2 py-1 border border-transparent hover:border-primary/20">
                     <span>[ BACK_TO_DATABASE ]</span>
                 </Link>
             </motion.div>
