@@ -80,12 +80,12 @@ export default function RootLayout({
               <Navigation />
 
               {/* MAIN CONTENT WRAPPER */}
-              <main className="flex-1 flex flex-col min-w-0 pt-16 md:pt-0 md:ml-20 min-h-screen">
+              <main className="flex-1 flex flex-col min-w-0 pt-16 md:pt-0 md:mr-20 h-screen overflow-hidden">
                 {/* GLOBAL HEADER */}
                 <HeroSchema />
 
                 {/* PAGE CONTENT */}
-                <div className="flex-1 w-full">
+                <div className="flex-1 w-full min-h-0 overflow-y-auto custom-scrollbar">
                   {children}
                 </div>
 

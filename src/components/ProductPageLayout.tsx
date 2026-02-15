@@ -49,7 +49,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
             variants={containerVariants}
             initial="initial"
             animate="animate"
-            className="fixed inset-0 top-16 md:top-0 md:left-20 bg-[var(--background)] overflow-hidden flex flex-col md:flex-row"
+            className="relative h-full w-full overflow-hidden flex flex-col md:flex-row"
         >
             {/* LEFT SIDE: PRODUCT VISUAL (Compact Frame) */}
             <motion.div
