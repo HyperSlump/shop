@@ -34,8 +34,9 @@ export const metadata: Metadata = {
 
 import Navigation from "@/components/Navigation";
 import HeroSchema from "@/components/HeroSchema";
+import HorizontalNav from "@/components/HorizontalNav";
 import IndustrialTicker from "@/components/IndustrialTicker";
-import ThemeToggle from "@/components/ThemeToggle";
+
 
 // ... imports
 
@@ -74,14 +75,15 @@ export default function RootLayout({
         <CartProvider>
           <CustomCursor />
 
-          <div className="relative min-h-screen bg-[var(--background)]">
+          <div className="relative min-h-screen bg-[var(--background)] flex flex-col md:flex-row">
             {/* GLOBAL NAVIGATION SIDEBAR */}
             <Navigation />
 
             {/* MAIN CONTENT WRAPPER */}
-            <main className="flex-1 flex flex-col min-w-0 pt-16 md:pt-0 md:ml-20 min-h-screen">
+            <main className="flex-1 flex flex-col min-w-0 md:pt-0 min-h-screen">
               {/* GLOBAL HEADER */}
               <HeroSchema />
+              <HorizontalNav />
 
               {/* PAGE CONTENT */}
               <div className="flex-1 w-full">
@@ -94,7 +96,7 @@ export default function RootLayout({
                   </div>
 
                   {/* Indented Footer Content */}
-                  <div className="p-8 md:p-12 bg-[var(--background)] border-t-2 border-black/10 dark:border-white/5">
+                  <div className="p-8 md:p-12 bg-[var(--background)] border-t border-foreground/15">
                     <div className="max-w-7xl mx-auto flex flex-col md:grid md:grid-cols-3 gap-12 items-center md:items-center">
                       {/* System Status (Left) */}
                       <div className="flex flex-col gap-4 font-mono w-full text-center md:text-left">
@@ -125,9 +127,7 @@ export default function RootLayout({
                         <p className="text-[9px] opacity-40 font-mono tracking-tighter uppercase text-center md:text-right">
                           ©2026 HYPER$LUMP // CORTEX_SYNTHESIS_HUB // ALL_RIGHTS_RESERVED
                         </p>
-                        <div className="pt-1">
-                          <ThemeToggle />
-                        </div>
+
                       </div>
                     </div>
                   </div>

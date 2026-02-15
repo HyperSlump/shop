@@ -2,24 +2,33 @@
 
 import Link from 'next/link';
 import { useCart } from './CartProvider';
+import ThemeToggle from './ThemeToggle';
+
 
 export default function Navigation() {
     const { toggleCart, cart } = useCart();
 
     return (
-        <aside className="w-full md:w-20 h-16 md:h-screen fixed top-0 left-0 border-b md:border-b-0 md:border-r-4 border-[var(--border)] flex flex-row md:flex-col items-center justify-between px-4 md:py-8 z-50 bg-[var(--background)] animate-fade-in">
+        <aside className="w-full md:w-20 h-16 md:h-screen sticky top-0 left-0 border-b md:border-b-0 md:border-r border-foreground/15 flex flex-row md:flex-col items-center justify-between px-4 md:p-6 z-50 bg-[var(--background)] animate-fade-in">
             {/* Mobile Title */}
             <Link href="/" className="md:hidden text-xl font-gothic tracking-tighter hover:text-primary transition-colors leading-none font-bold">
                 <span>hyper$lump</span>
             </Link>
 
-            {/* Centered Navigation Module */}
-            <nav className="flex md:flex-col gap-4 md:gap-6 items-center md:m-auto">
-                <button className="hover:text-primary transition-colors group">
-                    <span className="material-icons text-xl block transition-transform group-hover:scale-110">search</span>
-                </button>
-                <button className="hover:text-primary transition-colors group">
+            {/* Top: Brain / Theme Toggle */}
+            <div className="hidden md:flex flex-col items-center gap-6 w-full pt-[52px]">
+                <ThemeToggle />
+            </div>
+
+            {/* Center: Tools */}
+            <nav className="flex md:flex-col gap-6 md:gap-10 items-center w-full">
+
+                <button className="hover:text-primary transition-colors group relative">
                     <span className="material-icons text-xl block transition-transform group-hover:scale-110">filter_list</span>
+                    <div className="absolute left-full ml-4 top-1/2 -translate-y-1/2 hidden md:group-hover:flex items-center gap-2">
+                        <div className="h-[1px] w-4 bg-primary/50" />
+                        <span className="text-[10px] font-mono tracking-widest text-primary whitespace-nowrap bg-background px-1">FILTER_GIRD</span>
+                    </div>
                 </button>
                 <button
                     onClick={toggleCart}

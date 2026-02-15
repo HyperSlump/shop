@@ -1,0 +1,342 @@
+import React, { useState, useEffect } from 'react';
+import { Search, ShoppingCart, Filter, Globe, Terminal, Activity, ChevronRight, Brain } from 'lucide-react';
+
+// Using inline styles for font imports and dynamic theme styles
+const GlobalStyles = ({ isDark }) => {
+const scrollTrack = isDark ? '#121212' : '#E8E3D9';
+const scrollThumb = isDark ? '#E8E3D9' : '#1F1F1F';
+const selectionBg = isDark ? '#FF4D4D' : '#FF4D4D';
+const selectionText = isDark ? '#121212' : '#FFFFFF';
+
+return (
+<style>
+    {
+        ` @import url('https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+        .font-gothic {
+            font-family: 'UnifrakturCook', cursive;
+        }
+
+        .font-mono {
+            font-family: 'Space Mono', monospace;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: $ {
+                scrollTrack
+            }
+
+            ;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: $ {
+                scrollThumb
+            }
+
+            ;
+        }
+
+        ::selection {
+            background: $ {
+                selectionBg
+            }
+
+            ;
+
+            color: $ {
+                selectionText
+            }
+
+            ;
+        }
+
+        /* Glitch/Hover effect utility */
+        .hover-glitch {
+            transition: all 0.2s;
+        }
+
+        /* Blinking cursor */
+        .blink {
+            animation: blinker 1s linear infinite;
+        }
+
+        @keyframes blinker {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        `
+    }
+</style>
+);
+};
+
+const App = () => {
+const [time, setTime] = useState(new Date());
+const [isDark, setIsDark] = useState(false); // Default to light mode
+const [cartCount, setCartCount] = useState(3);
+
+// Update clock
+useEffect(() => {
+const timer = setInterval(() => setTime(new Date()), 1000);
+return () => clearInterval(timer);
+}, []);
+
+const navItems = [
+{ label: 'SHOP', sub: ':: NEW' },
+{ label: 'BLOG', sub: ':: READ' },
+{ label: 'ABOUT', sub: ':: INFO' },
+{ label: 'ARCHIVE', sub: ':: OLD' },
+{ label: 'CONTACT', sub: ':: MAIL' },
+{ label: 'SUPPORT', sub: ':: HELP' },
+{ label: 'DOCS', sub: ':: FILE' }
+];
+
+// Theme configuration
+const theme = {
+bg: isDark ? 'bg-[#121212]' : 'bg-[#E8E3D9]',
+text: isDark ? 'text-[#E8E3D9]' : 'text-[#1F1F1F]',
+border: isDark ? 'border-[#E8E3D9]/20' : 'border-[#1F1F1F]/20',
+muted: isDark ? 'text-[#E8E3D9]/60' : 'text-[#1F1F1F]/60',
+cardBg: isDark ? 'bg-[#1E1E1E]' : 'bg-[#EAE6DE]',
+cardBorder: isDark ? 'border-[#333]' : 'border-[#1F1F1F]',
+buttonHover: isDark ? 'hover:bg-[#E8E3D9] hover:text-[#121212]' : 'hover:bg-[#1F1F1F] hover:text-[#E8E3D9]',
+accent: '#FF4D4D'
+};
+
+return (
+<div className={`min-h-screen ${theme.bg} ${theme.text} font-mono flex flex-col md:flex-row overflow-hidden relative
+    transition-colors duration-300`}>
+    <GlobalStyles isDark={isDark} />
+
+    {/* --- SIDEBAR (Fixed Left) --- */}
+    <aside className={`w-full md:w-20 md:h-screen border-b md:border-b-0 md:border-r ${theme.border} flex md:flex-col
+        items-center justify-between p-4 ${theme.bg} z-50 sticky top-0 transition-colors duration-300`}>
+
+        {/* Desktop Header Top - Now contains Brain Toggle instead of 3 lines */}
+        <div className="hidden md:block">
+            <button onClick={()=> setIsDark(!isDark)}
+                className={`p-2 ${theme.buttonHover} transition-all rounded-sm group relative active:scale-90`}
+                title="Toggle Neural Mode"
+                >
+                <Brain size={24} />
+                <span className={`absolute left-12 top-2 ${isDark ? 'bg-[#E8E3D9] text-[#121212]'
+                    : 'bg-[#1F1F1F] text-[#E8E3D9]' } text-[10px] px-2 py-1 opacity-0 group-hover:opacity-100
+                    transition-opacity whitespace-nowrap pointer-events-none z-50`}>
+                    {isDark ? 'SYS_LIGHT_UP' : 'SYS_DARK_UP'}
+                </span>
+            </button>
+        </div>
+
+        {/* Mobile Header Control */}
+        <div className="md:hidden flex items-center justify-between w-full">
+            <span className="font-gothic text-2xl">HS</span>
+            <button onClick={()=> setIsDark(!isDark)}
+                className="p-2 transition-transform active:scale-95"
+                title="Toggle Theme"
+                >
+                <Brain size={24} className={isDark ? "text-[#E8E3D9]" : "text-[#1F1F1F]" } />
+            </button>
+        </div>
+
+        {/* Sidebar Tools (Desktop) */}
+        <div className="hidden md:flex flex-col gap-8 items-center">
+            <button className={`p-2 ${theme.buttonHover} transition-colors rounded-sm group relative`}>
+                <Search size={20} />
+                <span className={`absolute left-10 top-2 ${isDark ? 'bg-[#E8E3D9] text-[#121212]'
+                    : 'bg-[#1F1F1F] text-[#E8E3D9]' } text-xs px-2 py-1 opacity-0 group-hover:opacity-100
+                    transition-opacity whitespace-nowrap pointer-events-none`}>SEARCH_DB</span>
+            </button>
+
+            <button className={`p-2 ${theme.buttonHover} transition-colors rounded-sm group relative`}>
+                <Filter size={20} />
+                <span className={`absolute left-10 top-2 ${isDark ? 'bg-[#E8E3D9] text-[#121212]'
+                    : 'bg-[#1F1F1F] text-[#E8E3D9]' } text-xs px-2 py-1 opacity-0 group-hover:opacity-100
+                    transition-opacity whitespace-nowrap pointer-events-none`}>FILTER_MOD</span>
+            </button>
+
+            <button className={`p-2 ${theme.buttonHover} transition-colors rounded-sm relative group`}>
+                <ShoppingCart size={20} />
+                {cartCount > 0 && (
+                <span
+                    className="absolute -top-1 -right-1 bg-[#5D5FEF] text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">
+                    {cartCount}
+                </span>
+                )}
+                <span className={`absolute left-10 top-2 ${isDark ? 'bg-[#E8E3D9] text-[#121212]'
+                    : 'bg-[#1F1F1F] text-[#E8E3D9]' } text-xs px-2 py-1 opacity-0 group-hover:opacity-100
+                    transition-opacity whitespace-nowrap pointer-events-none`}>CART_VIEW</span>
+            </button>
+        </div>
+
+        <div className="hidden md:block text-[10px] rotate-180 opacity-50 writing-vertical-lr">
+            ©2026_HS_GLOBAL
+        </div>
+    </aside>
+
+    {/* --- MAIN CONTENT AREA --- */}
+    <main className="flex-1 flex flex-col h-screen overflow-y-auto scroll-smooth">
+
+        {/* HERO HEADER SECTION */}
+        <header className={`px-6 pt-8 pb-4 border-b ${theme.border} relative`}>
+
+            {/* Technical Metadata Grid */}
+            <div className={`grid grid-cols-2 md:grid-cols-4 text-[10px] ${theme.muted} mb-6 font-bold tracking-widest
+                gap-y-2`}>
+                <div className="flex items-center gap-2">
+                    <span className={`w-2 h-2 ${isDark ? 'bg-[#E8E3D9]' : 'bg-[#1F1F1F]' } rounded-full
+                        animate-pulse`}></span>
+                    SYS: V.4.0.ALPHA [ OK ]
+                </div>
+                <div className="md:text-center">
+                    COORDS: {time.getHours()}:{time.getMinutes()}:{time.getSeconds()}
+                </div>
+                <div className="md:text-center hidden md:block">
+                    BUILD_ID: 856.992
+                </div>
+                <div className="text-right flex items-center justify-end gap-2">
+                    <Globe size={12} />
+                    <span>LINK_ESTABLISHED</span>
+                </div>
+            </div>
+
+            {/* Main Logo Area */}
+            <div className="flex flex-col md:flex-row justify-between items-end mb-8 relative">
+                <h1 className="text-6xl md:text-8xl font-gothic tracking-tight leading-[0.8] mb-4 md:mb-0">
+                    hyperSlump
+                </h1>
+
+                {/* Contextual Box */}
+                <div className={`border ${theme.border} p-2 max-w-xs text-xs mb-2 md:mb-0 ${isDark ? 'bg-[#1E1E1E]'
+                    : 'bg-[#E8E3D9]' }`}>
+                    <div className={`flex justify-between border-b ${theme.border} pb-1 mb-1`}>
+                        <span>TERMINAL_READY</span>
+                        <span className="text-[#FF4D4D]">
+                            <Activity size={12} />
+                        </span>
+                    </div>
+                    <p className="opacity-70 leading-tight">
+                        Warning: Browsing this archive may result in extreme aesthetic satisfaction. Proceed with
+                        caution.
+                    </p>
+                </div>
+            </div>
+
+            {/* Navigation Grid */}
+            <nav className={`hidden md:flex flex-col md:flex-row border-t border-l ${theme.border}`}>
+                {navItems.map((item, index) => (
+                <a key={index} href="#" className={`flex-1 border-r border-b ${theme.border} p-4 md:py-6 md:px-2 flex
+                    flex-col items-center justify-center transition-all duration-200 group ${theme.buttonHover}`}>
+                    <span className="text-sm font-bold tracking-wider">{item.label}</span>
+                    <span
+                        className="text-[9px] opacity-40 mt-1 group-hover:text-[#5D5FEF] transition-colors">{item.sub}</span>
+                </a>
+                ))}
+            </nav>
+        </header>
+
+        {/* CONTENT */}
+        <div className="p-6 md:p-12 grid grid-cols-1 md:grid-cols-12 gap-8">
+            <div className="col-span-1 md:col-span-12 flex items-center gap-4 mb-4">
+                <Terminal size={16} />
+                <h2 className="text-xl font-bold uppercase">Featured_Arrivals <span className="blink">_</span></h2>
+                <div className={`h-[1px] ${isDark ? 'bg-[#E8E3D9]' : 'bg-[#1F1F1F]' } flex-1 opacity-20`}></div>
+            </div>
+
+            {/* Product Card 1 */}
+            <div className={`col-span-1 md:col-span-4 border ${theme.cardBorder} p-4 relative group cursor-pointer
+                hover:shadow-[8px_8px_0px_rgba(31,31,31,0.1)] transition-shadow ${theme.cardBg}`}>
+                <div className={`aspect-square ${isDark ? 'bg-[#2A2A2A]' : 'bg-[#D8D3C9]' } mb-4 flex items-center
+                    justify-center overflow-hidden relative`}>
+                    <div className="absolute top-2 right-2 bg-[#FF4D4D] text-white text-[10px] px-2 py-1 font-bold">SALE
+                    </div>
+                    <div
+                        className="text-4xl opacity-10 font-gothic group-hover:scale-110 transition-transform duration-500">
+                        ITEM_01</div>
+                </div>
+                <div className="flex justify-between items-start">
+                    <div>
+                        <h3 className="font-bold text-lg">Cyber_Jacket_v2</h3>
+                        <p className="text-xs opacity-60">Ballistic Nylon / Weatherproof</p>
+                    </div>
+                    <div className="text-right">
+                        <span className="block font-bold">$240.00</span>
+                        <span className="text-[10px] line-through opacity-50">$320.00</span>
+                    </div>
+                </div>
+                <button className={`w-full mt-4 ${isDark ? 'bg-[#E8E3D9] text-[#121212]' : 'bg-[#1F1F1F] text-[#E8E3D9]'
+                    } py-2 text-xs font-bold hover:bg-[#5D5FEF] hover:text-white transition-colors flex items-center
+                    justify-center gap-2`}>
+                    ADD_TO_CART
+                    <ChevronRight size={12} />
+                </button>
+            </div>
+
+            {/* Product Card 2 */}
+            <div className={`col-span-1 md:col-span-4 border ${theme.cardBorder} p-4 relative group cursor-pointer
+                hover:shadow-[8px_8px_0px_rgba(31,31,31,0.1)] transition-shadow ${theme.cardBg}`}>
+                <div className={`aspect-square ${isDark ? 'bg-[#2A2A2A]' : 'bg-[#D8D3C9]' } mb-4 flex items-center
+                    justify-center overflow-hidden`}>
+                    <div
+                        className="text-4xl opacity-10 font-gothic group-hover:scale-110 transition-transform duration-500">
+                        ITEM_02</div>
+                </div>
+                <div className="flex justify-between items-start">
+                    <div>
+                        <h3 className="font-bold text-lg">Neural_Interface</h3>
+                        <p className="text-xs opacity-60">Brain-Computer Link / USB-C</p>
+                    </div>
+                    <div className="text-right">
+                        <span className="block font-bold">$1,200.00</span>
+                    </div>
+                </div>
+                <button className={`w-full mt-4 border ${theme.border} ${theme.text} py-2 text-xs font-bold
+                    ${theme.buttonHover} transition-colors`}>
+                    VIEW_SPECS
+                </button>
+            </div>
+
+            {/* Product Card 3 */}
+            <div className={`col-span-1 md:col-span-4 border ${theme.cardBorder} p-4 relative group cursor-pointer
+                hover:shadow-[8px_8px_0px_rgba(31,31,31,0.1)] transition-shadow ${theme.cardBg}`}>
+                <div className={`aspect-square ${isDark ? 'bg-[#2A2A2A]' : 'bg-[#D8D3C9]' } mb-4 flex items-center
+                    justify-center overflow-hidden`}>
+                    <div
+                        className="text-4xl opacity-10 font-gothic group-hover:scale-110 transition-transform duration-500">
+                        ITEM_03</div>
+                </div>
+                <div className="flex justify-between items-start">
+                    <div>
+                        <h3 className="font-bold text-lg">Data_Pants</h3>
+                        <p className="text-xs opacity-60">Wide Leg / 15 Pockets</p>
+                    </div>
+                    <div className="text-right">
+                        <span className="block font-bold">$180.00</span>
+                    </div>
+                </div>
+                <button className={`w-full mt-4 border ${theme.border} ${theme.text} py-2 text-xs font-bold
+                    ${theme.buttonHover} transition-colors`}>
+                    VIEW_SPECS
+                </button>
+            </div>
+
+        </div>
+
+        <footer className={`mt-auto border-t ${theme.border} p-6 text-[10px] flex justify-between opacity-60`}>
+            <div>SERVER_TIME: {time.toLocaleTimeString()} UTC</div>
+            <div>RUNNING_ON_GEMINI_ENGINE</div>
+        </footer>
+
+    </main>
+</div>
+);
+};
+
+export default App;

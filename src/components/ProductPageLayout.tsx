@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 import WaveformOverlay from './WaveformOverlay';
 import OneShotPlayer from './OneShotPlayer';
 import MatrixSpace from './MatrixSpace';
@@ -46,6 +47,22 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
         }
     };
 
+    // Extended "Verbage" / Lore Map
+    const DETAILED_DESCRIPTIONS: Record<string, string> = {
+        'VOID_TEXTURES_01': "A collection of high-fidelity audio artifacts harvested from corrupted data streams. These textures have been processed through analog distortion circuits and granular synthesis engines to create a sense of vast, empty space. ideal for cinematic sound design, dark ambient, and industrial techno. Expect heavy sub-bass drones, metallic scrapes, and digital interference patterns.",
+        'BROKEN_DRUMS_X': "Rhythmic glitches and decimated percussion loops. Each sample has been rigorously tested for maximum impact and textural grit. This pack contains hard-hitting kicks, snapping snares, and erratic hi-hat patterns that defy standard quantization. Perfect for adding a chaotic, human feel to mechanical beats.",
+        'NEURO_BASS_V2': "Twisted low-end frequencies and reese basslines designed to tear through the mix. Synthesized using advanced frequency modulation and wave-shaping techniques. These sounds are essential for drum and bass, neurofunk, and heavy dubstep production. Warning: High levels of spectral saturation.",
+        'CORTEX_LOOPS': "Brain-melting synth loops and arpeggios recorded from a custom modular eurorack system. These sequences are generative and evolving, providing endless inspiration for IDM and experimental electronic music. Contains complex polyrhythms and microtonal melodies.",
+        'GLITCH_ARTIFACTS': "Pure digital error. Datamosh sounds, signal interference, and buffer underruns. These samples capture the beauty of technology failing. Use them as rhythmic elements, FX transitions, or to add a layer of digital decay to your tracks.",
+        'ACID_WASH_303': "Squelchy, resonant acid lines directly from a modified TB-303. Recorded through a chain of vintage distortion pedals and tape delays. These loops scream with analog warmth and aggressive filter modulation. The definitive sound of underground rave culture.",
+        'DISTORTION_UNIT': "A comprehensive library of impulse responses and heavy distortion FX chains. Run your clean sounds through these processors to add grit, warmth, and destruction. Includes bit-crushing, tube saturation, and wave-folding effects.",
+        'VOCAL_CHOP_SYSTEM': "Futuristic vocal aesthetics for the modern producer. Processed vocal chops, granular synthesis textures, and formant-shifted phrases. These samples have been deconstructed and reassembled to create an alien, cybernetic vocal instrument.",
+        'AMBIENT_WASH_IV': "Lush, evolving pads and drones that drift through the stereo field. Perfect for creating immersive backgrounds, intros, and breakdowns. These sounds are rich in harmonic content and slow modulation, evoking a sense of deep space and tranquility."
+    };
+
+    const extendedDescription = DETAILED_DESCRIPTIONS[product.name] ||
+        "This asset pack contains high-fidelity audio recordings processed via proprietary analog and digital chains. Optimal for advanced sound design, cinematic scoring, and experimental electronic music production. All files are rendered at 24-bit / 48kHz for maximum headroom and dynamic range. Expect minimal noise floor and maximum signal integrity.";
+
     return (
         <motion.div
             variants={containerVariants}
@@ -83,8 +100,9 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                 </div>
 
                 {/* Return Link */}
-                <Link href="/" className="absolute top-0 left-4 md:top-0 md:left-10 lg:top-0 lg:left-12 z-50 font-mono text-[9px] text-foreground/40 hover:text-primary transition-colors flex items-center gap-2 px-2 py-1 border border-transparent hover:border-primary/20">
-                    <span>[ BACK_TO_DATABASE ]</span>
+                {/* Return Link - Replaced with Arrow */}
+                <Link href="/" className="absolute top-4 left-4 z-50 text-foreground/40 hover:text-primary transition-colors p-2 hover:bg-white/5 rounded-full group">
+                    <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
                 </Link>
             </motion.div>
 
@@ -105,9 +123,20 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                             {product.amount === 0 ? 'FREE' : `$${product.amount}`}
                         </div>
                     </div>
-                    <p className="font-mono text-[10px] md:text-[11px] text-foreground/50 max-w-lg leading-relaxed">
-                        {product.description || "Experimental industrial audio dataset. High-fidelity spectral textures for advanced synthesis."}
+                    {/* Primary Description */}
+                    <p className="font-mono text-[10px] md:text-[11px] text-foreground/70 max-w-2xl leading-relaxed mt-4">
+                        {product.description}
                     </p>
+
+                    {/* Extended "Verbage" / Lore Section */}
+                    <div className="mt-8 border-l-2 border-primary/20 pl-4 py-1">
+                        <h3 className="font-mono text-[9px] text-primary/50 uppercase tracking-widest mb-2">
+                            SYSTEM_ANALYSIS //
+                        </h3>
+                        <p className="font-mono text-[11px] md:text-sm text-foreground/80 leading-relaxed max-w-3xl">
+                            {extendedDescription}
+                        </p>
+                    </div>
                 </motion.div>
 
                 {/* Audio Console - Natural Flow */}

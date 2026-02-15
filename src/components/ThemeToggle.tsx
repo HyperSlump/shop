@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Brain } from 'lucide-react';
 
 export default function ThemeToggle() {
     const [mounted, setMounted] = useState(false);
@@ -34,18 +35,13 @@ export default function ThemeToggle() {
     return (
         <button
             onClick={toggleTheme}
-            className="flex items-center gap-2 px-2 py-1 border border-primary/20 hover:border-primary/50 transition-all duration-300 group rounded-sm"
+            className="flex items-center justify-center hover:text-primary transition-colors group"
             title={isDark ? "SWITCH_TO_LIGHT_MODE" : "SWITCH_TO_DARK_MODE"}
         >
-            <div className="flex items-center justify-center w-5 h-5">
-                <span className="material-icons text-[16px] text-primary transition-transform duration-500 group-hover:rotate-12">
-                    {isDark ? 'light_mode' : 'dark_mode'}
-                </span>
-            </div>
-            <div className="h-[10px] w-[1px] bg-primary/20 group-hover:bg-primary/40" />
-            <span className="font-mono text-[9px] text-primary/40 group-hover:text-primary transition-colors">
-                {isDark ? "LT_MODE" : "DK_MODE"}
-            </span>
+            <Brain
+                size={22}
+                className="transition-transform group-hover:scale-110"
+            />
         </button>
     );
 }

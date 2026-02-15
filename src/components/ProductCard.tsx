@@ -113,7 +113,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 </div>
 
                 {/* Bottom Section: Info - New Industrial Design */}
-                <div className="min-h-[140px] border-t-2 border-primary/30 bg-[var(--background)] pt-4 px-4 pb-6 relative flex flex-col gap-2">
+                <div className="min-h-[140px] border-t border-primary/30 bg-[var(--background)] pt-4 px-4 pb-6 relative flex flex-col gap-2">
                     {/* Top Notch decorative element */}
                     <div className="absolute -top-[2px] right-8 w-12 h-[2px] bg-accent z-20" />
 
@@ -139,7 +139,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     </div>
 
                     {/* Action Row */}
-                    <div className="flex items-center justify-between mt-1 pt-2 border-t-2 border-primary/10">
+                    <div className="flex items-center justify-between mt-1 pt-2 border-t border-primary/10">
                         {/* Preview (moved from image) */}
                         <button
                             onClick={(e) => {
@@ -231,7 +231,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 </div>
 
                 {/* Bottom Section: Info - Consistent with Front */}
-                <div className="min-h-[140px] border-t-2 border-primary/30 bg-[var(--background)] pt-4 px-4 pb-6 relative flex flex-col gap-2">
+                <div className="min-h-[140px] border-t border-primary/30 bg-[var(--background)] pt-4 px-4 pb-6 relative flex flex-col gap-2">
                     {/* Top Notch decorative element */}
                     <div className="absolute -top-[2px] right-8 w-12 h-[2px] bg-accent z-20" />
                     {/* Header Row */}
@@ -254,7 +254,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     </div>
 
                     {/* Action Row */}
-                    <div className="flex items-center justify-between mt-1 pt-2 border-t-2 border-primary/10">
+                    <div className="flex items-center justify-between mt-1 pt-2 border-t border-primary/10">
                         {/* Back Button */}
                         <button
                             onClick={(e) => {
