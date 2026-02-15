@@ -68,7 +68,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
             variants={containerVariants}
             initial="initial"
             animate="animate"
-            className="flex-1 w-full p-6 md:p-10 lg:p-16"
+            className="flex-1 w-full p-4 md:p-6 lg:p-8"
         >
             <div className="max-w-6xl mx-auto space-y-12">
                 {/* 1. Header System Line (Synced with MockPages) */}

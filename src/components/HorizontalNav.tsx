@@ -19,7 +19,7 @@ export default function HorizontalNav() {
 
     return (
         <nav
-            className="sticky top-16 md:top-0 z-40 border-y border-foreground/15 bg-[var(--background)] px-6 md:px-10 lg:px-16 py-4 transition-colors duration-300 group/nav"
+            className="sticky top-16 md:top-0 z-40 border-y border-foreground/15 bg-[var(--background)] px-4 md:px-6 lg:px-8 py-4 transition-colors duration-300 group/nav"
             onMouseLeave={() => setHoveredLink(null)}
         >
             {/* 4-Corner Minimal Accents */}

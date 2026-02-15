@@ -11,7 +11,7 @@ interface MockPageLayoutProps {
 
 export default function MockPageLayout({ title, subtitle, content, status }: MockPageLayoutProps) {
     return (
-        <div className="flex-1 w-full p-6 md:p-10 lg:p-16 animate-fade-in">
+        <div className="flex-1 w-full p-4 md:p-6 lg:p-8 animate-fade-in">
             <div className="max-w-4xl mx-auto space-y-12">
                 {/* Header System Line */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-primary/20 pb-8 gap-6">
