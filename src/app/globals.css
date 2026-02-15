@@ -2,22 +2,16 @@
 
 @theme {
   --color-primary: #ccff00;
-  --color-background-light: #f7f4ee;
-  /* Warmer Beige */
+  --color-background-light: #f2efe9;
   --color-background-dark: #121212;
-  /* Matte Black */
-
   --font-display: "Pirata One", system-ui;
   --font-gothic: "UnifrakturMaguntia", serif;
   --font-mono: "JetBrains Mono", monospace;
-
   --radius-DEFAULT: 0px;
-
-  /* Use a more robust selector for theme switching in Tailwind v4 */
   --variant-dark: .dark &;
 }
 
-/* Custom Utilities from code.html */
+/* Custom Utilities */
 @layer utilities {
   .noise {
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
@@ -49,7 +43,6 @@
   .animate-fade-in {
     animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     opacity: 0;
-    /* Ensure hidden before animation starts */
   }
 
   .delay-100 {
@@ -63,38 +56,90 @@
   .delay-300 {
     animation-delay: 300ms;
   }
+
+  .border-strong {
+    border-width: 2px;
+  }
 }
 
-/* Base Styles */
+/* Base Styles & Theme Tokens */
 @layer base {
   html {
-    font-size: 110%;
-    /* Increase base font size to fill white space */
-    --background: var(--color-background-light);
-    --foreground: #000000;
-    --primary: #7b00ff;
-    /* Electric Violet - WCAG AA (5.5:1) */
+    font-size: 125%;
+    --background: #D8CEB9;
+    /* RC-20 Warm Hardware Beige */
+    --foreground: #1A1D23;
+    /* RC-20 Deep Charcoal Panel */
+    --primary: #4F46E5;
+    /* Indigo - High Contrast against Beige */
     --primary-foreground: #ffffff;
-    --border: rgba(0, 0, 0, 0.1);
-    --noise-opacity: 0.03;
-    --noise-blend: overlay;
+    --accent: #E11D48;
+    /* Hardware Red */
+    --status: #059669;
+    /* Deep Mint */
+    --alert: #DC2626;
+    /* UI Alert */
+    --border: rgba(26, 29, 35, 0.25);
+    --noise-opacity: 0.1;
+    --noise-blend: multiply;
   }
 
   html.dark {
-    --background: var(--color-background-dark);
-    --foreground: #ffffff;
-    --primary: #e5ff00;
-    /* Brighter Neon Yellow */
-    --primary-foreground: #000000;
-    --border: rgba(255, 255, 255, 0.1);
-    --noise-opacity: 0.05;
-    --noise-blend: overlay;
+    --background: #0F1115;
+    /* Sligthly Darker Chassis */
+    --foreground: #D8CEB9;
+    /* RC-20 Label Text */
+    --primary: #89D9C6;
+    /* Digital Mint - High Contrast against Dark */
+    --primary-foreground: #0F1115;
+    --accent: #FF9500;
+    /* Analog Orange */
+    --status: #89D9C6;
+    --alert: #FB7185;
+    --border: rgba(216, 206, 185, 0.2);
+    --noise-opacity: 0.12;
+    /* Dialed back grain for dark mode */
+    --noise-blend: screen;
   }
 
   body {
     background-color: var(--background);
     color: var(--foreground);
+    font-weight: 500;
+    /* Bolder globally */
     @apply font-mono selection:bg-primary selection:text-black transition-colors duration-700 ease-in-out;
+    position: relative;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Analog CRT / Hardware Overlay */
+  body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+      linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%),
+      linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+    background-size: 100% 4px, 4px 100%;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.2;
+    /* Slightly sharper lines */
+    mix-blend-mode: overlay;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 700;
   }
 
   a,
@@ -108,4 +153,7 @@
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-status: var(--status);
+  --color-alert: var(--alert);
 }

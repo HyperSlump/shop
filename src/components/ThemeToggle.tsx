@@ -3,44 +3,49 @@
 import { useEffect, useState } from 'react';
 
 export default function ThemeToggle() {
-    const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+    const [mounted, setMounted] = useState(false);
+    const [isDark, setIsDark] = useState(false);
 
     useEffect(() => {
-        const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
-        if (savedTheme) {
-            setTheme(savedTheme);
-            document.documentElement.classList.toggle('dark', savedTheme === 'dark');
-            document.documentElement.classList.toggle('light', savedTheme === 'light');
-        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            setTheme('dark');
-            document.documentElement.classList.add('dark');
-        } else {
-            setTheme('light');
-            document.documentElement.classList.add('light');
-        }
+        setMounted(true);
+        const checkTheme = () => {
+            setIsDark(document.documentElement.classList.contains('dark'));
+        };
+        checkTheme();
+        const observer = new MutationObserver(checkTheme);
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+        return () => observer.disconnect();
     }, []);
 
     const toggleTheme = () => {
-        const newTheme = theme === 'light' ? 'dark' : 'light';
-        setTheme(newTheme);
-        localStorage.setItem('theme', newTheme);
-        document.documentElement.classList.toggle('dark', newTheme === 'dark');
-        document.documentElement.classList.toggle('light', newTheme === 'light');
+        const newTheme = !isDark;
+        setIsDark(newTheme);
+        if (newTheme) {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        }
     };
+
+    if (!mounted) return <div className="h-6 w-24" />;
 
     return (
         <button
             onClick={toggleTheme}
-            className="group border-2 border-black dark:border-white p-4 text-center hover:border-primary transition-colors w-full max-w-[200px]"
+            className="flex items-center gap-2 px-2 py-1 border border-primary/20 hover:border-primary/50 transition-all duration-300 group rounded-sm"
+            title={isDark ? "SWITCH_TO_LIGHT_MODE" : "SWITCH_TO_DARK_MODE"}
         >
-            <div className="text-[8px] uppercase tracking-[0.4em] mb-2 opacity-50 group-hover:text-primary group-hover:opacity-100 transition-all">
-                System Mode
+            <div className="flex items-center justify-center w-5 h-5">
+                <span className="material-icons text-[16px] text-primary transition-transform duration-500 group-hover:rotate-12">
+                    {isDark ? 'light_mode' : 'dark_mode'}
+                </span>
             </div>
-            <div className="font-mono text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2">
-                <span className={theme === 'dark' ? 'text-primary' : 'opacity-40'}>DARK</span>
-                <span className="opacity-20">/</span>
-                <span className={theme === 'light' ? 'text-primary' : 'opacity-40'}>LIGHT</span>
-            </div>
+            <div className="h-[10px] w-[1px] bg-primary/20 group-hover:bg-primary/40" />
+            <span className="font-mono text-[9px] text-primary/40 group-hover:text-primary transition-colors">
+                {isDark ? "LT_MODE" : "DK_MODE"}
+            </span>
         </button>
     );
 }

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import WaveformOverlay from './WaveformOverlay';
 import OneShotPlayer from './OneShotPlayer';
 import Image from 'next/image';
+import Link from 'next/link';
 import MatrixSpace from './MatrixSpace';
 
 interface ProductCardProps {
@@ -60,7 +61,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 IMG_SAMP._{product.id.slice(0, 4)}
                             </div>
 
-                            <div className="relative w-full h-full overflow-hidden">
+                            <Link href={`/product/${product.id}`} className="relative block w-full h-full overflow-hidden cursor-ne-resize">
                                 <Image
                                     alt={product.name}
                                     className="w-full h-full object-cover opacity-90 contrast-125 grayscale group-hover:grayscale-0 transition-all duration-500"
@@ -69,7 +70,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                     sizes="160px"
                                 />
                                 <div className="absolute inset-0 bg-primary/5 mix-blend-overlay" />
-                            </div>
+                            </Link>
                         </div>
 
                         {/* Technical Metadata Stack */}
@@ -77,8 +78,8 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                             {/* Status Label */}
                             <div className="flex items-center justify-between border-b border-primary/10 pb-1.5 text-[8px]">
                                 <div className="flex items-center gap-1.5 font-mono uppercase tracking-widest leading-tight">
-                                    <span className="w-1 h-1 bg-red-500 rounded-sm animate-pulse" />
-                                    <span className="text-red-500/90 font-bold">system.active</span>
+                                    <span className="w-1 h-1 bg-alert rounded-sm animate-pulse" />
+                                    <span className="text-alert/90 font-bold">system.active</span>
                                 </div>
                                 <span className="font-mono text-primary/40">ID_{product.id.slice(0, 8)}</span>
                             </div>
@@ -114,12 +115,14 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 {/* Bottom Section: Info - New Industrial Design */}
                 <div className="min-h-[140px] border-t-2 border-primary/30 bg-[var(--background)] pt-4 px-4 pb-6 relative flex flex-col gap-2">
                     {/* Top Notch decorative element */}
-                    <div className="absolute -top-[2px] right-8 w-12 h-[2px] bg-red-500 z-20" />
+                    <div className="absolute -top-[2px] right-8 w-12 h-[2px] bg-accent z-20" />
 
                     {/* Header Row */}
                     <div className="flex justify-between items-start">
                         <h3 className="font-gothic text-2xl text-foreground leading-none tracking-wide max-w-[70%]">
-                            {product.name}
+                            <Link href={`/product/${product.id}`} className="hover:text-primary transition-colors">
+                                {product.name}
+                            </Link>
                         </h3>
                         <span className="font-mono text-primary font-bold border border-primary/30 px-2 py-0.5 text-[10px]">
                             {product.amount === 0 ? 'FREE' : `$${product.amount}`}
@@ -143,7 +146,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 e.stopPropagation();
                                 setShowPreview(true);
                             }}
-                            className="text-left font-mono text-[11px] uppercase tracking-widest text-foreground/40 hover:text-primary transition-colors flex items-center gap-2 group/pbtn"
+                            className="text-left font-mono text-[11px] font-bold uppercase tracking-widest text-foreground/50 hover:text-primary transition-colors flex items-center gap-2 group/pbtn"
                         >
                             <span className="w-2 h-2 border border-current group-hover/pbtn:bg-primary transition-all rounded-[1px]" />
                             PREVIEW
@@ -156,9 +159,9 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 onAddToCart(product);
                             }}
                             disabled={isInCart}
-                            className="text-right font-mono text-[13px] text-primary uppercase hover:text-primary/70 transition-colors disabled:opacity-50"
+                            className="text-right font-mono text-[13px] font-bold text-primary uppercase hover:text-primary/70 transition-colors disabled:opacity-50"
                         >
-                            {isInCart ? '[ IN CART ]' : '[ BUY NOW ]'}
+                            {isInCart ? '[ IN_CART ]' : '[ ACQUIRE ]'}
                         </button>
                     </div>
 
@@ -174,7 +177,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
                 {/* Top Section: Single Column Layout (Waveform + Samples Stacked) */}
                 <div className="flex-1 flex flex-col relative border-b-2 border-primary/20 bg-black/5 dark:bg-white/5 overflow-hidden">
-                    <div className="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar">
+                    <div className="flex-1 overflow-hidden p-2 space-y-2">
                         {/* Header with Close */}
                         <div className="flex justify-between items-center">
                             <span className="font-mono text-[8px] text-primary/40 uppercase tracking-widest">// PREVIEW_ANALYSIS</span>
@@ -183,7 +186,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                     e.stopPropagation();
                                     setShowPreview(false);
                                 }}
-                                className="text-foreground/30 hover:text-red-500 transition-colors"
+                                className="text-foreground/30 hover:text-alert transition-colors"
                             >
                                 <span className="material-icons text-base">close</span>
                             </button>
@@ -193,7 +196,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         {audioPreviewUrl && showPreview && (
                             <div className="space-y-2">
                                 <div className="flex items-center gap-2">
-                                    <div className="w-1 h-1 bg-red-500 rounded-full animate-pulse" />
+                                    <div className="w-1 h-1 bg-alert rounded-full animate-pulse" />
                                     <span className="font-mono text-[8px] text-primary/60 uppercase tracking-[0.2em]">MAIN_PREVIEW.WAV</span>
                                 </div>
                                 <div className="relative w-full h-[26px] bg-[var(--background)] border-2 border-primary/60 dark:border-white/30 rounded overflow-hidden group/wave">
@@ -230,7 +233,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 {/* Bottom Section: Info - Consistent with Front */}
                 <div className="min-h-[140px] border-t-2 border-primary/30 bg-[var(--background)] pt-4 px-4 pb-6 relative flex flex-col gap-2">
                     {/* Top Notch decorative element */}
-                    <div className="absolute -top-[2px] right-8 w-12 h-[2px] bg-red-500 z-20" />
+                    <div className="absolute -top-[2px] right-8 w-12 h-[2px] bg-accent z-20" />
                     {/* Header Row */}
                     <div className="flex justify-between items-start">
                         <h3 className="font-gothic text-2xl text-foreground leading-none tracking-wide max-w-[70%]">
@@ -276,10 +279,9 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                             {isInCart ? '[ IN CART ]' : '[ ADD TO CART ]'}
                         </button>
                     </div>
-
                 </div>
 
             </div>
-        </div>
+        </div >
     );
 }

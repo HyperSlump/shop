@@ -117,7 +117,7 @@ export default function CartDrawer() {
                                             </span>
                                         </div>
                                         <span className="font-mono text-xs font-bold text-primary">
-                                            {item.amount === 0 ? 'FREE' : `$${item.amount.toFixed(2)}`}
+                                            {(!item.amount || item.amount === 0) ? 'FREE' : `$${(item.amount || 0).toFixed(2)}`}
                                         </span>
                                     </div>
 
@@ -142,7 +142,7 @@ export default function CartDrawer() {
                 <div className="mt-8 border-t-2 border-foreground/10 p-6 pt-6 space-y-4">
                     <div className="flex justify-between font-mono text-xl font-bold tracking-tighter text-foreground">
                         <span className="opacity-60 text-foreground">SUBTOTAL_</span>
-                        <span className="text-primary">${cartTotal.toFixed(2)}</span>
+                        <span className="text-primary">${(cartTotal || 0).toFixed(2)}</span>
                     </div>
                     <button
                         onClick={handleCheckout}
