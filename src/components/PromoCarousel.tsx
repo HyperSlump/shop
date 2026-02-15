@@ -1,63 +1,90 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import gsap from 'gsap';
 import Link from 'next/link';
 
-const promos = [
+// Technical flavor templates to "industrialize" the product promotional data
+const industrialTemplates = [
     {
-        text: "NEURO_PATCH_v4.5 :: SYNTHETIC_TEXTURE_PACK",
-        sub: "// IMMERSIVE_AUDIO_ENGINEERING // 400+ UNIQUE_SAMPLES // CORTEX_COMPATIBLE",
-        desc: "A DEEP_DIVE INTO THE ANALOG_ABYSS. RECONSTRUCT YOUR SONIC_ARCHITECTURE WITH VOID_BASS AND CRYSTALLINE_HIGHS.",
-        href: "/product/neuro-patch-v4"
+        sub: "// NEURAL_DYNAMICS // 24-BIT_RESAMPLING // PROXIMITY_ALERT",
+        desc: "SIGNAL_PURITY_RETAINED THROUGH VACUUM_TUBE_INTERFACES. DISCOVER THE LIMITS OF THE ANALOG_ABYSS WITH HIGH_FIDELITY_GLITCH_ARTIFACTS."
     },
     {
-        text: "FREE_SIGNAL_BROADCAST :: GLOBAL_DELIVERY",
-        sub: "// ZERO_LATENCY_Fulfillment // ENCRYPTED_DOWNLOAD_STREAMS",
-        desc: "ALL DIGITAL_ASSETS ARE DELIVERED VIA SECURE_LINK INSTANTLY AFTER PURCHASE. NO_WAITING // NO_FRICTION // ONLY_SPEED.",
-        href: "/product/free-signal"
+        sub: "// ZERO_LATENCY_STREAM // CRYPTOGRAPHIC_DELIVERY",
+        desc: "INSTANT_SYNC WITH THE GLOBAL_CORTEX. ENCRYPTED_ASSETS_FIRMWARE_READY FOR IMMEDIATE_INTEGRATION INTO YOUR SONIC_PIPELINE."
     },
     {
-        text: "THE_CORTEX_COLLECTIVE :: DISCORD_SYNC",
-        sub: "// COMMUNITY_DRIVEN_DEVELOPMENT // EXCLUSIVE_BETA_ACCESS",
-        desc: "JOIN 5000+ SYNTHESIS_ENTHUSIASTS. SHARE PATCHES // TROUBLESHOOT // COLLABORATE ON THE NEXT_GENERATION OF HYPER$LUMP TOOLS.",
-        href: "https://discord.gg/hyperslump"
+        sub: "// GRANULAR_RECONSTRUCTION // HARMONIC_DISTORTION",
+        desc: "DECONSTRUCT_THE_WAVEFORM. REFINED_PERCUSSION_ENGINEERED_FOR_MAXIMUM_IMPACT IN HEAVY_INDUSTRIAL_AND_EXPERIMENTAL_CONTEXTS."
     },
     {
-        text: "ANALOG_GRIME_v2 :: LIMITED_COLLECTION",
-        sub: "// ORGANIC_DISTORTION_CURVES // 24-BIT_RESAMPLING",
-        desc: "RAW // UNFILTERED // INDUSTRIAL. CAPTURED FROM EXPERIMENTAL_OSCILLATORS AND DISTORTED THROUGH VINTAGE_HARDWARE.",
-        href: "/product/analog-grime-v2"
+        sub: "// PHASE_SHIFT_TECHNOLOGY // SUB-SONIC_CLARITY",
+        desc: "DESIGNED_TO_SHAKE_THE_CHASSIS. EXPERIMENT_WITH_NEW_WAVEFORM_GEOMETRY AND UNCONVENTIONAL_DISTORTION_CURVES."
     },
     {
-        text: "VOID_ENGINE_v1.0 :: GRANULAR_PROCESSOR",
-        sub: "// REAL-TIME_DESTRUCTION // PHASE_MODULATION_ALGORITHMS",
-        desc: "DECONSTRUCT ANY INPUT SIGNAL INTO MICRO-PARTICULATES. ENGINEERED FOR CHAOS // REFINED FOR PRECISION.",
-        href: "/product/void-engine"
+        sub: "// ULTRA-WIDE_STEREO_IMAGING // CORTEX_COMPATIBLE",
+        desc: "RECONSTRUCT_YOUR_SONIC_ARCHITECTURE. VOID_CORE_SAMPLES_OPTIMIZED_FOR_BINAURAL_DEPTH AND PSYCHOACOUSTIC_IMMERSION."
     },
     {
-        text: "EARLY_ACCESS_RESERVE :: Q1_ROADMAP",
-        sub: "// PROTOCOL_ENHANCEMENTS // NEW_WAVEFORM_GEOMETRY",
-        desc: "HOLDERS OF THE NEXUS_PASS RECEIVE PRIORITY ACCESS TO ALL UPCOMING MODULES AND EXPERIMENTAL KITS.",
-        href: "/product/early-access"
+        sub: "// ORGANIC_GRIT_v4.5 // BIT-CRUSHED_PRECISION",
+        desc: "CAPTURED_FROM_EXPERIMENTAL_OSCILLATORS AND DISTORTED THROUGH VINTAGE_HARDWARE. RAW_UNFILTERED_INDUSTRIAL_FLAVORS FOR THE BOLD."
     },
     {
-        text: "THERMAL_DYNAMICS :: KICK_DRUM_LABS",
-        sub: "// SUB-SONIC_IMPACT // TRANSIENT_SHAPING_TOOLS",
-        desc: "DESIGNED TO SHAKE THE CHASSIS. DISCOVER THE LIMITS OF LOW-END THEORY WITH OUR CUSTOM DESIGNED TRANSIENT KITS.",
-        href: "/product/thermal-dynamics"
+        sub: "// SYMBOLIC_RECONSTRUCTION // VOID_PROTOCOL",
+        desc: "A DEEP_DIVE INTO THE SPECTRAL_VOID. HARVEST THE ESSENCE OF SYNTHETIC_TEXTURES AND RECONSTRUCT THEM INTO NEW_FORMS."
     }
 ];
 
 export default function PromoCarousel() {
+    const [products, setProducts] = useState<any[]>([]); // eslint-disable-line @typescript-eslint/no-explicit-any
     const [index, setIndex] = useState(0);
+    const [loading, setLoading] = useState(true);
+
     const containerRef = useRef<HTMLDivElement>(null);
     const placeholderRef = useRef<HTMLDivElement>(null);
     const textRef = useRef<HTMLAnchorElement>(null);
     const subRef = useRef<HTMLDivElement>(null);
     const descRef = useRef<HTMLDivElement>(null);
 
+    // Fetch products from the newly created API
     useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const res = await fetch('/api/products');
+                const data = await res.json();
+                if (Array.isArray(data)) {
+                    // Shuffle products for random promotion
+                    const shuffled = [...data].sort(() => Math.random() - 0.5);
+                    setProducts(shuffled);
+                }
+            } catch (error) {
+                console.error('Failed to fetch carousel products:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProducts();
+    }, []);
+
+    // Memoize the promos with shuffled industrial flavor text
+    const promos = useMemo(() => {
+        if (products.length === 0) return [];
+
+        return products.map((product, i) => {
+            const template = industrialTemplates[i % industrialTemplates.length];
+            return {
+                text: product.name,
+                sub: template.sub,
+                desc: product.description || template.desc,
+                href: `/product/${product.id}`,
+            };
+        });
+    }, [products]);
+
+    useEffect(() => {
+        if (promos.length === 0) return;
+
         const timer = setInterval(() => {
             const nextIndex = (index + 1) % promos.length;
 
@@ -84,13 +111,15 @@ export default function PromoCarousel() {
         }, 10000); // 10s Pause between cycles
 
         return () => clearInterval(timer);
-    }, [index]);
+    }, [index, promos]);
 
     useEffect(() => {
+        if (promos.length === 0) return;
+
         // Heavy, Premium Phase In from Back + Enter Right
         const tl = gsap.timeline();
 
-        // Placeholder "Phases" in - Languid and smooth
+        // Placeholder "Phases" in
         tl.fromTo(placeholderRef.current,
             { opacity: 0, scale: 0.6, filter: "blur(30px)" },
             {
@@ -102,7 +131,7 @@ export default function PromoCarousel() {
             }, 0
         );
 
-        // Text Animates in from Right with deliberate, slower stagger
+        // Text Animates in
         tl.fromTo([textRef.current, subRef.current, descRef.current],
             { opacity: 0, x: 80 },
             {
@@ -113,7 +142,13 @@ export default function PromoCarousel() {
                 ease: "power4.out"
             }, 0.4
         );
-    }, [index]);
+    }, [index, promos]);
+
+    if (loading || promos.length === 0) return (
+        <div className="flex items-center justify-center gap-12 px-8 min-w-[800px] max-w-[1400px] h-[220px] opacity-20">
+            <div className="font-mono text-[10px] animate-pulse uppercase tracking-[0.5em]">INITIALIZING_PROMO_FEED...</div>
+        </div>
+    );
 
     return (
         <div
@@ -137,7 +172,7 @@ export default function PromoCarousel() {
                     ref={textRef}
                     className="group"
                 >
-                    <div className="font-gothic text-2xl md:text-3xl lg:text-4xl tracking-widest text-foreground hover:text-primary transition-colors duration-300 lowercase mb-4">
+                    <div className="font-gothic text-2xl md:text-3xl lg:text-4xl tracking-widest text-foreground group-hover:text-primary transition-colors duration-300 lowercase mb-4">
                         {promos[index].text}
                     </div>
                 </Link>
