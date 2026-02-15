@@ -57,7 +57,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                 className="relative w-full md:w-[45%] h-[40vh] md:h-full border-b md:border-b-0 md:border-r border-primary/20 bg-black/5"
             >
                 {/* Image Frame - Smaller than before, centered */}
-                <div className="absolute inset-0 flex items-center justify-center p-8 md:p-12 lg:p-20">
+                <div className="absolute inset-0 flex items-center justify-center p-6 md:p-10 lg:p-12">
                     <div className="relative w-full aspect-square max-h-[500px] border border-primary/20 shadow-2xl overflow-hidden group">
                         <Image
                             alt={product.name}
@@ -89,7 +89,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
             {/* RIGHT SIDE: CONTROL CENTER */}
             <div className="flex-1 flex flex-col bg-black/[0.02] dark:bg-white/[0.02]">
                 {/* Header Section */}
-                <motion.div variants={itemVariants} className="p-6 md:p-10 border-b border-primary/10">
+                <motion.div variants={itemVariants} className="p-6 md:p-10 lg:p-12 border-b border-primary/10">
                     <div className="flex justify-between items-start mb-2">
                         <div className="space-y-1">
                             <span className="font-mono text-[8px] text-primary/40 uppercase tracking-[0.3em]">
@@ -109,7 +109,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                 </motion.div>
 
                 {/* Audio Console - Natural Flow */}
-                <motion.div variants={itemVariants} className="flex-1 p-6 md:p-10 flex flex-col gap-8">
+                <motion.div variants={itemVariants} className="flex-1 p-6 md:p-10 lg:p-12 flex flex-col gap-8">
                     {/* Main Stream */}
                     <div className="space-y-3">
                         <div className="flex items-center gap-2">
@@ -164,7 +164,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                 </motion.div>
 
                 {/* Footer Action */}
-                <motion.div variants={itemVariants} className="p-6 md:p-8 border-t border-primary/10 bg-[var(--background)]">
+                <motion.div variants={itemVariants} className="p-6 md:p-10 lg:p-12 border-t border-primary/10 bg-[var(--background)]">
                     <button
                         onClick={() => !isInCart && addToCart(product)}
                         disabled={isInCart}
