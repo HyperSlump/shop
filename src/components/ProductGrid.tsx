@@ -59,11 +59,11 @@ export default function ProductGrid({ products }: { products: Product[] }) {
 
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 w-full p-0 border-t border-l border-primary/20 animate-fade-in transition-all duration-500">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 w-full p-0 animate-fade-in transition-all duration-500">
                 {products.map((product, index) => (
                     <div
                         key={product.id}
-                        className="w-full animate-fade-in border-r border-b border-primary/20"
+                        className="w-full animate-fade-in border border-primary/20 hover:border-primary/40 transition-colors"
                         style={{ animationDelay: `${200 + index * 100}ms` }}
                     >
                         <ProductCard
