@@ -15,7 +15,7 @@ export default function MatrixSpace({ isVisible = true }: { isVisible?: boolean 
             const { width, height } = container.getBoundingClientRect();
             if (width === 0 || height === 0) return;
 
-            const columns = Math.floor(width / 10); // ~10px spacing (higher density)
+            const columns = Math.floor(width / 12); // Match the 12px spacing used below
 
             // Clear previous content
             container.innerHTML = '';

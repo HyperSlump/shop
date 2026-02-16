@@ -29,7 +29,7 @@ export default function Navigation() {
 
     return (
         <>
-            <aside className="w-full md:w-20 md:h-screen sticky top-0 left-0 md:border-r border-foreground/15 flex flex-row md:flex-col items-center justify-between px-0 md:p-6 z-[145] bg-[var(--background)] md:bg-[var(--background)] animate-fade-in">
+            <aside className="w-full md:w-20 md:h-screen md:fixed top-0 left-0 md:border-r border-foreground/15 flex flex-row md:flex-col items-center justify-between px-0 md:p-6 z-[145] bg-[var(--background)] md:bg-[var(--background)] animate-fade-in transition-colors">
                 {/* Mobile Sticky Control Bar */}
                 <div className="flex md:hidden w-full items-center justify-between p-4 border-b border-foreground/15 bg-[var(--background)] relative z-[110]">
                     <Link href="/" className="text-xl font-gothic tracking-tight hover:text-primary transition-colors leading-tight inline-block py-1 -my-1">
@@ -172,6 +172,21 @@ export default function Navigation() {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* MOBILE FIXED CART ICON */}
+            <div className="md:hidden fixed bottom-6 right-6 z-[130]">
+                <button
+                    onClick={toggleCart}
+                    className="w-14 h-14 bg-[var(--background)]/60 backdrop-blur-md text-foreground rounded-full flex items-center justify-center shadow-lg border border-foreground/10 active:scale-90 transition-all group"
+                >
+                    <span className="material-icons text-[24px]">shopping_cart</span>
+                    {cart.length > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-primary text-black text-[10px] font-bold w-6 h-6 rounded-full flex items-center justify-center animate-bounce-subtle border-2 border-[var(--background)] shadow-[0_0_10px_rgba(var(--primary-rgb),0.3)]">
+                            {cart.length}
+                        </span>
+                    )}
+                </button>
+            </div>
         </>
     );
 }

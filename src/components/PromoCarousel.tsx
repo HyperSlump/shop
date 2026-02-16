@@ -154,19 +154,22 @@ export default function PromoCarousel() {
     return (
         <div
             ref={containerRef}
-            className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 px-4 md:px-8 w-full max-w-[1400px] min-h-[220px] py-8 md:py-0 mx-auto"
+            className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 px-4 md:px-8 w-full max-w-[1400px] min-h-[220px] py-2 md:py-0 mx-auto"
         >
             {/* Real Product Image Frame */}
             <div
                 ref={placeholderRef}
-                className="relative w-32 h-32 md:w-40 md:h-40 border border-primary/20 bg-primary/5 flex items-center justify-center overflow-hidden shrink-0 group shadow-[0_0_30px_rgba(0,0,0,0.5)]"
+                className="relative w-32 h-32 md:w-40 md:h-40 border border-primary/20 bg-primary/15 flex items-center justify-center overflow-hidden shrink-0 group shadow-[0_0_30px_rgba(0,0,0,0.5)]"
             >
                 {promos[index].image ? (
-                    <img
-                        src={promos[index].image}
-                        alt={promos[index].text}
-                        className="w-full h-full object-cover filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-1000"
-                    />
+                    <div className="relative w-full h-full">
+                        <img
+                            src={promos[index].image}
+                            alt={promos[index].text}
+                            className="w-full h-full object-cover filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-1000"
+                        />
+                        <div className="absolute inset-0 bg-primary/5 mix-blend-color" />
+                    </div>
                 ) : (
                     <>
                         <div className="absolute inset-0 bg-primary/10 animate-pulse" />

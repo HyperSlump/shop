@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Brain } from 'lucide-react';
+import { Sun, Moon } from 'lucide-react';
 import CursorTooltip from './CursorTooltip';
 
 export default function ThemeToggle() {
@@ -39,10 +39,17 @@ export default function ThemeToggle() {
                 onClick={toggleTheme}
                 className="flex items-center justify-center hover:text-primary transition-colors group"
             >
-                <Brain
-                    size={22}
-                    className="transition-transform group-hover:scale-110"
-                />
+                {isDark ? (
+                    <Sun
+                        size={22}
+                        className="transition-transform group-hover:scale-110"
+                    />
+                ) : (
+                    <Moon
+                        size={22}
+                        className="transition-transform group-hover:scale-110"
+                    />
+                )}
             </button>
         </CursorTooltip>
     );

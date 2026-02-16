@@ -40,6 +40,9 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 <div className="absolute top-0 left-0 w-[3px] h-8 bg-primary/60 -translate-x-[1px]" />
             </div>
 
+            {/* Top Right Accent Tab */}
+            <div className="absolute top-0 right-12 w-1 h-4 bg-accent/40 z-20" />
+
             {/* Inner Inset Panel Border */}
             <div className="absolute inset-[3px] border border-primary/5 pointer-events-none z-0" />
 
@@ -56,7 +59,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         className="absolute inset-0 flex flex-col"
                     >
                         {/* Top Section: Single Column Technical Dashboard */}
-                        <div className="flex-1 flex flex-col relative border-b-2 border-primary/20 bg-black/5 dark:bg-white/5 transition-colors duration-500 overflow-hidden">
+                        <div className="flex-1 flex flex-col relative border-b-2 border-primary/20 bg-primary/10 dark:bg-white/5 transition-colors duration-500 overflow-hidden">
                             {/* Full Background Matrix Effect */}
                             <div className="absolute inset-0 z-0">
                                 <MatrixSpace isVisible={isHovered} />
@@ -81,7 +84,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                             fill
                                             sizes="160px"
                                         />
-                                        <div className="absolute inset-0 bg-primary/5 mix-blend-overlay" />
+                                        <div className="absolute inset-0 bg-primary/15 mix-blend-overlay" />
                                     </div>
                                 </div>
 
@@ -193,7 +196,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         </div>
 
                         {/* Top Section */}
-                        <div className="flex-1 flex flex-col relative border-b-2 border-primary/20 bg-black/5 dark:bg-white/5 overflow-hidden">
+                        <div className="flex-1 flex flex-col relative border-b-2 border-primary/20 bg-primary/10 dark:bg-white/5 overflow-hidden">
                             <div className="flex-1 overflow-hidden p-2 space-y-2">
                                 {/* Header with Close */}
                                 <div className="flex justify-between items-center">

@@ -82,7 +82,7 @@ export default function RootLayout({
               <Navigation />
 
               {/* MAIN CONTENT WRAPPER */}
-              <main className="flex-1 flex flex-col min-w-0 md:pt-0 min-h-screen">
+              <main className="flex-1 flex flex-col min-w-0 md:pl-20 md:pt-0 min-h-screen">
                 {/* GLOBAL HEADER */}
                 <HeroSchema />
                 <HorizontalNav />

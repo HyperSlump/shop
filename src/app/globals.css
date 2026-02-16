@@ -76,6 +76,7 @@
   html {
     font-size: 100%;
     scrollbar-gutter: stable;
+    overflow-x: clip;
 
     --background: #EBE6DC;
     /* Hardware Warm Bone / Surgical Shell */
@@ -127,8 +128,9 @@
     background-color: var(--background);
     color: var(--foreground);
     font-weight: 500;
+    overflow-x: clip;
     /* Bolder globally */
-    @apply font-mono selection:bg-primary selection:text-black transition-colors duration-700 ease-in-out;
+    @apply font-mono selection:bg-primary selection:text-black transition-colors duration-300 ease-in-out;
     position: relative;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
