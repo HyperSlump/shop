@@ -66,7 +66,7 @@ export default function RootLayout({
       </head>
       <body className={`${jetbrainsMono.variable} ${pirataOne.variable} ${unifrakturMaguntia.variable} antialiased transition-colors duration-300`}>
         <div
-          className="fixed inset-0 noise z-[100] pointer-events-none"
+          className="fixed inset-0 noise z-[200] pointer-events-none"
           style={{
             opacity: 'var(--noise-opacity)',
             mixBlendMode: 'var(--noise-blend)' as any // eslint-disable-line @typescript-eslint/no-explicit-any

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useCart } from './CartProvider';
 import ThemeToggle from './ThemeToggle';
 import CursorTooltip from './CursorTooltip';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import MatrixSpace from './MatrixSpace';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -15,9 +15,21 @@ export default function Navigation() {
 
     const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
+    // Lock body scroll when menu is open
+    useEffect(() => {
+        if (isMobileMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [isMobileMenuOpen]);
+
     return (
         <>
-            <aside className="w-full md:w-20 md:h-screen sticky top-0 left-0 md:border-r border-foreground/15 flex flex-row md:flex-col items-center justify-between px-0 md:p-6 z-[110] bg-[var(--background)] md:bg-[var(--background)] animate-fade-in">
+            <aside className="w-full md:w-20 md:h-screen sticky top-0 left-0 md:border-r border-foreground/15 flex flex-row md:flex-col items-center justify-between px-0 md:p-6 z-[145] bg-[var(--background)] md:bg-[var(--background)] animate-fade-in">
                 {/* Mobile Sticky Control Bar */}
                 <div className="flex md:hidden w-full items-center justify-between p-4 border-b border-foreground/15 bg-[var(--background)] relative z-[110]">
                     <Link href="/" className="text-xl font-gothic tracking-tighter hover:text-primary transition-colors leading-none font-bold">
@@ -83,7 +95,7 @@ export default function Navigation() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="fixed inset-0 z-[100] bg-[var(--background)] md:hidden flex flex-col justify-center overflow-hidden"
+                        className="fixed inset-0 z-[140] bg-[var(--background)] md:hidden flex flex-col justify-center overflow-hidden"
                     >
                         {/* Immersive Background */}
                         <div className="absolute inset-0 z-0 opacity-[0.8] dark:opacity-[0.4] pointer-events-none">
@@ -156,15 +168,6 @@ export default function Navigation() {
                                     <span>ENCRYPTED_LINK_ACTIVE</span>
                                 </div>
                             </motion.div>
-
-                            {/* Circular Close Button at bottom */}
-                            <motion.button
-                                whileTap={{ scale: 0.9 }}
-                                onClick={toggleMobileMenu}
-                                className="mt-8 w-16 h-16 rounded-full border border-foreground/20 flex items-center justify-center opacity-60 hover:opacity-100 transition-opacity bg-[var(--background)]/50 backdrop-blur-sm"
-                            >
-                                <X size={32} />
-                            </motion.button>
                         </div>
                     </motion.div>
                 )}
