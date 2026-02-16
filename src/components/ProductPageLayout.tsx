@@ -195,10 +195,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                     {/* RIGHT COLUMN: Visual Frame */}
                     <div className="lg:col-span-5 flex flex-col gap-8">
                         {/* Main Product Image Frame (Mock Style) */}
-                        <div className="relative aspect-square border-2 border-primary/10 overflow-hidden group">
-                            {/* Scanning Line Animation */}
-                            <div className="absolute top-0 left-0 w-full h-[2px] bg-primary/30 shadow-[0_0_20px_rgba(var(--primary-rgb),0.6)] animate-scan z-20 pointer-events-none" />
-
+                        <div className="relative aspect-square overflow-hidden group">
                             <Image
                                 alt={product.name}
                                 src={product.image || 'https://via.placeholder.com/1000'}
@@ -213,15 +210,6 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                             </div>
 
 
-
-                            {/* Corner Accents */}
-                            <div className="absolute top-0 left-0 w-4 h-4 border-l border-t border-primary/40 z-30" />
-                            <div className="absolute bottom-0 right-0 w-4 h-4 border-r border-b border-primary/40 z-30" />
-
-                            {/* Technical Label */}
-                            <div className="absolute bottom-4 left-4 z-30 font-mono text-[9px] text-white/50 bg-black/60 px-2 py-1 border border-white/10 uppercase tracking-widest">
-                                SRC_VISUAL // {product.id.slice(0, 4)}:RENDER_EX
-                            </div>
                         </div>
 
                         {/* Technical Metadata Box */}

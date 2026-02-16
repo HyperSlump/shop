@@ -70,11 +70,8 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 className="relative z-10 flex-1 w-full overflow-hidden p-4 flex flex-col items-center gap-2 custom-scrollbar hover:bg-primary/[0.02] transition-colors duration-300"
                             >
                                 {/* Centered Image Frame */}
-                                <div className="relative w-36 h-36 shrink-0 transition-transform duration-500 group-hover:scale-105">
-                                    {/* Technical Label */}
-                                    <div className="absolute bottom-1 left-1 z-30 font-mono text-[7px] text-white/40 bg-black/40 px-1">
-                                        IMG_SAMP._{product.id.slice(0, 4)}
-                                    </div>
+                                <div className="relative w-44 h-44 shrink-0 transition-transform duration-500 group-hover:scale-105">
+
 
                                     <div className="relative block w-full h-full overflow-hidden">
                                         <Image

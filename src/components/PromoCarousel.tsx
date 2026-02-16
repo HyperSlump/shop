@@ -159,7 +159,7 @@ export default function PromoCarousel() {
             {/* Real Product Image Frame */}
             <div
                 ref={placeholderRef}
-                className="relative w-32 h-32 md:w-40 md:h-40 border border-primary/20 flex items-center justify-center overflow-hidden shrink-0 group shadow-[0_0_30px_rgba(0,0,0,0.5)]"
+                className="relative w-40 h-40 md:w-64 md:h-64 flex items-center justify-center overflow-hidden shrink-0 group transition-transform duration-700 hover:scale-105"
             >
                 {promos[index].image ? (
                     <div className="relative w-full h-full">
@@ -175,12 +175,6 @@ export default function PromoCarousel() {
                         <div className="font-mono text-[10px] opacity-40 uppercase rotate-90 tracking-[0.5em] font-bold">CORTEX_SIGNAL_v4</div>
                     </>
                 )}
-
-                {/* Scanning Line Animation */}
-                <div className="absolute top-0 left-0 w-full h-[1px] bg-primary/40 shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)] animate-scan-slow pointer-events-none" />
-
-                <div className="absolute top-0 left-0 w-3 h-3 border-l-2 border-t-2 border-primary/60" />
-                <div className="absolute bottom-0 right-0 w-3 h-3 border-r-2 border-b-2 border-primary/60" />
             </div>
 
             <div className="flex flex-col items-center md:items-start text-center md:text-left md:flex-initial w-full md:w-auto min-w-0">
