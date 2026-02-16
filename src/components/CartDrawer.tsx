@@ -154,12 +154,12 @@ export default function CartDrawer() {
                                                 </div>
 
                                                 {/* Thumbnail */}
-                                                <div className="w-16 h-16 md:w-20 md:h-20 relative shrink-0 border border-foreground/10 bg-[var(--background)]">
+                                                <div className="w-16 h-16 md:w-20 md:h-20 relative shrink-0 border border-foreground/10">
                                                     <NextImage
                                                         src={item.image || 'https://via.placeholder.com/100'}
                                                         alt={item.name}
                                                         fill
-                                                        className="object-cover contrast-110 grayscale group-hover:grayscale-0 transition-all duration-500"
+                                                        className="object-contain contrast-110 grayscale group-hover:grayscale-0 transition-all duration-500"
                                                     />
                                                 </div>
 

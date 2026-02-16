@@ -59,7 +59,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         className="absolute inset-0 flex flex-col"
                     >
                         {/* Top Section: Single Column Technical Dashboard */}
-                        <div className="flex-1 flex flex-col relative border-b-2 border-primary/20 bg-primary/10 dark:bg-white/5 transition-colors duration-500 overflow-hidden">
+                        <div className="flex-1 flex flex-col relative border-b-2 border-primary/20 transition-colors duration-500 overflow-hidden">
                             {/* Full Background Matrix Effect */}
                             <div className="absolute inset-0 z-0">
                                 <MatrixSpace isVisible={isHovered} />
@@ -70,7 +70,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 className="relative z-10 flex-1 w-full overflow-hidden p-4 flex flex-col items-center gap-2 custom-scrollbar hover:bg-primary/[0.02] transition-colors duration-300"
                             >
                                 {/* Centered Image Frame */}
-                                <div className="relative w-36 h-36 shrink-0 shadow-2xl transition-transform duration-500 group-hover:scale-105">
+                                <div className="relative w-36 h-36 shrink-0 transition-transform duration-500 group-hover:scale-105">
                                     {/* Technical Label */}
                                     <div className="absolute bottom-1 left-1 z-30 font-mono text-[7px] text-white/40 bg-black/40 px-1">
                                         IMG_SAMP._{product.id.slice(0, 4)}
@@ -79,12 +79,11 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                     <div className="relative block w-full h-full overflow-hidden">
                                         <Image
                                             alt={product.name}
-                                            className="w-full h-full object-cover opacity-90 contrast-125 grayscale group-hover:grayscale-0 transition-all duration-500"
+                                            className="w-full h-full object-contain opacity-90 contrast-125 grayscale group-hover:grayscale-0 transition-all duration-500"
                                             src={product.image || 'https://via.placeholder.com/500'}
                                             fill
                                             sizes="160px"
                                         />
-                                        <div className="absolute inset-0 bg-primary/15 mix-blend-overlay" />
                                     </div>
                                 </div>
 
@@ -196,7 +195,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         </div>
 
                         {/* Top Section */}
-                        <div className="flex-1 flex flex-col relative border-b-2 border-primary/20 bg-primary/10 dark:bg-white/5 overflow-hidden">
+                        <div className="flex-1 flex flex-col relative border-b-2 border-primary/20 overflow-hidden">
                             <div className="flex-1 overflow-hidden p-2 space-y-2">
                                 {/* Header with Close */}
                                 <div className="flex justify-between items-center">

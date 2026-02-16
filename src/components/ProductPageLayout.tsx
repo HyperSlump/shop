@@ -195,7 +195,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                     {/* RIGHT COLUMN: Visual Frame */}
                     <div className="lg:col-span-5 flex flex-col gap-8">
                         {/* Main Product Image Frame (Mock Style) */}
-                        <div className="relative aspect-square border-2 border-primary/10 overflow-hidden group bg-black/40">
+                        <div className="relative aspect-square border-2 border-primary/10 overflow-hidden group">
                             {/* Scanning Line Animation */}
                             <div className="absolute top-0 left-0 w-full h-[2px] bg-primary/30 shadow-[0_0_20px_rgba(var(--primary-rgb),0.6)] animate-scan z-20 pointer-events-none" />
 
@@ -203,7 +203,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                                 alt={product.name}
                                 src={product.image || 'https://via.placeholder.com/1000'}
                                 fill
-                                className="object-cover opacity-80 contrast-125 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 group-hover:scale-105"
+                                className="object-contain opacity-80 contrast-125 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 group-hover:scale-105"
                                 priority
                             />
 
@@ -212,7 +212,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                                 <MatrixSpace isVisible={true} />
                             </div>
 
-                            <div className="absolute inset-0 bg-primary/5 mix-blend-overlay z-10" />
+
 
                             {/* Corner Accents */}
                             <div className="absolute top-0 left-0 w-4 h-4 border-l border-t border-primary/40 z-30" />

@@ -159,16 +159,15 @@ export default function PromoCarousel() {
             {/* Real Product Image Frame */}
             <div
                 ref={placeholderRef}
-                className="relative w-32 h-32 md:w-40 md:h-40 border border-primary/20 bg-primary/15 flex items-center justify-center overflow-hidden shrink-0 group shadow-[0_0_30px_rgba(0,0,0,0.5)]"
+                className="relative w-32 h-32 md:w-40 md:h-40 border border-primary/20 flex items-center justify-center overflow-hidden shrink-0 group shadow-[0_0_30px_rgba(0,0,0,0.5)]"
             >
                 {promos[index].image ? (
                     <div className="relative w-full h-full">
                         <img
                             src={promos[index].image}
                             alt={promos[index].text}
-                            className="w-full h-full object-cover filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-1000"
+                            className="w-full h-full object-contain filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-1000"
                         />
-                        <div className="absolute inset-0 bg-primary/5 mix-blend-color" />
                     </div>
                 ) : (
                     <>
