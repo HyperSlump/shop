@@ -120,15 +120,6 @@ export default async function SuccessPage({
                 </div>
             </div>
 
-            <style jsx>{`
-                @keyframes scan {
-                    0% { top: 0%; }
-                    100% { top: 100%; }
-                }
-                .animate-scan {
-                    animation: scan 4s linear infinite;
-                }
-            `}</style>
         </div>
     );
 }

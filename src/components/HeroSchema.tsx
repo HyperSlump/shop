@@ -75,7 +75,7 @@ export default function HeroSchema() {
                 {/* Decorative Tech Legend - Hidden on mobile */}
                 <div className="hidden md:flex mt-10 items-center justify-between font-mono text-[10px] opacity-20 uppercase tracking-[0.4em] w-full border-t border-primary/10 pt-6">
                     <div className="flex items-center gap-6">
-                        <span className="flex items-center gap-2 pulse-slow">
+                        <span className="flex items-center gap-2 animate-pulse-slow">
                             <div className="w-1.5 h-1.5 rounded-full bg-primary" />
                             Live_System_Feed
                         </span>
@@ -90,10 +90,6 @@ export default function HeroSchema() {
                 </div>
             </div>
 
-            <style jsx>{`
-                .pulse-slow { animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-                @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .2; } }
-            `}</style>
         </section>
     );
 }
