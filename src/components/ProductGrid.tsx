@@ -31,7 +31,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
     const isInCart = (id: string) => cart.some(item => item.id === id);
 
     return (
-        <div className="px-4 md:px-6 lg:px-8 mb-12">
+        <div className="px-4 md:px-7 lg:px-8 mb-12">
             {/* Catalog Status Bar - Moved & Resized */}
             <div className="w-full flex items-center justify-between px-0 py-2 mt-2 animate-fade-in">
                 <div className="flex items-center gap-4">
@@ -59,7 +59,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
 
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 w-full p-0 animate-fade-in transition-all duration-500">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 w-full p-0 animate-fade-in transition-all duration-500">
                 {products.map((product, index) => (
                     <div
                         key={product.id}

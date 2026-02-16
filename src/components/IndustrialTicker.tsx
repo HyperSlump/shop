@@ -47,19 +47,6 @@ export default function IndustrialTicker() {
         };
     }, []);
 
-    const onMouseEnter = (rowRef: React.RefObject<HTMLDivElement | null>) => {
-        const row = rowRef.current;
-        if (!row) return;
-
-        // Find the animation associated with this row
-        const anim = rowRef === row1Ref ? row1AnimRef.current : row2AnimRef.current;
-        if (anim) anim.pause();
-    };
-
-    const onMouseLeave = (rowRef: React.RefObject<HTMLDivElement | null>) => {
-        const anim = rowRef === row1Ref ? row1AnimRef.current : row2AnimRef.current;
-        if (anim) anim.play();
-    };
 
     const row1Text = "NEW MERCH OUT NOW — HYPER$LUMP — INDUSTRIAL_CORE_V1 — READ BLOG — SYSTEM_ACTIVE — ";
     const row2Text = "$ $ $ $ /// REF_ID: 0x8823 /// ANALOG_ACTIVE /// $$$ /// 60.00_BPM_SYNC /// SIGNAL_LOST /// ";
@@ -70,11 +57,7 @@ export default function IndustrialTicker() {
                 <div className="w-full">
 
                     {/* Row 1 / Gothic */}
-                    <div
-                        className="overflow-hidden w-full cursor-pointer"
-                        onMouseEnter={() => onMouseEnter(row1Ref)}
-                        onMouseLeave={() => onMouseLeave(row1Ref)}
-                    >
+                    <div className="overflow-hidden w-full">
                         <div ref={row1Ref} className="flex whitespace-nowrap py-2 border-b border-primary/5 w-fit">
                             {/* Double the content for a seamless GSAP loop */}
                             {[...Array(2)].map((_, i) => (
@@ -90,11 +73,7 @@ export default function IndustrialTicker() {
                     </div>
 
                     {/* Row 2 / Mono */}
-                    <div
-                        className="overflow-hidden w-full cursor-pointer"
-                        onMouseEnter={() => onMouseEnter(row2Ref)}
-                        onMouseLeave={() => onMouseLeave(row2Ref)}
-                    >
+                    <div className="overflow-hidden w-full">
                         <div ref={row2Ref} className="flex whitespace-nowrap py-1 w-fit">
                             {[...Array(2)].map((_, i) => (
                                 <div key={i} className="flex">

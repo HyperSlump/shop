@@ -3,6 +3,7 @@
 import { useCart } from './CartProvider';
 import { useState, useEffect } from 'react';
 import NextImage from 'next/image';
+import { useRouter } from 'next/navigation';
 import { ArrowRight, ArrowLeft, Trash2 } from 'lucide-react';
 import MatrixSpace from './MatrixSpace';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -10,6 +11,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function CartDrawer() {
     const { cart, isCartOpen, toggleCart, removeFromCart, cartTotal } = useCart();
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
     // Lock body scroll when cart is open
     useEffect(() => {
@@ -29,26 +31,9 @@ export default function CartDrawer() {
 
     const handleCheckout = async () => {
         setLoading(true);
-        try {
-            const res = await fetch('/api/checkout', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    lineItems: cart.map((item) => ({ priceId: item.id })),
-                }),
-            });
-            const data = await res.json();
-            if (data.url) {
-                window.location.href = data.url;
-            } else {
-                alert('Error initiating checkout');
-            }
-        } catch (e) {
-            console.error(e);
-            alert('Checkout failed');
-        } finally {
-            setLoading(false);
-        }
+        toggleCart(); // Close the cart
+        router.push('/checkout');
+        setLoading(false);
     };
 
     return (

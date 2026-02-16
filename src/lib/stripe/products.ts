@@ -36,7 +36,7 @@ export async function getActiveProducts() {
                 productId: 'prod_mock_1',
                 name: 'VOID_TEXTURES_01',
                 description: 'Industrial atmosphere and corrupted noise floors. High-fidelity textures for cinematic sound design.',
-                image: '/hyperslump_product_placeholder.png',
+                image: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?auto=format&fit=crop&q=80&w=500',
                 currency: 'usd',
                 amount: 15.00,
                 metadata: {
@@ -52,7 +52,7 @@ export async function getActiveProducts() {
                 productId: 'prod_mock_2',
                 name: 'BROKEN_DRUMS_X',
                 description: 'Distorted percussion and rhythmic glitches. Hard-hitting kicks and snares for industrial techno.',
-                image: '/hyperslump_product_placeholder.png',
+                image: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?auto=format&fit=crop&q=80&w=500',
                 currency: 'usd',
                 amount: 25.00,
                 metadata: {
@@ -66,7 +66,7 @@ export async function getActiveProducts() {
                 productId: 'prod_mock_3',
                 name: 'NEURO_BASS_V2',
                 description: 'Reese basslines and twisted low-end frequencies. Essential for drum and bass and neurofunk.',
-                image: '/hyperslump_product_placeholder.png',
+                image: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?auto=format&fit=crop&q=80&w=500',
                 currency: 'usd',
                 amount: 20.00,
                 metadata: {
@@ -80,7 +80,7 @@ export async function getActiveProducts() {
                 productId: 'prod_mock_4',
                 name: 'CORTEX_LOOPS',
                 description: 'Brain-melting synth loops and arpeggios. Modular synthesis recordings for IDM.',
-                image: '/hyperslump_product_placeholder.png',
+                image: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?auto=format&fit=crop&q=80&w=500',
                 currency: 'usd',
                 amount: 18.00,
                 metadata: {
@@ -94,7 +94,7 @@ export async function getActiveProducts() {
                 productId: 'prod_mock_5',
                 name: 'GLITCH_ARTIFACTS',
                 description: 'Digital errors, datamosh sounds, and signal interference. Textures for modern glitch art.',
-                image: '/hyperslump_product_placeholder.png',
+                image: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?auto=format&fit=crop&q=80&w=500',
                 currency: 'usd',
                 amount: 12.00,
                 metadata: {
@@ -108,7 +108,7 @@ export async function getActiveProducts() {
                 productId: 'prod_mock_6',
                 name: 'ACID_WASH_303',
                 description: 'Squelchy TB-303 acid lines. Recorded through analog distortion pedals.',
-                image: '/hyperslump_product_placeholder.png',
+                image: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?auto=format&fit=crop&q=80&w=500',
                 currency: 'usd',
                 amount: 22.00,
                 metadata: {
@@ -122,7 +122,7 @@ export async function getActiveProducts() {
                 productId: 'prod_mock_7',
                 name: 'DISTORTION_UNIT',
                 description: 'Heavy distortion FX chains and impulse responses. Add grit to any sound source.',
-                image: '/hyperslump_product_placeholder.png',
+                image: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?auto=format&fit=crop&q=80&w=500',
                 currency: 'usd',
                 amount: 15.00,
                 metadata: {
@@ -136,7 +136,7 @@ export async function getActiveProducts() {
                 productId: 'prod_mock_8',
                 name: 'VOCAL_CHOP_SYSTEM',
                 description: 'Processed vocal chops and granular synthesis textures. Futuristic vocal aesthetic.',
-                image: '/hyperslump_product_placeholder.png',
+                image: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?auto=format&fit=crop&q=80&w=500',
                 currency: 'usd',
                 amount: 28.00,
                 metadata: {
@@ -150,7 +150,7 @@ export async function getActiveProducts() {
                 productId: 'prod_mock_9',
                 name: 'AMBIENT_WASH_IV',
                 description: 'Lush, evolving ambient pads and drones. Perfect for background textures and intros.',
-                image: '/hyperslump_product_placeholder.png',
+                image: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?auto=format&fit=crop&q=80&w=500',
                 currency: 'usd',
                 amount: 19.00,
                 metadata: {

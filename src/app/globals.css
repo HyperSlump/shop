@@ -78,20 +78,22 @@
     scrollbar-gutter: stable;
     overflow-x: clip;
 
-    --background: #EBE6DC;
-    /* Hardware Warm Bone / Surgical Shell */
-    --foreground: #1A1815;
-    /* Deep Oiled Iron */
-    --primary: #9C1F1F;
-    /* Oxidized Cinnabar / Surgical Red */
-    --primary-rgb: 156, 31, 31;
+    --background: #F8F9FB;
+    /* Sleek Laboratory / Stripe Clean */
+    --foreground: #1A1F36;
+    /* Stripe Indigo-Grey */
+    --primary: #635BFF;
+    /* Stripe Blurple - High Trust */
+    --primary-rgb: 99, 91, 255;
     --primary-foreground: #ffffff;
-    --accent: #B48E68;
-    /* Brushed Copper / Sienna */
-    --status: #2D6A4F;
-    --alert: #8A0000;
-    --border: rgba(26, 24, 21, 0.12);
-    --noise-opacity: 0.07;
+    --accent: #00D4FF;
+    /* Cyber Blue */
+    --status: #22C55E;
+    /* Industrial Green */
+    --alert: #FF3B30;
+    /* Warning Red */
+    --border: rgba(26, 31, 54, 0.1);
+    --noise-opacity: 0.05;
     --noise-blend: multiply;
   }
 
@@ -104,23 +106,19 @@
   }
 
   html.dark {
-    --background: #0C0A09;
-    /* Warm Deep Chassis (Stone 950) */
-    --foreground: #E7E5E4;
-    /* Warm Light Text (Stone 200) */
-    --primary: #FF7F11;
-    /* Analog Searing Orange - Very Warm */
-    --primary-rgb: 255, 127, 17;
-    --primary-foreground: #0C0A09;
-    --accent: #FACC15;
-    /* Electronic Yellow */
+    --background: #0A0A0A;
+    /* Obsidian Terminal */
+    --foreground: #FAFAFA;
+    /* High Contrast Text */
+    --primary: #635BFF;
+    /* Universal Action Color */
+    --primary-rgb: 99, 91, 255;
+    --primary-foreground: #FAFAFA;
+    --accent: #00D4FF;
     --status: #BEF264;
-    /* Warm Lime Neon */
-    --alert: #FF3D00;
-    /* High Temp Red */
-    --border: rgba(255, 127, 17, 0.2);
-    --noise-opacity: 0.15;
-    /* Slightly more grain for heat effect */
+    --alert: #FF3B30;
+    --border: rgba(255, 255, 255, 0.1);
+    --noise-opacity: 0.12;
     --noise-blend: screen;
   }
 

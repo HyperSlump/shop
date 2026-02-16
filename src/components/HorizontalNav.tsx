@@ -19,7 +19,7 @@ export default function HorizontalNav() {
 
     return (
         <nav
-            className="hidden md:block sticky top-0 z-40 border-y border-foreground/15 bg-[var(--background)] px-4 md:px-6 lg:px-8 py-4 transition-colors group/nav"
+            className="hidden md:block sticky top-0 z-40 border-y border-foreground/15 bg-[var(--background)] px-4 md:px-7 lg:px-8 py-3 transition-colors group/nav"
             onMouseLeave={() => setHoveredLink(null)}
         >
             {/* 4-Corner Minimal Accents */}
@@ -36,13 +36,13 @@ export default function HorizontalNav() {
                             onMouseEnter={() => setHoveredLink(link.id)}
                             onFocus={() => setHoveredLink(link.id)}
                             style={{ animationDelay: `${100 + i * 100}ms` }}
-                            className="animate-slide-up group relative h-12 min-w-[100px] flex items-center justify-center px-4 bg-foreground/5 hover:bg-primary/10 border border-transparent transition-all duration-300"
+                            className="animate-slide-up group relative h-14 min-w-[120px] flex items-center justify-center px-6 bg-foreground/5 hover:bg-primary/10 border border-transparent transition-all duration-300"
                         >
                             <div className="absolute top-0 left-0 w-[2px] h-0 group-hover:h-full bg-primary transition-all duration-300" />
                             <div className="flex flex-col items-center z-10">
-                                <span className="font-mono text-sm tracking-widest uppercase group-hover:text-primary transition-colors">{link.label}</span>
+                                <span className="font-mono text-base tracking-widest uppercase group-hover:text-primary transition-colors">{link.label}</span>
                                 {link.note && (
-                                    <span className="text-[10px] opacity-40 group-hover:opacity-80 font-mono">{link.note}</span>
+                                    <span className="text-[11px] opacity-40 group-hover:opacity-80 font-mono">{link.note}</span>
                                 )}
                             </div>
                             <div className="absolute bottom-1 right-1 w-1 h-1 bg-primary/0 group-hover:bg-primary transition-all duration-300" />
@@ -52,12 +52,12 @@ export default function HorizontalNav() {
                                 <>
                                     <motion.div
                                         layoutId="nav-highlight-top"
-                                        className="absolute -top-[17px] left-0 right-0 h-[1px] bg-primary shadow-[0_0_10px_var(--primary)]"
+                                        className="absolute -top-[13px] left-0 right-0 h-[1px] bg-primary shadow-[0_0_10px_var(--primary)]"
                                         transition={{ type: "spring", bounce: 0.4, duration: 0.6 }}
                                     />
                                     <motion.div
                                         layoutId="nav-highlight-bottom"
-                                        className="absolute -bottom-[17px] left-0 right-0 h-[1px] bg-primary shadow-[0_0_10px_var(--primary)]"
+                                        className="absolute -bottom-[13px] left-0 right-0 h-[1px] bg-primary shadow-[0_0_10px_var(--primary)]"
                                         transition={{ type: "spring", bounce: 0.4, duration: 0.6 }}
                                     />
                                 </>

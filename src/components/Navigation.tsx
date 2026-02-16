@@ -29,20 +29,14 @@ export default function Navigation() {
 
     return (
         <>
-            <aside className="w-full md:w-20 md:h-screen md:fixed top-0 left-0 md:border-r border-foreground/15 flex flex-row md:flex-col items-center justify-between px-0 md:p-6 z-[145] bg-[var(--background)] md:bg-[var(--background)] animate-fade-in transition-colors">
+            <aside className="w-full md:w-20 md:h-screen md:fixed top-0 left-0 md:border-r border-foreground/15 flex flex-row md:flex-col items-center justify-between px-0 md:p-6 z-[130] bg-[var(--background)] md:bg-[var(--background)] animate-fade-in transition-colors">
                 {/* Mobile Sticky Control Bar */}
                 <div className="flex md:hidden w-full items-center justify-between p-4 border-b border-foreground/15 bg-[var(--background)] relative z-[110]">
-                    <Link href="/" className="text-xl font-gothic tracking-tight hover:text-primary transition-colors leading-tight inline-block py-1 -my-1">
-                        <span>hyper$lump</span>
+                    <Link href="/" className="text-2xl font-gothic tracking-tighter hover:text-primary transition-colors leading-tight inline-block py-1 -my-1">
+                        <span>h$</span>
                     </Link>
 
                     <div className="flex items-center gap-3">
-                        {/* Mobile Dedicated Theme Switch */}
-                        <div className="flex items-center justify-center w-10 h-10 border border-foreground/10 rounded-full">
-                            <ThemeToggle />
-                        </div>
-
-                        {/* Hamburger Button - Now matches brain icon style */}
                         <button
                             onClick={toggleMobileMenu}
                             className="w-10 h-10 flex items-center justify-center border border-foreground/10 rounded-full hover:text-primary active:scale-90 transition-all"
@@ -53,10 +47,12 @@ export default function Navigation() {
                 </div>
 
                 {/* DESKTOP SIDEBAR: PRECISION DISTRIBUTED TRIO */}
-                <div className="hidden md:flex flex-col items-center w-full h-full relative py-12">
-                    {/* 1. TOP: Brain (Theme Control) - Anchored Top */}
-                    <div className="flex flex-col items-center">
-                        <ThemeToggle />
+                <div className="hidden md:flex flex-col items-center w-full h-full relative py-8">
+                    {/* 1. TOP: Minimal Brand Mark */}
+                    <div className="flex flex-col items-center mb-auto">
+                        <Link href="/" className="text-3xl font-gothic tracking-tighter hover:text-primary transition-all duration-300 hover:scale-110">
+                            h$
+                        </Link>
                     </div>
 
                     {/* 2. CENTER: Shopping Cart - Absolute Centered at 50vh Axis */}
@@ -76,13 +72,9 @@ export default function Navigation() {
                         </CursorTooltip>
                     </div>
 
-                    {/* 3. BOTTOM: Contact icon - Anchored Bottom */}
-                    <div className="mt-auto flex flex-col items-center">
-                        <CursorTooltip text="REACH_CONTACT_DIR">
-                            <button className="hover:text-primary transition-colors relative group p-4 opacity-40 hover:opacity-100 transition-opacity">
-                                <span className="material-icons text-[28px] block transition-transform group-hover:scale-110">alternate_email</span>
-                            </button>
-                        </CursorTooltip>
+                    {/* 3. BOTTOM: Theme Control - Anchored Bottom */}
+                    <div className="mt-auto flex flex-col items-center gap-6">
+                        <ThemeToggle />
                     </div>
                 </div>
             </aside>

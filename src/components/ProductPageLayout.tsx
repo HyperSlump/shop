@@ -8,7 +8,6 @@ import WaveformOverlay from './WaveformOverlay';
 import OneShotPlayer from './OneShotPlayer';
 import MatrixSpace from './MatrixSpace';
 import { useCart } from './CartProvider';
-
 import { Product } from './CartProvider';
 
 interface ProductPageLayoutProps {
@@ -38,22 +37,6 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
         }
     };
 
-    const itemVariants = {
-        initial: { opacity: 0, y: 30, scale: 0.98 },
-        animate: {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            transition: {
-                type: "spring",
-                stiffness: 300,
-                damping: 30,
-                mass: 0.8,
-                duration: 0.8
-            }
-        }
-    };
-
     // Extended "Verbage" / Lore Map
     const DETAILED_DESCRIPTIONS: Record<string, string> = {
         'VOID_TEXTURES_01': "A collection of high-fidelity audio artifacts harvested from corrupted data streams. These textures have been processed through analog distortion circuits and granular synthesis engines to create a sense of vast, empty space. ideal for cinematic sound design, dark ambient, and industrial techno. Expect heavy sub-bass drones, metallic scrapes, and digital interference patterns.",
@@ -75,32 +58,80 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
             variants={containerVariants}
             initial="initial"
             animate="animate"
-            className="flex-1 w-full p-4 md:p-6 lg:p-8"
+            className="flex-1 w-full px-4 md:px-7 lg:px-8 py-10"
         >
-            <div className="w-full space-y-12">
-                {/* 1. Header System Line (Synced with MockPages) */}
+            <div className="w-full space-y-10">
+                {/* 0. MINIMAL RETURN NAV */}
+                <Link
+                    href="/"
+                    className="inline-flex items-center gap-2 text-primary/70 hover:text-primary transition-all group w-fit"
+                >
+                    <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform duration-300" />
+                    <span className="font-mono text-[12px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300">back</span>
+                </Link>
+
+                {/* 1. Header System Line - Condensed */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-primary/20 pb-8 gap-6">
-                    <div className="space-y-2">
+                    <div className="space-y-1">
                         <div className="flex items-center gap-3 text-primary/60 font-mono text-[10px] tracking-[0.3em]">
                             <span className="w-2 h-2 bg-primary animate-pulse" />
                             SYS_LOC // {product.name.toUpperCase()}
                         </div>
-                        <h1 className="text-5xl md:text-7xl font-gothic tracking-tighter leading-none lowercase">
+                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-gothic tracking-tighter leading-none lowercase">
                             {product.name}
                         </h1>
                     </div>
-                    <div className="flex flex-col items-start md:items-end font-mono text-[10px] opacity-40">
+                    <div className="flex flex-col items-start md:items-end font-mono text-[11px] opacity-40">
+                        <p className="text-primary opacity-60 uppercase mb-1">PRICE: ${product.amount}</p>
                         <p>ACCESS_CODE: {product.id.slice(0, 10).toUpperCase()}</p>
-                        <p>STATUS_ID: DATA_RECON_v7</p>
                     </div>
                 </div>
 
-                {/* 2. Primary Content Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                    {/* LEFT COLUMN: Lore & Audio Console */}
-                    <div className="lg:col-span-7 space-y-10">
-                        <div className="space-y-6">
-                            <p className="font-mono text-[13px] md:text-base leading-relaxed opacity-80 max-w-prose">
+                {/* 2. Primary Content Grid - CONDENSED */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14">
+                    {/* LEFT COLUMN: Visual & Technical Frame - MOVED UP */}
+                    <div className="lg:col-span-5 space-y-6">
+                        {/* Main Product Image Frame */}
+                        <div className="relative aspect-square overflow-hidden group bg-foreground/5 dark:bg-white/5 border border-primary/10">
+                            <Image
+                                alt={product.name}
+                                src={product.image || 'https://via.placeholder.com/1000'}
+                                fill
+                                className="object-contain opacity-80 contrast-125 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000"
+                                priority
+                            />
+                            {/* Matrix Overlay Overlay */}
+                            <div className="absolute inset-0 z-10 opacity-[0.03] pointer-events-none">
+                                <MatrixSpace isVisible={true} />
+                            </div>
+                        </div>
+
+                        {/* Technical Metadata Box */}
+                        <div className="p-5 border border-primary/10 bg-black/20 flex flex-col gap-4 font-mono">
+                            <div className="text-[10px] text-primary/40 flex justify-between uppercase border-b border-primary/10 pb-2">
+                                <span>Metadata_Package</span>
+                                <span>[Verified]</span>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                {[
+                                    { k: 'TYPE', v: product.metadata?.category || 'SAMPLE_PACK' },
+                                    { k: 'SIZE', v: product.metadata?.size || 'UNSPECIFIED' },
+                                    { k: 'DEPTH', v: '24-BIT / 96' },
+                                    { k: 'FORMAT', v: product.metadata?.format || 'WAV' }
+                                ].map((spec) => (
+                                    <div key={spec.k} className="flex flex-col gap-1">
+                                        <span className="text-[8px] text-primary/30 uppercase tracking-tighter">{spec.k}</span>
+                                        <span className="text-[11px] text-foreground/70 uppercase truncate">{spec.v}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* RIGHT COLUMN: Lore & Audio Console */}
+                    <div className="lg:col-span-7 space-y-8">
+                        <div className="space-y-4">
+                            <p className="font-mono text-sm md:text-base leading-relaxed opacity-90 max-w-prose">
                                 {product.description}
                             </p>
 
@@ -155,7 +186,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                                 </div>
                             )}
 
-                            {/* Technical Legend (Mock Style) */}
+                            {/* Technical Legend */}
                             <div className="pt-4 border-t border-primary/5 space-y-3">
                                 <div className="flex justify-between items-center text-[9px] font-mono opacity-50 uppercase tracking-widest">
                                     <span>Signal_Flux_Density</span>
@@ -190,58 +221,11 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                                 <span>Format: {product.metadata?.format || 'WAV'}</span>
                             </div>
                         </div>
-                    </div>
 
-                    {/* RIGHT COLUMN: Visual Frame */}
-                    <div className="lg:col-span-5 flex flex-col gap-8">
-                        {/* Main Product Image Frame (Mock Style) */}
-                        <div className="relative aspect-square overflow-hidden group">
-                            <Image
-                                alt={product.name}
-                                src={product.image || 'https://via.placeholder.com/1000'}
-                                fill
-                                className="object-contain opacity-80 contrast-125 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 group-hover:scale-105"
-                                priority
-                            />
-
-                            {/* Matrix Overlay Overlay */}
-                            <div className="absolute inset-0 z-10 opacity-[0.03] pointer-events-none">
-                                <MatrixSpace isVisible={true} />
-                            </div>
-
-
-                        </div>
-
-                        {/* Technical Metadata Box */}
-                        <div className="p-5 border border-primary/10 bg-black/20 flex flex-col gap-4 font-mono">
-                            <div className="text-[10px] text-primary/40 flex justify-between uppercase border-b border-primary/10 pb-2">
-                                <span>Metadata_Package</span>
-                                <span>[Verified]</span>
-                            </div>
-                            <div className="grid grid-cols-2 gap-4">
-                                {[
-                                    { k: 'OBJECT', v: 'WARP_CORE' },
-                                    { k: 'TYPE', v: product.metadata?.category || 'SAMPLE_PACK' },
-                                    { k: 'SIZE', v: product.metadata?.size || 'UNSPECIFIED' },
-                                    { k: 'BIT_DEPTH', v: '24-BIT / 96' }
-                                ].map((spec) => (
-                                    <div key={spec.k} className="flex flex-col gap-1">
-                                        <span className="text-[8px] text-primary/30 uppercase tracking-tighter">{spec.k}</span>
-                                        <span className="text-[11px] text-foreground/70 uppercase truncate">{spec.v}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Return Link Styled */}
-                        <Link href="/" className="inline-flex items-center gap-3 font-mono text-[10px] opacity-40 hover:opacity-100 transition-all hover:text-primary group mt-auto">
-                            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-                            <span>RETURN_TO_BASE_TERMINAL</span>
-                        </Link>
                     </div>
                 </div>
 
-                {/* Footer Section Indicators (Synced with Mock) */}
+                {/* Footer Section Indicators */}
                 <div className="flex flex-wrap gap-4 pt-8">
                     {['X_PROTO', 'Y_ALGO', 'Z_CORE', 'H_SLUMP'].map((tag) => (
                         <div key={tag} className="px-4 py-2 border border-foreground/10 text-[9px] font-mono opacity-30 hover:opacity-100 hover:border-primary/40 transition-all cursor-default uppercase tracking-widest">

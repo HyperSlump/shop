@@ -19,19 +19,15 @@ export default function HeroSchema() {
     }, []);
 
     return (
-        <section className="relative w-full bg-[var(--background)] animate-fade-in px-0 pt-0 pb-0 min-h-[380px] md:h-[calc(50vh-40px)] md:min-h-[300px]">
+        <section className="relative w-full bg-[var(--background)] animate-fade-in px-0 pt-0 pb-0 min-h-[400px] md:h-[calc(55vh-40px)] md:min-h-[350px]">
             <div className="w-full h-full relative flex flex-col justify-center md:justify-between p-4 md:px-6 md:py-8 lg:px-8 lg:py-12">
                 {/* 1. BRANDING SECTION - Hidden on mobile as per user request */}
-                <div className="relative w-full hidden md:flex justify-between items-center mb-4 z-[60]">
+                <div className="relative w-full hidden md:flex justify-between items-center mb-6 z-[60]">
                     <div className="flex items-center gap-4">
-                        <h1 className="font-gothic text-4xl md:text-5xl tracking-tight lowercase leading-tight drop-shadow-[0_0_10px_rgba(var(--primary-rgb),0.2)] antialiased">
-                            <Link href="/" className="inline-block py-2 -my-2 hover:text-primary transition-colors duration-300" data-cursor-invert="true">
-                                hyper$lump
-                            </Link>
-                        </h1>
+                        {/* Logo removed as per request */}
                     </div>
 
-                    <div className="flex flex-col items-end font-mono text-[9px] opacity-40 tracking-wider uppercase gap-0.5">
+                    <div className="flex flex-col items-end font-mono text-[10px] opacity-40 tracking-wider uppercase gap-1">
                         <div className="flex items-center gap-2 mb-1">
                             <span className="opacity-40">COORD:</span>
                             <span
@@ -61,7 +57,7 @@ export default function HeroSchema() {
 
                 {/* 2. SECONDARY DATA AREA - Hidden on mobile */}
                 <div className="relative w-full hidden md:flex flex-col md:flex-row items-start md:items-end justify-between gap-1 py-0 transition-all duration-300">
-                    <div className="flex flex-col gap-2 font-mono text-[9px] uppercase tracking-[0.3em] opacity-30 min-w-[250px]">
+                    <div className="flex flex-col gap-2 font-mono text-[10px] uppercase tracking-[0.3em] opacity-30 min-w-[300px]">
                         <div className="flex justify-between border-b border-primary/10 pb-1">
                             <span>Sys: V.4.0.ALPHA</span>
                             <span>[ OK ]</span>
@@ -77,7 +73,7 @@ export default function HeroSchema() {
                 </div>
 
                 {/* Decorative Tech Legend - Hidden on mobile */}
-                <div className="hidden md:flex mt-8 items-center justify-between font-mono text-[8px] opacity-20 uppercase tracking-[0.4em] w-full border-t border-primary/10 pt-4">
+                <div className="hidden md:flex mt-10 items-center justify-between font-mono text-[10px] opacity-20 uppercase tracking-[0.4em] w-full border-t border-primary/10 pt-6">
                     <div className="flex items-center gap-6">
                         <span className="flex items-center gap-2 pulse-slow">
                             <div className="w-1.5 h-1.5 rounded-full bg-primary" />
