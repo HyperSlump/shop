@@ -32,7 +32,7 @@ export default function Navigation() {
             <aside className="w-full md:w-20 md:h-screen sticky top-0 left-0 md:border-r border-foreground/15 flex flex-row md:flex-col items-center justify-between px-0 md:p-6 z-[145] bg-[var(--background)] md:bg-[var(--background)] animate-fade-in">
                 {/* Mobile Sticky Control Bar */}
                 <div className="flex md:hidden w-full items-center justify-between p-4 border-b border-foreground/15 bg-[var(--background)] relative z-[110]">
-                    <Link href="/" className="text-xl font-gothic tracking-tighter hover:text-primary transition-colors leading-none font-bold">
+                    <Link href="/" className="text-xl font-gothic tracking-tight hover:text-primary transition-colors leading-tight inline-block py-1 -my-1">
                         <span>hyper$lump</span>
                     </Link>
 
@@ -61,7 +61,7 @@ export default function Navigation() {
 
                     {/* 2. CENTER: Shopping Cart - Absolute Centered at 50vh Axis */}
                     <div className="absolute top-[calc(50%-40px)] left-0 w-full h-[80px] flex items-center justify-center pointer-events-none">
-                        <CursorTooltip text="VIEW_CART_MGR">
+                        <CursorTooltip text="CART_MGR">
                             <button
                                 onClick={toggleCart}
                                 className="hover:text-primary transition-colors relative group p-4 pointer-events-auto"
@@ -139,7 +139,7 @@ export default function Navigation() {
                                         <Link
                                             href={link.href}
                                             onClick={() => setIsMobileMenuOpen(false)}
-                                            className="text-6xl md:text-7xl font-gothic tracking-tighter transition-all hover:text-primary active:scale-95 block py-2 drop-shadow-2xl"
+                                            className="text-5xl md:text-7xl font-gothic tracking-tight transition-all hover:text-primary active:scale-95 block py-1 drop-shadow-2xl"
                                         >
                                             {link.label}
                                         </Link>

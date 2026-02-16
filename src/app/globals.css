@@ -75,22 +75,22 @@
 @layer base {
   html {
     font-size: 100%;
+    scrollbar-gutter: stable;
 
-    --background: #D8CEB9;
-    /* RC-20 Warm Hardware Beige */
-    --foreground: #050505;
-    /* RC-20 Deep Charcoal Panel */
-    --primary: #4F46E5;
-    /* Indigo - High Contrast against Beige */
+    --background: #EBE6DC;
+    /* Hardware Warm Bone / Surgical Shell */
+    --foreground: #1A1815;
+    /* Deep Oiled Iron */
+    --primary: #9C1F1F;
+    /* Oxidized Cinnabar / Surgical Red */
+    --primary-rgb: 156, 31, 31;
     --primary-foreground: #ffffff;
-    --accent: #E11D48;
-    /* Hardware Red */
-    --status: #059669;
-    /* Deep Mint */
-    --alert: #DC2626;
-    /* UI Alert */
-    --border: rgba(26, 29, 35, 0.25);
-    --noise-opacity: 0.1;
+    --accent: #B48E68;
+    /* Brushed Copper / Sienna */
+    --status: #2D6A4F;
+    --alert: #8A0000;
+    --border: rgba(26, 24, 21, 0.12);
+    --noise-opacity: 0.07;
     --noise-blend: multiply;
   }
 
@@ -109,6 +109,7 @@
     /* Warm Light Text (Stone 200) */
     --primary: #FF7F11;
     /* Analog Searing Orange - Very Warm */
+    --primary-rgb: 255, 127, 17;
     --primary-foreground: #0C0A09;
     --accent: #FACC15;
     /* Electronic Yellow */

@@ -1,7 +1,7 @@
 'use client';
 
 import { useCart } from './CartProvider';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import NextImage from 'next/image';
 import { ArrowRight, ArrowLeft, Trash2 } from 'lucide-react';
 import MatrixSpace from './MatrixSpace';
@@ -10,6 +10,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function CartDrawer() {
     const { cart, isCartOpen, toggleCart, removeFromCart, cartTotal } = useCart();
     const [loading, setLoading] = useState(false);
+
+    // Lock body scroll when cart is open
+    useEffect(() => {
+        if (isCartOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [isCartOpen]);
 
     const handleRemoveItem = (id: string) => {
         removeFromCart(id);
@@ -63,7 +75,7 @@ export default function CartDrawer() {
                             damping: 30,
                             mass: 0.8
                         }}
-                        className="fixed top-0 right-0 h-full w-full md:w-[480px] bg-[var(--background)] border-l-0 md:border-l-2 border-foreground/10 z-[150] flex flex-col shadow-2xl overflow-hidden"
+                        className="fixed inset-y-0 right-0 left-0 md:left-auto h-full w-full md:w-[480px] bg-[var(--background)] border-l-0 md:border-l-2 border-foreground/10 z-[150] flex flex-col shadow-2xl overflow-hidden"
                     >
                         {/* Matrix Background Texture */}
                         <div className="absolute inset-0 z-0 opacity-[0.9] dark:opacity-[0.6] pointer-events-none">

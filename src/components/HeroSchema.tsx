@@ -22,10 +22,10 @@ export default function HeroSchema() {
         <section className="relative w-full bg-[var(--background)] animate-fade-in px-0 pt-0 pb-0 min-h-[450px] md:h-[calc(50vh-40px)] md:min-h-[300px]">
             <div className="w-full h-full relative flex flex-col justify-center md:justify-between p-4 md:px-6 md:py-8 lg:px-8 lg:py-12">
                 {/* 1. BRANDING SECTION - Hidden on mobile as per user request */}
-                <div className="relative w-full hidden md:flex justify-between items-center mb-4">
+                <div className="relative w-full hidden md:flex justify-between items-center mb-4 z-[60]">
                     <div className="flex items-center gap-4">
-                        <h1 className="font-gothic text-4xl md:text-5xl tracking-tight lowercase leading-none drop-shadow-[0_0_10px_rgba(var(--primary-rgb),0.2)]">
-                            <Link href="/" className="hover:text-primary transition-colors duration-300" data-cursor-invert="true">
+                        <h1 className="font-gothic text-4xl md:text-5xl tracking-tight lowercase leading-tight drop-shadow-[0_0_10px_rgba(var(--primary-rgb),0.2)] antialiased">
+                            <Link href="/" className="inline-block py-2 -my-2 hover:text-primary transition-colors duration-300" data-cursor-invert="true">
                                 hyper$lump
                             </Link>
                         </h1>
@@ -50,9 +50,13 @@ export default function HeroSchema() {
                     </div>
                 </div>
 
-                {/* Promotional Carousel - Restored horizontal centering for desktop */}
-                <div className="md:absolute md:left-0 md:top-1/2 md:-translate-y-1/2 z-50 w-full flex justify-center py-8 md:py-0">
-                    <PromoCarousel />
+                {/* Promotional Carousel - Restored horizontal centering for desktop.
+                    Using pointer-events-none on the full-width wrapper to prevent blocking the logo above.
+                */}
+                <div className="md:absolute md:left-0 md:top-1/2 md:-translate-y-1/2 z-50 w-full flex justify-center py-8 md:py-0 pointer-events-none">
+                    <div className="pointer-events-auto w-full flex justify-center">
+                        <PromoCarousel />
+                    </div>
                 </div>
 
                 {/* 2. SECONDARY DATA AREA - Hidden on mobile */}

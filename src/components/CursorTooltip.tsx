@@ -36,10 +36,10 @@ export default function CursorTooltip({ text, children }: CursorTooltipProps) {
             {children}
             {isVisible && (
                 <div
-                    className="fixed z-[1000] pointer-events-none px-3 py-1.5 bg-[var(--background)] text-primary text-[10px] font-mono tracking-[0.2em] border border-primary/40 shadow-[4px_4px_0px_rgba(var(--primary-rgb),0.2)] flex items-center gap-2 whitespace-nowrap"
+                    className="fixed z-[1000] pointer-events-none px-2 py-1 bg-[var(--background)] text-primary text-[8px] font-mono tracking-[0.1em] border border-primary/40 shadow-[2px_2px_0px_rgba(var(--primary-rgb),0.2)] flex items-center gap-1.5 whitespace-nowrap"
                     style={{
-                        left: pos.x + 20,
-                        top: pos.y - 12
+                        left: pos.x + 12,
+                        top: pos.y + 24
                     }}
                 >
                     <div className="w-1 h-1 bg-primary animate-pulse" />

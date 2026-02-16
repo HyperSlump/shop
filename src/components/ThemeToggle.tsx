@@ -34,7 +34,7 @@ export default function ThemeToggle() {
     if (!mounted) return <div className="h-6 w-24" />;
 
     return (
-        <CursorTooltip text={isDark ? "LIGHT_MODE_SYNC" : "DARK_MODE_SYNC"}>
+        <CursorTooltip text={isDark ? "SYNC_L" : "SYNC_D"}>
             <button
                 onClick={toggleTheme}
                 className="flex items-center justify-center hover:text-primary transition-colors group"
