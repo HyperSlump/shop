@@ -68,8 +68,8 @@ export default function Navigation() {
                             >
                                 <span className="material-icons text-[32px] block transition-transform group-hover:scale-110 font-bold">shopping_cart</span>
                                 {cart.length > 0 && (
-                                    <span className="absolute top-2 right-2 bg-primary text-black text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center animate-bounce-subtle shadow-[0_0_15_rgba(var(--primary-rgb),0.5)] border-2 border-background">
-                                        {cart.length}
+                                    <span className="absolute top-1 right-2 text-primary text-[10px] font-bold font-mono animate-pulse">
+                                        [{cart.length}]
                                     </span>
                                 )}
                             </button>
@@ -181,7 +181,7 @@ export default function Navigation() {
                 >
                     <span className="material-icons text-[24px]">shopping_cart</span>
                     {cart.length > 0 && (
-                        <span className="absolute -top-1 -right-1 bg-primary text-black text-[10px] font-bold w-6 h-6 rounded-full flex items-center justify-center animate-bounce-subtle border-2 border-[var(--background)] shadow-[0_0_10px_rgba(var(--primary-rgb),0.3)]">
+                        <span className="absolute top-1 right-1 text-primary text-[11px] font-black font-mono">
                             {cart.length}
                         </span>
                     )}
