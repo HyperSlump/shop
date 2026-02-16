@@ -3,7 +3,7 @@
 import { useCart } from './CartProvider';
 import { useState } from 'react';
 import NextImage from 'next/image';
-import { ArrowRight, Trash2 } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Trash2 } from 'lucide-react';
 import MatrixSpace from './MatrixSpace';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -72,7 +72,16 @@ export default function CartDrawer() {
                         </div>
 
                         <header className="flex justify-between items-center mb-0 border-b-2 border-foreground/10 p-4 md:p-6 pb-4 md:pb-6 relative z-10">
-                            <div className="flex flex-col">
+                            {/* Mobile Back Button */}
+                            <button
+                                onClick={toggleCart}
+                                className="md:hidden flex items-center gap-3 text-primary active:scale-95 transition-transform p-2 -ml-2"
+                            >
+                                <ArrowLeft size={24} />
+                                <span className="font-mono text-[12px] uppercase tracking-[0.2em] font-bold">BACK_TO_SESSION</span>
+                            </button>
+
+                            <div className="flex flex-col items-end md:items-start text-right md:text-left">
                                 <div className="text-[10px] md:text-base uppercase font-bold tracking-[0.2em] text-primary">
                                     Current Cart
                                 </div>
@@ -80,12 +89,14 @@ export default function CartDrawer() {
                                     {cart.length} {cart.length === 1 ? 'Item' : 'Items'}
                                 </div>
                             </div>
+
+                            {/* Desktop Close Button */}
                             <button
                                 onClick={toggleCart}
-                                className="hover:translate-x-1 active:scale-95 transition-all text-primary/70 hover:text-primary px-2 md:px-4 flex items-center gap-2 group"
+                                className="hidden md:flex hover:translate-x-1 active:scale-95 transition-all text-primary/70 hover:text-primary px-4 items-center gap-2 group"
                             >
-                                <span className="font-mono text-[10px] md:text-[12px] uppercase tracking-widest opacity-60 md:opacity-0 md:group-hover:opacity-100 transition-opacity">Close</span>
-                                <ArrowRight size={20} className="md:w-6 md:h-6" />
+                                <span className="font-mono text-[12px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Close</span>
+                                <ArrowRight size={24} />
                             </button>
                         </header>
 

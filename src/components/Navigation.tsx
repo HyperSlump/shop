@@ -6,6 +6,7 @@ import ThemeToggle from './ThemeToggle';
 import CursorTooltip from './CursorTooltip';
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import MatrixSpace from './MatrixSpace';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Navigation() {
@@ -29,10 +30,10 @@ export default function Navigation() {
                             <ThemeToggle />
                         </div>
 
-                        {/* Hamburger Button */}
+                        {/* Hamburger Button - Now matches brain icon style */}
                         <button
                             onClick={toggleMobileMenu}
-                            className="w-10 h-10 flex items-center justify-center bg-primary text-black rounded-full active:scale-90 transition-transform"
+                            className="w-10 h-10 flex items-center justify-center border border-foreground/10 rounded-full hover:text-primary active:scale-90 transition-all"
                         >
                             {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
                         </button>
@@ -78,15 +79,32 @@ export default function Navigation() {
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
-                        initial={{ opacity: 0, scale: 1.1 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 1.1 }}
-                        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                        className="fixed inset-0 z-[100] bg-[var(--background)] dark:bg-black md:hidden flex flex-col justify-center overflow-hidden"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="fixed inset-0 z-[100] bg-[var(--background)] md:hidden flex flex-col justify-center overflow-hidden"
                     >
-                        <div className="flex flex-col h-full items-center justify-between p-8 py-20 overflow-y-auto">
+                        {/* Immersive Background */}
+                        <div className="absolute inset-0 z-0 opacity-[0.8] dark:opacity-[0.4] pointer-events-none">
+                            <MatrixSpace isVisible={isMobileMenuOpen} />
+                            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/40 to-[var(--background)]" />
+                        </div>
+
+                        {/* Corner Accents */}
+                        <div className="absolute top-8 left-8 w-8 h-8 border-t-2 border-l-2 border-primary/20" />
+                        <div className="absolute top-8 right-8 w-8 h-8 border-t-2 border-r-2 border-primary/20" />
+                        <div className="absolute bottom-8 left-8 w-8 h-8 border-b-2 border-l-2 border-primary/20" />
+                        <div className="absolute bottom-8 right-8 w-8 h-8 border-b-2 border-r-2 border-primary/20" />
+
+                        <div className="flex flex-col h-full items-center justify-between p-8 py-20 relative z-10">
+                            {/* Decorative Label */}
+                            <div className="absolute top-10 left-1/2 -translate-x-1/2 font-mono text-[10px] tracking-[0.5em] opacity-30 uppercase">
+                                System_Directory_V.4
+                            </div>
+
                             {/* Primary Links */}
-                            <div className="flex flex-col items-center space-y-8 my-auto w-full">
+                            <div className="flex flex-col items-center space-y-4 my-auto w-full">
                                 {[
                                     { label: 'Shop', href: '/', id: 'shop' },
                                     { label: 'Blog', href: '/blog', id: 'blog' },
@@ -96,20 +114,20 @@ export default function Navigation() {
                                 ].map((link, i) => (
                                     <motion.div
                                         key={link.id}
-                                        initial={{ opacity: 0, y: 30 }}
-                                        animate={{ opacity: 1, y: 0 }}
+                                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                                        animate={{ opacity: 1, scale: 1, y: 0 }}
                                         transition={{
                                             type: "spring",
-                                            stiffness: 300,
-                                            damping: 25,
-                                            delay: i * 0.05
+                                            stiffness: 200,
+                                            damping: 20,
+                                            delay: i * 0.08
                                         }}
                                         className="w-full text-center"
                                     >
                                         <Link
                                             href={link.href}
                                             onClick={() => setIsMobileMenuOpen(false)}
-                                            className="text-5xl md:text-6xl font-gothic tracking-tighter transition-all hover:text-primary active:scale-95 block py-1"
+                                            className="text-6xl md:text-7xl font-gothic tracking-tighter transition-all hover:text-primary active:scale-95 block py-2 drop-shadow-2xl"
                                         >
                                             {link.label}
                                         </Link>
@@ -119,25 +137,31 @@ export default function Navigation() {
 
                             {/* Mobile Actions Overlay */}
                             <motion.div
-                                initial={{ opacity: 0, y: 50 }}
+                                initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.3 }}
-                                className="w-full grid grid-cols-1 gap-4 mt-12"
+                                transition={{ delay: 0.4 }}
+                                className="w-full flex flex-col items-center gap-6 mt-12"
                             >
                                 <button
                                     onClick={() => { toggleCart(); setIsMobileMenuOpen(false); }}
-                                    className="flex items-center justify-center gap-4 p-6 bg-primary text-black font-bold uppercase tracking-widest text-lg rounded-sm active:scale-95 transition-transform"
+                                    className="flex items-center justify-center gap-4 w-full p-6 bg-primary text-black font-bold uppercase tracking-widest text-lg rounded-sm active:scale-95 transition-transform"
                                 >
                                     <span className="material-icons">shopping_cart</span>
                                     VIEW_CART ({cart.length})
                                 </button>
+
+                                <div className="flex items-center gap-8 opacity-40 font-mono text-[10px] tracking-[0.2em]">
+                                    <span>STATUS: ONLINE</span>
+                                    <span className="w-1 h-1 rounded-full bg-primary" />
+                                    <span>ENCRYPTED_LINK_ACTIVE</span>
+                                </div>
                             </motion.div>
 
                             {/* Circular Close Button at bottom */}
                             <motion.button
                                 whileTap={{ scale: 0.9 }}
                                 onClick={toggleMobileMenu}
-                                className="mt-12 w-16 h-16 rounded-full border border-foreground/20 flex items-center justify-center opacity-60 hover:opacity-100 transition-opacity"
+                                className="mt-8 w-16 h-16 rounded-full border border-foreground/20 flex items-center justify-center opacity-60 hover:opacity-100 transition-opacity bg-[var(--background)]/50 backdrop-blur-sm"
                             >
                                 <X size={32} />
                             </motion.button>
