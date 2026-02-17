@@ -4,9 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { useCart } from '@/components/CartProvider';
-import MockPageLayout from '@/components/MockPageLayout';
 import CheckoutForm from '@/components/CheckoutForm';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -14,23 +14,20 @@ export default function CheckoutPage() {
     const { cartTotal, cart } = useCart();
     const [clientSecret, setClientSecret] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
-    const [theme, setTheme] = useState<'light' | 'dark'>('light');
+    const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+    const [summaryOpen, setSummaryOpen] = useState(false);
+
+    const isDark = theme === 'dark';
 
     useEffect(() => {
         const checkTheme = () => {
             setTheme(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
         };
-
         checkTheme();
         const observer = new MutationObserver(checkTheme);
         observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 
-        if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
-            setError('Stripe configuration missing. Please verify environment variables.');
-        }
-
         if (cartTotal > 0 && cart.length > 0) {
-            console.log('[CLIENT] Requesting Payment Intent for cart...');
             fetch('/api/create-payment-intent', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -43,143 +40,301 @@ export default function CheckoutPage() {
                     }
                     return res.json();
                 })
-                .then((data) => {
-                    console.log('[CLIENT] Payment Intent created successfully');
-                    setClientSecret(data.clientSecret);
-                })
-                .catch(err => {
-                    console.error('[CLIENT] Checkout Initialization Failed:', err);
-                    setError(err.message || 'Failed to initialize payment gateway.');
-                });
+                .then((data) => setClientSecret(data.clientSecret))
+                .catch(err => setError(err.message || 'Failed to initialize payment.'));
         }
 
         return () => observer.disconnect();
     }, [cartTotal, cart]);
 
     const appearance = {
-        theme: (theme === 'dark' ? 'night' : 'stripe') as any,
+        theme: (isDark ? 'night' : 'stripe') as any,
         variables: {
-            colorPrimary: '#635BFF',
-            colorBackground: theme === 'dark' ? '#0A0A0A' : '#ffffff',
-            colorText: theme === 'dark' ? '#FAFAFA' : '#1A1F36',
+            colorPrimary: isDark ? '#FAFAFA' : '#1A1F36',
+            colorBackground: isDark ? '#0A0A0A' : '#FFFFFF',
+            colorText: isDark ? '#FAFAFA' : '#1A1F36',
             colorDanger: '#FF3B30',
-            fontFamily: 'JetBrains Mono, monospace',
+            fontFamily: '"JetBrains Mono", monospace',
             spacingUnit: '4px',
             borderRadius: '0px',
+            colorTextPlaceholder: isDark ? 'rgba(250,250,250,0.3)' : 'rgba(26,31,54,0.35)',
         },
         rules: {
             '.Input': {
-                border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(26, 31, 54, 0.1)',
+                border: isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(26, 31, 54, 0.15)',
                 boxShadow: 'none',
-                backgroundColor: theme === 'dark' ? '#0A0A0A' : '#FAFAFA',
+                backgroundColor: isDark ? '#0A0A0A' : '#FFFFFF',
+                color: isDark ? '#FAFAFA' : '#1A1F36',
+                fontSize: '13px',
+                padding: '12px 14px',
             },
             '.Input:focus': {
-                border: '1px solid #635BFF',
-                boxShadow: '0 0 0 1px #635BFF',
+                border: isDark ? '1px solid rgba(250, 250, 250, 0.4)' : '1px solid rgba(26, 31, 54, 0.5)',
+                boxShadow: isDark ? '0 0 0 1px rgba(250, 250, 250, 0.2)' : '0 0 0 1px rgba(26, 31, 54, 0.15)',
+            },
+            '.Input:hover': {
+                border: isDark ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(26, 31, 54, 0.3)',
             },
             '.Label': {
-                fontFamily: 'JetBrains Mono, monospace',
-                textTransform: 'uppercase',
+                fontFamily: '"JetBrains Mono", monospace',
+                textTransform: 'uppercase' as const,
                 fontSize: '10px',
-                letterSpacing: '0.2em',
-                color: theme === 'dark' ? 'rgba(250, 250, 250, 0.5)' : 'rgba(26, 31, 54, 0.5)',
+                letterSpacing: '0.15em',
+                color: isDark ? 'rgba(250, 250, 250, 0.5)' : 'rgba(26, 31, 54, 0.5)',
+                marginBottom: '8px',
             },
             '.Tab': {
-                border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(26, 31, 54, 0.1)',
-                backgroundColor: theme === 'dark' ? '#161616' : '#ffffff',
+                border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(26, 31, 54, 0.1)',
+                backgroundColor: isDark ? '#0A0A0A' : '#FFFFFF',
+                color: isDark ? 'rgba(250, 250, 250, 0.6)' : 'rgba(26, 31, 54, 0.6)',
+            },
+            '.Tab:hover': {
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(26, 31, 54, 0.04)',
+                color: isDark ? '#FAFAFA' : '#1A1F36',
             },
             '.Tab--selected': {
-                border: '1px solid #635BFF',
-            }
+                border: isDark ? '1px solid rgba(250, 250, 250, 0.4)' : '1px solid rgba(26, 31, 54, 0.4)',
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(26, 31, 54, 0.04)',
+                color: isDark ? '#FAFAFA' : '#1A1F36',
+            },
+            '.TabIcon--selected': {
+                fill: isDark ? '#FAFAFA' : '#1A1F36',
+            },
+            '.Block': {
+                backgroundColor: isDark ? '#0A0A0A' : '#FFFFFF',
+                border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(26, 31, 54, 0.08)',
+            },
         }
     };
 
-    const checkoutNode = (
-        <div className="max-w-6xl mx-auto w-full px-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-                <div className="space-y-10 animate-fade-in">
-                    <div className="space-y-4">
-                        <div className="flex items-center gap-3 text-primary/60 font-mono text-[10px] tracking-[0.3em]">
-                            <span className="w-2 h-2 bg-primary animate-pulse" />
-                            SYS_LOC // ORDER_MANIFEST
-                        </div>
-                        <h2 className="text-4xl font-gothic tracking-tighter lowercase">review manifest</h2>
+    // Theme-aware color tokens for the layout
+    const bg = isDark ? 'bg-black' : 'bg-white';
+    const bgPanel = isDark ? 'bg-[#050505]' : 'bg-[#F5F5F5]';
+    const text = isDark ? 'text-white' : 'text-[#1A1F36]';
+    const textMuted = isDark ? 'text-white/60' : 'text-[#1A1F36]/60';
+    const textFaint = isDark ? 'text-white/30' : 'text-[#1A1F36]/30';
+    const textFaintest = isDark ? 'text-white/20' : 'text-[#1A1F36]/20';
+    const border = isDark ? 'border-white/[0.06]' : 'border-[#1A1F36]/[0.08]';
+    const borderMed = isDark ? 'border-white/10' : 'border-[#1A1F36]/10';
+    const borderHover = isDark ? 'border-white/20' : 'border-[#1A1F36]/20';
+    const borderHoverStrong = isDark ? 'border-white/40' : 'border-[#1A1F36]/40';
+    const dotBg = isDark ? 'bg-white' : 'bg-[#1A1F36]';
+    const dotBgHover = isDark ? 'bg-white/60' : 'bg-[#1A1F36]/60';
+    const spinnerBorder = isDark ? 'border-white/10 border-t-white/60' : 'border-[#1A1F36]/10 border-t-[#1A1F36]/60';
+    const btnBg = isDark ? 'bg-white text-black' : 'bg-[#1A1F36] text-white';
+
+    // Empty cart state
+    if (cart.length === 0) {
+        return (
+            <div className={`min-h-screen ${bg} flex items-center justify-center`}>
+                <div className="text-center space-y-6 p-12">
+                    <div className={`font-mono text-[10px] tracking-[0.4em] ${textFaint} uppercase`}>[SYS]: NO_ITEMS_IN_BUFFER</div>
+                    <h1 className={`text-2xl font-gothic tracking-tight ${text} lowercase`}>cart is empty</h1>
+                    <Link href="/" className={`inline-block border ${borderHover} px-8 py-3 font-mono text-[10px] uppercase tracking-[0.3em] ${textMuted} hover:${text} hover:${borderHoverStrong} transition-all`}>
+                        ← Return to Store
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className={`min-h-screen ${bg} ${text}`}>
+            {/* Mobile Order Summary Toggle */}
+            <div className={`lg:hidden border-b ${borderMed}`}>
+                <button
+                    onClick={() => setSummaryOpen(!summaryOpen)}
+                    className="w-full flex items-center justify-between px-6 py-4 font-mono text-xs cursor-pointer"
+                >
+                    <div className="flex items-center gap-3">
+                        <svg className={`w-3 h-3 transition-transform ${summaryOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                        <span className={`uppercase tracking-[0.2em] ${textMuted}`}>
+                            {summaryOpen ? 'Hide' : 'Show'} order summary
+                        </span>
                     </div>
+                    <span className="font-bold">${cartTotal.toFixed(2)}</span>
+                </button>
 
-                    <div className="border border-primary/10 bg-primary/[0.02] p-8 space-y-6">
-                        <div className="space-y-4 max-h-[300px] overflow-y-auto custom-scrollbar pr-4">
-                            {cart.map((item) => (
-                                <div key={item.id} className="flex justify-between items-start py-4 border-b border-primary/5 last:border-0">
-                                    <div className="space-y-1">
-                                        <p className="font-mono text-xs uppercase tracking-widest text-primary">{item.name}</p>
-                                        <p className="font-mono text-[10px] opacity-40 uppercase">ITEM_ID: {item.id.slice(-8).toUpperCase()}</p>
-                                    </div>
-                                    <span className="font-mono text-xs">${item.amount.toFixed(2)}</span>
-                                </div>
-                            ))}
-                        </div>
+                <AnimatePresence>
+                    {summaryOpen && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="overflow-hidden px-6 pb-6"
+                        >
+                            <OrderSummary cart={cart} cartTotal={cartTotal} isDark={isDark} />
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
 
-                        <div className="pt-6 border-t border-primary/20 space-y-2">
-                            <div className="flex justify-between font-mono text-[10px] opacity-40 uppercase tracking-widest">
-                                <span>SUBTOTAL_VAL</span>
-                                <span>${cartTotal.toFixed(2)}</span>
-                            </div>
-                            <div className="flex justify-between font-mono text-sm pt-4 border-t border-primary/10 leading-none">
-                                <span className="uppercase tracking-[0.3em] font-bold">TOTAL_DUE</span>
-                                <span className="text-primary font-bold">${cartTotal.toFixed(2)}</span>
-                            </div>
-                        </div>
+            <div className="flex flex-col lg:flex-row min-h-screen">
+                {/* LEFT: Order Summary (Desktop) */}
+                <div className={`hidden lg:flex lg:w-[45%] xl:w-[42%] ${bgPanel} border-r ${border} flex-col`}>
+                    <div className="flex-1 flex flex-col justify-center max-w-lg ml-auto w-full px-12 xl:px-16 py-16">
+                        {/* Brand */}
+                        <Link href="/" className="flex items-center gap-3 mb-16 group">
+                            <div className={`w-2 h-2 ${dotBg} group-hover:${dotBgHover} transition-colors`} />
+                            <span className={`font-gothic text-lg tracking-tight ${textMuted} group-hover:opacity-100 transition-colors lowercase`}>
+                                hyper$lump
+                            </span>
+                        </Link>
+
+                        <OrderSummary cart={cart} cartTotal={cartTotal} isDark={isDark} />
                     </div>
                 </div>
 
-                <div className="relative">
-                    <AnimatePresence mode="wait">
-                        {error ? (
-                            <motion.div
-                                key="error"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                className="border border-red-500/20 bg-red-500/5 p-12 text-center space-y-4"
-                            >
-                                <div className="text-red-500 font-mono text-xs tracking-widest">[CRITICAL_ERROR]: PAY_GATEWAY_FAIL</div>
-                                <p className="text-[10px] font-mono opacity-40 uppercase">{error}</p>
-                                <button onClick={() => window.location.reload()} className="border border-primary px-6 py-2 font-mono text-[10px] uppercase">RETRY</button>
-                            </motion.div>
-                        ) : (clientSecret && stripePromise) ? (
-                            <motion.div
-                                key="checkout-form"
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -20 }}
-                                className="bg-foreground/[0.02] dark:bg-white/[0.02] border border-primary/10 p-6 md:p-10 relative"
-                            >
-                                <div className="absolute top-0 right-0 p-3 flex gap-1 z-10">
-                                    <div className="w-1 h-3 bg-primary/20" />
+                {/* RIGHT: Payment Form */}
+                <div className="flex-1 flex flex-col">
+                    <div className="flex-1 flex flex-col justify-center max-w-lg mx-auto w-full px-6 md:px-12 xl:px-16 py-12 lg:py-16">
+                        {/* Section Header */}
+                        <div className="mb-10 space-y-2">
+                            <div className={`font-mono text-[9px] tracking-[0.4em] ${textFaintest} uppercase`}>
+                                Secure_Payment_Layer
+                            </div>
+                            <h1 className={`text-xl font-gothic tracking-tight ${text} lowercase`}>
+                                payment details
+                            </h1>
+                        </div>
+
+                        {/* Payment Form Area */}
+                        <AnimatePresence mode="wait">
+                            {error ? (
+                                <motion.div
+                                    key="error"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="space-y-6"
+                                >
+                                    <div className="border border-red-500/20 bg-red-500/5 p-8 space-y-4">
+                                        <div className="text-red-400 font-mono text-[10px] tracking-[0.2em] uppercase">
+                                            [ERROR]: PAYMENT_INIT_FAIL
+                                        </div>
+                                        <p className={`font-mono text-[11px] ${textFaint} leading-relaxed`}>
+                                            {error}
+                                        </p>
+                                        <button
+                                            onClick={() => window.location.reload()}
+                                            className={`border ${borderHover} px-6 py-2.5 font-mono text-[10px] uppercase tracking-[0.2em] ${textMuted} hover:${borderHoverStrong} transition-all cursor-pointer`}
+                                        >
+                                            Retry Connection
+                                        </button>
+                                    </div>
+                                </motion.div>
+                            ) : clientSecret ? (
+                                <motion.div
+                                    key="form"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.4 }}
+                                >
+                                    <Elements options={{ clientSecret, appearance }} stripe={stripePromise}>
+                                        <CheckoutForm amount={cartTotal} isDark={isDark} />
+                                    </Elements>
+                                </motion.div>
+                            ) : (
+                                <motion.div
+                                    key="loading"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    className="flex flex-col items-center justify-center py-20 space-y-6"
+                                >
+                                    <div className={`w-8 h-8 border ${spinnerBorder} rounded-full animate-spin`} />
+                                    <div className="space-y-2 text-center">
+                                        <span className={`block font-mono text-[10px] uppercase tracking-[0.3em] ${textFaint} animate-pulse`}>
+                                            Initializing...
+                                        </span>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
+                        {/* Footer Security */}
+                        <div className={`mt-12 pt-8 border-t ${border}`}>
+                            <div className={`flex items-center justify-between font-mono text-[8px] ${textFaintest} uppercase tracking-[0.2em]`}>
+                                <div className="flex items-center gap-2">
+                                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                    </svg>
+                                    <span>TLS_1.3 Encrypted</span>
                                 </div>
-                                <Elements options={{ clientSecret, appearance }} stripe={stripePromise}>
-                                    <CheckoutForm amount={cartTotal} />
-                                </Elements>
-                            </motion.div>
-                        ) : cartTotal === 0 ? (
-                            <motion.div key="empty" className="border border-alert/20 bg-alert/5 p-12 text-center">
-                                <span className="font-mono text-[10px] opacity-40 uppercase tracking-[0.4em]">Cart_Empty_Status</span>
-                            </motion.div>
-                        ) : (
-                            <motion.div key="loader" className="flex flex-col items-center justify-center py-24 space-y-6">
-                                <div className="w-12 h-12 border-2 border-primary/10 border-t-primary rounded-full animate-spin" />
-                                <span className="font-mono text-[10px] uppercase tracking-[0.4em] opacity-40 animate-pulse">Initializing_Authorization_Layer...</span>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+                                <span>Powered by Stripe</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     );
-
-    return (
-        <MockPageLayout title="SECURE_FULFILLMENT // PAYMENT" subtitle="Checkout" status="WAITING_FOR_AUTH" content="">
-            {checkoutNode}
-        </MockPageLayout>
-    );
 }
 
+/* ─── Order Summary Sub-Component ──────────────────────── */
+function OrderSummary({ cart, cartTotal, isDark }: { cart: any[]; cartTotal: number; isDark: boolean }) {
+    const textSub = isDark ? 'text-white/90' : 'text-[#1A1F36]/90';
+    const textFaint = isDark ? 'text-white/25' : 'text-[#1A1F36]/25';
+    const textMuted = isDark ? 'text-white/30' : 'text-[#1A1F36]/30';
+    const textPrice = isDark ? 'text-white/70' : 'text-[#1A1F36]/70';
+    const textTotal = isDark ? 'text-white' : 'text-[#1A1F36]';
+    const textTotalLabel = isDark ? 'text-white/60' : 'text-[#1A1F36]/60';
+    const border = isDark ? 'border-white/[0.06]' : 'border-[#1A1F36]/[0.06]';
+    const borderStrong = isDark ? 'border-white/[0.08]' : 'border-[#1A1F36]/[0.08]';
+    const thumbBg = isDark ? 'bg-white/[0.04] border-white/[0.08]' : 'bg-[#1A1F36]/[0.04] border-[#1A1F36]/[0.08]';
+    const thumbText = isDark ? 'text-white/20' : 'text-[#1A1F36]/20';
+
+    return (
+        <div className="space-y-8">
+            {/* Line Items */}
+            <div className="space-y-0">
+                {cart.map((item, i) => (
+                    <div key={item.id} className={`flex items-center gap-4 py-5 border-b ${border} last:border-0`}>
+                        {/* Product Thumbnail */}
+                        <div className={`w-14 h-14 ${thumbBg} border flex-shrink-0 flex items-center justify-center overflow-hidden`}>
+                            {item.image ? (
+                                <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                            ) : (
+                                <div className={`font-mono text-[8px] ${thumbText} uppercase`}>
+                                    {String(i + 1).padStart(2, '0')}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Product Info */}
+                        <div className="flex-1 min-w-0">
+                            <p className={`font-mono text-[11px] ${textSub} uppercase tracking-wider truncate`}>
+                                {item.name}
+                            </p>
+                            <p className={`font-mono text-[9px] ${textFaint} uppercase mt-1`}>
+                                Digital Asset • Qty 1
+                            </p>
+                        </div>
+
+                        {/* Price */}
+                        <span className={`font-mono text-[12px] ${textPrice} flex-shrink-0`}>
+                            ${item.amount.toFixed(2)}
+                        </span>
+                    </div>
+                ))}
+            </div>
+
+            {/* Totals */}
+            <div className="space-y-3 pt-2">
+                <div className={`flex justify-between font-mono text-[10px] ${textMuted} uppercase tracking-wider`}>
+                    <span>Subtotal</span>
+                    <span>${cartTotal.toFixed(2)}</span>
+                </div>
+                <div className={`flex justify-between font-mono text-[10px] ${textMuted} uppercase tracking-wider`}>
+                    <span>Tax</span>
+                    <span>—</span>
+                </div>
+                <div className={`flex justify-between pt-4 border-t ${borderStrong}`}>
+                    <span className={`font-mono text-[11px] ${textTotalLabel} uppercase tracking-wider`}>Total</span>
+                    <span className={`font-mono text-base ${textTotal} font-bold`}>${cartTotal.toFixed(2)}</span>
+                </div>
+            </div>
+        </div>
+    );
+}
