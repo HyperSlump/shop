@@ -66,8 +66,8 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                     href="/"
                     className="inline-flex items-center gap-2 text-primary/70 hover:text-primary transition-all group w-fit"
                 >
-                    <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform duration-300" />
-                    <span className="font-mono text-[12px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300">back</span>
+                    <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform duration-300" />
+                    <span className="font-mono text-[11px] uppercase tracking-wider">Back to Shop</span>
                 </Link>
 
                 {/* 1. Header System Line - Condensed */}
@@ -75,7 +75,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                     <div className="space-y-1">
                         <div className="flex items-center gap-3 text-primary/60 font-mono text-[10px] tracking-[0.3em]">
                             <span className="w-2 h-2 bg-primary animate-pulse" />
-                            SYS_LOC // {product.name.toUpperCase()}
+                            Product / {product.name.toUpperCase()}
                         </div>
                         <h1 className="text-5xl md:text-7xl lg:text-8xl font-gothic tracking-tighter leading-none lowercase">
                             {product.name}

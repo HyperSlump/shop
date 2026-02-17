@@ -140,10 +140,10 @@ export default function CheckoutPage() {
         return (
             <div className={`min-h-screen ${bg} flex items-center justify-center`}>
                 <div className="text-center space-y-6 p-12">
-                    <div className={`font-mono text-[10px] tracking-[0.4em] ${textFaint} uppercase`}>[SYS]: NO_ITEMS_IN_BUFFER</div>
-                    <h1 className={`text-2xl font-gothic tracking-tight ${text} lowercase`}>cart is empty</h1>
+                    <div className={`font-mono text-[10px] tracking-[0.4em] ${textFaint} uppercase`}>Your cart is empty</div>
+                    <h1 className={`text-2xl font-gothic tracking-tight ${text} lowercase`}>nothing here yet</h1>
                     <Link href="/" className={`inline-block border ${borderHover} px-8 py-3 font-mono text-[10px] uppercase tracking-[0.3em] ${textMuted} hover:${text} hover:${borderHoverStrong} transition-all`}>
-                        ← Return to Store
+                        ← Continue Shopping
                     </Link>
                 </div>
             </div>
@@ -207,7 +207,7 @@ export default function CheckoutPage() {
                         {/* Section Header */}
                         <div className="mb-10 space-y-2">
                             <div className={`font-mono text-[9px] tracking-[0.4em] ${textFaintest} uppercase`}>
-                                {isFreeOrder ? 'Free_Download_Layer' : 'Secure_Payment_Layer'}
+                                {isFreeOrder ? 'Free Download' : 'Secure Payment'}
                             </div>
                             <h1 className={`text-xl font-gothic tracking-tight ${text} lowercase`}>
                                 {isFreeOrder ? 'claim your downloads' : 'payment details'}
@@ -244,7 +244,7 @@ export default function CheckoutPage() {
                                                     download
                                                     className={`block w-full ${btnBg} font-mono font-bold uppercase py-4 text-center tracking-[0.3em] text-xs cursor-pointer transition-opacity hover:opacity-80`}
                                                 >
-                                                    DOWNLOAD_{fileLabel}
+                                                    Download {fileLabel}
                                                 </a>
                                             </div>
                                         );

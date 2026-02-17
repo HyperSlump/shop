@@ -57,7 +57,7 @@ export default function Navigation() {
 
                     {/* 2. CENTER: Shopping Cart - Absolute Centered at 50vh Axis */}
                     <div className="absolute top-[calc(50%-40px)] left-0 w-full h-[80px] flex items-center justify-center pointer-events-none">
-                        <CursorTooltip text="CART_MGR">
+                        <CursorTooltip text="Cart">
                             <button
                                 onClick={toggleCart}
                                 className="hover:text-primary transition-colors relative group p-4 pointer-events-auto"
@@ -154,9 +154,9 @@ export default function Navigation() {
 
                             {/* Status - anchored bottom */}
                             <div className="absolute bottom-10 left-0 right-0 flex items-center justify-center gap-6 opacity-30 font-mono text-[9px] tracking-[0.3em]">
-                                <span>STATUS: ONLINE</span>
+                                <span>© hyper$lump 2026</span>
                                 <span className="w-1 h-1 rounded-full bg-primary" />
-                                <span>ENCRYPTED_LINK</span>
+                                <span>All rights reserved</span>
                             </div>
                         </div>
                     </motion.div>

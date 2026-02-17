@@ -75,7 +75,7 @@ export default function CartDrawer() {
                                 className="md:hidden flex items-center gap-3 text-primary active:scale-95 transition-transform p-2 -ml-2"
                             >
                                 <ArrowLeft size={24} />
-                                <span className="font-mono text-[12px] uppercase tracking-[0.2em] font-bold">BACK_TO_SESSION</span>
+                                <span className="font-mono text-[12px] uppercase tracking-[0.2em] font-bold">Back</span>
                             </button>
 
                             <div className="flex flex-col items-end md:items-start text-right md:text-left">
@@ -101,7 +101,7 @@ export default function CartDrawer() {
                             {cart.length === 0 ? (
                                 <div className="h-full flex flex-col items-center justify-center opacity-20">
                                     <span className="material-icons text-7xl md:text-9xl">shopping_cart</span>
-                                    <p className="font-mono text-xs md:text-sm uppercase tracking-widest mt-4">Buffer_Empty</p>
+                                    <p className="font-mono text-xs md:text-sm uppercase tracking-widest mt-4">Your cart is empty</p>
                                 </div>
                             ) : (
                                 <div className="space-y-3 md:space-y-4">
@@ -154,7 +154,7 @@ export default function CartDrawer() {
                                                         <div className="flex flex-col min-w-0">
                                                             <h3 className="font-gothic text-lg md:text-xl leading-none text-foreground truncate max-w-[120px] md:max-w-full">{item.name}</h3>
                                                             <span className="font-mono text-[9px] opacity-40 uppercase mt-0.5 tracking-widest">
-                                                                REF_{item.id.slice(0, 6)}
+                                                                ID: {item.id.slice(0, 6)}
                                                             </span>
                                                         </div>
                                                         <span className="font-mono text-xs md:text-sm font-bold text-primary">
@@ -183,7 +183,7 @@ export default function CartDrawer() {
 
                         <div className="mt-auto border-t-2 border-foreground/10 p-4 md:p-6 pt-4 md:pt-6 space-y-3 md:space-y-4 bg-[var(--background)] relative z-10">
                             <div className="flex justify-between font-mono text-lg md:text-xl font-bold tracking-tighter text-foreground">
-                                <span className="opacity-60 text-foreground">SUBTOTAL_</span>
+                                <span className="opacity-60 text-foreground">Subtotal</span>
                                 <span className="text-primary">${(cartTotal || 0).toFixed(2)}</span>
                             </div>
                             <button
@@ -197,17 +197,29 @@ export default function CartDrawer() {
                                 {loading ? (
                                     <>
                                         <span className="material-icons animate-spin text-sm">refresh</span>
-                                        SYNCING_PURCHASE...
+                                        Processing...
                                     </>
                                 ) : (
                                     <>
-                                        EXECUTE_CHECKOUT <span className="material-icons text-base">sensors</span>
+                                        Proceed to Checkout <span className="material-icons text-base">arrow_forward</span>
                                     </>
                                 )}
                             </button>
-                            <div className="flex justify-center gap-4 opacity-30 text-foreground pb-2 md:pb-0">
-                                <span className="text-[10px] md:text-[12px] font-mono uppercase">Stripe_Ready</span>
-                                <span className="text-[10px] md:text-[12px] font-mono uppercase">SSL_Enabled</span>
+                            <div className="flex flex-col items-center gap-2 pb-2 md:pb-0">
+                                <div className="flex items-center gap-2 opacity-50">
+                                    <span className="material-icons text-[14px]">lock</span>
+                                    <span className="text-[10px] md:text-[11px] font-mono uppercase tracking-wider">Secured by Stripe</span>
+                                </div>
+                                <div className="flex items-center gap-3 opacity-30">
+                                    {/* Visa */}
+                                    <svg viewBox="0 0 48 32" className="h-5 w-auto" fill="currentColor"><rect width="48" height="32" rx="4" fill="currentColor" opacity="0.1" /><text x="24" y="20" textAnchor="middle" fontSize="11" fontWeight="bold" fontFamily="monospace" fill="currentColor">VISA</text></svg>
+                                    {/* MC */}
+                                    <svg viewBox="0 0 48 32" className="h-5 w-auto" fill="currentColor"><rect width="48" height="32" rx="4" fill="currentColor" opacity="0.1" /><text x="24" y="20" textAnchor="middle" fontSize="9" fontWeight="bold" fontFamily="monospace" fill="currentColor">MC</text></svg>
+                                    {/* Amex */}
+                                    <svg viewBox="0 0 48 32" className="h-5 w-auto" fill="currentColor"><rect width="48" height="32" rx="4" fill="currentColor" opacity="0.1" /><text x="24" y="20" textAnchor="middle" fontSize="8" fontWeight="bold" fontFamily="monospace" fill="currentColor">AMEX</text></svg>
+                                    {/* Apple Pay */}
+                                    <svg viewBox="0 0 48 32" className="h-5 w-auto" fill="currentColor"><rect width="48" height="32" rx="4" fill="currentColor" opacity="0.1" /><text x="24" y="20" textAnchor="middle" fontSize="7" fontWeight="bold" fontFamily="monospace" fill="currentColor">APPLE</text></svg>
+                                </div>
                             </div>
                         </div>
                     </motion.aside>

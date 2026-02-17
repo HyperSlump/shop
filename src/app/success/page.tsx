@@ -114,8 +114,8 @@ export default async function SuccessPage({
                         </div>
 
                         <Link href="/" className="inline-flex items-center gap-2 text-primary/70 hover:text-primary transition-all group w-fit pt-6">
-                            <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform duration-300" />
-                            <span className="font-mono text-[12px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300">back</span>
+                            <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform duration-300" />
+                            <span className="font-mono text-[11px] uppercase tracking-wider">Back to Shop</span>
                         </Link>
                     </div>
 
@@ -125,7 +125,7 @@ export default async function SuccessPage({
                         <div className="absolute inset-0 flex items-center justify-center">
                             <div className="flex flex-col items-center gap-4">
                                 <span className="material-icons text-[160px] text-primary opacity-20 grayscale group-hover:grayscale-0 transition-all duration-1000">task_alt</span>
-                                <span className="font-mono text-[10px] tracking-[0.5em] opacity-30 uppercase animate-pulse">DECRYPTING_ASSETS...</span>
+                                <span className="font-mono text-[10px] tracking-[0.5em] opacity-30 uppercase animate-pulse">Download ready</span>
                             </div>
                         </div>
                         {/* Scanning Line Animation */}

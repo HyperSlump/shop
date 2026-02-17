@@ -185,7 +185,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                     disabled={isInCart}
                                     className="text-right font-mono text-[14px] md:text-[16px] font-bold text-primary uppercase hover:text-primary/70 transition-colors disabled:opacity-50 tracking-wider"
                                 >
-                                    {isInCart ? '[ IN_CART ]' : '[ ACQUIRE ]'}
+                                    {isInCart ? 'Added ✓' : 'Add to Cart'}
                                 </button>
                             </div>
 
@@ -305,7 +305,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                     className="text-left font-mono text-[12px] md:text-[14px] uppercase tracking-[0.2em] text-foreground/40 hover:text-foreground transition-colors flex items-center gap-2 group/back"
                                 >
                                     <span className="w-3 h-3 border border-current group-hover/back:bg-foreground transition-all rounded-[1px]" />
-                                    [ BACK ]
+                                    Back
                                 </button>
 
                                 <button
@@ -316,7 +316,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                     disabled={isInCart}
                                     className="text-right font-mono text-[14px] md:text-[16px] font-bold text-primary uppercase hover:text-primary/70 transition-colors disabled:opacity-50 tracking-wider"
                                 >
-                                    {isInCart ? '[ IN CART ]' : '[ ADD TO CART ]'}
+                                    {isInCart ? 'Added ✓' : 'Add to Cart'}
                                 </button>
                             </div>
 
