@@ -103,65 +103,61 @@ export default function Navigation() {
                             <ArrowLeft size={28} />
                         </button>
 
-                        {/* Corner Accents */}
-                        <div className="absolute top-8 left-8 w-8 h-8 border-t-2 border-l-2 border-primary/20" />
-                        <div className="absolute top-8 right-8 w-8 h-8 border-t-2 border-r-2 border-primary/20" />
-                        <div className="absolute bottom-8 left-8 w-8 h-8 border-b-2 border-l-2 border-primary/20" />
-                        <div className="absolute bottom-8 right-8 w-8 h-8 border-b-2 border-r-2 border-primary/20" />
+                        {/* Bottom Corner Accents Only */}
+                        <div className="absolute bottom-6 left-6 w-6 h-6 border-b border-l border-primary/15" />
+                        <div className="absolute bottom-6 right-6 w-6 h-6 border-b border-r border-primary/15" />
 
-                        <div className="flex flex-col h-full items-center justify-between p-8 py-20 relative z-10">
-                            {/* Decorative Label */}
-                            <div className="absolute top-10 left-1/2 -translate-x-1/2 font-mono text-[10px] tracking-[0.5em] opacity-30 uppercase">
-                                System_Directory_V.4
-                            </div>
-
-                            {/* Primary Links */}
-                            <div className="flex flex-col items-center space-y-4 my-auto w-full">
-                                {[
-                                    { label: 'Shop', href: '/', id: 'shop' },
-                                    { label: 'Blog', href: '/blog', id: 'blog' },
-                                    { label: 'About', href: '/about', id: 'about' },
-                                    { label: 'Archive', href: '/archive', id: 'archive' },
-                                    { label: 'Contact', href: '/contact', id: 'contact' }
-                                ].map((link, i) => (
-                                    <motion.div
-                                        key={link.id}
-                                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                                        transition={{
-                                            type: "spring",
-                                            stiffness: 200,
-                                            damping: 20,
-                                            delay: i * 0.08
-                                        }}
-                                        className="w-full text-center"
-                                    >
-                                        <Link
-                                            href={link.href}
-                                            onClick={() => setIsMobileMenuOpen(false)}
-                                            className="text-5xl md:text-7xl font-gothic tracking-tight transition-all hover:text-primary active:scale-95 block py-1 drop-shadow-2xl"
+                        <div className="flex flex-col h-full items-center justify-center p-8 relative z-10">
+                            {/* Primary Links + Theme Toggle as one group */}
+                            <div className="flex flex-col items-center w-full">
+                                <div className="flex flex-col items-center space-y-4 w-full">
+                                    {[
+                                        { label: 'Shop', href: '/', id: 'shop' },
+                                        { label: 'Blog', href: '/blog', id: 'blog' },
+                                        { label: 'About', href: '/about', id: 'about' },
+                                        { label: 'Archive', href: '/archive', id: 'archive' },
+                                        { label: 'Contact', href: '/contact', id: 'contact' }
+                                    ].map((link, i) => (
+                                        <motion.div
+                                            key={link.id}
+                                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                                            transition={{
+                                                type: "spring",
+                                                stiffness: 200,
+                                                damping: 20,
+                                                delay: i * 0.08
+                                            }}
+                                            className="w-full text-center"
                                         >
-                                            {link.label}
-                                        </Link>
-                                    </motion.div>
-                                ))}
+                                            <Link
+                                                href={link.href}
+                                                onClick={() => setIsMobileMenuOpen(false)}
+                                                className="text-5xl md:text-7xl font-gothic tracking-tight transition-all hover:text-primary active:scale-95 block py-1 drop-shadow-2xl"
+                                            >
+                                                {link.label}
+                                            </Link>
+                                        </motion.div>
+                                    ))}
+                                </div>
+
+                                {/* Theme Toggle - tight to links */}
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.45 }}
+                                    className="mt-8"
+                                >
+                                    <ThemeToggle />
+                                </motion.div>
                             </div>
 
-                            {/* Bottom: Theme Toggle + Status */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.4 }}
-                                className="w-full flex flex-col items-center gap-6 mt-12"
-                            >
-                                <ThemeToggle />
-
-                                <div className="flex items-center gap-8 opacity-40 font-mono text-[10px] tracking-[0.2em]">
-                                    <span>STATUS: ONLINE</span>
-                                    <span className="w-1 h-1 rounded-full bg-primary" />
-                                    <span>ENCRYPTED_LINK_ACTIVE</span>
-                                </div>
-                            </motion.div>
+                            {/* Status - anchored bottom */}
+                            <div className="absolute bottom-10 left-0 right-0 flex items-center justify-center gap-6 opacity-30 font-mono text-[9px] tracking-[0.3em]">
+                                <span>STATUS: ONLINE</span>
+                                <span className="w-1 h-1 rounded-full bg-primary" />
+                                <span>ENCRYPTED_LINK</span>
+                            </div>
                         </div>
                     </motion.div>
                 )}
