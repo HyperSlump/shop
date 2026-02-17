@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, PanInfo } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import WaveformOverlay from './WaveformOverlay';
@@ -21,7 +21,6 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
 
     // Swipe tracking
     const x = useMotionValue(0);
-    const opacity = useTransform(x, [-150, 0], [0.3, 1]);
 
     // Check for the audio preview URL in metadata
     const audioPreviewUrl = product.metadata?.audio_preview;
@@ -61,23 +60,20 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
             {/* Inner Inset Panel Border */}
             <div className="absolute inset-[3px] border border-primary/5 pointer-events-none z-0" />
 
-            <AnimatePresence mode="wait">
+            <AnimatePresence initial={false} mode="popLayout">
                 {!showPreview ? (
                     <motion.div
                         key="default"
-                        initial={{ opacity: 0, scale: 0.98 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                        transition={{
-                            type: "spring", stiffness: 300, damping: 25, mass: 0.8
-                        }}
+                        initial={{ x: '-100%' }}
+                        animate={{ x: 0 }}
+                        exit={{ x: '-100%' }}
+                        transition={{ type: "spring", stiffness: 400, damping: 35 }}
                         className="absolute inset-0 flex flex-col"
-                        // Mobile swipe: drag left to reveal preview
                         drag="x"
                         dragConstraints={{ left: 0, right: 0 }}
-                        dragElastic={0.3}
+                        dragElastic={0.25}
                         onDragEnd={handleDragEnd}
-                        style={{ x, opacity }}
+                        style={{ x }}
                     >
                         {/* Top Section: Single Column Technical Dashboard */}
                         <div className="flex-1 flex flex-col relative border-b-2 border-primary/20 transition-colors duration-500 overflow-hidden">
@@ -193,28 +189,31 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 </button>
                             </div>
 
-                            {/* Mobile swipe hint */}
-                            <div className="md:hidden flex items-center justify-center gap-2 pt-1">
-                                <div className="h-[2px] w-8 bg-primary/15 rounded-full" />
-                                <span className="font-mono text-[8px] text-primary/25 uppercase tracking-widest">swipe for preview</span>
-                                <div className="h-[2px] w-8 bg-primary/15 rounded-full" />
+                            {/* Mobile swipe CTA */}
+                            <div className="md:hidden flex items-center justify-center gap-1.5 pt-1">
+                                <span className="font-mono text-[8px] text-primary/30 uppercase tracking-widest">preview</span>
+                                <motion.svg
+                                    animate={{ x: [0, 4, 0] }}
+                                    transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                                    width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                                    className="text-primary/40"
+                                >
+                                    <polyline points="9 18 15 12 9 6" />
+                                </motion.svg>
                             </div>
                         </div>
                     </motion.div>
                 ) : (
                     <motion.div
                         key="preview"
-                        initial={{ opacity: 0, scale: 1.05, y: 20 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 1.05, y: 20 }}
-                        transition={{
-                            type: "spring", stiffness: 350, damping: 28, mass: 1
-                        }}
+                        initial={{ x: '100%' }}
+                        animate={{ x: 0 }}
+                        exit={{ x: '100%' }}
+                        transition={{ type: "spring", stiffness: 400, damping: 35 }}
                         className="absolute inset-0 bg-[var(--background)] backdrop-blur-md flex flex-col z-30"
-                        // Mobile swipe: drag right to go back
                         drag="x"
                         dragConstraints={{ left: 0, right: 0 }}
-                        dragElastic={0.3}
+                        dragElastic={0.25}
                         onDragEnd={handleDragEnd}
                     >
                         {/* Background Decoration - Matrix Effect */}
@@ -321,11 +320,17 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 </button>
                             </div>
 
-                            {/* Mobile swipe hint */}
-                            <div className="md:hidden flex items-center justify-center gap-2 pt-1">
-                                <div className="h-[2px] w-8 bg-primary/15 rounded-full" />
-                                <span className="font-mono text-[8px] text-primary/25 uppercase tracking-widest">swipe to go back</span>
-                                <div className="h-[2px] w-8 bg-primary/15 rounded-full" />
+                            {/* Mobile swipe CTA */}
+                            <div className="md:hidden flex items-center justify-center gap-1.5 pt-1">
+                                <motion.svg
+                                    animate={{ x: [0, -4, 0] }}
+                                    transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                                    width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                                    className="text-primary/40"
+                                >
+                                    <polyline points="15 18 9 12 15 6" />
+                                </motion.svg>
+                                <span className="font-mono text-[8px] text-primary/30 uppercase tracking-widest">back</span>
                             </div>
                         </div>
                     </motion.div>
