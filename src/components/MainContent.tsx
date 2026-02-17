@@ -13,7 +13,8 @@ export default function MainContent({ children }: { children: React.ReactNode })
         <main className="flex-1 flex flex-col min-w-0 md:pl-20 md:pt-0 min-h-screen">
             {/* GLOBAL HEADER */}
             {/* On mobile: only show hero on home. On desktop: always show. */}
-            <div className={`${isHome ? 'block' : 'hidden md:block'}`}>
+            {/* key={pathname} forces re-mount on navigation so hero always reappears when going home */}
+            <div key={pathname} className={`${isHome ? 'block' : 'hidden md:block'}`}>
                 <HeroSchema />
             </div>
             <HorizontalNav />

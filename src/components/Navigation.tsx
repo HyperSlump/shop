@@ -5,7 +5,7 @@ import { useCart } from './CartProvider';
 import ThemeToggle from './ThemeToggle';
 import CursorTooltip from './CursorTooltip';
 import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ArrowLeft } from 'lucide-react';
 import MatrixSpace from './MatrixSpace';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -95,6 +95,14 @@ export default function Navigation() {
                             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/40 to-[var(--background)]" />
                         </div>
 
+                        {/* Close Arrow - Upper Left */}
+                        <button
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="absolute top-6 left-6 z-20 text-foreground/50 hover:text-primary active:scale-90 transition-all"
+                        >
+                            <ArrowLeft size={28} />
+                        </button>
+
                         {/* Corner Accents */}
                         <div className="absolute top-8 left-8 w-8 h-8 border-t-2 border-l-2 border-primary/20" />
                         <div className="absolute top-8 right-8 w-8 h-8 border-t-2 border-r-2 border-primary/20" />
@@ -139,20 +147,14 @@ export default function Navigation() {
                                 ))}
                             </div>
 
-                            {/* Mobile Actions Overlay */}
+                            {/* Bottom: Theme Toggle + Status */}
                             <motion.div
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.4 }}
                                 className="w-full flex flex-col items-center gap-6 mt-12"
                             >
-                                <button
-                                    onClick={() => { toggleCart(); setIsMobileMenuOpen(false); }}
-                                    className="flex items-center justify-center gap-4 w-full p-6 bg-primary text-black font-bold uppercase tracking-widest text-lg rounded-sm active:scale-95 transition-transform"
-                                >
-                                    <span className="material-icons">shopping_cart</span>
-                                    VIEW_CART ({cart.length})
-                                </button>
+                                <ThemeToggle />
 
                                 <div className="flex items-center gap-8 opacity-40 font-mono text-[10px] tracking-[0.2em]">
                                     <span>STATUS: ONLINE</span>

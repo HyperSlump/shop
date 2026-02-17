@@ -19,8 +19,8 @@ export default function HeroSchema() {
     }, []);
 
     return (
-        <section className="relative w-full bg-[var(--background)] animate-fade-in px-0 pt-0 pb-0 min-h-[400px] md:h-[calc(55vh-40px)] md:min-h-[350px]">
-            <div className="w-full h-full relative flex flex-col justify-center md:justify-between p-4 md:px-6 md:py-8 lg:px-8 lg:py-12">
+        <section className="relative w-full bg-[var(--background)] animate-fade-in px-0 pt-0 pb-0 min-h-[220px] md:min-h-[350px] md:h-[calc(55vh-40px)]">
+            <div className="w-full h-full relative flex flex-col justify-center md:justify-between p-3 md:px-6 md:py-8 lg:px-8 lg:py-12">
                 {/* 1. BRANDING SECTION - Hidden on mobile as per user request */}
                 <div className="relative w-full hidden md:flex justify-between items-center mb-6 z-[60]">
                     <div className="flex items-center gap-4">

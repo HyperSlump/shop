@@ -183,13 +183,7 @@ export default function CheckoutPage() {
                 </AnimatePresence>
             </div>
 
-            {/* Back Arrow - Upper Left */}
-            <div className="absolute top-6 left-6 z-20">
-                <Link href="/" className="inline-flex items-center gap-2 text-primary/70 hover:text-primary transition-all group w-fit">
-                    <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform duration-300" />
-                    <span className="font-mono text-[12px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300">back</span>
-                </Link>
-            </div>
+
 
             <div className="flex flex-col lg:flex-row min-h-screen">
                 {/* LEFT: Order Summary (Desktop) */}
@@ -209,7 +203,7 @@ export default function CheckoutPage() {
 
                 {/* RIGHT: Payment Form or Free Claim */}
                 <div className="flex-1 flex flex-col">
-                    <div className="flex-1 flex flex-col justify-center max-w-lg mx-auto w-full px-6 md:px-12 xl:px-16 py-12 lg:py-16">
+                    <div className="flex-1 flex flex-col justify-center max-w-lg mx-auto w-full px-6 md:px-12 xl:px-16 py-4 md:py-12 lg:py-16">
                         {/* Section Header */}
                         <div className="mb-10 space-y-2">
                             <div className={`font-mono text-[9px] tracking-[0.4em] ${textFaintest} uppercase`}>
