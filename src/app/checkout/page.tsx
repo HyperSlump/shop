@@ -185,7 +185,7 @@ export default function CheckoutPage() {
 
 
 
-            <div className="flex flex-col lg:flex-row min-h-screen">
+            <div className="flex flex-col lg:flex-row lg:min-h-screen">
                 {/* LEFT: Order Summary (Desktop) */}
                 <div className={`hidden lg:flex lg:w-[45%] xl:w-[42%] ${bgPanel} border-r ${border} flex-col`}>
                     <div className="flex-1 flex flex-col justify-center max-w-lg ml-auto w-full px-12 xl:px-16 py-16">
@@ -203,7 +203,7 @@ export default function CheckoutPage() {
 
                 {/* RIGHT: Payment Form or Free Claim */}
                 <div className="flex-1 flex flex-col">
-                    <div className="flex-1 flex flex-col justify-center max-w-lg mx-auto w-full px-6 md:px-12 xl:px-16 py-4 md:py-12 lg:py-16">
+                    <div className="flex-1 flex flex-col justify-start lg:justify-center max-w-lg mx-auto w-full px-6 md:px-12 xl:px-16 py-4 md:py-12 lg:py-16">
                         {/* Section Header */}
                         <div className="mb-10 space-y-2">
                             <div className={`font-mono text-[9px] tracking-[0.4em] ${textFaintest} uppercase`}>
