@@ -7,8 +7,18 @@ import { useCart } from '@/components/CartProvider';
 import CheckoutForm from '@/components/CheckoutForm';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+
+// Map price IDs to downloadable file URLs (same mapping as success page)
+const PRODUCT_FILES: Record<string, { label: string; url: string }> = {
+    'price_1T070gHlah70mYw2Oe7IA8q8': { label: 'HYPERSLUMP_01', url: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip' },
+    'price_1T077bHlah70mYw2Oa6IwZgB': { label: 'HYPERSLUMP_02', url: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip' },
+    'price_1T076PHlah70mYw2D01WCvIT': { label: 'HYPERSLUMP_03', url: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip' },
+    'price_1Szmy3Hlah70mYw2t6BkUO6O': { label: 'HYPERSLUMP_04', url: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip' },
+};
+const PRODUCT_FILES_FALLBACK = 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip';
 
 export default function CheckoutPage() {
     const { cartTotal, cart } = useCart();
@@ -123,6 +133,8 @@ export default function CheckoutPage() {
     const spinnerBorder = isDark ? 'border-white/10 border-t-white/60' : 'border-[#1A1F36]/10 border-t-[#1A1F36]/60';
     const btnBg = isDark ? 'bg-white text-black' : 'bg-[#1A1F36] text-white';
 
+    const isFreeOrder = cartTotal === 0 && cart.length > 0;
+
     // Empty cart state
     if (cart.length === 0) {
         return (
@@ -139,7 +151,7 @@ export default function CheckoutPage() {
     }
 
     return (
-        <div className={`min-h-screen ${bg} ${text}`}>
+        <div className={`min-h-screen ${bg} ${text} relative`}>
             {/* Mobile Order Summary Toggle */}
             <div className={`lg:hidden border-b ${borderMed}`}>
                 <button
@@ -171,6 +183,14 @@ export default function CheckoutPage() {
                 </AnimatePresence>
             </div>
 
+            {/* Back Arrow - Upper Left */}
+            <div className="absolute top-6 left-6 z-20">
+                <Link href="/" className="inline-flex items-center gap-2 text-primary/70 hover:text-primary transition-all group w-fit">
+                    <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform duration-300" />
+                    <span className="font-mono text-[12px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300">back</span>
+                </Link>
+            </div>
+
             <div className="flex flex-col lg:flex-row min-h-screen">
                 {/* LEFT: Order Summary (Desktop) */}
                 <div className={`hidden lg:flex lg:w-[45%] xl:w-[42%] ${bgPanel} border-r ${border} flex-col`}>
@@ -187,71 +207,112 @@ export default function CheckoutPage() {
                     </div>
                 </div>
 
-                {/* RIGHT: Payment Form */}
+                {/* RIGHT: Payment Form or Free Claim */}
                 <div className="flex-1 flex flex-col">
                     <div className="flex-1 flex flex-col justify-center max-w-lg mx-auto w-full px-6 md:px-12 xl:px-16 py-12 lg:py-16">
                         {/* Section Header */}
                         <div className="mb-10 space-y-2">
                             <div className={`font-mono text-[9px] tracking-[0.4em] ${textFaintest} uppercase`}>
-                                Secure_Payment_Layer
+                                {isFreeOrder ? 'Free_Download_Layer' : 'Secure_Payment_Layer'}
                             </div>
                             <h1 className={`text-xl font-gothic tracking-tight ${text} lowercase`}>
-                                payment details
+                                {isFreeOrder ? 'claim your downloads' : 'payment details'}
                             </h1>
                         </div>
 
-                        {/* Payment Form Area */}
-                        <AnimatePresence mode="wait">
-                            {error ? (
-                                <motion.div
-                                    key="error"
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="space-y-6"
-                                >
-                                    <div className="border border-red-500/20 bg-red-500/5 p-8 space-y-4">
-                                        <div className="text-red-400 font-mono text-[10px] tracking-[0.2em] uppercase">
-                                            [ERROR]: PAYMENT_INIT_FAIL
+                        {isFreeOrder ? (
+                            /* ─── Free Order: Download Links Inline ─── */
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="space-y-8"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <div className="w-2 h-2 bg-green-500 animate-pulse" />
+                                    <p className={`font-mono text-[12px] ${textMuted} leading-relaxed`}>
+                                        These assets are free. Your downloads are ready.
+                                    </p>
+                                </div>
+
+                                <div className="space-y-4">
+                                    {cart.map((item) => {
+                                        const fileUrl = PRODUCT_FILES[item.id]?.url || PRODUCT_FILES_FALLBACK;
+                                        const fileLabel = PRODUCT_FILES[item.id]?.label || item.name;
+                                        return (
+                                            <div key={item.id} className={`p-6 border ${border} space-y-4 relative overflow-hidden group`}>
+                                                <div className={`flex justify-between items-center font-mono text-[8px] ${textFaintest} uppercase tracking-[0.3em]`}>
+                                                    <span>Asset: {item.name}</span>
+                                                    <span className="text-green-500">FREE</span>
+                                                </div>
+
+                                                <a
+                                                    href={fileUrl}
+                                                    download
+                                                    className={`block w-full ${btnBg} font-mono font-bold uppercase py-4 text-center tracking-[0.3em] text-xs cursor-pointer transition-opacity hover:opacity-80`}
+                                                >
+                                                    DOWNLOAD_{fileLabel}
+                                                </a>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+
+                            </motion.div>
+                        ) : (
+                            /* ─── Paid Order Flow ─── */
+                            <AnimatePresence mode="wait">
+                                {error ? (
+                                    <motion.div
+                                        key="error"
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="space-y-6"
+                                    >
+                                        <div className="border border-red-500/20 bg-red-500/5 p-8 space-y-4">
+                                            <div className="text-red-400 font-mono text-[10px] tracking-[0.2em] uppercase">
+                                                [ERROR]: PAYMENT_INIT_FAIL
+                                            </div>
+                                            <p className={`font-mono text-[11px] ${textFaint} leading-relaxed`}>
+                                                {error}
+                                            </p>
+                                            <button
+                                                onClick={() => window.location.reload()}
+                                                className={`border ${borderHover} px-6 py-2.5 font-mono text-[10px] uppercase tracking-[0.2em] ${textMuted} hover:${borderHoverStrong} transition-all cursor-pointer`}
+                                            >
+                                                Retry Connection
+                                            </button>
                                         </div>
-                                        <p className={`font-mono text-[11px] ${textFaint} leading-relaxed`}>
-                                            {error}
-                                        </p>
-                                        <button
-                                            onClick={() => window.location.reload()}
-                                            className={`border ${borderHover} px-6 py-2.5 font-mono text-[10px] uppercase tracking-[0.2em] ${textMuted} hover:${borderHoverStrong} transition-all cursor-pointer`}
-                                        >
-                                            Retry Connection
-                                        </button>
-                                    </div>
-                                </motion.div>
-                            ) : clientSecret ? (
-                                <motion.div
-                                    key="form"
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.4 }}
-                                >
-                                    <Elements options={{ clientSecret, appearance }} stripe={stripePromise}>
-                                        <CheckoutForm amount={cartTotal} isDark={isDark} />
-                                    </Elements>
-                                </motion.div>
-                            ) : (
-                                <motion.div
-                                    key="loading"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    className="flex flex-col items-center justify-center py-20 space-y-6"
-                                >
-                                    <div className={`w-8 h-8 border ${spinnerBorder} rounded-full animate-spin`} />
-                                    <div className="space-y-2 text-center">
-                                        <span className={`block font-mono text-[10px] uppercase tracking-[0.3em] ${textFaint} animate-pulse`}>
-                                            Initializing...
-                                        </span>
-                                    </div>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
+                                    </motion.div>
+                                ) : clientSecret ? (
+                                    <motion.div
+                                        key="form"
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.4 }}
+                                    >
+                                        <Elements options={{ clientSecret, appearance }} stripe={stripePromise}>
+                                            <CheckoutForm amount={cartTotal} isDark={isDark} />
+                                        </Elements>
+                                    </motion.div>
+                                ) : (
+                                    <motion.div
+                                        key="loading"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        className="flex flex-col items-center justify-center py-20 space-y-6"
+                                    >
+                                        <div className={`w-8 h-8 border ${spinnerBorder} rounded-full animate-spin`} />
+                                        <div className="space-y-2 text-center">
+                                            <span className={`block font-mono text-[10px] uppercase tracking-[0.3em] ${textFaint} animate-pulse`}>
+                                                Initializing...
+                                            </span>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        )}
+
 
                         {/* Footer Security */}
                         <div className={`mt-12 pt-8 border-t ${border}`}>
