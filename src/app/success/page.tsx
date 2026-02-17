@@ -20,10 +20,14 @@ export default async function SuccessPage({
         );
     }
 
-    // Verify session
+    // Verify session and expand line items to see what was bought
     let session;
+    let lineItems;
     try {
-        session = await stripe.checkout.sessions.retrieve(sessionId);
+        session = await stripe.checkout.sessions.retrieve(sessionId, {
+            expand: ['line_items']
+        });
+        lineItems = session.line_items?.data || [];
     } catch {
         return (
             <div className="min-h-screen flex items-center justify-center bg-background-light dark:bg-background-dark text-black dark:text-white font-mono">
@@ -36,17 +40,24 @@ export default async function SuccessPage({
     }
 
     // Map price IDs to file URLs
-    const PRODUCT_FILES: Record<string, string> = {
-        'price_1T070gHlah70mYw2Oe7IA8q8': 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip',
-        'price_1T077bHlah70mYw2Oa6IwZgB': 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip',
-        'price_1T076PHlah70mYw2D01WCvIT': 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip',
-        'price_1Szmy3Hlah70mYw2t6BkUO6O': 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip',
+    const PRODUCT_FILES: Record<string, { label: string, url: string }> = {
+        'price_1T070gHlah70mYw2Oe7IA8q8': { label: 'HYPERSLUMP_01', url: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip' },
+        'price_1T077bHlah70mYw2Oa6IwZgB': { label: 'HYPERSLUMP_02', url: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip' },
+        'price_1T076PHlah70mYw2D01WCvIT': { label: 'HYPERSLUMP_03', url: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip' },
+        'price_1Szmy3Hlah70mYw2t6BkUO6O': { label: 'HYPERSLUMP_04', url: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip' },
     };
 
-    const priceId = session.metadata?.priceId;
-    const downloadUrl = (priceId && PRODUCT_FILES[priceId])
-        ? PRODUCT_FILES[priceId]
-        : "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip"; // Fallback to sample
+    // Prepare download list - if not in map, use fallback
+    const downloads = lineItems.map(item => {
+        const priceId = item.price?.id;
+        const knownFile = priceId ? PRODUCT_FILES[priceId] : null;
+
+        return {
+            name: item.description || 'Unknown Asset',
+            url: knownFile?.url || "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+            label: knownFile?.label || 'DOWNLOAD_ASSET'
+        };
+    });
 
     return (
         <div className="flex-1 w-full px-4 md:px-7 lg:px-8 py-10 animate-fade-in min-h-[60vh] flex flex-col">
@@ -78,28 +89,31 @@ export default async function SuccessPage({
                             </p>
                         </div>
 
-                        {/* Download Console */}
-                        <div className="p-8 border border-primary/20 bg-primary/[0.02] space-y-6 relative overflow-hidden group">
-                            <div className="flex justify-between items-center text-[10px] font-mono opacity-50 uppercase tracking-widest">
-                                <span>Signal_Integrity</span>
-                                <span>[||||||||||||||||] 100%</span>
-                            </div>
+                        {/* Download Consoles - One for each item */}
+                        <div className="space-y-4">
+                            {downloads.map((dl, idx) => (
+                                <div key={idx} className="p-6 border border-primary/20 bg-primary/[0.02] space-y-4 relative overflow-hidden group">
+                                    <div className="flex justify-between items-center text-[8px] font-mono opacity-50 uppercase tracking-[0.3em]">
+                                        <span>Asset: {dl.name}</span>
+                                        <span>VLT_ID: {Math.random().toString(36).slice(2, 6).toUpperCase()}</span>
+                                    </div>
 
-                            <a
-                                href={downloadUrl}
-                                className="block w-full bg-primary text-black font-mono font-bold uppercase py-5 text-center tracking-[0.3em] hover:bg-transparent hover:text-primary border-2 border-primary transition-all duration-300"
-                            >
-                                INITIATE_DOWNLOAD
-                            </a>
-
-                            <div className="text-[10px] font-mono opacity-40 italic leading-relaxed pt-2">
-                                &gt; Warning: Download links expire after 24 hours of inactivity.
-                                Ensure local storage capacity is verified.
-                            </div>
-                            <div className="absolute top-0 right-0 p-2 font-mono text-[8px] opacity-10 uppercase tracking-widest">Vault.access</div>
+                                    <a
+                                        href={dl.url}
+                                        className="block w-full bg-primary text-black font-mono font-bold uppercase py-4 text-center tracking-[0.3em] hover:bg-transparent hover:text-primary border-2 border-primary transition-all duration-300 text-xs"
+                                    >
+                                        INITIATE_{dl.label}
+                                    </a>
+                                </div>
+                            ))}
                         </div>
 
-                        <Link href="/" className="inline-flex items-center gap-2 text-primary/70 hover:text-primary transition-all group w-fit">
+                        <div className="text-[10px] font-mono opacity-40 italic leading-relaxed pt-2">
+                            &gt; Warning: Download links expire after 24 hours of inactivity.
+                            Ensure local storage capacity is verified.
+                        </div>
+
+                        <Link href="/" className="inline-flex items-center gap-2 text-primary/70 hover:text-primary transition-all group w-fit pt-6">
                             <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform duration-300" />
                             <span className="font-mono text-[12px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300">back</span>
                         </Link>

@@ -2,9 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
+import {
+    EmbeddedCheckoutProvider,
+    EmbeddedCheckout
+} from '@stripe/react-stripe-js';
 import { useCart } from '@/components/CartProvider';
-import CheckoutForm from '@/components/CheckoutForm';
 import MockPageLayout from '@/components/MockPageLayout';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -25,15 +27,10 @@ export default function CheckoutPage() {
         observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 
         if (cartTotal > 0 && cart.length > 0) {
-            fetch('/api/create-payment-intent', {
+            fetch('/api/checkout-sessions', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    amount: cartTotal,
-                    metadata: {
-                        items: cart.map(item => item.name).join(', '),
-                    }
-                }),
+                body: JSON.stringify({ cart }),
             })
                 .then((res) => res.json())
                 .then((data) => setClientSecret(data.clientSecret));
@@ -42,43 +39,7 @@ export default function CheckoutPage() {
         return () => observer.disconnect();
     }, [cartTotal, cart]);
 
-    const appearance = {
-        theme: (theme === 'dark' ? 'night' : 'stripe') as any,
-        variables: {
-            colorPrimary: '#635BFF',
-            colorBackground: theme === 'dark' ? '#161616' : '#ffffff',
-            colorText: theme === 'dark' ? '#FAFAFA' : '#1A1F36',
-            colorDanger: '#FF3B30',
-            fontFamily: 'JetBrains Mono, monospace',
-            spacingUnit: '4px',
-            borderRadius: '0px',
-        },
-        rules: {
-            '.Input': {
-                border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(26, 31, 54, 0.1)',
-                boxShadow: 'none',
-                backgroundColor: theme === 'dark' ? '#0A0A0A' : '#FAFAFA',
-            },
-            '.Input:focus': {
-                border: '1px solid #635BFF',
-                boxShadow: '0 0 0 1px #635BFF',
-            },
-            '.Label': {
-                fontFamily: 'JetBrains Mono, monospace',
-                textTransform: 'uppercase',
-                fontSize: '10px',
-                letterSpacing: '0.2em',
-                color: theme === 'dark' ? 'rgba(250, 250, 250, 0.5)' : 'rgba(26, 31, 54, 0.5)',
-            },
-            '.Tab': {
-                border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(26, 31, 54, 0.1)',
-                backgroundColor: theme === 'dark' ? '#161616' : '#ffffff',
-            },
-            '.Tab--selected': {
-                border: '1px solid #635BFF',
-            }
-        }
-    };
+    const options = { clientSecret };
 
     const checkoutNode = (
         <div className="max-w-6xl mx-auto w-full px-4">
@@ -99,9 +60,9 @@ export default function CheckoutPage() {
                                 <div key={item.id} className="flex justify-between items-start py-4 border-b border-primary/5 last:border-0">
                                     <div className="space-y-1">
                                         <p className="font-mono text-xs uppercase tracking-widest text-primary">{item.name}</p>
-                                        <p className="font-mono text-[10px] opacity-40 uppercase">QTY: {item.quantity}</p>
+                                        <p className="font-mono text-[10px] opacity-40 uppercase">ITEM_ID: {item.id.slice(-8).toUpperCase()}</p>
                                     </div>
-                                    <span className="font-mono text-xs">${(item.price * item.quantity).toFixed(2)}</span>
+                                    <span className="font-mono text-xs">${item.amount.toFixed(2)}</span>
                                 </div>
                             ))}
                         </div>
@@ -129,8 +90,8 @@ export default function CheckoutPage() {
                     </div>
                 </div>
 
-                {/* 2. Stripe Payment Form */}
-                <div className="relative">
+                {/* 2. Stripe Embedded Checkout (The Hybrid) */}
+                <div className="relative min-h-[500px]">
                     <AnimatePresence mode="wait">
                         {clientSecret ? (
                             <motion.div
@@ -139,15 +100,17 @@ export default function CheckoutPage() {
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: -20 }}
                                 transition={{ duration: 0.5, ease: "easeOut" }}
-                                className="bg-foreground/[0.02] dark:bg-white/[0.02] border border-primary/10 p-8 md:p-12 relative"
+                                className="bg-foreground/[0.02] dark:bg-white/[0.02] border border-primary/10 p-4 md:p-8 relative min-h-[400px]"
                             >
-                                <div className="absolute top-0 right-0 p-3 flex gap-1">
+                                <div className="absolute top-0 right-0 p-3 flex gap-1 z-10">
                                     <div className="w-1 h-1 bg-primary/40" />
                                     <div className="w-1 h-3 bg-primary/20" />
                                 </div>
-                                <Elements options={{ clientSecret, appearance }} stripe={stripePromise}>
-                                    <CheckoutForm amount={cartTotal} />
-                                </Elements>
+                                <div id="checkout" className="w-full">
+                                    <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
+                                        <EmbeddedCheckout />
+                                    </EmbeddedCheckoutProvider>
+                                </div>
                             </motion.div>
                         ) : cartTotal === 0 ? (
                             <motion.div
