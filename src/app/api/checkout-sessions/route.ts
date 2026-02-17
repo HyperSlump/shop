@@ -4,11 +4,14 @@ import { stripe } from '@/lib/stripe/server';
 export async function POST(req: Request) {
     try {
         const { cart } = await req.json();
+        console.log('[API] Received cart for checkout:', cart?.length, 'items');
 
         if (!cart || cart.length === 0) {
+            console.error('[API] Cart validation failed: Empty cart');
             return new NextResponse('Cart is empty', { status: 400 });
         }
 
+        console.log('[API] Contacting Stripe for Embedded Session...');
         const session = await stripe.checkout.sessions.create({
             ui_mode: 'embedded',
             line_items: cart.map((item: any) => ({
@@ -30,9 +33,10 @@ export async function POST(req: Request) {
             automatic_tax: { enabled: false },
         });
 
+        console.log('[API] Session created successfully:', session.id);
         return NextResponse.json({ clientSecret: session.client_secret });
-    } catch (error) {
-        console.error('Error creating checkout session:', error);
-        return new NextResponse('Internal Server Error', { status: 500 });
+    } catch (error: any) {
+        console.error('[API] Stripe Session Creation Failed:', error);
+        return new NextResponse(error.message || 'Internal Server Error', { status: 500 });
     }
 }
