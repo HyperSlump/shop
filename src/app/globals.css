@@ -7,7 +7,7 @@
   --font-display: "Pirata One", system-ui;
   --font-gothic: "UnifrakturMaguntia", serif;
   --font-mono: "JetBrains Mono", monospace;
-  --radius-DEFAULT: 0px;
+  --radius-DEFAULT: 4px;
   --variant-dark: .dark &;
 }
 

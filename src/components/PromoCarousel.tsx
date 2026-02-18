@@ -146,7 +146,7 @@ export default function PromoCarousel() {
     }, [index, promos]);
 
     if (loading || promos.length === 0) return (
-        <div className="flex items-center justify-center w-full h-[220px] opacity-20">
+        <div className="flex items-center justify-center w-full h-[140px] opacity-20">
             <div className="font-mono text-[10px] md:text-[11px] animate-pulse uppercase tracking-[0.5em]">INITIALIZING_PROMO_FEED...</div>
         </div>
     );
@@ -154,12 +154,12 @@ export default function PromoCarousel() {
     return (
         <div
             ref={containerRef}
-            className="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-20 px-4 md:px-8 w-full max-w-[1400px] py-6 md:py-10 mx-auto"
+            className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 px-4 md:px-6 w-full max-w-[1200px] py-2 md:py-4 mx-auto"
         >
             {/* Real Product Image Frame */}
             <div
                 ref={placeholderRef}
-                className="relative w-48 h-48 md:w-80 md:h-80 flex items-center justify-center shrink-0 group transition-transform duration-700 hover:scale-105"
+                className="relative w-40 h-40 md:w-56 md:h-56 flex items-center justify-center shrink-0 group transition-transform duration-700 hover:scale-105"
             >
                 {promos[index].image ? (
                     <div className="relative w-full h-full">

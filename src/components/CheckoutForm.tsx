@@ -65,7 +65,7 @@ export default function CheckoutForm({ amount, isDark = true }: { amount: number
 
             {/* Error Message */}
             {message && (
-                <div className="flex items-start gap-3 p-4 border border-red-500/20 bg-red-500/5">
+                <div className="flex items-start gap-3 p-4 border border-red-500/20 bg-red-500/5 rounded">
                     <div className="w-1.5 h-1.5 bg-red-500 mt-1.5 flex-shrink-0 animate-pulse" />
                     <p className="font-mono text-[11px] text-red-400/90 leading-relaxed">
                         {message}
@@ -78,7 +78,7 @@ export default function CheckoutForm({ amount, isDark = true }: { amount: number
                 disabled={isLoading || !stripe || !elements}
                 id="submit"
                 type="submit"
-                className={`w-full relative group overflow-hidden ${btnClasses} py-4 px-6 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer`}
+                className={`w-full relative group overflow-hidden ${btnClasses} py-4 px-6 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer rounded`}
             >
                 <div className="relative z-10 flex items-center justify-center gap-3">
                     {isLoading ? (

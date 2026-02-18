@@ -31,13 +31,13 @@ export default function ProductGrid({ products }: { products: Product[] }) {
     const isInCart = (id: string) => cart.some(item => item.id === id);
 
     return (
-        <div className="px-4 md:px-7 lg:px-8 mb-12">
-            {/* Catalog Status Bar - Moved & Resized */}
-            <div className="w-full flex items-center justify-between px-0 py-2 mt-2 animate-fade-in">
+        <div className="px-3 md:px-5 lg:px-6 mb-8">
+            {/* Catalog Status Bar */}
+            <div className="w-full flex items-center justify-between px-0 py-1.5 mt-1 animate-fade-in">
                 <div className="flex items-center gap-4">
-                    {/* Decorative Barcode - Smaller Height */}
+                    {/* Decorative Barcode */}
                     <div
-                        className="flex gap-[2px] h-6 transition-opacity cursor-crosshair opacity-60 hover:opacity-100"
+                        className="flex gap-[2px] h-5 transition-opacity cursor-crosshair opacity-60 hover:opacity-100"
                         onMouseEnter={() => setBarcodeHover(true)}
                         onMouseLeave={() => setBarcodeHover(false)}
                     >
@@ -52,18 +52,16 @@ export default function ProductGrid({ products }: { products: Product[] }) {
                             />
                         ))}
                     </div>
-                    <div className="h-[1px] w-12 bg-primary/20 hidden md:block" />
-                    <span className="font-mono text-[11px] uppercase tracking-widest opacity-60 hidden md:block">Catalog_Index_v5</span>
+                    <div className="h-[1px] w-10 bg-primary/20 hidden md:block" />
+                    <span className="font-mono text-[10px] uppercase tracking-widest opacity-60 hidden md:block">Catalog</span>
                 </div>
-
-
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 w-full p-0 animate-fade-in transition-all duration-500">
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4 w-full p-0 animate-fade-in transition-all duration-500">
                 {products.map((product, index) => (
                     <div
                         key={product.id}
-                        className="w-full animate-fade-in border border-primary/20 hover:border-primary/40 transition-colors"
+                        className="w-full animate-fade-in"
                         style={{ animationDelay: `${200 + index * 100}ms` }}
                     >
                         <ProductCard

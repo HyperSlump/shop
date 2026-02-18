@@ -1,8 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { useCart } from './CartProvider';
+import ThemeToggle from './ThemeToggle';
+import { usePathname } from 'next/navigation';
+import { Menu, X, ShoppingCart } from 'lucide-react';
 
 const navLinks = [
     { label: 'Shop', href: '/', id: 'shop', note: '//MAIN' },
@@ -16,65 +20,109 @@ const navLinks = [
 
 export default function HorizontalNav() {
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const { toggleCart, cart } = useCart();
+    const pathname = usePathname();
 
     return (
         <nav
-            className="hidden md:block sticky top-0 z-40 border-y border-foreground/15 bg-[var(--background)] px-4 md:px-7 lg:px-8 py-3 transition-colors group/nav"
+            className="sticky top-0 z-[100] border-b border-foreground/15 bg-[var(--background)]/80 backdrop-blur-md transition-colors group/nav"
             onMouseLeave={() => setHoveredLink(null)}
         >
-            {/* 4-Corner Minimal Accents */}
-            <div className="absolute top-0 left-0 w-1 h-1 border-l border-t border-primary/40 group-hover/nav:border-primary transition-colors" />
-            <div className="absolute top-0 right-0 w-1 h-1 border-r border-t border-primary/40 group-hover/nav:border-primary transition-colors" />
-            <div className="absolute bottom-0 left-0 w-1 h-1 border-l border-b border-primary/40 group-hover/nav:border-primary transition-colors" />
-            <div className="absolute bottom-0 right-0 w-1 h-1 border-r border-b border-primary/40 group-hover/nav:border-primary transition-colors" />
+            {/* 4-Corner Minimal Accents - Hidden on checkout */}
+            {pathname !== '/checkout' && (
+                <>
+                    <div className="absolute top-0 left-0 w-1 h-1 border-l border-t border-primary/40 group-hover/nav:border-primary transition-colors" />
+                    <div className="absolute top-0 right-0 w-1 h-1 border-r border-t border-primary/40 group-hover/nav:border-primary transition-colors" />
+                </>
+            )}
 
-            <div className="w-full flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 relative">
-                {navLinks.map((link, i) => (
-                    <div key={link.id} className="relative flex-1 flex items-center justify-center">
-                        <Link
-                            href={link.href}
-                            onMouseEnter={() => setHoveredLink(link.id)}
-                            onFocus={() => setHoveredLink(link.id)}
-                            style={{ animationDelay: `${100 + i * 100}ms` }}
-                            className="animate-slide-up group relative h-14 min-w-[120px] flex items-center justify-center px-6 bg-foreground/5 hover:bg-primary/10 border border-transparent transition-all duration-300"
-                        >
-                            <div className="absolute top-0 left-0 w-[2px] h-0 group-hover:h-full bg-primary transition-all duration-300" />
-                            <div className="flex flex-col items-center z-10">
-                                <span className="font-mono text-base tracking-widest uppercase group-hover:text-primary transition-colors">{link.label}</span>
+            <div className="w-full max-w-7xl mx-auto px-4 md:px-8 h-18 flex items-center justify-between relative">
+                {/* LEFT: Logo */}
+                <div className="flex-shrink-0 min-w-[100px] flex justify-start">
+                    <Link href="/" className="text-3xl font-gothic tracking-tighter hover:text-primary transition-all duration-300">
+                        h$
+                    </Link>
+                </div>
+
+                {/* CENTER: Links (Desktop) - Filling White Space Evenly */}
+                <div className="hidden lg:flex items-center justify-between flex-1 px-8 xl:px-20 max-w-4xl mx-auto">
+                    {navLinks.map((link) => (
+                        <div key={link.id} className="relative group/link">
+                            <Link
+                                href={link.href}
+                                onMouseEnter={() => setHoveredLink(link.id)}
+                                onFocus={() => setHoveredLink(link.id)}
+                                className="group relative h-12 flex flex-col items-center justify-center px-4 hover:bg-primary/5 transition-all duration-300 rounded"
+                            >
+                                <span className="font-mono text-[11px] md:text-[12px] tracking-[0.3em] uppercase group-hover:text-primary transition-colors z-10">{link.label}</span>
                                 {link.note && (
-                                    <span className="text-[11px] opacity-40 group-hover:opacity-80 font-mono">{link.note}</span>
+                                    <span className="text-[9px] opacity-25 group-hover:opacity-60 font-mono tracking-tighter z-10 mt-0.5">{link.note}</span>
                                 )}
-                            </div>
-                            <div className="absolute bottom-1 right-1 w-1 h-1 bg-primary/0 group-hover:bg-primary transition-all duration-300" />
 
-                            {/* SLIDING BORDERS */}
-                            {hoveredLink === link.id && (
-                                <>
+                                {hoveredLink === link.id && (
                                     <motion.div
-                                        layoutId="nav-highlight-top"
-                                        className="absolute -top-[13px] left-0 right-0 h-[1px] bg-primary shadow-[0_0_10px_var(--primary)]"
-                                        transition={{ type: "spring", bounce: 0.4, duration: 0.6 }}
+                                        layoutId="nav-underline"
+                                        className="absolute bottom-0 left-2 right-2 h-[1px] bg-primary shadow-[0_0_15px_var(--primary)]"
+                                        transition={{ type: "spring", bounce: 0.3, duration: 0.5 }}
                                     />
-                                    <motion.div
-                                        layoutId="nav-highlight-bottom"
-                                        className="absolute -bottom-[13px] left-0 right-0 h-[1px] bg-primary shadow-[0_0_10px_var(--primary)]"
-                                        transition={{ type: "spring", bounce: 0.4, duration: 0.6 }}
-                                    />
-                                </>
-                            )}
-                        </Link>
+                                )}
+                            </Link>
+                        </div>
+                    ))}
+                </div>
 
-                        {/* DIVIDER (except last) */}
-                        {i < navLinks.length - 1 && (
-                            <div className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 h-4 w-[1px] gap-1 opacity-20 pointer-events-none translate-x-[6px]">
-                                <div className="w-[1px] h-2 bg-primary" />
-                                <div className="w-[1px] h-2 bg-primary" />
-                            </div>
+                {/* RIGHT: Controls */}
+                <div className="flex-shrink-0 min-w-[100px] flex items-center justify-end gap-3 md:gap-5">
+                    <ThemeToggle />
+
+                    <button
+                        onClick={toggleCart}
+                        className="p-2.5 hover:text-primary transition-colors relative group"
+                    >
+                        <ShoppingCart size={22} className="group-hover:scale-110 transition-transform" />
+                        {cart.length > 0 && (
+                            <span className="absolute -top-0.5 -right-0.5 bg-primary text-black text-[10px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)]">
+                                {cart.length}
+                            </span>
                         )}
-                    </div>
-                ))}
+                    </button>
+
+                    {/* Mobile Menu Toggle */}
+                    <button
+                        className="lg:hidden p-2 hover:text-primary transition-colors"
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    >
+                        {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
+                    </button>
+                </div>
             </div>
 
+            {/* MOBILE NAVIGATION DROPDOWN */}
+            <AnimatePresence>
+                {isMobileMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="lg:hidden bg-[var(--background)] border-t border-foreground/10 overflow-hidden"
+                    >
+                        <div className="flex flex-col p-4 gap-2">
+                            {navLinks.map((link) => (
+                                <Link
+                                    key={link.id}
+                                    href={link.href}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className="px-4 py-3 font-mono text-sm uppercase tracking-widest hover:bg-primary/10 hover:text-primary transition-all flex items-center justify-between"
+                                >
+                                    <span>{link.label}</span>
+                                    <span className="text-[10px] opacity-30">{link.note}</span>
+                                </Link>
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </nav>
     );
 }

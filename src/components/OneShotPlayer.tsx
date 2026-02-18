@@ -6,9 +6,11 @@ import { Play, Pause } from 'lucide-react';
 interface OneShotPlayerProps {
     audioUrl: string;
     label?: string;
+    isActive: boolean;
+    loop?: boolean;
 }
 
-export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlayerProps & { isActive: boolean }) {
+export default function OneShotPlayer({ audioUrl, isActive, loop = false }: OneShotPlayerProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const wavesurferRef = useRef<any>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
     const [isPlaying, setIsPlaying] = useState(false);
@@ -18,49 +20,46 @@ export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlay
 
         const init = async () => {
             if (!containerRef.current) return;
+            containerRef.current.innerHTML = '';
+
             const WaveSurfer = (await import('wavesurfer.js')).default;
 
             const isDark = document.documentElement.classList.contains('dark');
-            const waveColor = isDark ? 'rgba(255, 255, 255, 0.2)' : '#000000';
-            const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#ccff00';
+            const primary = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#ccff00';
 
             ws = WaveSurfer.create({
                 container: containerRef.current,
-                waveColor: waveColor,
-                progressColor: primaryColor,
-                cursorColor: primaryColor,
-                barWidth: 3,
-                barGap: 1,
-                barRadius: 2,
-                height: 24,
+                height: 'auto',
+                waveColor: isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.25)',
+                progressColor: primary,
+                cursorColor: loop ? primary : 'transparent',
+                cursorWidth: loop ? 1 : 0,
                 normalize: true,
-                backend: 'WebAudio',
-                url: audioUrl,
-                interact: false,
+                interact: loop,
             });
 
-            ws.on('ready', () => {
-                wavesurferRef.current = ws;
-            });
+            ws.load(audioUrl);
 
+            ws.on('ready', () => { wavesurferRef.current = ws; });
             ws.on('play', () => setIsPlaying(true));
             ws.on('pause', () => setIsPlaying(false));
             ws.on('finish', () => {
-                setIsPlaying(false);
-                ws.seekTo(0);
+                if (loop) {
+                    ws.play();
+                } else {
+                    setIsPlaying(false);
+                    ws.seekTo(0);
+                }
             });
-        };
-
-        if (audioUrl) {
-            init();
-        }
-
-        return () => {
-            if (ws) {
-                ws.destroy();
+            if (loop) {
+                ws.on('interaction', () => ws.play());
             }
         };
-    }, [audioUrl, isActive]);
+
+        if (audioUrl) init();
+
+        return () => { if (ws) ws.destroy(); };
+    }, [audioUrl, isActive, loop]);
 
     useEffect(() => {
         if (!isActive && wavesurferRef.current) {
@@ -70,39 +69,34 @@ export default function OneShotPlayer({ audioUrl, label, isActive }: OneShotPlay
         }
     }, [isActive]);
 
-    const handleTrigger = (e: React.MouseEvent) => {
+    const handleClick = (e: React.MouseEvent) => {
         e.stopPropagation();
         if (wavesurferRef.current) {
-            wavesurferRef.current.seekTo(0);
-            wavesurferRef.current.play();
+            if (loop) {
+                wavesurferRef.current.playPause();
+            } else {
+                wavesurferRef.current.seekTo(0);
+                wavesurferRef.current.play();
+            }
         }
     };
 
     return (
-        <div className="flex flex-col gap-1 w-full">
-            {label && (
-                <span className="font-mono text-[8px] text-gray-500 uppercase tracking-widest truncate">
-                    {label}
-                </span>
-            )}
-            <div
-                className="relative bg-[var(--background)] border-2 border-primary/60 dark:border-white/30 rounded overflow-hidden hover:border-primary transition-colors group cursor-pointer h-[26px]"
-                onClick={handleTrigger}
-            >
-                {/* Play Icon - Absolute Left */}
-                <div className="absolute left-1 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
-                    {isPlaying ? (
-                        <Pause size={10} className="text-primary fill-current" />
-                    ) : (
-                        <Play size={10} className="text-foreground hover:text-primary fill-current transition-colors" />
-                    )}
-                </div>
-
-                {/* Waveform - Padded left to avoid icon */}
-                <div className="absolute inset-0 left-5 top-[1px]">
-                    <div ref={containerRef} className="w-full" />
-                </div>
+        <div
+            className="relative w-full h-full overflow-hidden cursor-pointer"
+            onClick={handleClick}
+        >
+            {/* Play/Pause */}
+            <div className="absolute left-1 top-1/2 -translate-y-1/2 z-10 pointer-events-none w-8 h-11 flex items-center justify-center">
+                {isPlaying ? (
+                    <Pause size={14} className="text-primary fill-current" />
+                ) : (
+                    <Play size={14} className="text-foreground/60 fill-current" />
+                )}
             </div>
+
+            {/* Waveform */}
+            <div ref={containerRef} className="absolute top-0 bottom-0 left-9 right-0" />
         </div>
     );
 }

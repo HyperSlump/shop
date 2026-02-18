@@ -61,30 +61,14 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
             className="flex-1 w-full px-4 md:px-7 lg:px-8 py-10"
         >
             <div className="w-full space-y-10">
-                {/* 0. MINIMAL RETURN NAV */}
-                <Link
-                    href="/"
-                    className="inline-flex items-center gap-2 text-primary/70 hover:text-primary transition-all group w-fit"
-                >
-                    <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform duration-300" />
-                    <span className="font-mono text-[11px] uppercase tracking-wider">Back to Shop</span>
-                </Link>
-
-                {/* 1. Header System Line - Condensed */}
+                {/* Header System Line - Condensed */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-primary/20 pb-8 gap-6">
-                    <div className="space-y-1">
-                        <div className="flex items-center gap-3 text-primary/60 font-mono text-[10px] tracking-[0.3em]">
-                            <span className="w-2 h-2 bg-primary animate-pulse" />
-                            Product / {product.name.toUpperCase()}
-                        </div>
+                    <div className="space-y-1 pt-4">
                         <h1 className="text-5xl md:text-7xl lg:text-8xl font-gothic tracking-tighter leading-none lowercase">
                             {product.name}
                         </h1>
                     </div>
-                    <div className="flex flex-col items-start md:items-end font-mono text-[11px] opacity-40">
-                        <p className="text-primary opacity-60 uppercase mb-1">PRICE: ${product.amount}</p>
-                        <p>ACCESS_CODE: {product.id.slice(0, 10).toUpperCase()}</p>
-                    </div>
+
                 </div>
 
                 {/* 2. Primary Content Grid - CONDENSED */}
@@ -92,7 +76,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                     {/* LEFT COLUMN: Visual & Technical Frame - MOVED UP */}
                     <div className="lg:col-span-5 space-y-6">
                         {/* Main Product Image Frame */}
-                        <div className="relative aspect-square overflow-hidden group bg-foreground/5 dark:bg-white/5 border border-primary/10">
+                        <div className="relative aspect-square overflow-hidden group bg-foreground/5 dark:bg-white/5 border border-primary/10 rounded">
                             <Image
                                 alt={product.name}
                                 src={product.image || 'https://via.placeholder.com/1000'}
@@ -107,11 +91,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                         </div>
 
                         {/* Technical Metadata Box */}
-                        <div className="p-5 border border-primary/10 bg-black/20 flex flex-col gap-4 font-mono">
-                            <div className="text-[10px] text-primary/40 flex justify-between uppercase border-b border-primary/10 pb-2">
-                                <span>Metadata_Package</span>
-                                <span>[Verified]</span>
-                            </div>
+                        <div className="p-5 border border-primary/10 bg-black/20 flex flex-col gap-4 font-mono rounded">
                             <div className="grid grid-cols-2 gap-4">
                                 {[
                                     { k: 'TYPE', v: product.metadata?.category || 'SAMPLE_PACK' },
@@ -131,7 +111,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                     {/* RIGHT COLUMN: Lore & Audio Console */}
                     <div className="lg:col-span-7 space-y-8">
                         <div className="space-y-4">
-                            <p className="font-mono text-sm md:text-base leading-relaxed opacity-90 max-w-prose">
+                            <p className="font-mono text-base md:text-lg leading-relaxed opacity-90 max-w-prose whitespace-pre-wrap">
                                 {product.description}
                             </p>
 
@@ -146,7 +126,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                         </div>
 
                         {/* Audio Interface Container */}
-                        <div className="p-6 border border-primary/10 bg-primary/[0.02] space-y-8 relative overflow-hidden group">
+                        <div className="p-6 border border-primary/10 bg-primary/[0.02] space-y-8 relative overflow-hidden group rounded">
                             <div className="absolute top-0 right-0 p-2 font-mono text-[8px] opacity-20 uppercase tracking-widest">Console.active</div>
 
                             {/* Main Stream */}
@@ -156,11 +136,11 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                                     <span className="font-mono text-[10px] text-primary/60 uppercase tracking-[0.2em]">MASTER_SIGNAL_STREAM</span>
                                 </div>
                                 {audioPreviewUrl ? (
-                                    <div className="relative w-full h-[40px] bg-black/20 dark:bg-white/5 border border-primary/20 rounded-sm overflow-hidden group-hover:border-primary/40 transition-colors">
+                                    <div className="relative w-full h-[40px] bg-black/20 dark:bg-white/5 border border-primary/20 rounded overflow-hidden group-hover:border-primary/40 transition-colors">
                                         <WaveformOverlay audioUrl={audioPreviewUrl} isActive={true} />
                                     </div>
                                 ) : (
-                                    <div className="h-20 flex items-center justify-center border border-dashed border-primary/10 text-[11px] font-mono text-primary/20">
+                                    <div className="h-20 flex items-center justify-center border border-dashed border-primary/10 text-[11px] font-mono text-primary/20 rounded">
                                         NO_SIGNAL_DETECTED
                                     </div>
                                 )}
@@ -201,7 +181,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                             <button
                                 onClick={() => !isInCart && addToCart(product)}
                                 disabled={isInCart}
-                                className={`w-full h-16 flex items-center justify-center gap-6 font-mono text-sm font-bold tracking-[0.4em] uppercase transition-all duration-700
+                                className={`w-full h-16 flex items-center justify-center gap-6 font-mono text-sm font-bold tracking-[0.4em] uppercase transition-all duration-700 rounded
                                     ${isInCart
                                         ? 'bg-primary/5 border border-primary/10 text-primary/30 cursor-not-allowed'
                                         : 'bg-primary text-black border-2 border-primary hover:bg-transparent hover:text-primary'
@@ -228,7 +208,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                 {/* Footer Section Indicators */}
                 <div className="flex flex-wrap gap-4 pt-8">
                     {['X_PROTO', 'Y_ALGO', 'Z_CORE', 'H_SLUMP'].map((tag) => (
-                        <div key={tag} className="px-4 py-2 border border-foreground/10 text-[9px] font-mono opacity-30 hover:opacity-100 hover:border-primary/40 transition-all cursor-default uppercase tracking-widest">
+                        <div key={tag} className="px-4 py-2 border border-foreground/10 text-[9px] font-mono opacity-30 hover:opacity-100 hover:border-primary/40 transition-all cursor-default uppercase tracking-widest rounded">
                             {tag}
                         </div>
                     ))}

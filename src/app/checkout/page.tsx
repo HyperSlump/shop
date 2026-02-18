@@ -7,7 +7,7 @@ import { useCart } from '@/components/CartProvider';
 import CheckoutForm from '@/components/CheckoutForm';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Download } from 'lucide-react';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -66,7 +66,7 @@ export default function CheckoutPage() {
             colorDanger: '#FF3B30',
             fontFamily: '"JetBrains Mono", monospace',
             spacingUnit: '4px',
-            borderRadius: '0px',
+            borderRadius: '4px',
             colorTextPlaceholder: isDark ? 'rgba(250,250,250,0.3)' : 'rgba(26,31,54,0.35)',
         },
         rules: {
@@ -142,7 +142,7 @@ export default function CheckoutPage() {
                 <div className="text-center space-y-6 p-12">
                     <div className={`font-mono text-[10px] tracking-[0.4em] ${textFaint} uppercase`}>Your cart is empty</div>
                     <h1 className={`text-2xl font-gothic tracking-tight ${text} lowercase`}>nothing here yet</h1>
-                    <Link href="/" className={`inline-block border ${borderHover} px-8 py-3 font-mono text-[10px] uppercase tracking-[0.3em] ${textMuted} hover:${text} hover:${borderHoverStrong} transition-all`}>
+                    <Link href="/" className={`inline-block border ${borderHover} px-8 py-3 font-mono text-[10px] uppercase tracking-[0.3em] ${textMuted} hover:${text} hover:${borderHoverStrong} transition-all rounded`}>
                         ← Continue Shopping
                     </Link>
                 </div>
@@ -151,7 +151,7 @@ export default function CheckoutPage() {
     }
 
     return (
-        <div className={`min-h-screen ${bg} ${text} relative`}>
+        <div className={`min-h-screen flex flex-col ${bg} ${text} relative`}>
             {/* Mobile Order Summary Toggle */}
             <div className={`lg:hidden border-b ${borderMed}`}>
                 <button
@@ -183,17 +183,14 @@ export default function CheckoutPage() {
                 </AnimatePresence>
             </div>
 
-
-
-            <div className="flex flex-col lg:flex-row lg:min-h-screen">
+            <div className={`flex-1 flex flex-col lg:flex-row ${bg}`}>
                 {/* LEFT: Order Summary (Desktop) */}
-                <div className={`hidden lg:flex lg:w-[45%] xl:w-[42%] ${bgPanel} border-r ${border} flex-col`}>
-                    <div className="flex-1 flex flex-col justify-center max-w-lg ml-auto w-full px-12 xl:px-16 py-16">
+                <div className={`hidden lg:flex lg:w-1/2 ${bgPanel} border-r ${border} flex-col relative group/panel`}>
+                    <div className="flex-1 flex flex-col justify-center max-w-[420px] ml-auto w-full px-8 py-12">
                         {/* Brand */}
-                        <Link href="/" className="flex items-center gap-3 mb-16 group">
-                            <div className={`w-2 h-2 ${dotBg} group-hover:${dotBgHover} transition-colors`} />
-                            <span className={`font-gothic text-lg tracking-tight ${textMuted} group-hover:opacity-100 transition-colors lowercase`}>
-                                hyper$lump
+                        <Link href="/" className="flex items-center gap-3 mb-10 group relative">
+                            <span className="text-3xl font-gothic tracking-tighter hover:text-primary transition-all duration-300">
+                                h$
                             </span>
                         </Link>
 
@@ -202,8 +199,8 @@ export default function CheckoutPage() {
                 </div>
 
                 {/* RIGHT: Payment Form or Free Claim */}
-                <div className="flex-1 flex flex-col">
-                    <div className="flex-1 flex flex-col justify-start lg:justify-center max-w-lg mx-auto w-full px-6 md:px-12 xl:px-16 py-4 md:py-12 lg:py-16">
+                <div className="flex-1 flex flex-col relative group/content">
+                    <div className="flex-1 flex flex-col justify-center max-w-[420px] mr-auto w-full px-8 py-12">
                         {/* Section Header */}
                         <div className="mb-10 space-y-2">
                             <div className={`font-mono text-[9px] tracking-[0.4em] ${textFaintest} uppercase`}>
@@ -221,19 +218,13 @@ export default function CheckoutPage() {
                                 animate={{ opacity: 1, y: 0 }}
                                 className="space-y-8"
                             >
-                                <div className="flex items-center gap-3">
-                                    <div className="w-2 h-2 bg-green-500 animate-pulse" />
-                                    <p className={`font-mono text-[12px] ${textMuted} leading-relaxed`}>
-                                        These assets are free. Your downloads are ready.
-                                    </p>
-                                </div>
 
                                 <div className="space-y-4">
                                     {cart.map((item) => {
                                         const fileUrl = PRODUCT_FILES[item.id]?.url || PRODUCT_FILES_FALLBACK;
                                         const fileLabel = PRODUCT_FILES[item.id]?.label || item.name;
                                         return (
-                                            <div key={item.id} className={`p-6 border ${border} space-y-4 relative overflow-hidden group`}>
+                                            <div key={item.id} className={`p-6 border ${border} space-y-4 relative overflow-hidden group rounded-lg`}>
                                                 <div className={`flex justify-between items-center font-mono text-[8px] ${textFaintest} uppercase tracking-[0.3em]`}>
                                                     <span>Asset: {item.name}</span>
                                                     <span className="text-green-500">FREE</span>
@@ -242,9 +233,12 @@ export default function CheckoutPage() {
                                                 <a
                                                     href={fileUrl}
                                                     download
-                                                    className={`block w-full ${btnBg} font-mono font-bold uppercase py-4 text-center tracking-[0.3em] text-xs cursor-pointer transition-opacity hover:opacity-80`}
+                                                    className={`inline-flex items-center gap-3 font-mono font-bold uppercase tracking-[0.2em] text-[11px] hover:text-primary transition-all duration-300 group`}
                                                 >
-                                                    Download {fileLabel}
+                                                    <Download size={14} className={`${textFaintest} group-hover:text-primary transition-colors`} />
+                                                    <span className="border-b border-white/10 group-hover:border-primary pb-1">
+                                                        Download: {fileLabel}
+                                                    </span>
                                                 </a>
                                             </div>
                                         );
@@ -262,7 +256,7 @@ export default function CheckoutPage() {
                                         animate={{ opacity: 1, y: 0 }}
                                         className="space-y-6"
                                     >
-                                        <div className="border border-red-500/20 bg-red-500/5 p-8 space-y-4">
+                                        <div className="border border-red-500/20 bg-red-500/5 p-8 space-y-4 rounded">
                                             <div className="text-red-400 font-mono text-[10px] tracking-[0.2em] uppercase">
                                                 [ERROR]: PAYMENT_INIT_FAIL
                                             </div>
@@ -329,27 +323,27 @@ export default function CheckoutPage() {
 
 /* ─── Order Summary Sub-Component ──────────────────────── */
 function OrderSummary({ cart, cartTotal, isDark }: { cart: any[]; cartTotal: number; isDark: boolean }) {
-    const textSub = isDark ? 'text-white/90' : 'text-[#1A1F36]/90';
-    const textFaint = isDark ? 'text-white/25' : 'text-[#1A1F36]/25';
+    const textSub = isDark ? 'text-white' : 'text-[#1A1F36]';
+    const textFaint = isDark ? 'text-white/20' : 'text-[#1A1F36]/20';
     const textMuted = isDark ? 'text-white/30' : 'text-[#1A1F36]/30';
     const textPrice = isDark ? 'text-white/70' : 'text-[#1A1F36]/70';
     const textTotal = isDark ? 'text-white' : 'text-[#1A1F36]';
-    const textTotalLabel = isDark ? 'text-white/60' : 'text-[#1A1F36]/60';
-    const border = isDark ? 'border-white/[0.06]' : 'border-[#1A1F36]/[0.06]';
-    const borderStrong = isDark ? 'border-white/[0.08]' : 'border-[#1A1F36]/[0.08]';
-    const thumbBg = isDark ? 'bg-white/[0.04] border-white/[0.08]' : 'bg-[#1A1F36]/[0.04] border-[#1A1F36]/[0.08]';
-    const thumbText = isDark ? 'text-white/20' : 'text-[#1A1F36]/20';
+    const textTotalLabel = isDark ? 'text-white/40' : 'text-[#1A1F36]/40';
+    const border = isDark ? 'border-white/5' : 'border-[#1A1F36]/5';
+    const borderStrong = isDark ? 'border-white/10' : 'border-[#1A1F36]/10';
+    const thumbBg = isDark ? 'bg-white/[0.03] border-white/10' : 'bg-[#1A1F36]/[0.03] border-[#1A1F36]/10';
+    const thumbText = isDark ? 'text-white/10' : 'text-[#1A1F36]/10';
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-10">
             {/* Line Items */}
             <div className="space-y-0">
                 {cart.map((item, i) => (
-                    <div key={item.id} className={`flex items-center gap-4 py-5 border-b ${border} last:border-0`}>
+                    <div key={item.id} className={`flex items-center gap-6 py-4 border-b ${border} last:border-0`}>
                         {/* Product Thumbnail */}
-                        <div className={`w-14 h-14 ${thumbBg} border flex-shrink-0 flex items-center justify-center overflow-hidden`}>
+                        <div className={`w-14 h-14 ${thumbBg} border flex-shrink-0 flex items-center justify-center overflow-hidden rounded-lg`}>
                             {item.image ? (
-                                <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                                <img src={item.image} alt={item.name} className="w-full h-full object-cover contrast-125 grayscale" />
                             ) : (
                                 <div className={`font-mono text-[8px] ${thumbText} uppercase`}>
                                     {String(i + 1).padStart(2, '0')}
@@ -358,36 +352,36 @@ function OrderSummary({ cart, cartTotal, isDark }: { cart: any[]; cartTotal: num
                         </div>
 
                         {/* Product Info */}
-                        <div className="flex-1 min-w-0">
-                            <p className={`font-mono text-[11px] ${textSub} uppercase tracking-wider truncate`}>
-                                {item.name}
-                            </p>
-                            <p className={`font-mono text-[9px] ${textFaint} uppercase mt-1`}>
-                                Digital Asset • Qty 1
-                            </p>
+                        <div className="flex-1 min-w-0 flex items-center justify-between gap-4">
+                            <div>
+                                <p className={`font-mono text-[10px] font-bold ${textSub} uppercase tracking-[0.15em] mb-1 truncate`}>
+                                    {item.name}
+                                </p>
+                                <p className={`font-mono text-[8px] ${textMuted} uppercase tracking-[0.1em]`}>
+                                    Digital Asset • Qty 1
+                                </p>
+                            </div>
+                            <span className={`font-mono text-[12px] ${textPrice} flex-shrink-0`}>
+                                ${(item.amount || 0).toFixed(2)}
+                            </span>
                         </div>
-
-                        {/* Price */}
-                        <span className={`font-mono text-[12px] ${textPrice} flex-shrink-0`}>
-                            ${item.amount.toFixed(2)}
-                        </span>
                     </div>
                 ))}
             </div>
 
             {/* Totals */}
-            <div className="space-y-3 pt-2">
-                <div className={`flex justify-between font-mono text-[10px] ${textMuted} uppercase tracking-wider`}>
+            <div className="space-y-4">
+                <div className={`flex justify-between font-mono text-[10px] ${textMuted} uppercase tracking-[0.2em]`}>
                     <span>Subtotal</span>
-                    <span>${cartTotal.toFixed(2)}</span>
+                    <span className={`${textSub}/60`}>${cartTotal.toFixed(2)}</span>
                 </div>
-                <div className={`flex justify-between font-mono text-[10px] ${textMuted} uppercase tracking-wider`}>
+                <div className={`flex justify-between font-mono text-[10px] ${textMuted} uppercase tracking-[0.2em]`}>
                     <span>Tax</span>
-                    <span>—</span>
+                    <span className={`${textSub}/60`}>—</span>
                 </div>
-                <div className={`flex justify-between pt-4 border-t ${borderStrong}`}>
-                    <span className={`font-mono text-[11px] ${textTotalLabel} uppercase tracking-wider`}>Total</span>
-                    <span className={`font-mono text-base ${textTotal} font-bold`}>${cartTotal.toFixed(2)}</span>
+                <div className={`flex justify-between pt-8 border-t ${borderStrong} items-end`}>
+                    <span className={`font-mono text-[11px] ${textTotalLabel} uppercase tracking-[0.2em] pb-1`}>Total</span>
+                    <span className={`font-mono text-4xl font-bold ${textTotal} tracking-tighter`}>${cartTotal.toFixed(2)}</span>
                 </div>
             </div>
         </div>

@@ -5,7 +5,7 @@ import { CartProvider } from "@/components/CartProvider";
 import CartDrawer from "@/components/CartDrawer";
 import CustomCursor from "@/components/CustomCursor";
 import { JetBrains_Mono, Pirata_One, UnifrakturMaguntia } from "next/font/google";
-import Navigation from "@/components/Navigation";
+
 import SmoothScroll from "@/components/SmoothScroll";
 import MainContent from "@/components/MainContent";
 
@@ -70,10 +70,7 @@ export default function RootLayout({
           <SmoothScroll>
             <CustomCursor />
 
-            <div className="relative min-h-screen bg-[var(--background)] flex flex-col md:flex-row">
-              {/* GLOBAL NAVIGATION SIDEBAR */}
-              <Navigation />
-
+            <div className="relative min-h-screen bg-[var(--background)] flex flex-col">
               {/* MAIN CONTENT WRAPPER */}
               <MainContent>
                 {children}

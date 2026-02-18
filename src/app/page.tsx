@@ -10,8 +10,21 @@ export default async function Home() {
   return (
     <>
       <div className="relative bg-[var(--background)]">
-        {/* Product Grid Centered */}
-        <section className="flex-1 w-full mx-auto">
+        {/* Header Section — Matching MockPageLayout exactly */}
+        <div className="w-full px-4 md:px-7 lg:px-8 py-10 space-y-10">
+          {/* Header System Line */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-primary/20 pb-8 gap-6">
+            <div className="space-y-1 pt-4">
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-gothic tracking-tighter leading-none lowercase">
+                the slump store
+              </h1>
+            </div>
+
+          </div>
+        </div>
+
+        {/* Product Grid */}
+        <section className="flex-1 w-full">
           <ProductGrid products={products} />
         </section>
       </div>

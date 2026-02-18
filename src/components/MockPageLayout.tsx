@@ -15,54 +15,24 @@ interface MockPageLayoutProps {
 
 export default function MockPageLayout({ title, subtitle, content, status, children }: MockPageLayoutProps) {
     return (
-        <div className="flex-1 w-full px-4 md:px-7 lg:px-8 py-10 animate-fade-in">
+        <div className="flex-1 w-full px-4 md:px-7 lg:px-8 py-10">
             <div className="w-full space-y-10">
-                {/* 0. MINIMAL RETURN NAV */}
-                <Link
-                    href="/"
-                    className="inline-flex items-center gap-2 text-primary/70 hover:text-primary transition-all group w-fit"
-                >
-                    <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform duration-300" />
-                    <span className="font-mono text-[11px] uppercase tracking-wider">Back to Shop</span>
-                </Link>
-
-                {/* 1. Header System Line */}
+                {/* Header System Line */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-primary/20 pb-8 gap-6">
-                    <div className="space-y-1">
-                        <div className="flex items-center gap-3 text-primary/60 font-mono text-[10px] tracking-[0.3em]">
-                            <span className="w-2 h-2 bg-primary animate-pulse" />
-                            {title.split('//')[1]?.trim()?.toUpperCase() || title.toUpperCase()}
-                        </div>
+                    <div className="space-y-1 pt-4">
                         <h1 className="text-5xl md:text-7xl lg:text-8xl font-gothic tracking-tighter leading-none lowercase">
                             {subtitle}
                         </h1>
                     </div>
-                    <div className="flex flex-col items-start md:items-end font-mono text-[11px] opacity-40">
-                        <p className="text-primary opacity-60 uppercase mb-1">STATUS: {status}</p>
-                        <p>NODE_ID: {Math.random().toString(36).substring(7).toUpperCase()}</p>
-                    </div>
+
                 </div>
 
                 {/* 2. Primary Content Grid - Matching Product Page */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14">
                     {/* LEFT COLUMN: Visual Diagnostic Frame */}
                     <div className="lg:col-span-5 space-y-6">
-                        <div className="relative aspect-square overflow-hidden group bg-foreground/5 dark:bg-white/5 border border-primary/10 flex items-center justify-center p-12">
-                            <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                            <div className="relative flex flex-col items-center gap-6">
-                                <span className="material-icons text-[140px] text-primary/20 group-hover:scale-110 group-hover:text-primary/40 transition-all duration-1000">terminal</span>
-                                <div className="font-mono text-[10px] tracking-[0.5em] opacity-30 uppercase animate-pulse">DIRECTORY_INDEXING...</div>
-                            </div>
-                            {/* Scanning Line Animation */}
-                            <div className="absolute top-0 left-0 w-full h-[2px] bg-primary/20 shadow-[0_0_15px_rgba(var(--primary-rgb),0.3)] animate-scan" />
-                        </div>
-
                         {/* Technical Metadata Box */}
-                        <div className="p-5 border border-primary/10 bg-black/20 flex flex-col gap-4 font-mono">
-                            <div className="text-[10px] text-primary/40 flex justify-between uppercase border-b border-primary/10 pb-2">
-                                <span>Core_System_Data</span>
-                                <span>[Secure]</span>
-                            </div>
+                        <div className="p-5 border border-primary/10 bg-black/20 flex flex-col gap-4 font-mono rounded">
                             <div className="grid grid-cols-2 gap-4">
                                 {[
                                     { k: 'ENCRYPTION', v: 'AES-256' },
@@ -115,7 +85,6 @@ export default function MockPageLayout({ title, subtitle, content, status, child
                     </div>
                 </div>
             </div>
-
-        </div >
+        </div>
     );
 }

@@ -36,7 +36,7 @@ export default function CursorTooltip({ text, children }: CursorTooltipProps) {
             {children}
             {isVisible && (
                 <div
-                    className="fixed z-[1000] pointer-events-none hidden md:flex px-2 py-1 bg-[var(--background)] text-primary text-[8px] font-mono tracking-[0.1em] border border-primary/40 shadow-[2px_2px_0px_rgba(var(--primary-rgb),0.2)] items-center gap-1.5 whitespace-nowrap"
+                    className="fixed z-[1000] pointer-events-none hidden md:flex px-2 py-1 bg-[var(--background)] text-primary text-[8px] font-mono tracking-[0.1em] border border-primary/40 shadow-[2px_2px_0px_rgba(var(--primary-rgb),0.2)] items-center gap-1.5 whitespace-nowrap rounded"
                     style={{
                         left: pos.x + 12,
                         top: pos.y + 24
