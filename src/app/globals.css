@@ -62,12 +62,26 @@
   }
 
   .custom-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) transparent;
+    overscroll-behavior: contain;
   }
 
   .custom-scrollbar::-webkit-scrollbar {
-    display: none;
+    width: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(var(--primary-rgb), 0.2);
+    border-radius: 10px;
+  }
+
+  .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+    background: rgba(var(--primary-rgb), 0.4);
   }
 
   /* Industrial Animations */

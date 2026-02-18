@@ -194,7 +194,9 @@ export default function CheckoutPage() {
                             </span>
                         </Link>
 
-                        <OrderSummary cart={cart} cartTotal={cartTotal} isDark={isDark} />
+                        <div className="flex-1 min-h-0 flex flex-col">
+                            <OrderSummary cart={cart} cartTotal={cartTotal} isDark={isDark} />
+                        </div>
                     </div>
                 </div>
 
@@ -311,9 +313,11 @@ export default function CheckoutPage() {
 }
 
 /* ─── Order Summary Sub-Component ──────────────────────── */
+/* ─── Order Summary Sub-Component ──────────────────────── */
 function OrderSummary({ cart, cartTotal, isDark }: { cart: any[]; cartTotal: number; isDark: boolean }) {
+    const [itemsOpen, setItemsOpen] = useState(true);
+
     const textSub = isDark ? 'text-white' : 'text-[#1A1F36]';
-    const textFaint = isDark ? 'text-white/20' : 'text-[#1A1F36]/20';
     const textMuted = isDark ? 'text-white/30' : 'text-[#1A1F36]/30';
     const textPrice = isDark ? 'text-white/70' : 'text-[#1A1F36]/70';
     const textTotal = isDark ? 'text-white' : 'text-[#1A1F36]';
@@ -324,54 +328,78 @@ function OrderSummary({ cart, cartTotal, isDark }: { cart: any[]; cartTotal: num
     const thumbText = isDark ? 'text-white/10' : 'text-[#1A1F36]/10';
 
     return (
-        <div className="flex flex-col h-full max-h-full overflow-hidden">
-            {/* Line Items - Scrollable Area */}
-            <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 min-h-0">
-                <div className="space-y-0">
-                    {cart.map((item, i) => (
-                        <div key={item.id} className={`flex items-center gap-6 py-4 border-b ${border} last:border-0`}>
-                            {/* Product Thumbnail */}
-                            <div className={`w-14 h-14 ${thumbBg} border flex-shrink-0 flex items-center justify-center overflow-hidden rounded-lg`}>
-                                {item.image ? (
-                                    <img src={item.image} alt={item.name} className="w-full h-full object-cover contrast-125 grayscale" />
-                                ) : (
-                                    <div className={`font-mono text-[8px] ${thumbText} uppercase`}>
-                                        {String(i + 1).padStart(2, '0')}
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Product Info */}
-                            <div className="flex-1 min-w-0 flex items-center justify-between gap-4">
-                                <div>
-                                    <p className={`font-mono text-[10px] font-bold ${textSub} uppercase tracking-[0.15em] mb-1 truncate`}>
-                                        {item.name}
-                                    </p>
-                                    <p className={`font-mono text-[8px] ${textMuted} uppercase tracking-[0.1em]`}>
-                                        Digital Asset • Qty 1
-                                    </p>
-                                </div>
-                                <span className={`font-mono text-[12px] ${textPrice} flex-shrink-0`}>
-                                    ${(item.amount || 0).toFixed(2)}
-                                </span>
-                            </div>
-                        </div>
-                    ))}
+        <div className="flex flex-col flex-1 min-h-0 h-full overflow-hidden">
+            {/* Items Header / Toggle */}
+            <button
+                onClick={() => setItemsOpen(!itemsOpen)}
+                className={`flex items-center justify-between py-4 border-b ${borderStrong} group cursor-pointer mb-2`}
+            >
+                <div className="flex items-center gap-3">
+                    <span className={`font-mono text-[9px] uppercase tracking-[0.3em] ${textTotalLabel}`}>
+                        Contents ({cart.length})
+                    </span>
+                    <svg className={`w-2.5 h-2.5 transition-transform duration-300 ${itemsOpen ? 'rotate-180' : ''} ${textTotalLabel} group-hover:text-foreground`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                    </svg>
                 </div>
-            </div>
+            </button>
+
+            {/* Line Items - Scrollable Area (Accordion-like) */}
+            <AnimatePresence initial={false}>
+                {itemsOpen && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-2 mb-6"
+                    >
+                        <div className="space-y-0">
+                            {cart.map((item, i) => (
+                                <div key={item.id} className={`flex items-center gap-6 py-5 border-b ${border} last:border-0 group/item`}>
+                                    {/* Product Thumbnail */}
+                                    <div className={`w-12 h-12 ${thumbBg} border flex-shrink-0 flex items-center justify-center overflow-hidden rounded`}>
+                                        {item.image ? (
+                                            <img src={item.image} alt={item.name} className="w-full h-full object-cover contrast-125 grayscale group-hover/item:grayscale-0 transition-all duration-500" />
+                                        ) : (
+                                            <div className={`font-mono text-[8px] ${thumbText} uppercase`}>
+                                                {String(i + 1).padStart(2, '0')}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Product Info */}
+                                    <div className="flex-1 min-w-0 flex items-center justify-between gap-4">
+                                        <div className="min-w-0">
+                                            <p className={`font-mono text-[10px] font-bold ${textSub} uppercase tracking-[0.15em] mb-1 truncate`}>
+                                                {item.name}
+                                            </p>
+                                            <p className={`font-mono text-[8px] ${textMuted} uppercase tracking-[0.1em]`}>
+                                                ID: {item.id.slice(0, 8)}
+                                            </p>
+                                        </div>
+                                        <span className={`font-mono text-[11px] ${textPrice} flex-shrink-0`}>
+                                            ${(item.amount || 0).toFixed(2)}
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Totals - Fixed Bottom */}
-            <div className="space-y-4 pt-10 mt-auto border-t border-white/5">
+            <div className="space-y-4 pt-10 mt-auto border-t border-white/5 bg-[var(--background)]">
                 <div className={`flex justify-between font-mono text-[10px] ${textMuted} uppercase tracking-[0.2em]`}>
                     <span>Subtotal</span>
                     <span className={`${textSub}/60`}>${cartTotal.toFixed(2)}</span>
                 </div>
                 <div className={`flex justify-between font-mono text-[10px] ${textMuted} uppercase tracking-[0.2em]`}>
-                    <span>Tax</span>
-                    <span className={`${textSub}/60`}>—</span>
+                    <span>Taxation</span>
+                    <span className={`${textSub}/60`}>0.00</span>
                 </div>
                 <div className={`flex justify-between pt-8 border-t ${borderStrong} items-end`}>
-                    <span className={`font-mono text-[11px] ${textTotalLabel} uppercase tracking-[0.2em] pb-1`}>Total</span>
+                    <span className={`font-mono text-[11px] ${textTotalLabel} uppercase tracking-[0.2em] pb-1`}>Grand Total</span>
                     <span className={`font-mono text-4xl font-bold ${textTotal} tracking-tighter`}>${cartTotal.toFixed(2)}</span>
                 </div>
             </div>
