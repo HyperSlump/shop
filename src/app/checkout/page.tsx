@@ -151,7 +151,7 @@ export default function CheckoutPage() {
     }
 
     return (
-        <div className={`min-h-screen flex flex-col ${bg} ${text} relative`}>
+        <div className={`h-screen max-h-screen flex flex-col ${bg} ${text} relative overflow-hidden`}>
             {/* Mobile Order Summary Toggle */}
             <div className={`lg:hidden border-b ${borderMed}`}>
                 <button
@@ -185,8 +185,8 @@ export default function CheckoutPage() {
 
             <div className={`flex-1 flex flex-col lg:flex-row ${bg}`}>
                 {/* LEFT: Order Summary (Desktop) */}
-                <div className={`hidden lg:flex lg:w-1/2 ${bgPanel} border-r ${border} flex-col relative group/panel`}>
-                    <div className="flex-1 flex flex-col justify-center max-w-[420px] ml-auto w-full px-8 py-12">
+                <div className={`hidden lg:flex lg:w-1/2 ${bgPanel} border-r ${border} flex-col relative group/panel h-full overflow-hidden`}>
+                    <div className="flex-1 flex flex-col max-w-[420px] ml-auto w-full px-8 py-12 h-full overflow-hidden">
                         {/* Brand */}
                         <Link href="/" className="flex items-center gap-3 mb-10 group relative">
                             <span className="text-3xl font-gothic tracking-tighter hover:text-primary transition-all duration-300">
@@ -199,8 +199,8 @@ export default function CheckoutPage() {
                 </div>
 
                 {/* RIGHT: Payment Form or Free Claim */}
-                <div className="flex-1 flex flex-col relative group/content">
-                    <div className="flex-1 flex flex-col justify-center max-w-[420px] mr-auto w-full px-8 py-12">
+                <div className="flex-1 flex flex-col relative group/content h-full overflow-hidden">
+                    <div className="flex-1 flex flex-col max-w-[420px] mr-auto w-full px-8 py-12 h-full overflow-y-auto custom-scrollbar">
                         {/* Section Header */}
                         <div className="mb-10 space-y-2">
                             <div className={`font-mono text-[9px] tracking-[0.4em] ${textFaintest} uppercase`}>
@@ -302,18 +302,7 @@ export default function CheckoutPage() {
                         )}
 
 
-                        {/* Footer Security */}
-                        <div className={`mt-12 pt-8 border-t ${border}`}>
-                            <div className={`flex items-center justify-between font-mono text-[8px] ${textFaintest} uppercase tracking-[0.2em]`}>
-                                <div className="flex items-center gap-2">
-                                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                    </svg>
-                                    <span>TLS_1.3 Encrypted</span>
-                                </div>
-                                <span>Powered by Stripe</span>
-                            </div>
-                        </div>
+                        {/* Footer Security Removed */}
                     </div>
                 </div>
             </div>
@@ -335,42 +324,44 @@ function OrderSummary({ cart, cartTotal, isDark }: { cart: any[]; cartTotal: num
     const thumbText = isDark ? 'text-white/10' : 'text-[#1A1F36]/10';
 
     return (
-        <div className="space-y-10">
-            {/* Line Items */}
-            <div className="space-y-0">
-                {cart.map((item, i) => (
-                    <div key={item.id} className={`flex items-center gap-6 py-4 border-b ${border} last:border-0`}>
-                        {/* Product Thumbnail */}
-                        <div className={`w-14 h-14 ${thumbBg} border flex-shrink-0 flex items-center justify-center overflow-hidden rounded-lg`}>
-                            {item.image ? (
-                                <img src={item.image} alt={item.name} className="w-full h-full object-cover contrast-125 grayscale" />
-                            ) : (
-                                <div className={`font-mono text-[8px] ${thumbText} uppercase`}>
-                                    {String(i + 1).padStart(2, '0')}
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Product Info */}
-                        <div className="flex-1 min-w-0 flex items-center justify-between gap-4">
-                            <div>
-                                <p className={`font-mono text-[10px] font-bold ${textSub} uppercase tracking-[0.15em] mb-1 truncate`}>
-                                    {item.name}
-                                </p>
-                                <p className={`font-mono text-[8px] ${textMuted} uppercase tracking-[0.1em]`}>
-                                    Digital Asset • Qty 1
-                                </p>
+        <div className="flex flex-col h-full max-h-full overflow-hidden">
+            {/* Line Items - Scrollable Area */}
+            <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 min-h-0">
+                <div className="space-y-0">
+                    {cart.map((item, i) => (
+                        <div key={item.id} className={`flex items-center gap-6 py-4 border-b ${border} last:border-0`}>
+                            {/* Product Thumbnail */}
+                            <div className={`w-14 h-14 ${thumbBg} border flex-shrink-0 flex items-center justify-center overflow-hidden rounded-lg`}>
+                                {item.image ? (
+                                    <img src={item.image} alt={item.name} className="w-full h-full object-cover contrast-125 grayscale" />
+                                ) : (
+                                    <div className={`font-mono text-[8px] ${thumbText} uppercase`}>
+                                        {String(i + 1).padStart(2, '0')}
+                                    </div>
+                                )}
                             </div>
-                            <span className={`font-mono text-[12px] ${textPrice} flex-shrink-0`}>
-                                ${(item.amount || 0).toFixed(2)}
-                            </span>
+
+                            {/* Product Info */}
+                            <div className="flex-1 min-w-0 flex items-center justify-between gap-4">
+                                <div>
+                                    <p className={`font-mono text-[10px] font-bold ${textSub} uppercase tracking-[0.15em] mb-1 truncate`}>
+                                        {item.name}
+                                    </p>
+                                    <p className={`font-mono text-[8px] ${textMuted} uppercase tracking-[0.1em]`}>
+                                        Digital Asset • Qty 1
+                                    </p>
+                                </div>
+                                <span className={`font-mono text-[12px] ${textPrice} flex-shrink-0`}>
+                                    ${(item.amount || 0).toFixed(2)}
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
 
-            {/* Totals */}
-            <div className="space-y-4">
+            {/* Totals - Fixed Bottom */}
+            <div className="space-y-4 pt-10 mt-auto border-t border-white/5">
                 <div className={`flex justify-between font-mono text-[10px] ${textMuted} uppercase tracking-[0.2em]`}>
                     <span>Subtotal</span>
                     <span className={`${textSub}/60`}>${cartTotal.toFixed(2)}</span>
