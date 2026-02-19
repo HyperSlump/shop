@@ -26,54 +26,42 @@ export default function HorizontalNav() {
 
     return (
         <nav
-            className="sticky top-0 z-[100] border-b border-foreground/15 bg-[var(--background)]/80 backdrop-blur-md transition-colors group/nav"
+            className="sticky top-0 z-[100] border-b border-border bg-background/95 dark:bg-background/80 backdrop-blur-md transition-colors group/nav"
             onMouseLeave={() => setHoveredLink(null)}
         >
-            {/* 4-Corner Minimal Accents - Hidden on checkout */}
-            {pathname !== '/checkout' && (
-                <>
-                    <div className="absolute top-0 left-0 w-1 h-1 border-l border-t border-primary/40 group-hover/nav:border-primary transition-colors" />
-                    <div className="absolute top-0 right-0 w-1 h-1 border-r border-t border-primary/40 group-hover/nav:border-primary transition-colors" />
-                </>
-            )}
 
-            <div className="w-full max-w-7xl mx-auto px-4 md:px-8 h-18 flex items-center justify-between relative">
-                {/* LEFT: Logo */}
-                <div className="flex-shrink-0 min-w-[100px] flex justify-start">
-                    <Link href="/" className="text-3xl font-gothic tracking-tighter hover:text-primary transition-all duration-300">
+
+            <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 h-20 flex items-center justify-between relative">
+                {/* LEFT: Logo - Fixed width to match Right for perfect centering */}
+                <div className="flex-shrink-0 w-[140px] flex justify-start">
+                    <Link href="/" className="text-4xl font-display tracking-tighter hover:text-primary transition-all duration-150 ease-out">
                         h$
                     </Link>
                 </div>
 
                 {/* CENTER: Links (Desktop) - Filling White Space Evenly */}
-                <div className="hidden lg:flex items-center justify-between flex-1 px-8 xl:px-20 max-w-4xl mx-auto">
-                    {navLinks.map((link) => (
-                        <div key={link.id} className="relative group/link">
-                            <Link
-                                href={link.href}
-                                onMouseEnter={() => setHoveredLink(link.id)}
-                                onFocus={() => setHoveredLink(link.id)}
-                                className="group relative h-12 flex flex-col items-center justify-center px-4 hover:bg-primary/5 transition-all duration-300 rounded"
-                            >
-                                <span className="font-mono text-[11px] md:text-[12px] tracking-[0.3em] uppercase group-hover:text-primary transition-colors z-10">{link.label}</span>
-                                {link.note && (
-                                    <span className="text-[9px] opacity-25 group-hover:opacity-60 font-mono tracking-tighter z-10 mt-0.5">{link.note}</span>
-                                )}
-
-                                {hoveredLink === link.id && (
-                                    <motion.div
-                                        layoutId="nav-underline"
-                                        className="absolute bottom-0 left-2 right-2 h-[1px] bg-primary shadow-[0_0_15px_var(--primary)]"
-                                        transition={{ type: "spring", bounce: 0.3, duration: 0.5 }}
-                                    />
-                                )}
-                            </Link>
-                        </div>
-                    ))}
+                <div className="hidden lg:flex items-center justify-center flex-1">
+                    <div className="flex items-center justify-between w-full max-w-3xl px-8">
+                        {navLinks.map((link) => (
+                            <div key={link.id} className="relative group/link">
+                                <Link
+                                    href={link.href}
+                                    onMouseEnter={() => setHoveredLink(link.id)}
+                                    onFocus={() => setHoveredLink(link.id)}
+                                    className="group relative h-12 flex flex-col items-center justify-center px-4 transition-all duration-150 ease-out rounded"
+                                >
+                                    <span className="font-mono text-[11px] md:text-[12px] tracking-[0.3em] uppercase group-hover:text-primary transition-colors duration-150 ease-out z-10">{link.label}</span>
+                                    {link.note && (
+                                        <span className="text-[9px] opacity-25 group-hover:opacity-60 font-mono tracking-tighter z-10 mt-0.5 transition-opacity duration-150 ease-out">{link.note}</span>
+                                    )}
+                                </Link>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
-                {/* RIGHT: Controls */}
-                <div className="flex-shrink-0 min-w-[100px] flex items-center justify-end gap-3 md:gap-5">
+                {/* RIGHT: Controls - Fixed width to match Left */}
+                <div className="flex-shrink-0 w-[140px] flex items-center justify-end gap-4 md:gap-6">
                     <ThemeToggle />
 
                     <button
@@ -105,7 +93,7 @@ export default function HorizontalNav() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="lg:hidden bg-[var(--background)] border-t border-foreground/10 overflow-hidden"
+                        className="lg:hidden bg-background border-t border-border overflow-hidden"
                     >
                         <div className="flex flex-col p-4 gap-2">
                             {navLinks.map((link) => (

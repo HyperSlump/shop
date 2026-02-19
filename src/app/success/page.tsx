@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { stripe } from '@/lib/stripe/server';
 import { CheckCircle2, Download, Package, ArrowRight, ChevronDown } from 'lucide-react';
 import SuccessSummary from '@/components/SuccessSummary';
+import { getProductFile } from '@/lib/products';
 
 export default async function SuccessPage({
     searchParams,
@@ -41,23 +42,25 @@ export default async function SuccessPage({
     }
 
     // Map price IDs to file URLs
-    const PRODUCT_FILES: Record<string, { label: string, url: string }> = {
-        'price_1T070gHlah70mYw2Oe7IA8q8': { label: 'HYPERSLUMP_01', url: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip' },
-        'price_1T077bHlah70mYw2Oa6IwZgB': { label: 'HYPERSLUMP_02', url: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip' },
-        'price_1T076PHlah70mYw2D01WCvIT': { label: 'HYPERSLUMP_03', url: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip' },
-        'price_1Szmy3Hlah70mYw2t6BkUO6O': { label: 'HYPERSLUMP_04', url: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip' },
-    };
-
     const downloads = lineItems.map(item => {
         const priceId = item.price?.id;
-        const knownFile = priceId ? PRODUCT_FILES[priceId] : null;
+        const fileInfo = getProductFile(priceId);
+
+        let productImage: string | undefined;
+        if (item.price?.product && typeof item.price.product !== 'string' && 'images' in item.price.product) {
+            productImage = item.price.product.images[0];
+        }
+
         return {
+            id: priceId || 'unknown', // persist ID for localStorage
             name: item.description || 'Unknown Asset',
-            url: knownFile?.url || "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
-            label: knownFile?.label || 'DOWNLOAD_ASSET',
-            amount: (item.amount_total || 0) / 100
+            url: fileInfo.url,
+            label: fileInfo.label,
+            amount: (item.amount_total || 0) / 100,
+            image: productImage
         };
     });
+
 
     const totalAmount = (session.amount_total || 0) / 100;
     const isMultiple = downloads.length > 1;
@@ -85,7 +88,7 @@ export default async function SuccessPage({
                         </div>
 
                         {/* Headline */}
-                        <h1 className="text-4xl md:text-5xl lg:text-7xl font-gothic tracking-tighter text-white lowercase leading-[1] mb-8">
+                        <h1 className="text-3xl md:text-5xl lg:text-7xl font-mono font-bold tracking-tighter text-white uppercase leading-[1] mb-8">
                             claim your downloads
                         </h1>
 

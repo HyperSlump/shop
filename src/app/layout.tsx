@@ -4,20 +4,19 @@ import React from 'react';
 import { CartProvider } from "@/components/CartProvider";
 import CartDrawer from "@/components/CartDrawer";
 import CustomCursor from "@/components/CustomCursor";
-import { JetBrains_Mono, Pirata_One, UnifrakturMaguntia } from "next/font/google";
+import { Geist, Geist_Mono, UnifrakturMaguntia } from "next/font/google";
 
 import SmoothScroll from "@/components/SmoothScroll";
 import MainContent from "@/components/MainContent";
 
-const jetbrainsMono = JetBrains_Mono({
+const geistSans = Geist({
+  variable: "--font-sans",
   subsets: ["latin"],
-  variable: "--font-mono",
 });
 
-const pirataOne = Pirata_One({
-  weight: "400",
+const geistMono = Geist_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
-  variable: "--font-gothic",
 });
 
 const unifrakturMaguntia = UnifrakturMaguntia({
@@ -58,7 +57,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${jetbrainsMono.variable} ${pirataOne.variable} ${unifrakturMaguntia.variable} antialiased transition-colors duration-300`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${unifrakturMaguntia.variable} antialiased transition-colors duration-300`}>
         <div
           className="fixed inset-0 noise z-[200] pointer-events-none"
           style={{

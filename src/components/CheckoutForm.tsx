@@ -1,22 +1,29 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
     PaymentElement,
+    LinkAuthenticationElement,
+    ExpressCheckoutElement,
     useStripe,
-    useElements
-} from "@stripe/react-stripe-js";
+    useElements,
+} from '@stripe/react-stripe-js';
 
-export default function CheckoutForm({ amount, isDark = true }: { amount: number; isDark?: boolean }) {
+interface CheckoutFormProps {
+    amount: number;
+    isDark?: boolean;
+}
+
+export default function CheckoutForm({ amount, isDark = true }: CheckoutFormProps) {
     const stripe = useStripe();
     const elements = useElements();
 
     const [message, setMessage] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
+    /* ── Form submission ── */
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         if (!stripe || !elements) return;
 
         setIsLoading(true);
@@ -29,88 +36,115 @@ export default function CheckoutForm({ amount, isDark = true }: { amount: number
             },
         });
 
-        // This will only be reached if there's an immediate error
-        // (e.g., card declined). Successful payments redirect.
-        if (error.type === "card_error" || error.type === "validation_error") {
-            setMessage(error.message ?? "Payment declined.");
-        } else {
-            setMessage("An unexpected error occurred.");
+        if (error?.type === 'card_error' || error?.type === 'validation_error') {
+            setMessage(error.message ?? 'Payment declined.');
+        } else if (error) {
+            setMessage('An unexpected error occurred.');
         }
 
         setIsLoading(false);
     };
 
-    const btnClasses = isDark
-        ? 'bg-white text-black'
-        : 'bg-[#1A1F36] text-white';
-
-    const spinnerClasses = isDark
-        ? 'border-black/20 border-t-black'
-        : 'border-white/20 border-t-white';
+    /* ── Express checkout (Apple Pay / Google Pay / Link) ── */
+    const onExpressCheckoutConfirm = async () => {
+        if (!stripe || !elements) return;
+        const { error } = await stripe.confirmPayment({
+            elements,
+            confirmParams: {
+                return_url: `${window.location.origin}/success`,
+            },
+        });
+        if (error) {
+            setMessage(error.message ?? 'Payment failed.');
+        }
+    };
 
     return (
-        <form id="payment-form" onSubmit={handleSubmit} className="space-y-8">
-            {/* Stripe Payment Element */}
-            <div className="space-y-1">
-                <PaymentElement
-                    id="payment-element"
+        <form
+            id="payment-form"
+            onSubmit={handleSubmit}
+            className="font-sans antialiased"
+        >
+            {/* ── Express Checkout ── */}
+            <div className="mb-8">
+                <ExpressCheckoutElement
+                    onConfirm={onExpressCheckoutConfirm}
                     options={{
-                        layout: {
-                            type: 'tabs',
-                            defaultCollapsed: false,
+                        buttonType: {
+                            applePay: 'buy',
+                            googlePay: 'buy',
                         },
+                        buttonTheme: {
+                            applePay: isDark ? 'white-outline' : 'black',
+                            googlePay: isDark ? 'white' : 'black',
+                        }
                     }}
                 />
             </div>
 
-            {/* Error Message */}
+            {/* ── Divider ── */}
+            <div className="flex items-center gap-4 mb-8">
+                <div className="flex-1 h-px bg-border" />
+                <span className="text-[13px] whitespace-nowrap text-muted-foreground font-medium">
+                    Or pay another way
+                </span>
+                <div className="flex-1 h-px bg-border" />
+            </div>
+
+            {/* ── Email / Contact ── */}
+            <div className="mb-6">
+                <label className="block text-sm font-medium mb-3 text-foreground">
+                    Contact information
+                </label>
+                <LinkAuthenticationElement id="link-authentication-element" />
+            </div>
+
+            {/* ── Payment ── */}
+            <div className="mb-8">
+                <label className="block text-sm font-medium mb-3 text-foreground">
+                    Payment details
+                </label>
+                <PaymentElement
+                    id="payment-element"
+                    options={{ layout: 'tabs' }}
+                />
+            </div>
+
+            {/* ── Error ── */}
             {message && (
-                <div className="flex items-start gap-3 p-4 border border-red-500/20 bg-red-500/5 rounded">
-                    <div className="w-1.5 h-1.5 bg-red-500 mt-1.5 flex-shrink-0 animate-pulse" />
-                    <p className="font-mono text-[11px] text-red-400/90 leading-relaxed">
-                        {message}
-                    </p>
+                <div className="mb-6 p-4 rounded-md text-sm bg-alert/10 border border-alert/20 text-alert font-medium">
+                    {message}
                 </div>
             )}
 
-            {/* Pay Button */}
+            {/* ── Pay Button ── */}
             <button
                 disabled={isLoading || !stripe || !elements}
-                id="submit"
                 type="submit"
-                className={`w-full relative group overflow-hidden ${btnClasses} py-4 px-6 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer rounded`}
+                className="group relative w-full h-[48px] rounded-md font-medium text-[15px] transition-all duration-200 
+                         disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer
+                         bg-primary text-primary-foreground 
+                         shadow-[0_0_0_1px_rgba(255,255,255,0.1),0_2px_8px_rgba(99,91,255,0.4)]
+                         hover:shadow-[0_0_0_1px_rgba(255,255,255,0.2),0_4px_16px_rgba(99,91,255,0.5)]
+                         hover:-translate-y-0.5 active:translate-y-0 active:shadow-none"
             >
-                <div className="relative z-10 flex items-center justify-center gap-3">
-                    {isLoading ? (
-                        <div className="flex items-center gap-3">
-                            <div className={`w-4 h-4 border-2 ${spinnerClasses} rounded-full animate-spin`} />
-                            <span className="font-mono font-bold tracking-[0.3em] uppercase text-[11px]">
-                                Processing...
-                            </span>
-                        </div>
-                    ) : (
-                        <span className="font-mono font-bold tracking-[0.3em] uppercase text-[11px]">
-                            Pay ${amount.toFixed(2)}
-                        </span>
-                    )}
-                </div>
-
-                {/* Hover effect */}
-                <div className="absolute inset-0 bg-current opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
+                {isLoading ? (
+                    <span className="flex items-center justify-center gap-2">
+                        <span className="w-4 h-4 border-2 border-transparent border-t-white rounded-full animate-spin" />
+                        Processing…
+                    </span>
+                ) : (
+                    <span>Pay ${amount.toFixed(2)}</span>
+                )}
             </button>
 
-            {/* Trust Badge */}
-            <div className={`mt-6 pt-6 border-t ${isDark ? 'border-white/5' : 'border-[#1A1F36]/5'} flex flex-col items-center gap-4`}>
-                <div className={`flex items-center gap-2 ${isDark ? 'opacity-40' : 'opacity-50'}`}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
-                    <span className="font-mono text-[8px] uppercase tracking-[0.2em] font-bold">Secured by Stripe</span>
-                </div>
-                <div className={`flex flex-wrap justify-center gap-x-6 gap-y-2 ${isDark ? 'opacity-20' : 'opacity-30'}`}>
-                    <span className="font-mono text-[7px] uppercase tracking-[0.2em]">Visa</span>
-                    <span className="font-mono text-[7px] uppercase tracking-[0.2em]">Mastercard</span>
-                    <span className="font-mono text-[7px] uppercase tracking-[0.2em]">Amex</span>
-                    <span className="font-mono text-[7px] uppercase tracking-[0.2em]">Apple Pay</span>
-                </div>
+            {/* ── Footer ── */}
+            <div className="mt-8 flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-70">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+                <span>Secured by <strong className="text-foreground font-semibold">stripe</strong></span>
             </div>
         </form>
     );

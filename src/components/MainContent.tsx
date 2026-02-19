@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 import HeroSchema from "@/components/HeroSchema";
 import HorizontalNav from "@/components/HorizontalNav";
 import IndustrialTicker from "@/components/IndustrialTicker";
@@ -9,6 +10,7 @@ import IndustrialTicker from "@/components/IndustrialTicker";
 export default function MainContent({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const isHome = pathname === '/';
+    const isCheckout = pathname === '/checkout';
 
     return (
         <main className="flex-1 flex flex-col min-w-0 md:pt-0 min-h-screen">
@@ -30,50 +32,123 @@ export default function MainContent({ children }: { children: React.ReactNode })
                     duration: 0.6,
                     ease: "easeOut"
                 }}
-                className={`flex-1 w-full ${pathname === '/checkout' ? '' : 'max-w-6xl mx-auto'}`}
+                className={`flex-1 w-full min-h-0 ${isCheckout ? '' : 'max-w-6xl mx-auto'}`}
             >
                 {children}
             </motion.div>
 
-            {/* GLOBAL FOOTER — ticker spans full width, content is centered */}
-            <footer className="footer-unit relative z-10 w-full overflow-hidden mt-auto">
-                <div className="w-full">
-                    {isHome && <IndustrialTicker />}
+            {/* GLOBAL FOOTER — Redesigned Brutalist Variation */}
+            <footer className="w-full relative z-10 bg-background border-t border-border">
+                {/* Ticker Section */}
+                <div className="w-full border-b border-border bg-card/50 backdrop-blur-sm">
+                    <IndustrialTicker />
                 </div>
 
-                {/* Indented Footer Content */}
-                <div className="px-4 md:px-6 lg:px-8 py-6 md:py-8 bg-[var(--background)] border-t border-foreground/15 max-w-6xl mx-auto">
-                    <div className="flex flex-col md:grid md:grid-cols-3 gap-12 items-center md:items-center">
-                        {/* System Status (Left) */}
-                        <div className="flex flex-col gap-4 font-mono w-full text-center md:text-left">
-                            <div className="text-[10px] space-y-2 opacity-50 uppercase">
-                                <p>&gt; INITIALIZING SYSTEM_CORE...</p>
-                                <p>&gt; ASSET_LOAD: 100% [OK]</p>
-                                <p>&gt; AUDIO_BUFFER: CACHED [OK]</p>
-                                <p>&gt; SIGNAL_STATE: BROADCASTING</p>
+                <div className="px-6 md:px-10 lg:px-12 py-20 max-w-7xl mx-auto">
+                    {/* Main Footer Grid */}
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8">
+
+                        {/* Huge Brand Signature */}
+                        <div className="lg:col-span-6 flex flex-col justify-between space-y-12">
+                            <div>
+                                <Link
+                                    href="/"
+                                    className="text-6xl md:text-8xl font-display leading-[0.8] tracking-[-0.05em] hover:text-primary transition-colors duration-500"
+                                >
+                                    hyper$lump
+                                </Link>
+                                <div className="mt-8 flex items-center gap-4 group">
+                                    <div className="h-[1px] w-12 bg-border group-hover:w-20 group-hover:bg-primary transition-all duration-500" />
+                                    <p className="text-[10px] font-mono tracking-[0.2em] opacity-40 uppercase">
+                                        Digital Waste & Artifacts
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="max-w-md">
+                                <p className="text-xs font-mono leading-relaxed opacity-40 uppercase tracking-tight">
+                                    A sonic preservation project documenting the decay of digital synthesis.
+                                    We provide raw, industrial textures for the modern wasteland.
+                                </p>
                             </div>
                         </div>
 
-                        {/* Spacer (Center) */}
-                        <div className="hidden md:block" />
+                        {/* Navigation Grid */}
+                        <div className="lg:col-span-6 grid grid-cols-2 lg:grid-cols-3 gap-12">
+                            {/* Inventory */}
+                            <div className="space-y-8">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[9px] font-mono opacity-20">[01]</span>
+                                    <h4 className="text-[10px] font-mono font-bold tracking-[0.3em] uppercase opacity-30">Archive</h4>
+                                </div>
+                                <ul className="space-y-4">
+                                    {['All Packs', 'Sound Disks', 'Presets', 'Artifacts', 'Free Soil'].map((item) => (
+                                        <li key={item} className="group overflow-hidden">
+                                            <a href="#" className="text-[11px] font-mono uppercase tracking-wider opacity-60 hover:opacity-100 hover:text-primary transition-all block translate-y-0 group-hover:-translate-y-1 duration-300">
+                                                {item}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
 
-                        {/* Social & Credits (Right) */}
-                        <div className="flex flex-col items-center md:items-end gap-3 w-full">
-                            <div className="flex gap-6 mb-3">
-                                {['INSTAGRAM', 'DISCORD', 'BANDCAMP'].map((platform) => (
-                                    <a
-                                        key={platform}
-                                        className="text-[10px] font-bold tracking-widest hover:text-primary transition-all underline decoration-primary/20 hover:decoration-primary"
-                                        href="#"
-                                    >
-                                        {platform}
+                            {/* Connectivity */}
+                            <div className="space-y-8">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[9px] font-mono opacity-20">[02]</span>
+                                    <h4 className="text-[10px] font-mono font-bold tracking-[0.3em] uppercase opacity-30">Nodes</h4>
+                                </div>
+                                <ul className="space-y-4">
+                                    {['Instagram', 'Discord', 'Bandcamp', 'Mixcloud', 'GitHub'].map((item) => (
+                                        <li key={item} className="group overflow-hidden">
+                                            <a href="#" className="text-[11px] font-mono uppercase tracking-wider opacity-60 hover:opacity-100 hover:text-primary transition-all block translate-y-0 group-hover:-translate-y-1 duration-300">
+                                                {item}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+
+                            {/* Service */}
+                            <div className="col-span-2 lg:col-span-1 space-y-8">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[9px] font-mono opacity-20">[03]</span>
+                                    <h4 className="text-[10px] font-mono font-bold tracking-[0.3em] uppercase opacity-30">Terminal</h4>
+                                </div>
+                                <ul className="space-y-4">
+                                    {['Support', 'Recovery', 'F.A.Q', 'System Status'].map((item) => (
+                                        <li key={item} className="group overflow-hidden">
+                                            <a href="#" className="text-[11px] font-mono uppercase tracking-wider opacity-60 hover:opacity-100 hover:text-primary transition-all block translate-y-0 group-hover:-translate-y-1 duration-300">
+                                                {item}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Bottom Bar */}
+                <div className="w-full border-t border-border py-10 bg-card/30">
+                    <div className="px-6 md:px-10 lg:px-12 max-w-7xl mx-auto">
+                        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-10">
+                            <div className="flex flex-wrap gap-x-12 gap-y-4">
+                                {['Legal', 'Privacy', 'Compliance', 'Tokens'].map((item) => (
+                                    <a key={item} href="#" className="text-[9px] font-mono uppercase tracking-[0.2em] opacity-20 hover:opacity-100 hover:text-primary transition-all">
+                                        {item}
                                     </a>
                                 ))}
                             </div>
-                            <p className="text-[9px] opacity-40 font-mono tracking-tighter uppercase text-center md:text-right">
-                                ©2026 HYPER$LUMP // CORTEX_SYNTHESIS_HUB // ALL_RIGHTS_RESERVED
-                            </p>
 
+                            <div className="flex flex-col items-start lg:items-end gap-2">
+                                <p className="text-[9px] font-mono opacity-20 uppercase tracking-widest">
+                                    System build: 2026.02.18_v.01
+                                </p>
+                                <p className="text-[9px] font-mono font-bold opacity-30 uppercase tracking-[0.2em]">
+                                    © hyper$lump protocol. all data encrypted.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>

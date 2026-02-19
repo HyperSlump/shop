@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Sun, Moon } from 'lucide-react';
-import CursorTooltip from './CursorTooltip';
+
 
 export default function ThemeToggle() {
     const [mounted, setMounted] = useState(false);
@@ -34,23 +34,21 @@ export default function ThemeToggle() {
     if (!mounted) return <div className="h-6 w-24" />;
 
     return (
-        <CursorTooltip text={isDark ? "SYNC_L" : "SYNC_D"}>
-            <button
-                onClick={toggleTheme}
-                className="flex items-center justify-center hover:text-primary transition-colors group"
-            >
-                {isDark ? (
-                    <Sun
-                        size={22}
-                        className="transition-transform group-hover:scale-110"
-                    />
-                ) : (
-                    <Moon
-                        size={22}
-                        className="transition-transform group-hover:scale-110"
-                    />
-                )}
-            </button>
-        </CursorTooltip>
+        <button
+            onClick={toggleTheme}
+            className="flex items-center justify-center hover:text-primary transition-colors group"
+        >
+            {isDark ? (
+                <Sun
+                    size={22}
+                    className="transition-transform group-hover:scale-110"
+                />
+            ) : (
+                <Moon
+                    size={22}
+                    className="transition-transform group-hover:scale-110"
+                />
+            )}
+        </button>
     );
 }

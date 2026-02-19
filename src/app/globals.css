@@ -1,13 +1,29 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-primary: #ccff00;
-  --color-background-light: #f2efe9;
-  --color-background-dark: #121212;
-  --font-display: "Pirata One", system-ui;
-  --font-gothic: "UnifrakturMaguntia", serif;
-  --font-mono: "JetBrains Mono", monospace;
-  --radius-DEFAULT: 4px;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-card: var(--card);
+  --color-accent: var(--accent);
+  --color-status: var(--status);
+  --color-alert: var(--alert);
+  --color-border: var(--border);
+
+  --font-sans: var(--font-sans),
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+  --font-mono: var(--font-mono),
+    ui-monospace,
+    SFMono-Regular,
+    monospace;
+  --font-display: var(--font-display),
+    serif;
+
+  --radius-DEFAULT: 6px;
   --variant-dark: .dark &;
 }
 
@@ -21,6 +37,13 @@
   .vertical-text {
     writing-mode: vertical-rl;
     text-orientation: mixed;
+  }
+
+  .glass-panel {
+    background: var(--surface);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
   }
 
   .glitch-hover:hover .glitch-img {
@@ -41,7 +64,7 @@
   }
 
   .animate-fade-in {
-    animation: fade-in-up 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: fade-in-up 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
     opacity: 0;
   }
 
@@ -57,18 +80,14 @@
     animation-delay: 300ms;
   }
 
-  .border-strong {
-    border-width: 2px;
-  }
-
   .custom-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: var(--primary) transparent;
+    scrollbar-color: var(--border) transparent;
     overscroll-behavior: contain;
   }
 
   .custom-scrollbar::-webkit-scrollbar {
-    width: 3px;
+    width: 4px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-track {
@@ -76,12 +95,21 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(var(--primary-rgb), 0.2);
-    border-radius: 10px;
+    background: var(--border);
+    border-radius: 4px;
   }
 
   .custom-scrollbar:hover::-webkit-scrollbar-thumb {
-    background: rgba(var(--primary-rgb), 0.4);
+    background: var(--foreground);
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 
   /* Industrial Animations */
@@ -107,25 +135,12 @@
     }
 
     50% {
-      opacity: 0.2;
+      opacity: 0.4;
     }
   }
 
   .animate-pulse-slow {
-    animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-
-  @keyframes slideUp {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-slide-up {
-    animation: slideUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-    opacity: 0;
-    transform: translateY(20px);
+    animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 }
 
@@ -136,46 +151,56 @@
     scrollbar-gutter: stable;
     overflow-x: clip;
 
-    --background: #F8F9FB;
-    /* Sleek Laboratory / Stripe Clean */
-    --foreground: #1A1F36;
-    /* Stripe Indigo-Grey */
+    /* REFINED LIGHT MODE - Minimalist High-Fidelity */
+    --background: #FFFFFF;
+    --foreground: #0F172A;
+    /* Slate 900 */
     --primary: #635BFF;
-    /* Stripe Blurple - High Trust */
-    --primary-rgb: 99, 91, 255;
-    --primary-foreground: #ffffff;
-    --accent: #00D4FF;
-    /* Cyber Blue */
-    --status: #22C55E;
-    /* Industrial Green */
-    --alert: #FF3B30;
-    /* Warning Red */
-    --border: rgba(26, 31, 54, 0.1);
-    --noise-opacity: 0.05;
+    /* Stripe Blurple */
+    --primary-foreground: #FFFFFF;
+    --muted: #64748B;
+    /* Slate 500 */
+    --card: #F8FAFC;
+    /* Slate 50 */
+    --accent: #0EA5E9;
+    /* Sky 500 */
+    --surface: rgba(255, 255, 255, 0.8);
+    --status: #10B981;
+    /* Emerald 500 */
+    --alert: #EF4444;
+    /* Red 500 */
+    --border: rgba(15, 23, 42, 0.08);
+    --noise-opacity: 0.015;
     --noise-blend: multiply;
   }
 
   @media (min-width: 768px) {
     html {
-      font-size: 125%;
+      font-size: 100%;
     }
-
-
   }
 
   html.dark {
-    --background: #0A0A0A;
-    /* Obsidian Terminal */
-    --foreground: #FAFAFA;
-    /* High Contrast Text */
-    --primary: #635BFF;
-    /* Universal Action Color */
-    --primary-rgb: 99, 91, 255;
-    --primary-foreground: #FAFAFA;
-    --accent: #00D4FF;
-    --status: #BEF264;
-    --alert: #FF3B30;
-    --border: rgba(255, 255, 255, 0.1);
+    /* REFINED DARK MODE - Techno Industrial Deep */
+    --background: #09090B;
+    /* Zinc 950 */
+    --foreground: #F8FAFC;
+    /* Slate 50 */
+    --primary: #6366F1;
+    /* Indigo 500 */
+    --primary-foreground: #FFFFFF;
+    --muted: #94A3B8;
+    /* Slate 400 */
+    --card: #121214;
+    /* Slightly lighter than background */
+    --accent: #38BDF8;
+    /* Sky 400 */
+    --surface: rgba(9, 9, 11, 0.8);
+    --status: #34D399;
+    /* Emerald 400 */
+    --alert: #F87171;
+    /* Red 400 */
+    --border: rgba(248, 250, 252, 0.1);
     --noise-opacity: 0.12;
     --noise-blend: screen;
   }
@@ -183,10 +208,7 @@
   body {
     background-color: var(--background);
     color: var(--foreground);
-    font-weight: 500;
-    overflow-x: clip;
-    /* Bolder globally */
-    @apply font-mono selection:bg-primary selection:text-black transition-colors duration-300 ease-in-out;
+    @apply font-sans selection:bg-primary/30 selection:text-foreground transition-colors duration-300 ease-out;
     position: relative;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
@@ -204,12 +226,16 @@
     background:
       linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%),
       linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-    background-size: 100% 4px, 4px 100%;
+    background-size: 100% 3px, 3px 100%;
     pointer-events: none;
     z-index: 9999;
-    opacity: 0.2;
-    /* Slightly sharper lines */
+    opacity: 0.04;
+    /* Very subtle in light mode */
     mix-blend-mode: overlay;
+  }
+
+  html.dark body::after {
+    opacity: 0.15;
   }
 
   h1,
@@ -218,21 +244,14 @@
   h4,
   h5,
   h6 {
-    font-weight: 700;
+    font-weight: 600;
+    @apply font-sans tracking-tight;
   }
+
+
 
   a,
   button {
     @apply cursor-pointer;
   }
-}
-
-/* Map Tailwind colors to our dynamic variables */
-@theme {
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-foreground: var(--foreground);
-  --color-accent: var(--accent);
-  --color-status: var(--status);
-  --color-alert: var(--alert);
 }

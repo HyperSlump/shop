@@ -42,7 +42,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
     return (
         <div
             ref={containerRef}
-            className="group relative bg-[var(--background)] overflow-hidden rounded cursor-pointer touch-pan-y border border-foreground/[0.06] hover:border-foreground/[0.12] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.4)]"
+            className="group relative bg-background overflow-hidden rounded cursor-pointer touch-pan-y border border-border hover:border-primary/40 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.4)]"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
@@ -80,7 +80,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                             </div>
 
                             {/* Subtle format badge */}
-                            <div className="absolute top-2 left-2 font-mono text-[8px] uppercase tracking-wider text-foreground/30 bg-[var(--background)]/80 backdrop-blur-sm px-1.5 py-0.5 border border-foreground/[0.06] rounded">
+                            <div className="absolute top-2 left-2 font-mono text-[8px] uppercase tracking-wider text-foreground/30 bg-background/80 backdrop-blur-sm px-1.5 py-0.5 border border-border rounded">
                                 {product.metadata?.format || 'WAV'} • {product.metadata?.count || '140'} samples
                             </div>
 
@@ -97,7 +97,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                             {/* Name + Price row */}
                             <div className="flex items-start justify-between gap-2">
                                 <div className="min-w-0 flex-1">
-                                    <h3 className="font-gothic text-lg md:text-xl text-foreground leading-tight tracking-wide">
+                                    <h3 className="font-mono font-bold text-lg md:text-xl text-foreground leading-tight tracking-tight uppercase">
                                         <Link href={`/product/${product.id}`} className="hover:text-primary transition-colors duration-200">
                                             {product.name}
                                         </Link>
@@ -112,7 +112,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                             </div>
 
                             {/* Action row */}
-                            <div className="flex items-center justify-between pt-2 border-t border-foreground/[0.06]">
+                            <div className="flex items-center justify-between pt-2 border-t border-border">
                                 {/* Preview */}
                                 <button
                                     onClick={(e) => {
@@ -165,7 +165,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         animate={{ x: 0 }}
                         exit={{ x: '100%' }}
                         transition={{ type: "spring", stiffness: 400, damping: 35 }}
-                        className="flex flex-col bg-[var(--background)] z-30"
+                        className="flex flex-col bg-background z-30"
                         drag="x"
                         dragConstraints={{ left: 0, right: 0 }}
                         dragElastic={0.25}
@@ -234,7 +234,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                             {/* Name + Price */}
                             <div className="flex items-start justify-between gap-2">
                                 <div className="min-w-0 flex-1">
-                                    <h3 className="font-gothic text-lg md:text-xl text-foreground leading-tight tracking-wide">
+                                    <h3 className="font-mono font-bold text-lg md:text-xl text-foreground leading-tight tracking-tight uppercase">
                                         {product.name}
                                     </h3>
                                     <p className="font-mono text-[10px] text-foreground/40 mt-0.5 line-clamp-1">
@@ -247,7 +247,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                             </div>
 
                             {/* Actions */}
-                            <div className="flex items-center justify-between pt-1.5 border-t border-foreground/[0.06]">
+                            <div className="flex items-center justify-between pt-1.5 border-t border-border">
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();

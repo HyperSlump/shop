@@ -53,7 +53,7 @@ export default function IndustrialTicker() {
 
     return (
         <div ref={containerRef} className="w-full py-0 px-0 select-none relative z-20 pointer-events-auto overflow-hidden">
-            <div className="border-y border-foreground/15 bg-[var(--background)] relative">
+            <div className="border-y border-border bg-background relative">
                 <div className="w-full">
 
                     {/* Row 1 / Gothic */}
@@ -63,7 +63,7 @@ export default function IndustrialTicker() {
                             {[...Array(2)].map((_, i) => (
                                 <div key={i} className="flex">
                                     {[...Array(6)].map((_, j) => (
-                                        <span key={j} className="font-gothic text-6xl md:text-8xl text-primary px-12 tracking-wider lowercase">
+                                        <span key={j} className="font-mono font-bold text-6xl md:text-8xl text-primary px-12 tracking-tight uppercase">
                                             {row1Text}
                                         </span>
                                     ))}
@@ -89,7 +89,7 @@ export default function IndustrialTicker() {
                 </div>
 
                 {/* Technical Detail Overlays */}
-                <div className="absolute top-0 right-4 md:right-12 px-2 bg-[var(--background)] border-x border-primary/20 -translate-y-1/2">
+                <div className="absolute top-0 right-4 md:right-12 px-2 bg-background border-x border-primary/20 -translate-y-1/2">
                     <span className="font-mono text-[10px] text-primary/40 uppercase tracking-tighter">Tape_Feed.v1</span>
                 </div>
                 <div className="absolute top-0 left-0 w-8 md:w-48 h-[1px] bg-primary/40 -translate-y-1/2" />

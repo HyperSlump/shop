@@ -15,7 +15,7 @@ export default async function Home() {
           {/* Header System Line */}
           <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-primary/20 pb-8 gap-6">
             <div className="space-y-1 pt-4">
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-gothic tracking-tighter leading-none lowercase">
+              <h1 className="text-4xl md:text-6xl lg:text-8xl font-mono font-bold tracking-tighter leading-none uppercase">
                 the slump store
               </h1>
             </div>

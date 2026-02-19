@@ -183,7 +183,7 @@ export default function PromoCarousel() {
                     ref={textRef}
                     className="group"
                 >
-                    <div className="font-gothic text-4xl md:text-5xl lg:text-7xl tracking-widest text-foreground group-hover:text-primary transition-colors duration-300 lowercase mb-2">
+                    <div className="font-mono font-bold text-3xl md:text-5xl lg:text-7xl tracking-tighter text-foreground group-hover:text-primary transition-colors duration-300 mb-2 uppercase">
                         {promos[index].text}
                     </div>
                 </Link>
