@@ -171,8 +171,8 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         dragElastic={0.25}
                         onDragEnd={handleDragEnd}
                     >
-                        {/* Top — same aspect-[4/3] as image area */}
-                        <div className="relative w-full aspect-[4/3] overflow-hidden">
+                        {/* Top — same aspect-[4/3] as image area, but expandable on mobile to fit all previews */}
+                        <div className="relative w-full h-auto md:aspect-[4/3] min-h-[320px] md:min-h-0 overflow-hidden">
                             <div className="absolute inset-0 p-2 flex flex-col justify-center">
                                 {/* Header row */}
                                 <div className="flex justify-between items-center mb-1">

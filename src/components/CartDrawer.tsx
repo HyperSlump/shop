@@ -76,49 +76,63 @@ export default function CartDrawer() {
                                 <div>
                                     <AnimatePresence mode="popLayout" initial={false}>
                                         {cart.map((item) => (
-                                            <motion.div
-                                                key={item.id}
-                                                layout
-                                                initial={{ opacity: 0, y: 8 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0, x: 20 }}
-                                                className="py-5 flex items-center gap-4 border-b border-foreground/[0.05]"
-                                            >
-                                                {/* Thumbnail */}
-                                                <div className="w-[56px] h-[56px] flex-shrink-0 rounded-md overflow-hidden flex items-center justify-center border border-foreground/[0.05] bg-foreground/5 dark:bg-foreground/5">
-                                                    <NextImage
-                                                        src={item.image || 'https://via.placeholder.com/100'}
-                                                        alt={item.name}
-                                                        width={56}
-                                                        height={56}
-                                                        className="w-full h-full object-cover"
-                                                    />
+                                            <div key={item.id} className="relative overflow-hidden group/item">
+                                                {/* Swipe Background Action */}
+                                                <div className="absolute inset-0 bg-red-500 rounded-lg flex items-center justify-end px-6 z-0">
+                                                    <Trash2 size={20} className="text-white" />
                                                 </div>
 
-                                                {/* Info */}
-                                                <div className="flex-1 min-w-0">
-                                                    <p className="text-sm font-medium leading-snug text-foreground">
-                                                        {item.name}
-                                                    </p>
-                                                    <p className="text-xs mt-0.5 text-muted-foreground">
-                                                        Digital item · Qty 1
-                                                    </p>
-                                                </div>
-
-                                                {/* Price */}
-                                                <span className="text-sm font-medium flex-shrink-0 text-foreground">
-                                                    ${(item.amount || 0).toFixed(2)}
-                                                </span>
-
-                                                {/* Delete */}
-                                                <button
-                                                    onClick={() => removeFromCart(item.id)}
-                                                    className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-md transition-all duration-150 cursor-pointer text-muted-foreground/50 hover:text-red-500 hover:bg-red-500/10"
-                                                    title="Remove item"
+                                                <motion.div
+                                                    layout
+                                                    drag="x"
+                                                    dragConstraints={{ left: -100, right: 0 }}
+                                                    dragElastic={0.1}
+                                                    onDragEnd={(_, info) => {
+                                                        if (info.offset.x < -60) {
+                                                            removeFromCart(item.id);
+                                                        }
+                                                    }}
+                                                    initial={{ opacity: 0, y: 8 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    exit={{ opacity: 0, x: 20 }}
+                                                    className="relative py-5 flex items-center gap-4 border-b border-foreground/[0.05] bg-background z-10 transition-colors"
                                                 >
-                                                    <Trash2 size={15} />
-                                                </button>
-                                            </motion.div>
+                                                    {/* Thumbnail */}
+                                                    <div className="w-[56px] h-[56px] flex-shrink-0 rounded-md overflow-hidden flex items-center justify-center border border-foreground/[0.05] bg-foreground/5 dark:bg-foreground/5">
+                                                        <NextImage
+                                                            src={item.image || 'https://via.placeholder.com/100'}
+                                                            alt={item.name}
+                                                            width={56}
+                                                            height={56}
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    </div>
+
+                                                    {/* Info */}
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="text-sm font-medium leading-snug text-foreground">
+                                                            {item.name}
+                                                        </p>
+                                                        <p className="text-xs mt-0.5 text-muted-foreground">
+                                                            Digital item · Qty 1
+                                                        </p>
+                                                    </div>
+
+                                                    {/* Price */}
+                                                    <span className="text-sm font-medium flex-shrink-0 text-foreground">
+                                                        ${(item.amount || 0).toFixed(2)}
+                                                    </span>
+
+                                                    {/* Delete (Desktop only or fallback click) */}
+                                                    <button
+                                                        onClick={() => removeFromCart(item.id)}
+                                                        className="hidden md:flex flex-shrink-0 w-7 h-7 items-center justify-center rounded-md transition-all duration-150 cursor-pointer text-muted-foreground/50 hover:text-red-500 hover:bg-red-500/10"
+                                                        title="Remove item"
+                                                    >
+                                                        <Trash2 size={15} />
+                                                    </button>
+                                                </motion.div>
+                                            </div>
                                         ))}
                                     </AnimatePresence>
                                 </div>
