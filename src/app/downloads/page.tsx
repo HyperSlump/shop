@@ -41,7 +41,7 @@ export default function DownloadsPage() {
                         className="inline-flex items-center gap-2 text-sm font-medium hover:opacity-80 transition-opacity text-primary"
                     >
                         <ArrowLeft size={14} />
-                        Browse products
+                        Continue shopping
                     </Link>
                 </div>
             </div>
@@ -164,7 +164,8 @@ export default function DownloadsPage() {
                             href="/"
                             className="inline-flex items-center gap-2 text-sm font-medium transition-opacity hover:opacity-80 text-primary"
                         >
-                            ← Explore more sample packs
+                            <ArrowLeft size={14} />
+                            Continue shopping
                         </Link>
                     </div>
 
