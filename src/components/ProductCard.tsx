@@ -119,7 +119,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                         e.stopPropagation();
                                         setShowPreview(true);
                                     }}
-                                    className="font-mono text-[11px] font-bold uppercase tracking-wider px-3 py-1.5 rounded border border-foreground/15 text-foreground/60 hover:text-primary hover:border-primary/40 transition-all duration-200 flex items-center gap-1.5 active:scale-[0.97]"
+                                    className="font-mono text-[11px] md:text-[10px] lg:text-[11px] font-bold uppercase tracking-wider px-4 py-2.5 md:px-3 md:py-1.5 rounded border border-foreground/15 text-foreground/60 hover:text-primary hover:border-primary/40 transition-all duration-200 flex items-center gap-1.5 active:scale-[0.97]"
                                 >
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
                                         <polygon points="5 3 19 12 5 21 5 3" />
@@ -134,7 +134,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                         onAddToCart(product);
                                     }}
                                     disabled={isInCart}
-                                    className={`font-mono text-[11px] font-bold uppercase tracking-wider px-3 py-1.5 rounded border transition-all duration-200 active:scale-[0.97] ${isInCart
+                                    className={`font-mono text-[11px] md:text-[10px] lg:text-[11px] font-bold uppercase tracking-wider px-5 py-2.5 md:px-3 md:py-1.5 rounded border transition-all duration-200 active:scale-[0.97] ${isInCart
                                         ? 'text-primary/50 border-primary/20 cursor-default'
                                         : 'text-[var(--background)] bg-primary border-primary hover:bg-primary/90'
                                         }`}
@@ -253,7 +253,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                         e.stopPropagation();
                                         setShowPreview(false);
                                     }}
-                                    className="font-mono text-[10px] uppercase tracking-wider text-foreground/35 hover:text-foreground transition-colors duration-200 flex items-center gap-1.5"
+                                    className="font-mono text-[11px] md:text-[10px] uppercase tracking-wider text-foreground/35 hover:text-foreground transition-colors duration-200 flex items-center gap-1.5 px-2 py-2"
                                 >
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <polyline points="15 18 9 12 15 6" />
@@ -267,7 +267,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                         onAddToCart(product);
                                     }}
                                     disabled={isInCart}
-                                    className={`font-mono text-[11px] font-bold uppercase tracking-wider px-3 py-1.5 transition-all duration-200 rounded ${isInCart
+                                    className={`font-mono text-[11px] md:text-[10px] lg:text-[11px] font-bold uppercase tracking-wider px-5 py-2.5 md:px-3 md:py-1.5 transition-all duration-200 rounded ${isInCart
                                         ? 'text-primary/50 border border-primary/20 cursor-default'
                                         : 'text-[var(--background)] bg-primary hover:bg-primary/90 active:scale-[0.97]'
                                         }`}

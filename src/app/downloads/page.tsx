@@ -70,7 +70,7 @@ export default function DownloadsPage() {
                         </div>
                         <div>
                             <h1 className="text-xl font-semibold mb-1 text-foreground">
-                                Your assets are ready
+                                Your downloads are ready
                             </h1>
                             <p className="text-sm text-muted-foreground">
                                 {email && <>A confirmation has been sent to <strong className="text-foreground">{email}</strong>. </>}

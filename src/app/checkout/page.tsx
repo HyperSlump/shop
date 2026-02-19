@@ -150,7 +150,7 @@ export default function CheckoutPage() {
                             animate={{ height: 'auto', opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
                             transition={{ duration: 0.2 }}
-                            className="overflow-hidden bg-[#F7F7F7] dark:bg-[#0A0A0A]"
+                            className="overflow-hidden bg-card"
                         >
                             <div className="px-5 pb-6">
                                 <OrderSummary cart={cart} total={cartTotal} />
@@ -411,10 +411,10 @@ function FreeOrderPanel({ cart }: { cart: any[] }) {
     return (
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="font-sans">
             <h2 className="text-lg font-semibold mb-1 text-foreground">
-                Get your assets
+                Complete your order
             </h2>
             <p className="text-sm mb-8 text-muted-foreground">
-                Enter your email to receive your download links.
+                Enter your email address to receive your order.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -477,7 +477,7 @@ function FreeOrderPanel({ cart }: { cart: any[] }) {
                             Preparing…
                         </span>
                     ) : (
-                        'Get your assets'
+                        'Complete order'
                     )}
                 </button>
             </form>

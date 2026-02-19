@@ -43,7 +43,7 @@ export default function SuccessSummary({ downloads, totalAmount, sessionId }: Su
                     <div className="flex items-center gap-4">
                         <div className="flex items-center gap-2">
                             <CheckCircle2 size={16} className="text-green-500" />
-                            <span className="font-mono text-[10px] uppercase tracking-widest text-white/90">Asset Summary</span>
+                            <span className="font-mono text-[10px] uppercase tracking-widest text-white/90">Order Summary</span>
                         </div>
                         <ChevronDown
                             size={12}
@@ -100,7 +100,7 @@ export default function SuccessSummary({ downloads, totalAmount, sessionId }: Su
                                     {item.name}
                                 </p>
                                 <p className="font-mono text-[8px] text-white/30 uppercase tracking-[0.1em]">
-                                    Digital Asset • Qty 1
+                                    Digital Item • Qty 1
                                 </p>
                             </div>
                             <span className="font-mono text-[11px] text-white/70 flex-shrink-0">

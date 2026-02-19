@@ -101,7 +101,7 @@ export default function CartDrawer() {
                                                         {item.name}
                                                     </p>
                                                     <p className="text-xs mt-0.5 text-muted-foreground">
-                                                        Digital asset · Qty 1
+                                                        Digital item · Qty 1
                                                     </p>
                                                 </div>
 

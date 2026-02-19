@@ -89,11 +89,11 @@ export default async function SuccessPage({
 
                         {/* Headline */}
                         <h1 className="text-3xl md:text-5xl lg:text-7xl font-mono font-bold tracking-tighter text-white uppercase leading-[1] mb-8">
-                            claim your downloads
+                            Your downloads
                         </h1>
 
                         <p className="font-mono text-xs text-white/50 leading-relaxed mb-12 max-w-sm uppercase tracking-wide">
-                            The digital assets have been unlocked. A secure downlink frequency has been established for your coordinates.
+                            Your purchased items have been unlocked. A secure downlink frequency has been established for your coordinates.
                             Download links are ready below.
                         </p>
 
@@ -105,7 +105,7 @@ export default async function SuccessPage({
                                     {downloads.map((dl, idx) => (
                                         <div key={idx} className="group flex items-center justify-between p-5 border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] rounded-lg transition-all duration-300">
                                             <div className="flex flex-col">
-                                                <span className="font-mono text-[8px] text-white/30 uppercase tracking-widest mb-1">Asset: {dl.name}</span>
+                                                <span className="font-mono text-[8px] text-white/30 uppercase tracking-widest mb-1">Item: {dl.name}</span>
                                                 <span className="font-mono text-[10px] text-white font-bold uppercase tracking-widest group-hover:text-primary transition-colors">{dl.label}</span>
                                             </div>
                                             <a
