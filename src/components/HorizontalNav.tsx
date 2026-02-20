@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useCart } from './CartProvider';
@@ -21,17 +21,31 @@ const navLinks = [
 export default function HorizontalNav() {
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
     const { toggleCart, cart } = useCart();
     const pathname = usePathname();
+    const isHome = pathname === '/';
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const navOpacityClass = isHome
+        ? (isScrolled ? 'bg-background/95 dark:bg-zinc-950/90 border-b border-border' : 'bg-transparent border-transparent')
+        : 'bg-background/95 dark:bg-background/80 border-b border-border';
 
     return (
         <nav
-            className="sticky top-0 z-[100] border-b border-border bg-background/95 dark:bg-background/80 backdrop-blur-md transition-colors group/nav"
+            className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 backdrop-blur-[2px] ${navOpacityClass} group/nav`}
             onMouseLeave={() => setHoveredLink(null)}
         >
 
 
-            <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 h-20 flex items-center justify-between relative">
+            <div className="w-full max-w-[1400px] mx-auto px-3 md:px-5 lg:px-6 h-20 flex items-center justify-between relative">
                 {/* LEFT: Logo - Fixed width to match Right for perfect centering */}
                 <div className="flex-shrink-0 w-[140px] flex justify-start">
                     <Link href="/" className="text-4xl font-display tracking-tighter hover:text-primary transition-all duration-150 ease-out">

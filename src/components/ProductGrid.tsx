@@ -31,7 +31,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
     const isInCart = (id: string) => cart.some(item => item.id === id);
 
     return (
-        <div className="px-3 md:px-5 lg:px-6 mb-8">
+        <div className="mb-8">
             {/* Catalog Status Bar */}
             <div className="w-full flex items-center justify-between px-0 py-1.5 mt-1 animate-fade-in">
                 <div className="flex items-center gap-4">

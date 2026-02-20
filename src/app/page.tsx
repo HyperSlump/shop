@@ -11,7 +11,7 @@ export default async function Home() {
     <>
       <div className="relative bg-[var(--background)]">
         {/* Header Section — Matching MockPageLayout exactly */}
-        <div className="w-full px-4 md:px-7 lg:px-8 py-10 space-y-10">
+        <div className="w-full py-10 space-y-10">
           {/* Header System Line */}
           <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-primary/20 pb-8 gap-6">
             <div className="space-y-1 pt-4">

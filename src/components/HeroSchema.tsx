@@ -18,12 +18,10 @@ export default function HeroSchema() {
     }, []);
 
     return (
-        <section className="relative w-full bg-[var(--background)] animate-fade-in">
-            <div className="w-full max-w-6xl mx-auto px-3 md:px-5 lg:px-6 py-4 md:py-6">
-                {/* Promo Carousel — main hero content */}
-                <div className="w-full flex justify-center">
-                    <PromoCarousel />
-                </div>
+        <section className="relative w-full h-screen min-h-[700px] overflow-hidden bg-background">
+            <div className="w-full h-full">
+                {/* Full-bleed Promo Carousel — High impact hero content */}
+                <PromoCarousel />
             </div>
         </section>
     );

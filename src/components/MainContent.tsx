@@ -13,7 +13,7 @@ export default function MainContent({ children }: { children: React.ReactNode })
     const isCheckout = pathname === '/checkout';
 
     return (
-        <main className="flex-1 flex flex-col min-w-0 md:pt-0 min-h-screen">
+        <main className={`flex-1 flex flex-col min-w-0 min-h-screen ${isHome ? 'pt-0' : 'pt-20'}`}>
             {/* GLOBAL HEADER */}
             <HorizontalNav />
             {/* Hero only on home page */}
@@ -32,7 +32,7 @@ export default function MainContent({ children }: { children: React.ReactNode })
                     duration: 0.6,
                     ease: "easeOut"
                 }}
-                className={`flex-1 w-full min-h-0 ${isCheckout ? '' : 'max-w-6xl mx-auto'}`}
+                className={`flex-1 w-full min-h-0 px-3 md:px-5 lg:px-6`}
             >
                 {children}
             </motion.div>

@@ -20,8 +20,8 @@
     ui-monospace,
     SFMono-Regular,
     monospace;
-  --font-display: var(--font-display),
-    serif;
+  /* Use a separate variable for the computed stack to avoid circular reference in @theme */
+  --font-display: "UnifrakturMaguntia", "UnifrakturMaguntia Fallback", var(--font-display), serif;
 
   --radius-DEFAULT: 6px;
   --variant-dark: .dark &;
