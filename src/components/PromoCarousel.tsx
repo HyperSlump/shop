@@ -181,87 +181,118 @@ export default function PromoCarousel() {
                         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
                     </div>
 
-                    {/* CONTENT OVERLAY */}
-                    <div className="relative h-full flex flex-col justify-end px-6 md:px-12 lg:px-24 pb-32 md:pb-24 pt-32 md:pt-0">
-                        <div className="max-w-2xl flex flex-col gap-4 md:gap-3">
-                            <motion.div
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.2, duration: 0.5 }}
-                                className="flex flex-col gap-1"
-                            >
-                                <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-primary font-bold">
-                                    FEATURED ASSET PACK
-                                </span>
-                            </motion.div>
+                    {/* DISTRIBUTED HUD OVERLAY */}
+                    <div className="relative h-full w-full pointer-events-none">
+                        {/* TOP LEFT METADATA */}
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 1.0, duration: 0.8 }}
+                            className="absolute top-24 md:top-32 left-6 md:left-12 lg:left-24 flex items-center gap-4 opacity-60"
+                        >
+                            <div className="w-4 h-4 border-l border-t border-primary/50 relative">
+                                <div className="absolute top-1 left-1 w-1 h-1 bg-primary/50" />
+                            </div>
+                            <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-white">
+                                [SYS.VER.1.2 // STATUS: ACTIVE]
+                            </span>
+                            <div className="h-[1px] w-12 bg-white/20 hidden md:block" />
+                            <span className="font-mono text-[9px] text-primary tracking-[0.2em] hidden md:block">
+                                ID: {activePromo.id.split('_')[1]}
+                            </span>
+                        </motion.div>
 
+                        {/* RIGHT EDGE BARCODE / ROTATED TEXT */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 1.2, duration: 0.8 }}
+                            className="absolute top-1/2 -translate-y-1/2 right-6 md:right-12 lg:right-24 hidden lg:flex flex-col items-end gap-12 opacity-30 origin-right"
+                        >
+                            <div className="font-mono text-[10px] tracking-[0.4em] text-white" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
+                                {activePromo.subtitle}
+                            </div>
+                            <div className="w-[1px] h-32 bg-gradient-to-b from-white to-transparent" />
+                        </motion.div>
+
+                        {/* LEFT EDGE ROTATED HUD */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 1.2, duration: 0.8 }}
+                            className="absolute top-1/2 -translate-y-1/2 left-6 md:left-12 lg:left-8 hidden lg:flex flex-col items-center gap-8 opacity-40"
+                        >
+                            <div className="w-8 h-[1px] bg-primary" />
+                            <div className="font-mono text-[8px] tracking-[0.5em] text-primary" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
+                                {activePromo.badge}
+                            </div>
+                            <div className="w-[1px] h-24 bg-white/20" />
+                        </motion.div>
+
+                        {/* MASSIVE CENTER-LEFT TITLE */}
+                        <div className="absolute top-[40%] md:top-[45%] -translate-y-1/2 left-6 md:left-24 lg:left-32 z-10">
                             <motion.div className="relative">
                                 <motion.h2
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.3, duration: 0.5 }}
-                                    className="jacquard-24-regular text-[4rem] md:text-[7rem] lg:text-[8rem] leading-[0.82] lowercase tracking-tight text-white mb-2"
+                                    initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" }}
+                                    className="jacquard-24-regular text-[6rem] md:text-[9rem] lg:text-[14rem] leading-[0.75] lowercase tracking-tighter text-white drop-shadow-2xl"
+                                    style={{
+                                        textShadow: '0 10px 40px rgba(0,0,0,0.8), 0 0 100px rgba(0,0,0,0.5)'
+                                    }}
                                 >
                                     {activePromo.title}
                                 </motion.h2>
                                 <motion.div
                                     initial={{ width: 0 }}
-                                    animate={{ width: '80px' }}
-                                    transition={{ delay: 0.6, duration: 0.8 }}
-                                    className="h-[2px] bg-primary absolute -bottom-1 left-0"
+                                    animate={{ width: '120px' }}
+                                    transition={{ delay: 0.8, duration: 1 }}
+                                    className="h-[3px] bg-primary absolute -bottom-2 md:-bottom-4 left-2"
                                 />
                             </motion.div>
+                        </div>
 
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.5, duration: 0.5 }}
-                                className="flex items-center gap-4 mt-2"
-                            >
-                                <div className="h-4 w-[2px] bg-primary" />
-                                <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-white/70 font-bold">
-                                    24-BIT MASTERED / IMMEDIATE DELIVERY
-                                </p>
-                            </motion.div>
-
-                            <motion.p
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.6, duration: 0.5 }}
-                                className="text-white/60 text-[14px] md:text-[16px] leading-relaxed max-w-lg font-sans tracking-tight"
-                            >
-                                {activePromo.description}
-                            </motion.p>
-
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.7, duration: 0.5 }}
-                                className="flex flex-wrap items-center gap-x-6 gap-y-2 opacity-40"
-                            >
-                                {['INSTANT DOWNLOAD', 'LIFETIME LICENSE', 'SECURE CHECKOUT'].map((tag) => (
-                                    <span key={tag} className="font-mono text-[9px] uppercase tracking-[0.2em] text-white">{tag}</span>
-                                ))}
-                            </motion.div>
-
+                        {/* BOTTOM DESCRIPTION & CTA (FLOATING) */}
+                        <div className="absolute bottom-32 md:bottom-24 left-6 md:left-24 lg:left-32 w-full md:w-[500px] lg:w-[600px] pointer-events-auto">
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.8, duration: 0.5 }}
-                                className="flex flex-col sm:flex-row items-start gap-4 mt-4"
+                                transition={{ delay: 0.6, duration: 0.6 }}
+                                className="flex flex-col gap-4 md:gap-5 max-w-[90%]"
                             >
-                                <button
-                                    onClick={() => router.push(`/product/${activePromo.id}`)}
-                                    className="w-full sm:w-auto h-[48px] px-10 rounded-sm bg-primary text-white font-mono text-[11px] uppercase tracking-[0.2em] font-bold hover:brightness-110 transition-all shadow-[0_4px_20px_rgba(216,58,61,0.25)] flex items-center justify-center"
-                                >
-                                    Get Instant Access
-                                </button>
-                                <Link
-                                    href="/#catalog"
-                                    className="w-full sm:w-auto h-[48px] px-12 rounded-sm border border-white/20 bg-white/5 backdrop-blur-sm text-white font-mono text-[11px] uppercase tracking-[0.2em] hover:bg-white/10 transition-all flex items-center justify-center"
-                                >
-                                    Browse Catalog
-                                </Link>
+                                <div className="flex items-center gap-3">
+                                    <div className="w-1.5 h-1.5 bg-primary rotate-45" />
+                                    <p className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.25em] text-primary font-bold">
+                                        24-BIT MASTERED / IMMEDIATE DELIVERY
+                                    </p>
+                                </div>
+
+                                <p className="text-white/80 text-[14px] md:text-[16px] leading-relaxed font-sans tracking-tight bg-black/40 backdrop-blur-sm p-4 rounded-sm border-l-2 border-primary/50 shadow-xl">
+                                    {activePromo.description}
+                                </p>
+
+                                <div className="flex flex-wrap items-center gap-x-6 gap-y-2 opacity-50 mt-1">
+                                    {['INSTANT DOWNLOAD', 'LIFETIME LICENSE', 'SECURE CHECKOUT'].map((tag) => (
+                                        <span key={tag} className="font-mono text-[8px] md:text-[9px] uppercase tracking-[0.2em] text-white">[{tag}]</span>
+                                    ))}
+                                </div>
+
+                                <div className="flex flex-col sm:flex-row items-center gap-4 mt-2">
+                                    <button
+                                        onClick={() => router.push(`/product/${activePromo.id}`)}
+                                        className="w-full sm:w-auto h-[48px] px-10 rounded-sm bg-primary text-white font-mono text-[11px] uppercase tracking-[0.2em] font-bold hover:brightness-110 transition-all shadow-[0_0_30px_rgba(216,58,61,0.3)] flex items-center justify-center relative group overflow-hidden"
+                                    >
+                                        <span className="relative z-10">Get Instant Access</span>
+                                        <div className="absolute inset-0 bg-white/20 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300" />
+                                    </button>
+                                    <Link
+                                        href="/#catalog"
+                                        className="w-full sm:w-auto h-[48px] px-10 rounded-sm border border-white/20 bg-black/40 backdrop-blur-md text-white font-mono text-[11px] uppercase tracking-[0.2em] hover:bg-white/10 hover:border-white/40 transition-all flex items-center justify-center gap-2"
+                                    >
+                                        Browse Catalog
+                                        <IconArrowRight size={14} className="opacity-50" />
+                                    </Link>
+                                </div>
                             </motion.div>
                         </div>
                     </div>
