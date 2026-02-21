@@ -23,6 +23,9 @@ type PreviewPlayerContextType = {
     seekTo: (time: number) => void;
     setVolume: (value: number) => void;
     isTrackActive: (id: string) => boolean;
+    discoveredTracks: PreviewTrack[];
+    registerTrack: (track: PreviewTrack) => void;
+    unregisterTrack: (id: string) => void;
 };
 
 const PreviewPlayerContext = createContext<PreviewPlayerContextType | null>(null);
@@ -35,6 +38,7 @@ export function PreviewPlayerProvider({ children }: { children: React.ReactNode 
     const [duration, setDuration] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
     const [volume, setVolumeState] = useState(0.75);
+    const [discoveredTracks, setDiscoveredTracks] = useState<PreviewTrack[]>([]);
 
     useEffect(() => {
         const audio = new Audio();
@@ -152,6 +156,17 @@ export function PreviewPlayerProvider({ children }: { children: React.ReactNode 
 
     const isTrackActive = useCallback((id: string) => currentTrack?.id === id, [currentTrack?.id]);
 
+    const registerTrack = useCallback((track: PreviewTrack) => {
+        setDiscoveredTracks(prev => {
+            if (prev.some(t => t.id === track.id)) return prev;
+            return [...prev, track];
+        });
+    }, []);
+
+    const unregisterTrack = useCallback((id: string) => {
+        setDiscoveredTracks(prev => prev.filter(t => t.id !== id));
+    }, []);
+
     const value = useMemo<PreviewPlayerContextType>(() => ({
         currentTrack,
         isOpen,
@@ -165,7 +180,10 @@ export function PreviewPlayerProvider({ children }: { children: React.ReactNode 
         seekTo,
         setVolume,
         isTrackActive,
-    }), [closePlayer, currentTime, currentTrack, duration, isOpen, isPlaying, isTrackActive, playTrack, seekTo, setVolume, togglePlayback, volume]);
+        discoveredTracks,
+        registerTrack,
+        unregisterTrack,
+    }), [closePlayer, currentTime, currentTrack, duration, isOpen, isPlaying, isTrackActive, playTrack, seekTo, setVolume, togglePlayback, volume, discoveredTracks, registerTrack, unregisterTrack]);
 
     return (
         <PreviewPlayerContext.Provider value={value}>

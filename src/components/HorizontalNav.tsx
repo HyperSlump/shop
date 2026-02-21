@@ -44,10 +44,8 @@ export default function HorizontalNav() {
             className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 backdrop-blur-[2px] ${navOpacityClass} group/nav`}
             onMouseLeave={() => setHoveredLink(null)}
         >
-
-
             <div className="w-full max-w-[1400px] mx-auto px-3 md:px-5 lg:px-6 h-20 flex items-center justify-between relative">
-                {/* LEFT: Logo - Fixed width to match Right for perfect centering */}
+                {/* LEFT: Logo */}
                 <div className="flex-shrink-0 w-[140px] flex justify-start">
                     <Link
                         href="/"
@@ -58,7 +56,7 @@ export default function HorizontalNav() {
                     </Link>
                 </div>
 
-                {/* CENTER: Links (Desktop) - Filling White Space Evenly */}
+                {/* CENTER: Links (Desktop) */}
                 <div className="hidden lg:flex items-center justify-center flex-1">
                     <div className="flex items-center justify-between w-full max-w-3xl px-8">
                         {navLinks.map((link) => (
@@ -67,7 +65,7 @@ export default function HorizontalNav() {
                                     href={link.href}
                                     onMouseEnter={() => setHoveredLink(link.id)}
                                     onFocus={() => setHoveredLink(link.id)}
-                                    className="group relative h-12 flex flex-col items-center justify-center px-4 transition-all duration-150 ease-out rounded"
+                                    className="group relative h-12 flex flex-col items-center justify-center px-4 transition-all duration-150 ease-out rounded-none"
                                 >
                                     <span className="jacquard-24-regular lowercase text-[1.2rem] md:text-[1.28rem] tracking-[0.04em] leading-none group-hover:text-primary transition-colors duration-150 ease-out z-10">
                                         {link.label}
@@ -81,7 +79,7 @@ export default function HorizontalNav() {
                     </div>
                 </div>
 
-                {/* RIGHT: Controls - Fixed width to match Left */}
+                {/* RIGHT: Controls */}
                 <div className="flex-shrink-0 w-[140px] flex items-center justify-end gap-4 md:gap-6">
                     <ThemeToggle />
 
@@ -91,7 +89,7 @@ export default function HorizontalNav() {
                     >
                         <IconShoppingCart size={22} stroke={2} className="group-hover:scale-110 transition-transform" />
                         {cart.length > 0 && (
-                            <span className="absolute -top-0.5 -right-0.5 bg-primary text-black text-[10px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)]">
+                            <span className="absolute -top-0.5 -right-0.5 bg-primary text-black text-[10px] font-black w-4.5 h-4.5 rounded-none flex items-center justify-center shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)]">
                                 {cart.length}
                             </span>
                         )}
@@ -122,7 +120,7 @@ export default function HorizontalNav() {
                                     key={link.id}
                                     href={link.href}
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className="px-4 py-3 hover:bg-primary/10 hover:text-primary transition-all flex items-center justify-between"
+                                    className="px-4 py-3 hover:bg-primary/10 hover:text-primary transition-all flex items-center justify-between rounded-none"
                                 >
                                     <span className="jacquard-24-regular lowercase text-[1.2rem] leading-none tracking-[0.04em]">
                                         {link.label}

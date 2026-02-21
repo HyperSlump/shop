@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { usePreviewPlayer } from './PreviewPlayerProvider';
 
 const AUTO_ROTATE_MS = 12000;
@@ -16,6 +17,7 @@ type ApiProduct = {
     image?: string;
     amount?: number;
     currency?: string;
+    metadata?: Record<string, unknown>;
 };
 
 type PromoItem = {
@@ -167,9 +169,10 @@ function useTheme() {
 }
 
 export default function PromoCarousel() {
+    const router = useRouter();
     const reduceMotion = useReducedMotion();
     const isDark = useTheme();
-    const { isOpen: isPreviewDockOpen } = usePreviewPlayer();
+    const { isOpen: isPreviewDockOpen, registerTrack, unregisterTrack } = usePreviewPlayer();
     const [products, setProducts] = useState<ApiProduct[]>([]);
     const [index, setIndex] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -226,10 +229,32 @@ export default function PromoCarousel() {
     }, [products]);
 
     useEffect(() => {
-        if (promos.length === 0) return;
         if (index < promos.length) return;
         setIndex(0);
     }, [index, promos.length]);
+
+    useEffect(() => {
+        promos.forEach(promo => {
+            // Find the original product to get metadata
+            const product = products.find(p => p.id === promo.id);
+            const audioUrl = typeof product?.metadata?.audio_preview === 'string' ? product.metadata.audio_preview : '';
+            if (audioUrl) {
+                const oneShotCount = typeof product?.metadata?.count === 'string' ? product.metadata.count : '140';
+                const formatLabel = typeof product?.metadata?.format === 'string' ? product.metadata.format.toUpperCase() : 'WAV';
+                registerTrack({
+                    id: promo.id,
+                    title: promo.name,
+                    subtitle: `${formatLabel} / ${oneShotCount} one-shots`,
+                    image: promo.image,
+                    audioUrl: audioUrl,
+                });
+            }
+        });
+
+        return () => {
+            promos.forEach(promo => unregisterTrack(promo.id));
+        };
+    }, [promos, products, registerTrack, unregisterTrack]);
 
     useEffect(() => {
         if (promos.length <= 1 || isPaused) return;
@@ -345,131 +370,131 @@ export default function PromoCarousel() {
 
             <div className="relative z-20 w-full h-full max-w-[1600px] mx-auto px-6 md:px-12 lg:px-20 py-16 md:py-20">
                 <div className="h-full grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-                <AnimatePresence mode="wait">
-                    <motion.div
-                        key={activePromo.id}
-                        className="max-w-3xl"
-                        initial={{ opacity: 0, y: reduceMotion ? 0 : 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: reduceMotion ? 0 : -8 }}
-                        transition={{ duration: revealDuration, ease: [0.16, 1, 0.3, 1] }}
-                    >
-                        <motion.div
-                            className="font-mono text-[10px] md:text-[11px] tracking-[0.4em] uppercase text-primary/90 mb-4"
-                            initial={{ opacity: 0, y: reduceMotion ? 0 : 8 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: revealDuration, delay: 0.05 }}
-                        >
-                            Featured Asset Pack
-                        </motion.div>
-
-                        <motion.h1
-                            className={`heading-h1 jacquard-24-regular text-5xl md:text-7xl lg:text-[7.25rem] ${headingClass}`}
-                            initial={{ opacity: 0, y: reduceMotion ? 0 : 12 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: revealDuration, delay: 0.1 }}
-                        >
-                            {activePromo.name}
-                        </motion.h1>
-
-                        <motion.div
-                            className="mt-6 mb-6 h-[1px] w-28 bg-primary/70"
-                            initial={{ scaleX: 0, opacity: 0 }}
-                            animate={{ scaleX: 1, opacity: 1 }}
-                            transition={{ duration: revealDuration, delay: 0.15 }}
-                            style={{ transformOrigin: 'left center' }}
-                        />
-
-                        <motion.div
-                            className="space-y-4 max-w-xl"
-                            initial={{ opacity: 0, y: reduceMotion ? 0 : 12 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: revealDuration, delay: 0.2 }}
-                        >
-                            <p className={`font-mono text-[10px] md:text-xs tracking-[0.28em] font-bold uppercase border-l-2 border-primary pl-4 ${sublineClass}`}>
-                                {activePromo.sub}
-                            </p>
-                            <p className={`font-mono text-[11px] md:text-sm tracking-tight leading-relaxed max-w-[62ch] ${descClass}`}>
-                                {activePromo.desc.slice(0, 160)}
-                            </p>
-                        </motion.div>
-
-                        <motion.div
-                            className={`mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[10px] uppercase tracking-[0.24em] ${metaClass}`}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: revealDuration, delay: 0.24 }}
-                        >
-                            <span>Instant Download</span>
-                            <span className={separatorClass}>/</span>
-                            <span>Lifetime License</span>
-                            <span className={separatorClass}>/</span>
-                            <span>Secure Checkout</span>
-                        </motion.div>
-
-                        <motion.div
-                            className="pt-7 flex flex-wrap items-center gap-3"
-                            initial={{ opacity: 0, y: reduceMotion ? 0 : 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: revealDuration, delay: 0.3 }}
-                        >
-                            <Link
-                                href={`/product/${activePromo.id}`}
-                                className={`h-[50px] px-8 rounded-md font-sans font-semibold text-[14px] tracking-wide inline-flex items-center gap-2
-                                           bg-primary text-white transition-all duration-200
-                                           ${ctaButtonClass}
-                                           hover:-translate-y-0.5 active:translate-y-0`}
-                            >
-                                {ctaLabel}
-                            </Link>
-                            <Link
-                                href="/#catalog"
-                                className={`h-[50px] px-6 rounded-md font-mono font-semibold text-[11px] uppercase tracking-[0.22em] inline-flex items-center
-                                           border transition-colors duration-200 ${secondaryCtaClass}`}
-                            >
-                                Browse Catalog
-                            </Link>
-                        </motion.div>
-                    </motion.div>
-                </AnimatePresence>
-
-                <div className="w-full max-w-[300px] sm:max-w-[340px] lg:max-w-[440px] justify-self-center lg:justify-self-end">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={activePromo.id}
-                            className={`relative aspect-[4/5] rounded-xl overflow-hidden border shadow-[0_20px_70px_rgba(0,0,0,0.45)] ${cardBorderClass}`}
-                            initial={{ opacity: 0, y: reduceMotion ? 0 : 16, scale: reduceMotion ? 1 : 0.98 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: reduceMotion ? 0 : -12, scale: reduceMotion ? 1 : 1.01 }}
-                            transition={{ duration: revealDuration + 0.15, ease: [0.22, 1, 0.36, 1] }}
+                            className="max-w-3xl"
+                            initial={{ opacity: 0, y: reduceMotion ? 0 : 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: reduceMotion ? 0 : -8 }}
+                            transition={{ duration: revealDuration, ease: [0.16, 1, 0.3, 1] }}
                         >
-                            <Image
-                                src={activePromo.image}
-                                alt={activePromo.name}
-                                fill
-                                sizes="(max-width: 1024px) 340px, 440px"
-                                className="object-cover"
+                            <motion.div
+                                className="font-mono text-[10px] md:text-[11px] tracking-[0.4em] uppercase text-primary/90 mb-4"
+                                initial={{ opacity: 0, y: reduceMotion ? 0 : 8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: revealDuration, delay: 0.05 }}
+                            >
+                                Featured Asset Pack
+                            </motion.div>
+
+                            <motion.h1
+                                className={`heading-h1 jacquard-24-regular text-5xl md:text-7xl lg:text-[7.25rem] ${headingClass}`}
+                                initial={{ opacity: 0, y: reduceMotion ? 0 : 12 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: revealDuration, delay: 0.1 }}
+                            >
+                                {activePromo.name}
+                            </motion.h1>
+
+                            <motion.div
+                                className="mt-6 mb-6 h-[1px] w-28 bg-primary/70"
+                                initial={{ scaleX: 0, opacity: 0 }}
+                                animate={{ scaleX: 1, opacity: 1 }}
+                                transition={{ duration: revealDuration, delay: 0.15 }}
+                                style={{ transformOrigin: 'left center' }}
                             />
-                            <div className={`absolute inset-0 ${imageOverlayClass}`} />
 
-                            <div className="absolute top-4 left-4">
-                                <span className={`inline-flex h-7 items-center rounded border px-2.5 font-mono text-[9px] uppercase tracking-[0.24em] ${previewBadgeClass}`}>
-                                    Preview
-                                </span>
-                            </div>
+                            <motion.div
+                                className="space-y-4 max-w-xl"
+                                initial={{ opacity: 0, y: reduceMotion ? 0 : 12 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: revealDuration, delay: 0.2 }}
+                            >
+                                <p className={`font-mono text-[10px] md:text-xs tracking-[0.28em] font-bold uppercase border-l-2 border-primary pl-4 ${sublineClass}`}>
+                                    {activePromo.sub}
+                                </p>
+                                <p className={`font-mono text-[11px] md:text-sm tracking-tight leading-relaxed max-w-[62ch] ${descClass}`}>
+                                    {activePromo.desc.slice(0, 160)}
+                                </p>
+                            </motion.div>
 
-                            <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
-                                <p className={`font-mono text-[9px] uppercase tracking-[0.3em] ${featureLabelClass}`}>Current Feature</p>
-                                <p className={`mt-1 font-sans text-sm md:text-base font-semibold ${featureNameClass}`}>{activePromo.name}</p>
-                                {activePromo.priceLabel ? (
-                                    <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.25em] text-primary/95">
-                                        {activePromo.priceLabel}
-                                    </p>
-                                ) : null}
-                            </div>
+                            <motion.div
+                                className={`mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[10px] uppercase tracking-[0.24em] ${metaClass}`}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: revealDuration, delay: 0.24 }}
+                            >
+                                <span>Instant Download</span>
+                                <span className={separatorClass}>/</span>
+                                <span>Lifetime License</span>
+                                <span className={separatorClass}>/</span>
+                                <span>Secure Checkout</span>
+                            </motion.div>
+
+                            <motion.div
+                                className="pt-7 flex flex-wrap items-center gap-3"
+                                initial={{ opacity: 0, y: reduceMotion ? 0 : 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: revealDuration, delay: 0.3 }}
+                            >
+                                <button
+                                    onClick={() => router.push(`/product/${activePromo.id}`)}
+                                    className={`h-[50px] px-8 rounded-none font-sans font-semibold text-[14px] tracking-wide inline-flex items-center gap-2
+                                           bg-primary text-white transition-all duration-200
+                                           ${ctaButtonClass}
+                                           hover:-translate-y-0.5 active:translate-y-0`}
+                                >
+                                    {ctaLabel}
+                                </button>
+                                <Link
+                                    href="/#catalog"
+                                    className={`h-[50px] px-6 rounded-none font-mono font-semibold text-[11px] uppercase tracking-[0.22em] inline-flex items-center
+                                           border transition-colors duration-200 ${secondaryCtaClass}`}
+                                >
+                                    Browse Catalog
+                                </Link>
+                            </motion.div>
                         </motion.div>
                     </AnimatePresence>
-                </div>
+
+                    <div className="w-full max-w-[300px] sm:max-w-[340px] lg:max-w-[440px] justify-self-center lg:justify-self-end">
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={activePromo.id}
+                                className={`relative aspect-[4/5] rounded-lg overflow-hidden border shadow-[0_20px_70px_rgba(0,0,0,0.45)] ${cardBorderClass}`}
+                                initial={{ opacity: 0, y: reduceMotion ? 0 : 16, scale: reduceMotion ? 1 : 0.98 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: reduceMotion ? 0 : -12, scale: reduceMotion ? 1 : 1.01 }}
+                                transition={{ duration: revealDuration + 0.15, ease: [0.22, 1, 0.36, 1] }}
+                            >
+                                <Image
+                                    src={activePromo.image}
+                                    alt={activePromo.name}
+                                    fill
+                                    sizes="(max-width: 1024px) 340px, 440px"
+                                    className="object-cover"
+                                />
+                                <div className={`absolute inset-0 ${imageOverlayClass}`} />
+
+                                <div className="absolute top-4 left-4">
+                                    <span className={`inline-flex h-7 items-center rounded border px-2.5 font-mono text-[9px] uppercase tracking-[0.24em] ${previewBadgeClass}`}>
+                                        Preview
+                                    </span>
+                                </div>
+
+                                <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
+                                    <p className={`font-mono text-[9px] uppercase tracking-[0.3em] ${featureLabelClass}`}>Current Feature</p>
+                                    <p className={`mt-1 font-sans text-sm md:text-base font-semibold ${featureNameClass}`}>{activePromo.name}</p>
+                                    {activePromo.priceLabel ? (
+                                        <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.25em] text-primary/95">
+                                            {activePromo.priceLabel}
+                                        </p>
+                                    ) : null}
+                                </div>
+                            </motion.div>
+                        </AnimatePresence>
+                    </div>
                 </div>
             </div>
 

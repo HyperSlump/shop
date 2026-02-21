@@ -1363,3 +1363,654 @@
   Reload env: .env.local
 [dotenv@17.3.0] injecting env (0) from .env.local -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
  GET / 200 in 1337ms (compile: 786ms, render: 551ms)
+ GET /blog 200 in 654ms (compile: 470ms, render: 184ms)
+ GET /about 200 in 359ms (compile: 302ms, render: 57ms)
+ GET /archive 200 in 574ms (compile: 371ms, render: 202ms)
+ GET /contact 200 in 225ms (compile: 182ms, render: 43ms)
+ GET /support 200 in 229ms (compile: 186ms, render: 43ms)
+ GET /docs 200 in 192ms (compile: 146ms, render: 46ms)
+ GET / 200 in 413ms (compile: 8ms, render: 406ms)
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: 🛡️ auth for agents: https://vestauth.com
+ GET /api/products 200 in 460ms (compile: 91ms, render: 369ms)
+ GET / 200 in 156ms (compile: 3ms, render: 153ms)
+✓ Compiled in 223ms
+ GET / 200 in 954ms (compile: 154ms, render: 800ms)
+ GET / 200 in 486ms (compile: 6ms, render: 480ms)
+ GET / 200 in 492ms (compile: 23ms, render: 469ms)
+ GET / 200 in 345ms (compile: 5ms, render: 340ms)
+ GET / 200 in 329ms (compile: 9ms, render: 319ms)
+ GET / 200 in 315ms (compile: 8ms, render: 307ms)
+ GET / 200 in 172ms (compile: 5ms, render: 167ms)
+ GET / 200 in 176ms (compile: 4ms, render: 172ms)
+ GET / 200 in 152ms (compile: 4ms, render: 149ms)
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+ GET / 200 in 1603ms (compile: 386ms, render: 1217ms)
+ GET / 200 in 1014ms (compile: 6ms, render: 1008ms)
+ GET / 200 in 1011ms (compile: 7ms, render: 1004ms)
+ GET / 200 in 292ms (compile: 44ms, render: 248ms)
+ GET / 200 in 169ms (compile: 6ms, render: 164ms)
+ GET / 200 in 759ms (compile: 40ms, render: 718ms)
+ GET / 200 in 155ms (compile: 7ms, render: 148ms)
+ GET / 200 in 1094ms (compile: 49ms, render: 1045ms)
+ GET / 200 in 399ms (compile: 5ms, render: 394ms)
+ HEAD / 200 in 300ms (compile: 5ms, render: 296ms)
+ GET / 200 in 207ms (compile: 4ms, render: 203ms)
+ GET /checkout 200 in 917ms (compile: 541ms, render: 375ms)
+>>> [STRIPE_API] POST RECEIVED
+>>> [STRIPE_API] Payload received: [
+  {
+    "id": "price_1Szmy3Hlah70mYw2t6BkUO6O",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T1cKPHlah70mYw2rGIbLA02",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T1cMCHlah70mYw2AzZRHQ5R",
+    "productId": "prod_TzbZHUNmcWxdAQ",
+    "name": "sample_product_13",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfVTJ0V21jbHpONFU0QURKTlR6M09iRnNS00lq6x8Nnk",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {}
+  }
+]
+>>> [STRIPE_API] Calculated Total: 1
+>>> [STRIPE_API] Requesting PaymentIntent from Stripe...
+>>> [STRIPE_API] POST RECEIVED
+>>> [STRIPE_API] Payload received: [
+  {
+    "id": "price_1Szmy3Hlah70mYw2t6BkUO6O",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T1cKPHlah70mYw2rGIbLA02",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T1cMCHlah70mYw2AzZRHQ5R",
+    "productId": "prod_TzbZHUNmcWxdAQ",
+    "name": "sample_product_13",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfVTJ0V21jbHpONFU0QURKTlR6M09iRnNS00lq6x8Nnk",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {}
+  }
+]
+>>> [STRIPE_API] Calculated Total: 1
+>>> [STRIPE_API] Requesting PaymentIntent from Stripe...
+>>> [STRIPE_API] PaymentIntent Created Successfully: pi_3T35yYHlah70mYw21bU1g81E
+ POST /api/create-payment-intent 200 in 615ms (compile: 155ms, render: 460ms)
+>>> [STRIPE_API] PaymentIntent Created Successfully: pi_3T35yYHlah70mYw20aVXiXDz
+ POST /api/create-payment-intent 200 in 621ms (compile: 257ms, render: 364ms)
+ GET / 200 in 382ms (compile: 41ms, render: 340ms)
+ GET /api/products 200 in 175ms (compile: 12ms, render: 164ms)
+✓ Compiled in 983ms
+✓ Compiled in 696ms
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: ⚙️  override existing env vars with { override: true }
+ GET /product/price_1Szmy3Hlah70mYw2t6BkUO6O 200 in 1560ms (compile: 472ms, render: 1088ms)
+⨯ ./Desktop/hyperslump/src/components/ProductPageLayout.tsx:7:1
+Module not found: Can't resolve './WaveformOverlay'
+[0m [90m  5 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m'next/link'[39m[33m;[39m
+ [90m  6 |[39m [36mimport[39m { [33mArrowLeft[39m } [36mfrom[39m [32m'lucide-react'[39m[33m;[39m
+[31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m [33mWaveformOverlay[39m [36mfrom[39m [32m'./WaveformOverlay'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m  8 |[39m [36mimport[39m [33mOneShotPlayer[39m [36mfrom[39m [32m'./OneShotPlayer'[39m[33m;[39m
+ [90m  9 |[39m [36mimport[39m [33mMatrixSpace[39m [36mfrom[39m [32m'./MatrixSpace'[39m[33m;[39m
+ [90m 10 |[39m [36mimport[39m { useCart } [36mfrom[39m [32m'./CartProvider'[39m[33m;[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./Desktop/hyperslump/src/components/ProductPageLayout.tsx
+    ./Desktop/hyperslump/src/app/product/[id]/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./Desktop/hyperslump/src/components/ProductPageLayout.tsx:7:1
+Module not found: Can't resolve './WaveformOverlay'
+[0m [90m  5 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m'next/link'[39m[33m;[39m
+ [90m  6 |[39m [36mimport[39m { [33mArrowLeft[39m } [36mfrom[39m [32m'lucide-react'[39m[33m;[39m
+[31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m [33mWaveformOverlay[39m [36mfrom[39m [32m'./WaveformOverlay'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m  8 |[39m [36mimport[39m [33mOneShotPlayer[39m [36mfrom[39m [32m'./OneShotPlayer'[39m[33m;[39m
+ [90m  9 |[39m [36mimport[39m [33mMatrixSpace[39m [36mfrom[39m [32m'./MatrixSpace'[39m[33m;[39m
+ [90m 10 |[39m [36mimport[39m { useCart } [36mfrom[39m [32m'./CartProvider'[39m[33m;[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./Desktop/hyperslump/src/components/ProductPageLayout.tsx
+    ./Desktop/hyperslump/src/app/product/[id]/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./Desktop/hyperslump/src/components/ProductPageLayout.tsx:7:1
+Module not found: Can't resolve './WaveformOverlay'
+[0m [90m  5 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m'next/link'[39m[33m;[39m
+ [90m  6 |[39m [36mimport[39m { [33mArrowLeft[39m } [36mfrom[39m [32m'lucide-react'[39m[33m;[39m
+[31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m [33mWaveformOverlay[39m [36mfrom[39m [32m'./WaveformOverlay'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m  8 |[39m [36mimport[39m [33mOneShotPlayer[39m [36mfrom[39m [32m'./OneShotPlayer'[39m[33m;[39m
+ [90m  9 |[39m [36mimport[39m [33mMatrixSpace[39m [36mfrom[39m [32m'./MatrixSpace'[39m[33m;[39m
+ [90m 10 |[39m [36mimport[39m { useCart } [36mfrom[39m [32m'./CartProvider'[39m[33m;[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./Desktop/hyperslump/src/components/ProductPageLayout.tsx
+    ./Desktop/hyperslump/src/app/product/[id]/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./Desktop/hyperslump/src/components/ProductPageLayout.tsx:7:1
+Module not found: Can't resolve './WaveformOverlay'
+[0m [90m  5 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m'next/link'[39m[33m;[39m
+ [90m  6 |[39m [36mimport[39m { [33mArrowLeft[39m } [36mfrom[39m [32m'lucide-react'[39m[33m;[39m
+[31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m [33mWaveformOverlay[39m [36mfrom[39m [32m'./WaveformOverlay'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m  8 |[39m [36mimport[39m [33mOneShotPlayer[39m [36mfrom[39m [32m'./OneShotPlayer'[39m[33m;[39m
+ [90m  9 |[39m [36mimport[39m [33mMatrixSpace[39m [36mfrom[39m [32m'./MatrixSpace'[39m[33m;[39m
+ [90m 10 |[39m [36mimport[39m { useCart } [36mfrom[39m [32m'./CartProvider'[39m[33m;[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./Desktop/hyperslump/src/components/ProductPageLayout.tsx
+    ./Desktop/hyperslump/src/app/product/[id]/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./Desktop/hyperslump/src/components/ProductPageLayout.tsx:7:1
+Module not found: Can't resolve './WaveformOverlay'
+[0m [90m  5 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m'next/link'[39m[33m;[39m
+ [90m  6 |[39m [36mimport[39m { [33mArrowLeft[39m } [36mfrom[39m [32m'lucide-react'[39m[33m;[39m
+[31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m [33mWaveformOverlay[39m [36mfrom[39m [32m'./WaveformOverlay'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m  8 |[39m [36mimport[39m [33mOneShotPlayer[39m [36mfrom[39m [32m'./OneShotPlayer'[39m[33m;[39m
+ [90m  9 |[39m [36mimport[39m [33mMatrixSpace[39m [36mfrom[39m [32m'./MatrixSpace'[39m[33m;[39m
+ [90m 10 |[39m [36mimport[39m { useCart } [36mfrom[39m [32m'./CartProvider'[39m[33m;[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./Desktop/hyperslump/src/components/ProductPageLayout.tsx
+    ./Desktop/hyperslump/src/app/product/[id]/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./Desktop/hyperslump/src/components/ProductPageLayout.tsx:7:1
+Module not found: Can't resolve './WaveformOverlay'
+[0m [90m  5 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m'next/link'[39m[33m;[39m
+ [90m  6 |[39m [36mimport[39m { [33mArrowLeft[39m } [36mfrom[39m [32m'lucide-react'[39m[33m;[39m
+[31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m [33mWaveformOverlay[39m [36mfrom[39m [32m'./WaveformOverlay'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m  8 |[39m [36mimport[39m [33mOneShotPlayer[39m [36mfrom[39m [32m'./OneShotPlayer'[39m[33m;[39m
+ [90m  9 |[39m [36mimport[39m [33mMatrixSpace[39m [36mfrom[39m [32m'./MatrixSpace'[39m[33m;[39m
+ [90m 10 |[39m [36mimport[39m { useCart } [36mfrom[39m [32m'./CartProvider'[39m[33m;[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./Desktop/hyperslump/src/components/ProductPageLayout.tsx
+    ./Desktop/hyperslump/src/app/product/[id]/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./Desktop/hyperslump/src/components/ProductPageLayout.tsx:7:1
+Module not found: Can't resolve './WaveformOverlay'
+[0m [90m  5 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m'next/link'[39m[33m;[39m
+ [90m  6 |[39m [36mimport[39m { [33mArrowLeft[39m } [36mfrom[39m [32m'lucide-react'[39m[33m;[39m
+[31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m [33mWaveformOverlay[39m [36mfrom[39m [32m'./WaveformOverlay'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m  8 |[39m [36mimport[39m [33mOneShotPlayer[39m [36mfrom[39m [32m'./OneShotPlayer'[39m[33m;[39m
+ [90m  9 |[39m [36mimport[39m [33mMatrixSpace[39m [36mfrom[39m [32m'./MatrixSpace'[39m[33m;[39m
+ [90m 10 |[39m [36mimport[39m { useCart } [36mfrom[39m [32m'./CartProvider'[39m[33m;[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./Desktop/hyperslump/src/components/ProductPageLayout.tsx
+    ./Desktop/hyperslump/src/app/product/[id]/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./Desktop/hyperslump/src/components/ProductPageLayout.tsx:7:1
+Module not found: Can't resolve './WaveformOverlay'
+[0m [90m  5 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m'next/link'[39m[33m;[39m
+ [90m  6 |[39m [36mimport[39m { [33mArrowLeft[39m } [36mfrom[39m [32m'lucide-react'[39m[33m;[39m
+[31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m [33mWaveformOverlay[39m [36mfrom[39m [32m'./WaveformOverlay'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m  8 |[39m [36mimport[39m [33mOneShotPlayer[39m [36mfrom[39m [32m'./OneShotPlayer'[39m[33m;[39m
+ [90m  9 |[39m [36mimport[39m [33mMatrixSpace[39m [36mfrom[39m [32m'./MatrixSpace'[39m[33m;[39m
+ [90m 10 |[39m [36mimport[39m { useCart } [36mfrom[39m [32m'./CartProvider'[39m[33m;[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./Desktop/hyperslump/src/components/ProductPageLayout.tsx
+    ./Desktop/hyperslump/src/app/product/[id]/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./Desktop/hyperslump/src/components/ProductPageLayout.tsx:7:1
+Module not found: Can't resolve './WaveformOverlay'
+[0m [90m  5 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m'next/link'[39m[33m;[39m
+ [90m  6 |[39m [36mimport[39m { [33mArrowLeft[39m } [36mfrom[39m [32m'lucide-react'[39m[33m;[39m
+[31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m [33mWaveformOverlay[39m [36mfrom[39m [32m'./WaveformOverlay'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m  8 |[39m [36mimport[39m [33mOneShotPlayer[39m [36mfrom[39m [32m'./OneShotPlayer'[39m[33m;[39m
+ [90m  9 |[39m [36mimport[39m [33mMatrixSpace[39m [36mfrom[39m [32m'./MatrixSpace'[39m[33m;[39m
+ [90m 10 |[39m [36mimport[39m { useCart } [36mfrom[39m [32m'./CartProvider'[39m[33m;[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./Desktop/hyperslump/src/components/ProductPageLayout.tsx
+    ./Desktop/hyperslump/src/app/product/[id]/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./Desktop/hyperslump/src/components/ProductPageLayout.tsx:7:1
+Module not found: Can't resolve './WaveformOverlay'
+[0m [90m  5 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m'next/link'[39m[33m;[39m
+ [90m  6 |[39m [36mimport[39m { [33mArrowLeft[39m } [36mfrom[39m [32m'lucide-react'[39m[33m;[39m
+[31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m [33mWaveformOverlay[39m [36mfrom[39m [32m'./WaveformOverlay'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m  8 |[39m [36mimport[39m [33mOneShotPlayer[39m [36mfrom[39m [32m'./OneShotPlayer'[39m[33m;[39m
+ [90m  9 |[39m [36mimport[39m [33mMatrixSpace[39m [36mfrom[39m [32m'./MatrixSpace'[39m[33m;[39m
+ [90m 10 |[39m [36mimport[39m { useCart } [36mfrom[39m [32m'./CartProvider'[39m[33m;[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./Desktop/hyperslump/src/components/ProductPageLayout.tsx
+    ./Desktop/hyperslump/src/app/product/[id]/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./Desktop/hyperslump/src/components/ProductPageLayout.tsx:7:1
+Module not found: Can't resolve './WaveformOverlay'
+[0m [90m  5 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m'next/link'[39m[33m;[39m
+ [90m  6 |[39m [36mimport[39m { [33mArrowLeft[39m } [36mfrom[39m [32m'lucide-react'[39m[33m;[39m
+[31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m [33mWaveformOverlay[39m [36mfrom[39m [32m'./WaveformOverlay'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m  8 |[39m [36mimport[39m [33mOneShotPlayer[39m [36mfrom[39m [32m'./OneShotPlayer'[39m[33m;[39m
+ [90m  9 |[39m [36mimport[39m [33mMatrixSpace[39m [36mfrom[39m [32m'./MatrixSpace'[39m[33m;[39m
+ [90m 10 |[39m [36mimport[39m { useCart } [36mfrom[39m [32m'./CartProvider'[39m[33m;[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./Desktop/hyperslump/src/components/ProductPageLayout.tsx
+    ./Desktop/hyperslump/src/app/product/[id]/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./Desktop/hyperslump/src/components/ProductPageLayout.tsx:7:1
+Module not found: Can't resolve './WaveformOverlay'
+[0m [90m  5 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m'next/link'[39m[33m;[39m
+ [90m  6 |[39m [36mimport[39m { [33mArrowLeft[39m } [36mfrom[39m [32m'lucide-react'[39m[33m;[39m
+[31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m [33mWaveformOverlay[39m [36mfrom[39m [32m'./WaveformOverlay'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m  8 |[39m [36mimport[39m [33mOneShotPlayer[39m [36mfrom[39m [32m'./OneShotPlayer'[39m[33m;[39m
+ [90m  9 |[39m [36mimport[39m [33mMatrixSpace[39m [36mfrom[39m [32m'./MatrixSpace'[39m[33m;[39m
+ [90m 10 |[39m [36mimport[39m { useCart } [36mfrom[39m [32m'./CartProvider'[39m[33m;[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./Desktop/hyperslump/src/components/ProductPageLayout.tsx
+    ./Desktop/hyperslump/src/app/product/[id]/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+✓ Compiled in 813ms
+✓ Compiled in 445ms
+⨯ ./Desktop/hyperslump/src/components/ProductPageLayout.tsx:7:1
+Module not found: Can't resolve './WaveformOverlay'
+[0m [90m  5 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m'next/link'[39m[33m;[39m
+ [90m  6 |[39m [36mimport[39m { [33mArrowLeft[39m } [36mfrom[39m [32m'lucide-react'[39m[33m;[39m
+[31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m [33mWaveformOverlay[39m [36mfrom[39m [32m'./WaveformOverlay'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m  8 |[39m [36mimport[39m [33mOneShotPlayer[39m [36mfrom[39m [32m'./OneShotPlayer'[39m[33m;[39m
+ [90m  9 |[39m [36mimport[39m [33mMatrixSpace[39m [36mfrom[39m [32m'./MatrixSpace'[39m[33m;[39m
+ [90m 10 |[39m [36mimport[39m { useCart } [36mfrom[39m [32m'./CartProvider'[39m[33m;[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./Desktop/hyperslump/src/components/ProductPageLayout.tsx
+    ./Desktop/hyperslump/src/app/product/[id]/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./Desktop/hyperslump/src/components/ProductPageLayout.tsx:7:1
+Module not found: Can't resolve './WaveformOverlay'
+[0m [90m  5 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m'next/link'[39m[33m;[39m
+ [90m  6 |[39m [36mimport[39m { [33mArrowLeft[39m } [36mfrom[39m [32m'lucide-react'[39m[33m;[39m
+[31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m [33mWaveformOverlay[39m [36mfrom[39m [32m'./WaveformOverlay'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m  8 |[39m [36mimport[39m [33mOneShotPlayer[39m [36mfrom[39m [32m'./OneShotPlayer'[39m[33m;[39m
+ [90m  9 |[39m [36mimport[39m [33mMatrixSpace[39m [36mfrom[39m [32m'./MatrixSpace'[39m[33m;[39m
+ [90m 10 |[39m [36mimport[39m { useCart } [36mfrom[39m [32m'./CartProvider'[39m[33m;[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./Desktop/hyperslump/src/components/ProductPageLayout.tsx
+    ./Desktop/hyperslump/src/app/product/[id]/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./Desktop/hyperslump/src/components/ProductPageLayout.tsx:7:1
+Module not found: Can't resolve './WaveformOverlay'
+[0m [90m  5 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m'next/link'[39m[33m;[39m
+ [90m  6 |[39m [36mimport[39m { [33mArrowLeft[39m } [36mfrom[39m [32m'lucide-react'[39m[33m;[39m
+[31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m [33mWaveformOverlay[39m [36mfrom[39m [32m'./WaveformOverlay'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m  8 |[39m [36mimport[39m [33mOneShotPlayer[39m [36mfrom[39m [32m'./OneShotPlayer'[39m[33m;[39m
+ [90m  9 |[39m [36mimport[39m [33mMatrixSpace[39m [36mfrom[39m [32m'./MatrixSpace'[39m[33m;[39m
+ [90m 10 |[39m [36mimport[39m { useCart } [36mfrom[39m [32m'./CartProvider'[39m[33m;[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./Desktop/hyperslump/src/components/ProductPageLayout.tsx
+    ./Desktop/hyperslump/src/app/product/[id]/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./Desktop/hyperslump/src/components/ProductPageLayout.tsx:7:1
+Module not found: Can't resolve './WaveformOverlay'
+[0m [90m  5 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m'next/link'[39m[33m;[39m
+ [90m  6 |[39m [36mimport[39m { [33mArrowLeft[39m } [36mfrom[39m [32m'lucide-react'[39m[33m;[39m
+[31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m [33mWaveformOverlay[39m [36mfrom[39m [32m'./WaveformOverlay'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m  8 |[39m [36mimport[39m [33mOneShotPlayer[39m [36mfrom[39m [32m'./OneShotPlayer'[39m[33m;[39m
+ [90m  9 |[39m [36mimport[39m [33mMatrixSpace[39m [36mfrom[39m [32m'./MatrixSpace'[39m[33m;[39m
+ [90m 10 |[39m [36mimport[39m { useCart } [36mfrom[39m [32m'./CartProvider'[39m[33m;[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./Desktop/hyperslump/src/components/ProductPageLayout.tsx
+    ./Desktop/hyperslump/src/app/product/[id]/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+✓ Compiled in 332ms
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: ⚙️  write to custom object with { processEnv: myObject }
+✓ Compiled in 89ms
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+⚠ Fast Refresh had to perform a full reload when ./Desktop/hyperslump/src/components/ProductPageLayout.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /product/price_1Szmy3Hlah70mYw2t6BkUO6O 200 in 1833ms (compile: 620ms, render: 1213ms)
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: 🛡️ auth for agents: https://vestauth.com
+ GET /product/price_1Szmy3Hlah70mYw2t6BkUO6O 200 in 2.9s (compile: 1751ms, render: 1150ms)
+ GET /product/price_1Szmy3Hlah70mYw2t6BkUO6O 200 in 956ms (compile: 79ms, render: 877ms)
+ HEAD /product/price_1T1cMCHlah70mYw2AzZRHQ5R 200 in 607ms (compile: 144ms, render: 463ms)
+ GET /product/price_1T1cMCHlah70mYw2AzZRHQ5R 200 in 313ms (compile: 5ms, render: 308ms)
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: ⚙️  enable debug logging with { debug: true }
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: ⚙️  suppress all logs with { quiet: true }
+ GET / 200 in 790ms (compile: 321ms, render: 469ms)
+ GET /api/products 200 in 47ms (compile: 14ms, render: 33ms)
+ GET /api/products 200 in 335ms (compile: 3ms, render: 332ms)
+ GET /product/price_1T1cMCHlah70mYw2AzZRHQ5R 200 in 171ms (compile: 13ms, render: 158ms)
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: ⚙️  override existing env vars with { override: true }
+ GET / 200 in 172ms (compile: 4ms, render: 168ms)
+ GET /api/products 200 in 170ms (compile: 5ms, render: 165ms)
+ GET /product/price_1T1cKPHlah70mYw2rGIbLA02 200 in 160ms (compile: 9ms, render: 150ms)
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+ GET / 200 in 170ms (compile: 7ms, render: 163ms)
+ GET /api/products 200 in 140ms (compile: 5ms, render: 135ms)
+ GET /product/price_1T076PHlah70mYw2D01WCvIT 200 in 163ms (compile: 13ms, render: 150ms)
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: ⚙️  override existing env vars with { override: true }
+ GET /api/products 200 in 138ms (compile: 3ms, render: 135ms)
+ GET /checkout 200 in 246ms (compile: 127ms, render: 119ms)
+>>> [STRIPE_API] POST RECEIVED
+>>> [STRIPE_API] Payload received: [
+  {
+    "id": "price_1Szmy3Hlah70mYw2t6BkUO6O",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T1cKPHlah70mYw2rGIbLA02",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T1cMCHlah70mYw2AzZRHQ5R",
+    "productId": "prod_TzbZHUNmcWxdAQ",
+    "name": "sample_product_13",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfVTJ0V21jbHpONFU0QURKTlR6M09iRnNS00lq6x8Nnk",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {}
+  },
+  {
+    "id": "price_1T076PHlah70mYw2D01WCvIT",
+    "productId": "prod_Ty3ClgxrqLyZfY",
+    "name": "sample_product_3",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfYU14SndoeVlWaERaOElSZVJrNjg3Q0pt00xXUko4P1",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_3.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_3.zip",
+      "key": "test_key_3",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  }
+]
+>>> [STRIPE_API] Calculated Total: 1
+>>> [STRIPE_API] Requesting PaymentIntent from Stripe...
+>>> [STRIPE_API] POST RECEIVED
+>>> [STRIPE_API] Payload received: [
+  {
+    "id": "price_1Szmy3Hlah70mYw2t6BkUO6O",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T1cKPHlah70mYw2rGIbLA02",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T1cMCHlah70mYw2AzZRHQ5R",
+    "productId": "prod_TzbZHUNmcWxdAQ",
+    "name": "sample_product_13",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfVTJ0V21jbHpONFU0QURKTlR6M09iRnNS00lq6x8Nnk",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {}
+  },
+  {
+    "id": "price_1T076PHlah70mYw2D01WCvIT",
+    "productId": "prod_Ty3ClgxrqLyZfY",
+    "name": "sample_product_3",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfYU14SndoeVlWaERaOElSZVJrNjg3Q0pt00xXUko4P1",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_3.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_3.zip",
+      "key": "test_key_3",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  }
+]
+>>> [STRIPE_API] Calculated Total: 1
+>>> [STRIPE_API] Requesting PaymentIntent from Stripe...
+>>> [STRIPE_API] PaymentIntent Created Successfully: pi_3T36GbHlah70mYw21h7AAFi2
+ POST /api/create-payment-intent 200 in 319ms (compile: 34ms, render: 285ms)
+>>> [STRIPE_API] PaymentIntent Created Successfully: pi_3T36GbHlah70mYw21yjZLbOK
+ POST /api/create-payment-intent 200 in 375ms (compile: 100ms, render: 276ms)
+ GET / 200 in 170ms (compile: 9ms, render: 161ms)
+ GET /api/products 200 in 200ms (compile: 9ms, render: 191ms)
+^C^C

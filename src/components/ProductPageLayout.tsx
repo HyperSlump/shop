@@ -8,6 +8,7 @@ import { IconPlayerPlayFilled, IconPlayerPauseFilled } from '@tabler/icons-react
 import MatrixSpace from './MatrixSpace';
 import { useCart, Product } from './CartProvider';
 import { usePreviewPlayer } from './PreviewPlayerProvider';
+import { useEffect } from 'react';
 
 interface ProductPageLayoutProps {
     product: Product;
@@ -21,7 +22,20 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
     const formatLabel = typeof product.metadata?.format === 'string' ? product.metadata.format.toUpperCase() : 'WAV';
     const oneShotCount = typeof product.metadata?.count === 'string' ? product.metadata.count : '140';
 
-    const { playTrack, isTrackActive, isPlaying, isOpen } = usePreviewPlayer();
+    const { playTrack, isTrackActive, isPlaying, isOpen, registerTrack, unregisterTrack } = usePreviewPlayer();
+
+    useEffect(() => {
+        if (audioPreviewUrl) {
+            registerTrack({
+                id: product.id,
+                title: product.name,
+                subtitle: `${formatLabel} / ${oneShotCount} one-shots`,
+                image: product.image,
+                audioUrl: audioPreviewUrl,
+            });
+        }
+        return () => unregisterTrack(product.id);
+    }, [product, audioPreviewUrl, formatLabel, oneShotCount, registerTrack, unregisterTrack]);
     const isActivePreview = isOpen && isTrackActive(product.id);
 
     const playPreview = () => {

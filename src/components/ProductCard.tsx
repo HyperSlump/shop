@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect } from 'react';
 import { IconPlayerPauseFilled, IconPlayerPlayFilled, IconWaveSine } from '@tabler/icons-react';
 
 import type { Product } from './CartProvider';
@@ -14,7 +15,23 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, isInCart, onAddToCart }: ProductCardProps) {
-    const { playTrack, isTrackActive, isPlaying, isOpen } = usePreviewPlayer();
+    const { playTrack, isTrackActive, isPlaying, isOpen, registerTrack, unregisterTrack } = usePreviewPlayer();
+
+    useEffect(() => {
+        const audioPreviewUrl = typeof product.metadata?.audio_preview === 'string' ? product.metadata.audio_preview : '';
+        if (audioPreviewUrl) {
+            const oneShotCount = typeof product.metadata?.count === 'string' ? product.metadata.count : '140';
+            const formatLabel = typeof product.metadata?.format === 'string' ? product.metadata.format.toUpperCase() : 'WAV';
+            registerTrack({
+                id: product.id,
+                title: product.name,
+                subtitle: `${formatLabel} / ${oneShotCount} one-shots`,
+                image: product.image,
+                audioUrl: audioPreviewUrl,
+            });
+        }
+        return () => unregisterTrack(product.id);
+    }, [product, registerTrack, unregisterTrack]);
 
     const audioPreviewUrl = typeof product.metadata?.audio_preview === 'string' ? product.metadata.audio_preview : '';
     const oneShotCount = typeof product.metadata?.count === 'string' ? product.metadata.count : '140';
@@ -44,7 +61,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
     };
 
     return (
-        <article className="group relative overflow-hidden rounded-xl border border-border/70 bg-card/75 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-[0_18px_45px_rgba(15,23,42,0.12)] dark:hover:shadow-[0_18px_45px_rgba(0,0,0,0.45)]">
+        <article className="group relative overflow-hidden rounded-lg border border-border/70 bg-card/75 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-[0_18px_45px_rgba(15,23,42,0.12)] dark:hover:shadow-[0_18px_45px_rgba(0,0,0,0.45)]">
             <div
                 className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                 style={{
@@ -57,15 +74,15 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 <Link href={href} className="relative block">
                     <div className="relative aspect-[4/3] overflow-hidden border-b border-border/60 px-3 pb-3 pt-3">
                         <div className="absolute left-5 right-5 top-5 z-20 flex items-center justify-between gap-2">
-                            <span className="inline-flex h-6 items-center rounded-full border border-border/70 bg-background/70 px-2.5 font-mono text-[9px] uppercase tracking-[0.16em] text-muted">
+                            <span className="inline-flex h-6 items-center rounded-none border border-border/70 bg-background/70 px-2.5 font-mono text-[9px] uppercase tracking-[0.16em] text-muted">
                                 instant download
                             </span>
-                            <span className="inline-flex h-6 items-center rounded-full border border-primary/25 bg-primary/12 px-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">
+                            <span className="inline-flex h-6 items-center rounded-none border border-primary/25 bg-primary/12 px-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">
                                 {product.amount === 0 ? 'free' : `$${product.amount}`}
                             </span>
                         </div>
 
-                        <div className="absolute inset-3 rounded-lg border border-border/65 bg-background/45" />
+                        <div className="absolute inset-3 rounded-md border border-border/65 bg-background/45" />
                         <div className="relative h-full w-full p-3">
                             <div className="relative h-full w-full transition-transform duration-500 ease-out group-hover:scale-[1.03]">
                                 <Image
@@ -134,13 +151,13 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 </p>
 
                 <div className="flex flex-wrap gap-1.5">
-                    <span className="inline-flex h-6 items-center rounded-full border border-border bg-background/45 px-2.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
+                    <span className="inline-flex h-6 items-center rounded-none border border-border bg-background/45 px-2.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
                         {formatLabel}
                     </span>
-                    <span className="inline-flex h-6 items-center rounded-full border border-border bg-background/45 px-2.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
+                    <span className="inline-flex h-6 items-center rounded-none border border-border bg-background/45 px-2.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
                         {oneShotCount} one-shots
                     </span>
-                    <span className="inline-flex h-6 items-center rounded-full border border-border bg-background/45 px-2.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
+                    <span className="inline-flex h-6 items-center rounded-none border border-border bg-background/45 px-2.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
                         secure checkout
                     </span>
                 </div>
