@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import {
@@ -83,7 +83,7 @@ export default function PromoCarousel() {
 
     const activePromo = promoSlides[currentIndex];
 
-    const variants = {
+    const variants: Variants = {
         enter: (direction: number) => ({
             x: direction > 0 ? 1000 : -1000,
             opacity: 0,
@@ -95,10 +95,10 @@ export default function PromoCarousel() {
             opacity: 1,
             scale: 1,
             transition: {
-                x: { type: 'spring', stiffness: 300, damping: 30 },
+                x: { type: 'spring' as const, stiffness: 300, damping: 30 },
                 opacity: { duration: 0.4 },
                 scale: { duration: 0.4 }
-            }
+            } as any
         },
         exit: (direction: number) => ({
             zIndex: 0,
@@ -106,9 +106,9 @@ export default function PromoCarousel() {
             opacity: 0,
             scale: 0.95,
             transition: {
-                x: { type: 'spring', stiffness: 300, damping: 30 },
+                x: { type: 'spring' as const, stiffness: 300, damping: 30 },
                 opacity: { duration: 0.2 }
-            }
+            } as any
         })
     };
 
@@ -125,172 +125,196 @@ export default function PromoCarousel() {
             : 'border-[#C86A83]/30 text-[#C86A83] hover:bg-[#C86A83]/5';
 
     return (
-        <div className="relative w-full max-w-[1400px] mx-auto group/carousel">
-            <div className="relative h-[600px] md:h-[520px] overflow-hidden rounded-xl border border-border/80 bg-background/40 backdrop-blur-sm shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)]">
+        <div className="relative w-full h-full group/carousel flex flex-col items-center justify-center overflow-hidden">
+            {/* DYNAMIC BACKGROUND GRADIENT */}
+            <div
+                className="absolute inset-0 z-0 transition-opacity duration-1000"
+                style={{
+                    background: `radial-gradient(circle at 12% 10%, ${activePromo.accent}22 0%, transparent 40%),
+                                 radial-gradient(circle at 88% 12%, ${activePromo.accent}11 0%, transparent 40%)`
+                }}
+            />
 
-                {/* Background Texture Overlay */}
-                <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.03] grayscale bg-[url('https://www.transparenttextures.com/patterns/micro-carbon.png')]" />
+            {/* TECHNICAL GRID BACKGROUND */}
+            <div className="absolute inset-0 z-1 pointer-events-none"
+                style={{
+                    backgroundImage: `
+                        linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px),
+                        linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px)
+                    `,
+                    backgroundSize: '40px 40px'
+                }}
+            />
+            <div className="absolute inset-0 z-1 pointer-events-none opacity-[0.02] grayscale bg-[url('https://www.transparenttextures.com/patterns/micro-carbon.png')]" />
 
-                <AnimatePresence initial={false} custom={direction}>
-                    <motion.div
-                        key={currentIndex}
-                        custom={direction}
-                        variants={variants}
-                        initial="enter"
-                        animate="center"
-                        exit="exit"
-                        className="absolute inset-0 flex flex-col md:flex-row items-center justify-between"
-                    >
-                        {/* CONTENT SECTION */}
-                        <div className="relative z-10 w-full md:w-1/2 p-8 md:p-16 flex flex-col items-start text-left order-2 md:order-1">
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.2, duration: 0.5 }}
-                                className="flex items-center gap-3 mb-6"
-                            >
-                                <span className="px-3 py-1 rounded-sm bg-foreground/5 dark:bg-foreground/10 border border-border/40 font-mono text-[10px] uppercase tracking-[0.2em] text-muted font-bold">
-                                    {activePromo.badge}
-                                </span>
-                                <div className="h-px w-8 bg-border/60" />
-                                <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-muted/60 opacity-60">
-                                    {activePromo.subtitle}
-                                </span>
-                            </motion.div>
+            <AnimatePresence initial={false} custom={direction}>
+                <motion.div
+                    key={currentIndex}
+                    custom={direction}
+                    variants={variants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    className="absolute inset-0 flex flex-col md:flex-row items-center justify-center px-6 md:px-12 lg:px-24 z-10"
+                >
+                    {/* LEFT CONTENT */}
+                    <div className="relative z-10 w-full md:w-3/5 flex flex-col items-start text-left gap-6">
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.2, duration: 0.5 }}
+                            className="flex flex-col gap-1"
+                        >
+                            <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-primary font-bold">
+                                FEATURED ASSET PACK
+                            </span>
+                        </motion.div>
 
+                        <motion.div className="relative">
                             <motion.h2
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3, duration: 0.5 }}
-                                className="jacquard-24-regular text-[4rem] md:text-[5.5rem] leading-[0.85] lowercase mb-8 tracking-tighter"
+                                className="jacquard-24-regular text-[5rem] md:text-[7rem] lg:text-[8rem] leading-[0.82] lowercase tracking-tight text-white mb-2"
                             >
                                 {activePromo.title}
                             </motion.h2>
-
-                            <motion.p
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.4, duration: 0.5 }}
-                                className="text-muted text-[15px] md:text-[17px] leading-relaxed max-w-md mb-10 font-sans tracking-tight"
-                            >
-                                {activePromo.description}
-                            </motion.p>
-
                             <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.5, duration: 0.5 }}
-                                className="flex flex-wrap items-center gap-4"
+                                initial={{ width: 0 }}
+                                animate={{ width: '80px' }}
+                                transition={{ delay: 0.6, duration: 0.8 }}
+                                className="h-[2px] bg-primary absolute -bottom-1 left-0"
+                            />
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.5, duration: 0.5 }}
+                            className="flex items-center gap-4 mt-4"
+                        >
+                            <div className="h-4 w-[2px] bg-primary" />
+                            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-foreground/80 font-bold">
+                                24-BIT MASTERED / IMMEDIATE DELIVERY
+                            </p>
+                        </motion.div>
+
+                        <motion.p
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.6, duration: 0.5 }}
+                            className="text-muted text-[14px] md:text-[16px] leading-relaxed max-w-lg font-sans tracking-tight opacity-70"
+                        >
+                            {activePromo.description}
+                        </motion.p>
+
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.7, duration: 0.5 }}
+                            className="flex flex-wrap items-center gap-x-6 gap-y-2 opacity-40"
+                        >
+                            {['INSTANT DOWNLOAD', 'LIFETIME LICENSE', 'SECURE CHECKOUT'].map((tag) => (
+                                <span key={tag} className="font-mono text-[9px] uppercase tracking-[0.2em]">{tag}</span>
+                            ))}
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.8, duration: 0.5 }}
+                            className="flex flex-wrap items-center gap-4 mt-4"
+                        >
+                            <button
+                                onClick={() => router.push(`/product/${activePromo.id}`)}
+                                className="h-[48px] px-8 rounded-sm bg-primary text-white font-mono text-[11px] uppercase tracking-[0.2em] font-bold hover:brightness-110 transition-all shadow-[0_4px_20px_rgba(216,58,61,0.25)] flex items-center justify-center"
                             >
-                                <button
-                                    onClick={() => router.push(`/product/${activePromo.id}`)}
-                                    className={`h-[50px] px-8 rounded-sm font-sans font-semibold text-[14px] tracking-wide inline-flex items-center gap-2
-                           bg-primary text-white transition-all duration-200
-                           ${ctaButtonClass}
-                           hover:-translate-y-0.5 active:translate-y-0`}
-                                >
-                                    <IconDownload size={18} stroke={2.5} />
-                                    <span>Get Started</span>
-                                    <IconArrowRight size={16} stroke={2.5} className="ml-1" />
-                                </button>
-                                <Link
-                                    href="/#catalog"
-                                    className={`h-[50px] px-6 rounded-sm font-mono font-semibold text-[11px] uppercase tracking-[0.22em] inline-flex items-center
-                           border transition-colors duration-200 ${secondaryCtaClass}`}
-                                >
-                                    Browse Catalog
-                                </Link>
-                            </motion.div>
-                        </div>
-
-                        {/* IMAGE SECTION */}
-                        <div className="relative w-full md:w-1/2 h-full order-1 md:order-2 overflow-hidden flex items-center justify-center p-8 md:p-12">
-                            <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-l from-transparent to-background/40 z-10" />
-
-                            <motion.div
-                                className="relative w-full h-full max-w-[480px] aspect-square"
-                                initial={{ opacity: 0, scale: 0.9, rotate: -3 }}
-                                animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                                transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" }}
+                                Get Instant Access
+                            </button>
+                            <Link
+                                href="/#catalog"
+                                className="h-[48px] px-10 rounded-sm border border-white/10 bg-black/40 backdrop-blur-sm text-white font-mono text-[11px] uppercase tracking-[0.2em] hover:bg-white/5 transition-all flex items-center justify-center"
                             >
-                                {/* Decorative Frames */}
-                                <div className="absolute -inset-4 border border-border/20 rounded-xl" />
-                                <div className="absolute -inset-8 border border-border/10 rounded-2xl opacity-50" />
+                                Browse Catalog
+                            </Link>
+                        </motion.div>
+                    </div>
 
-                                <div className="relative w-full h-full overflow-hidden rounded-xl border border-border/40 bg-card/60 backdrop-blur-md shadow-2xl group/img">
+                    {/* RIGHT IMAGE SECTION */}
+                    <div className="relative w-full md:w-2/5 h-full flex items-center justify-center p-8 lg:p-12">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, rotateY: -15 }}
+                            animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                            transition={{ delay: 0.4, duration: 0.8 }}
+                            className="relative w-full max-w-[440px] aspect-[4/5] perspective-1000"
+                        >
+                            <div className="relative w-full h-full rounded-sm border border-white/10 bg-[#0f1113]/80 backdrop-blur-md overflow-hidden shadow-2xl flex flex-col">
+                                {/* CARD HEADER */}
+                                <div className="p-4 flex items-center justify-between border-b border-white/5">
+                                    <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/40 font-bold border border-white/20 px-2 py-0.5 rounded-xs">
+                                        PREVIEW
+                                    </span>
+                                </div>
+
+                                {/* IMAGE CONTAINER */}
+                                <div className="flex-1 relative m-4 rounded-xs overflow-hidden bg-black/40 border border-white/5">
                                     <Image
                                         src={activePromo.image}
                                         alt={activePromo.title}
                                         fill
-                                        className="object-cover transition-transform duration-[2000ms] ease-out group-hover/img:scale-110"
-                                        priority
+                                        className="object-cover opacity-80"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent mix-blend-overlay" />
-
-                                    {/* Floating Action Hint */}
-                                    <div className="absolute bottom-6 left-6 z-20 flex items-center gap-3">
-                                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-background/80 backdrop-blur-md border border-border/60 text-primary animate-pulse">
-                                            <IconPlayerPlayFilled size={16} />
-                                        </div>
-                                        <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white font-bold drop-shadow-md">
-                                            Preview Soundscape
-                                        </span>
-                                    </div>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                                 </div>
 
-                                {/* Technical Corner Accents */}
-                                <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-primary/50 translate-x-1 -translate-y-1" />
-                                <div className="absolute bottom-0 left-0 w-8 h-8 border-b border-l border-primary/50 -translate-x-1 translate-y-1" />
-                            </motion.div>
-                        </div>
-                    </motion.div>
-                </AnimatePresence>
+                                {/* CARD FOOTER */}
+                                <div className="p-5 flex flex-col gap-2">
+                                    <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-primary font-bold opacity-80">
+                                        CURRENT FEATURE
+                                    </span>
+                                    <h3 className="jacquard-24-regular text-2xl text-white lowercase leading-none">
+                                        {activePromo.title}
+                                    </h3>
+                                </div>
 
-                {/* NAVIGATION BUTTONS */}
-                <div className="absolute bottom-10 right-10 z-30 flex items-center gap-3">
-                    <button
-                        onClick={handlePrev}
-                        className="w-12 h-12 flex items-center justify-center rounded-sm bg-background/60 backdrop-blur-md border border-border/60 text-muted hover:text-primary hover:border-primary/40 transition-all duration-200"
-                        aria-label="Previous slide"
-                    >
-                        <IconChevronLeft size={22} stroke={2} />
-                    </button>
+                                <div className="absolute top-4 right-4 text-white/20">
+                                    <IconDownload size={20} stroke={1.5} />
+                                </div>
+                            </div>
 
-                    <div className="flex gap-1.5 px-3">
-                        {promoSlides.map((_, idx) => (
-                            <button
-                                key={idx}
-                                onClick={() => {
-                                    setIsAutoPlaying(false);
-                                    setDirection(idx > currentIndex ? 1 : -1);
-                                    setCurrentIndex(idx);
-                                }}
-                                className={`h-1.5 transition-all duration-300 rounded-full ${idx === currentIndex ? 'w-8 bg-primary' : 'w-1.5 bg-border/60 hover:bg-border'}`}
-                                aria-label={`Go to slide ${idx + 1}`}
-                            />
-                        ))}
+                            {/* DECORATIVE ACCENTS */}
+                            <div className="absolute -top-2 -right-2 w-12 h-12 border-t-2 border-r-2 border-primary/20" />
+                            <div className="absolute -bottom-2 -left-2 w-12 h-12 border-b-2 border-l-2 border-primary/20" />
+                        </motion.div>
                     </div>
+                </motion.div>
+            </AnimatePresence>
 
-                    <button
-                        onClick={handleNext}
-                        className="w-12 h-12 flex items-center justify-center rounded-sm bg-primary/10 hover:bg-primary/20 backdrop-blur-md border border-primary/20 text-primary hover:border-primary/40 transition-all duration-200"
-                        aria-label="Next slide"
-                    >
-                        <IconChevronRight size={22} stroke={2} />
-                    </button>
+            {/* BOTTOM PAGINATION & ARROWS */}
+            <div className="absolute bottom-12 left-0 right-0 z-20 px-6 md:px-12 lg:px-24 flex items-center justify-between pointer-events-none">
+                <div className="flex items-center gap-4 pointer-events-auto">
+                    <span className="font-mono text-[16px] font-bold text-white tracking-widest">
+                        {String(currentIndex + 1).padStart(2, '0')}
+                    </span>
+                    <div className="h-[1px] w-12 bg-white/20" />
+                    <span className="font-mono text-[12px] text-white/30 tracking-widest">
+                        {String(promoSlides.length).padStart(2, '0')}
+                    </span>
                 </div>
 
-                {/* Vertical Progress Indicator */}
-                <div className="absolute left-6 top-1/2 -translate-y-1/2 z-20 hidden md:flex flex-col items-center gap-4">
-                    <span className="font-mono text-[9px] vertical-text uppercase tracking-[0.3em] text-muted/30">FEATURED_RELEASES</span>
-                    <div className="w-px h-24 bg-border/20 relative">
-                        <motion.div
-                            className="absolute top-0 left-0 w-full bg-primary"
-                            animate={{ height: `${((currentIndex + 1) / promoSlides.length) * 100}%` }}
-                            transition={{ duration: 0.5 }}
-                        />
-                    </div>
-                    <span className="font-mono text-[10px] text-primary font-bold">0{currentIndex + 1}</span>
+                <div className="flex items-center gap-2 pointer-events-auto">
+                    <button
+                        onClick={handlePrev}
+                        className="w-12 h-12 flex items-center justify-center rounded-sm bg-black/40 border border-white/10 text-white/60 hover:text-white hover:border-white/30 transition-all"
+                    >
+                        <IconChevronLeft size={24} stroke={1.5} />
+                    </button>
+                    <button
+                        onClick={handleNext}
+                        className="w-12 h-12 flex items-center justify-center rounded-sm bg-black/40 border border-white/10 text-white/60 hover:text-white hover:border-white/30 transition-all"
+                    >
+                        <IconChevronRight size={24} stroke={1.5} />
+                    </button>
                 </div>
             </div>
         </div>

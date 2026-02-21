@@ -118,40 +118,6 @@ export default function CheckoutPage() {
 
     return (
         <div className="flow-page-surface min-h-screen flex flex-col bg-background text-foreground">
-            <div className="lg:hidden border-b border-border drawer-surface backdrop-blur-sm">
-                <button
-                    onClick={() => setMobileOpen(!mobileOpen)}
-                    className="w-full flex items-center justify-between px-5 py-4 font-sans text-sm cursor-pointer hover:bg-card/80 transition-colors"
-                >
-                    <div className="flex items-center gap-2 text-primary">
-                        <IconChevronDown
-                            size={16}
-                            stroke={2}
-                            className={`transition-transform duration-200 ${mobileOpen ? 'rotate-180' : ''}`}
-                        />
-                        <span className="font-medium">
-                            {mobileOpen ? 'Hide' : 'Show'} order summary
-                        </span>
-                    </div>
-                    <span className="font-semibold text-foreground">${cartTotal.toFixed(2)}</span>
-                </button>
-
-                <AnimatePresence>
-                    {mobileOpen && (
-                        <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="overflow-hidden drawer-surface border-t border-border"
-                        >
-                            <div className="px-5 pb-6">
-                                <OrderSummary cart={cart} total={cartTotal} />
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </div>
 
             <div className="flex-1 flex flex-col lg:flex-row">
                 <div className="w-full lg:w-[44%] drawer-surface border-b lg:border-b-0 lg:border-r border-border">
