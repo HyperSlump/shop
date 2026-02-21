@@ -65,7 +65,7 @@ export default function HorizontalNav() {
                                     href={link.href}
                                     onMouseEnter={() => setHoveredLink(link.id)}
                                     onFocus={() => setHoveredLink(link.id)}
-                                    className="group relative h-12 flex flex-col items-center justify-center px-4 transition-all duration-150 ease-out rounded-none"
+                                    className="group relative h-12 flex flex-col items-center justify-center px-4 transition-all duration-150 ease-out rounded-sm"
                                 >
                                     <span className="jacquard-24-regular lowercase text-[1.2rem] md:text-[1.28rem] tracking-[0.04em] leading-none group-hover:text-primary transition-colors duration-150 ease-out z-10">
                                         {link.label}
@@ -89,7 +89,7 @@ export default function HorizontalNav() {
                     >
                         <IconShoppingCart size={22} stroke={2} className="group-hover:scale-110 transition-transform" />
                         {cart.length > 0 && (
-                            <span className="absolute -top-0.5 -right-0.5 bg-primary text-black text-[10px] font-black w-4.5 h-4.5 rounded-none flex items-center justify-center shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)]">
+                            <span className="absolute -top-0.5 -right-0.5 bg-primary text-black text-[10px] font-black w-4.5 h-4.5 rounded-xs flex items-center justify-center shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)]">
                                 {cart.length}
                             </span>
                         )}
@@ -120,7 +120,7 @@ export default function HorizontalNav() {
                                     key={link.id}
                                     href={link.href}
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className="px-4 py-3 hover:bg-primary/10 hover:text-primary transition-all flex items-center justify-between rounded-none"
+                                    className="px-4 py-3 hover:bg-primary/10 hover:text-primary transition-all flex items-center justify-between rounded-sm"
                                 >
                                     <span className="jacquard-24-regular lowercase text-[1.2rem] leading-none tracking-[0.04em]">
                                         {link.label}

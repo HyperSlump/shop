@@ -61,7 +61,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
     };
 
     return (
-        <article className="group relative overflow-hidden rounded-lg border border-border/70 bg-card/75 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-[0_18px_45px_rgba(15,23,42,0.12)] dark:hover:shadow-[0_18px_45px_rgba(0,0,0,0.45)]">
+        <article className="group relative overflow-hidden rounded-xl border border-border/70 bg-card/75 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-[0_18px_45px_rgba(15,23,42,0.12)] dark:hover:shadow-[0_18px_45px_rgba(0,0,0,0.45)]">
             <div
                 className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                 style={{
@@ -74,10 +74,10 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 <Link href={href} className="relative block">
                     <div className="relative aspect-[4/3] overflow-hidden border-b border-border/60 px-3 pb-3 pt-3">
                         <div className="absolute left-5 right-5 top-5 z-20 flex items-center justify-between gap-2">
-                            <span className="inline-flex h-6 items-center rounded-none border border-border/70 bg-background/70 px-2.5 font-mono text-[9px] uppercase tracking-[0.16em] text-muted">
+                            <span className="inline-flex h-6 items-center rounded-xs border border-border/70 bg-background/70 px-2.5 font-mono text-[9px] uppercase tracking-[0.16em] text-muted">
                                 instant download
                             </span>
-                            <span className="inline-flex h-6 items-center rounded-none border border-primary/25 bg-primary/12 px-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">
+                            <span className="inline-flex h-6 items-center rounded-xs border border-primary/25 bg-primary/12 px-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">
                                 {product.amount === 0 ? 'free' : `$${product.amount}`}
                             </span>
                         </div>
@@ -87,7 +87,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                             <div className="relative h-full w-full transition-transform duration-500 ease-out group-hover:scale-[1.03]">
                                 <Image
                                     alt={product.name}
-                                    className="object-contain drop-shadow-[0_12px_28px_rgba(0,0,0,0.34)]"
+                                    className="object-contain drop-shadow-[0_12px_28px_rgba(0,0,0,0.34)] rounded-sm"
                                     src={product.image || 'https://via.placeholder.com/500'}
                                     fill
                                     sizes="(max-width: 768px) 92vw, (max-width: 1200px) 46vw, 31vw"
@@ -151,13 +151,13 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 </p>
 
                 <div className="flex flex-wrap gap-1.5">
-                    <span className="inline-flex h-6 items-center rounded-none border border-border bg-background/45 px-2.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
+                    <span className="inline-flex h-6 items-center rounded-xs border border-border bg-background/45 px-2.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
                         {formatLabel}
                     </span>
-                    <span className="inline-flex h-6 items-center rounded-none border border-border bg-background/45 px-2.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
+                    <span className="inline-flex h-6 items-center rounded-xs border border-border bg-background/45 px-2.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
                         {oneShotCount} one-shots
                     </span>
-                    <span className="inline-flex h-6 items-center rounded-none border border-border bg-background/45 px-2.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
+                    <span className="inline-flex h-6 items-center rounded-xs border border-border bg-background/45 px-2.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
                         secure checkout
                     </span>
                 </div>

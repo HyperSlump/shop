@@ -38,7 +38,7 @@ export default function CartDrawer() {
     const [oneShotsOpen, setOneShotsOpen] = useState(false);
     const [upsellsOpen, setUpsellsOpen] = useState(false);
     const router = useRouter();
-    const dismissButtonClass = 'rounded-none transition-colors cursor-pointer text-muted hover:text-foreground hover:bg-foreground/5';
+    const dismissButtonClass = 'rounded-xs transition-colors cursor-pointer text-muted hover:text-foreground hover:bg-foreground/5';
 
     const handleCheckout = async () => {
         setLoading(true);
@@ -209,7 +209,7 @@ export default function CartDrawer() {
                                 <div className="space-y-1">
                                     {upsellCandidates.map((item) => (
                                         <div key={item.id} className="flex items-center gap-3 py-3 border-b border-border/40 last:border-b-0 hover:bg-foreground/[0.02] transition-colors rounded-sm px-1">
-                                            <div className="w-12 h-12 border border-border/80 overflow-hidden bg-background/70 flex-shrink-0 rounded-none shadow-sm relative group/img">
+                                            <div className="w-12 h-12 border border-border/80 overflow-hidden bg-background/70 flex-shrink-0 rounded-sm shadow-sm relative group/img">
                                                 {item.image ? (
                                                     <NextImage src={item.image} alt={item.name} width={48} height={48} className="w-full h-full object-cover grayscale-[0.5] group-hover/img:grayscale-0 transition-all duration-300" />
                                                 ) : (
@@ -232,7 +232,7 @@ export default function CartDrawer() {
                                                     e.stopPropagation();
                                                     addToCart(item);
                                                 }}
-                                                className="inline-flex items-center justify-center w-8 h-8 rounded-none border border-border text-muted hover:text-foreground hover:bg-primary hover:border-primary transition-all duration-200 cursor-pointer flex-shrink-0 group/add"
+                                                className="inline-flex items-center justify-center w-8 h-8 rounded-sm border border-border text-muted hover:text-foreground hover:bg-primary hover:border-primary transition-all duration-200 cursor-pointer flex-shrink-0 group/add"
                                                 aria-label={`Add ${item.name} to cart`}
                                                 title="Add to cart"
                                             >
@@ -304,7 +304,7 @@ export default function CartDrawer() {
                                 <div className="flex-1 flex flex-col items-center justify-center py-12 text-center">
                                     <div className="w-full max-w-[300px] space-y-6">
                                         <div className="flex flex-col items-center">
-                                            <div className="w-16 h-16 rounded-none border border-border/50 flex items-center justify-center mb-6 bg-foreground/[0.02]">
+                                            <div className="w-16 h-16 rounded-sm border border-border/50 flex items-center justify-center mb-6 bg-foreground/[0.02]">
                                                 <IconShoppingCart size={28} stroke={1.2} className="text-muted/60" aria-hidden />
                                             </div>
                                             <h2 className="jacquard-24-regular text-2xl leading-none text-foreground">cart empty</h2>
@@ -316,7 +316,7 @@ export default function CartDrawer() {
                                         <div className="space-y-3 pt-4">
                                             <button
                                                 onClick={() => goTo('/#catalog')}
-                                                className="w-full h-[46px] rounded-none bg-primary text-primary-foreground font-semibold text-[13px] transition-all duration-150 hover:brightness-110 cursor-pointer inline-flex items-center justify-center gap-2 group"
+                                                className="w-full h-[46px] rounded-sm bg-primary text-primary-foreground font-semibold text-[13px] transition-all duration-150 hover:brightness-110 cursor-pointer inline-flex items-center justify-center gap-2 group"
                                             >
                                                 Browse catalog
                                                 <IconArrowRight size={14} stroke={2.2} className="group-hover:translate-x-1 transition-transform" />
@@ -324,7 +324,7 @@ export default function CartDrawer() {
 
                                             <button
                                                 onClick={() => goTo('/')}
-                                                className="w-full h-[44px] rounded-none border border-border bg-transparent text-foreground/85 font-medium text-[12px] transition-colors duration-150 hover:bg-foreground/5 cursor-pointer inline-flex items-center justify-center gap-2"
+                                                className="w-full h-[44px] rounded-sm border border-border bg-transparent text-foreground/85 font-medium text-[12px] transition-colors duration-150 hover:bg-foreground/5 cursor-pointer inline-flex items-center justify-center gap-2"
                                             >
                                                 <IconSparkles size={14} stroke={2} />
                                                 New merch drops
@@ -353,7 +353,7 @@ export default function CartDrawer() {
                                                         transition={{ duration: 0.46, ease: [0.16, 1, 0.3, 1] }}
                                                         className="relative py-5 flex items-center gap-3 border-b border-border/70 bg-transparent transition-colors"
                                                     >
-                                                        <div className="w-[56px] h-[56px] flex-shrink-0 rounded-none overflow-hidden flex items-center justify-center border border-border bg-background/55">
+                                                        <div className="w-[56px] h-[56px] flex-shrink-0 rounded-sm overflow-hidden flex items-center justify-center border border-border bg-background/55">
                                                             <NextImage
                                                                 src={item.image || 'https://via.placeholder.com/100'}
                                                                 alt={item.name}
@@ -417,7 +417,7 @@ export default function CartDrawer() {
                                 <button
                                     onClick={handleCheckout}
                                     disabled={cart.length === 0 || loading}
-                                    className="w-full h-[44px] rounded-none font-medium text-[15px] transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-primary text-primary-foreground hover:brightness-110 shadow-[0_4px_12px_rgba(15,23,42,0.16)] dark:shadow-[0_8px_18px_rgba(0,0,0,0.28)]"
+                                    className="w-full h-[44px] rounded-sm font-medium text-[15px] transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-primary text-primary-foreground hover:brightness-110 shadow-[0_4px_12px_rgba(15,23,42,0.16)] dark:shadow-[0_8px_18px_rgba(0,0,0,0.28)]"
                                 >
                                     {loading ? 'Redirecting...' : 'Continue to checkout'}
                                 </button>

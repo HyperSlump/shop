@@ -150,7 +150,7 @@ export default function PreviewPlayerDock() {
                                         <button
                                             type="button"
                                             onClick={togglePlayback}
-                                            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-none border border-border bg-background text-foreground transition-colors hover:border-primary hover:text-primary"
+                                            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-sm border border-border bg-background text-foreground transition-colors hover:border-primary hover:text-primary"
                                             aria-label={isPlaying ? 'Pause preview' : 'Play preview'}
                                         >
                                             {isPlaying ? (
@@ -199,7 +199,7 @@ export default function PreviewPlayerDock() {
                                 <div className="flex items-center lg:border-r lg:border-border/50 lg:pr-4 lg:mr-1">
                                     <button
                                         onClick={() => setIsPlaylistOpen(!isPlaylistOpen)}
-                                        className={`flex items-center gap-2 px-3 py-1.5 rounded-md font-mono text-[10px] uppercase tracking-[0.15em] transition-all duration-300 group
+                                        className={`flex items-center gap-2 px-3 py-1.5 rounded-sm font-mono text-[10px] uppercase tracking-[0.15em] transition-all duration-300 group
                                         ${isPlaylistOpen
                                                 ? 'bg-primary text-primary-foreground shadow-[0_0_15px_rgba(216,58,61,0.2)]'
                                                 : 'bg-background/40 text-muted hover:text-foreground hover:bg-background/60 border border-border/50'}`}

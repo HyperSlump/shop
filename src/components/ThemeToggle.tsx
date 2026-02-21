@@ -32,7 +32,7 @@ export default function ThemeToggle() {
         }
     };
 
-    if (!mounted) return <div className="h-8 w-14 rounded-none border border-border/60 bg-card/40" />;
+    if (!mounted) return <div className="h-8 w-14 rounded-sm border border-border/60 bg-card/40" />;
 
     return (
         <motion.button
@@ -40,10 +40,10 @@ export default function ThemeToggle() {
             whileTap={{ scale: 0.96 }}
             aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
             aria-pressed={isDark}
-            className="relative h-8 w-14 rounded-none border border-border/70 bg-card/70 p-1 backdrop-blur-sm transition-colors duration-200 hover:border-primary/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+            className="relative h-8 w-14 rounded-sm border border-border/70 bg-card/70 p-1 backdrop-blur-sm transition-colors duration-200 hover:border-primary/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
         >
             <motion.span
-                className="pointer-events-none absolute inset-0 rounded-none"
+                className="pointer-events-none absolute inset-0 rounded-sm"
                 animate={{
                     background: isDark
                         ? 'linear-gradient(120deg, rgba(216,58,61,0.22), rgba(123,170,178,0.16))'
@@ -60,7 +60,7 @@ export default function ThemeToggle() {
             </span>
 
             <motion.span
-                className="relative z-10 flex h-6 w-6 items-center justify-center rounded-none border border-border/80 bg-background text-foreground shadow-[0_1px_4px_rgba(0,0,0,0.22)]"
+                className="relative z-10 flex h-6 w-6 items-center justify-center rounded-sm border border-border/80 bg-background text-foreground shadow-[0_1px_4px_rgba(0,0,0,0.22)]"
                 animate={{
                     x: isDark ? 0 : 24
                 }}
