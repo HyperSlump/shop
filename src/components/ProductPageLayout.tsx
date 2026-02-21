@@ -4,11 +4,10 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import WaveformOverlay from './WaveformOverlay';
-import OneShotPlayer from './OneShotPlayer';
+import { IconPlayerPlayFilled, IconPlayerPauseFilled } from '@tabler/icons-react';
 import MatrixSpace from './MatrixSpace';
-import { useCart } from './CartProvider';
-import { Product } from './CartProvider';
+import { useCart, Product } from './CartProvider';
+import { usePreviewPlayer } from './PreviewPlayerProvider';
 
 interface ProductPageLayoutProps {
     product: Product;
@@ -19,12 +18,22 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
     const isInCart = cart.some(item => item.id === product.id);
 
     const audioPreviewUrl = product.metadata?.audio_preview;
-    const samples = [
-        product.metadata?.sample_1,
-        product.metadata?.sample_2,
-        product.metadata?.sample_3,
-        product.metadata?.sample_4,
-    ].filter(Boolean);
+    const formatLabel = typeof product.metadata?.format === 'string' ? product.metadata.format.toUpperCase() : 'WAV';
+    const oneShotCount = typeof product.metadata?.count === 'string' ? product.metadata.count : '140';
+
+    const { playTrack, isTrackActive, isPlaying, isOpen } = usePreviewPlayer();
+    const isActivePreview = isOpen && isTrackActive(product.id);
+
+    const playPreview = () => {
+        if (!audioPreviewUrl) return;
+        playTrack({
+            id: product.id,
+            title: product.name,
+            subtitle: `${formatLabel} / ${oneShotCount} one-shots`,
+            image: product.image,
+            audioUrl: audioPreviewUrl,
+        });
+    };
 
     const containerVariants = {
         initial: { opacity: 0 },
@@ -125,59 +134,26 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                             </div>
                         </div>
 
-                        {/* Audio Interface Container */}
-                        <div className="p-6 border border-primary/10 bg-primary/[0.02] space-y-8 relative overflow-hidden group rounded">
-                            <div className="absolute top-0 right-0 p-2 font-mono text-[8px] opacity-20 uppercase tracking-widest">Console.active</div>
-
-                            {/* Main Stream */}
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-1 h-1 bg-red-500 animate-pulse rounded-full" />
-                                    <span className="font-mono text-[10px] text-primary/60 uppercase tracking-[0.2em]">MASTER_SIGNAL_STREAM</span>
-                                </div>
-                                {audioPreviewUrl ? (
-                                    <div className="relative w-full h-[40px] bg-black/20 dark:bg-white/5 border border-primary/20 rounded overflow-hidden group-hover:border-primary/40 transition-colors">
-                                        <WaveformOverlay audioUrl={audioPreviewUrl} isActive={true} />
-                                    </div>
-                                ) : (
-                                    <div className="h-20 flex items-center justify-center border border-dashed border-primary/10 text-[11px] font-mono text-primary/20 rounded">
-                                        NO_SIGNAL_DETECTED
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Samples Utility Grid */}
-                            {samples.length > 0 && (
-                                <div className="space-y-4">
-                                    <div className="flex justify-between items-center border-b border-primary/10 pb-2">
-                                        <span className="font-mono text-[10px] text-primary/40 uppercase tracking-widest">DRUM_SUB_SAMPLES</span>
-                                        <span className="font-mono text-[9px] text-primary/20 opacity-50">{samples.length}_BANKS_ONLINE</span>
-                                    </div>
-                                    <div className="grid grid-cols-4 gap-3">
-                                        {samples.map((url, index) => (
-                                            <OneShotPlayer
-                                                key={index}
-                                                audioUrl={url}
-                                                label={`S_${index + 1}`}
-                                                isActive={true}
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
+                        {/* Action Bar */}
+                        <div className="pt-2 space-y-4">
+                            {audioPreviewUrl && (
+                                <button
+                                    onClick={playPreview}
+                                    className={`w-full h-14 flex items-center justify-center gap-4 font-mono text-sm font-bold tracking-[0.3em] uppercase transition-all duration-300 rounded border
+                                        ${isActivePreview && isPlaying
+                                            ? 'bg-primary/20 text-primary border-primary/50'
+                                            : 'bg-transparent text-foreground/90 border-foreground/20 hover:border-primary/50 hover:text-primary hover:bg-primary/5'
+                                        }`}
+                                >
+                                    {isActivePreview && isPlaying ? (
+                                        <IconPlayerPauseFilled size={18} />
+                                    ) : (
+                                        <IconPlayerPlayFilled size={18} />
+                                    )}
+                                    <span>{isActivePreview && isPlaying ? 'PLAYING_PREVIEW' : 'STREAM_AUDIO_DEMO'}</span>
+                                </button>
                             )}
 
-                            {/* Technical Legend */}
-                            <div className="pt-4 border-t border-primary/5 space-y-3">
-                                <div className="flex justify-between items-center text-[9px] font-mono opacity-50 uppercase tracking-widest">
-                                    <span>Signal_Flux_Density</span>
-                                    <span>[|||||||||||||---] 85%</span>
-                                </div>
-                                <div className="w-full h-[1px] bg-gradient-to-r from-primary/30 to-transparent" />
-                            </div>
-                        </div>
-
-                        {/* Action Bar */}
-                        <div className="pt-4">
                             <button
                                 onClick={() => !isInCart && addToCart(product)}
                                 disabled={isInCart}
