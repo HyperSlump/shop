@@ -6,7 +6,8 @@ import Link from 'next/link';
 import { useCart } from './CartProvider';
 import ThemeToggle from './ThemeToggle';
 import { usePathname } from 'next/navigation';
-import { Menu, X, ShoppingCart } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
+import { IconShoppingCart } from '@tabler/icons-react';
 
 const navLinks = [
     { label: 'Shop', href: '/', id: 'shop', note: '//MAIN' },
@@ -35,8 +36,8 @@ export default function HorizontalNav() {
     }, []);
 
     const navOpacityClass = isHome
-        ? (isScrolled ? 'bg-background/95 dark:bg-zinc-950/90 border-b border-border' : 'bg-transparent border-transparent')
-        : 'bg-background/95 dark:bg-background/80 border-b border-border';
+        ? (isScrolled ? 'bg-background/95 border-b border-border' : 'bg-transparent border-transparent')
+        : 'bg-background/95 border-b border-border';
 
     return (
         <nav
@@ -48,7 +49,11 @@ export default function HorizontalNav() {
             <div className="w-full max-w-[1400px] mx-auto px-3 md:px-5 lg:px-6 h-20 flex items-center justify-between relative">
                 {/* LEFT: Logo - Fixed width to match Right for perfect centering */}
                 <div className="flex-shrink-0 w-[140px] flex justify-start">
-                    <Link href="/" className="text-4xl font-display tracking-tighter hover:text-primary transition-all duration-150 ease-out">
+                    <Link
+                        href="/"
+                        className="brand-logo-jacquard text-[3.2rem] md:text-[3.6rem] leading-none tracking-tight hover:text-primary transition-all duration-150 ease-out"
+                        style={{ fontFamily: 'var(--font-heading), "Jacquard 24", "Jacquard 12", system-ui' }}
+                    >
                         h$
                     </Link>
                 </div>
@@ -64,9 +69,11 @@ export default function HorizontalNav() {
                                     onFocus={() => setHoveredLink(link.id)}
                                     className="group relative h-12 flex flex-col items-center justify-center px-4 transition-all duration-150 ease-out rounded"
                                 >
-                                    <span className="font-mono text-[11px] md:text-[12px] tracking-[0.3em] uppercase group-hover:text-primary transition-colors duration-150 ease-out z-10">{link.label}</span>
+                                    <span className="jacquard-24-regular lowercase text-[1.2rem] md:text-[1.28rem] tracking-[0.04em] leading-none group-hover:text-primary transition-colors duration-150 ease-out z-10">
+                                        {link.label}
+                                    </span>
                                     {link.note && (
-                                        <span className="text-[9px] opacity-25 group-hover:opacity-60 font-mono tracking-tighter z-10 mt-0.5 transition-opacity duration-150 ease-out">{link.note}</span>
+                                        <span className="text-[9px] opacity-25 group-hover:opacity-60 font-mono uppercase tracking-tighter z-10 mt-0.5 transition-opacity duration-150 ease-out">{link.note}</span>
                                     )}
                                 </Link>
                             </div>
@@ -82,7 +89,7 @@ export default function HorizontalNav() {
                         onClick={toggleCart}
                         className="p-2.5 hover:text-primary transition-colors relative group"
                     >
-                        <ShoppingCart size={22} className="group-hover:scale-110 transition-transform" />
+                        <IconShoppingCart size={22} stroke={2} className="group-hover:scale-110 transition-transform" />
                         {cart.length > 0 && (
                             <span className="absolute -top-0.5 -right-0.5 bg-primary text-black text-[10px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)]">
                                 {cart.length}
@@ -115,10 +122,12 @@ export default function HorizontalNav() {
                                     key={link.id}
                                     href={link.href}
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className="px-4 py-3 font-mono text-sm uppercase tracking-widest hover:bg-primary/10 hover:text-primary transition-all flex items-center justify-between"
+                                    className="px-4 py-3 hover:bg-primary/10 hover:text-primary transition-all flex items-center justify-between"
                                 >
-                                    <span>{link.label}</span>
-                                    <span className="text-[10px] opacity-30">{link.note}</span>
+                                    <span className="jacquard-24-regular lowercase text-[1.2rem] leading-none tracking-[0.04em]">
+                                        {link.label}
+                                    </span>
+                                    <span className="text-[10px] uppercase opacity-30">{link.note}</span>
                                 </Link>
                             ))}
                         </div>

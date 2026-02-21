@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ChevronDown, CheckCircle2 } from 'lucide-react';
+import { IconChevronDown, IconCircleCheck } from '@tabler/icons-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 
@@ -42,11 +42,12 @@ export default function SuccessSummary({ downloads, totalAmount, sessionId }: Su
                 >
                     <div className="flex items-center gap-4">
                         <div className="flex items-center gap-2">
-                            <CheckCircle2 size={16} className="text-green-500" />
+                            <IconCircleCheck size={16} stroke={2} className="text-green-500" />
                             <span className="font-mono text-[10px] uppercase tracking-widest text-white/90">Order Summary</span>
                         </div>
-                        <ChevronDown
+                        <IconChevronDown
                             size={12}
+                            stroke={2}
                             className={`text-white/20 transition-transform duration-500 ${isOpen ? 'rotate-180' : ''}`}
                         />
                     </div>
@@ -77,9 +78,14 @@ export default function SuccessSummary({ downloads, totalAmount, sessionId }: Su
 
             {/* Desktop Brand / Header (Hidden on Mobile) */}
             <div className="hidden lg:block mb-12">
-                <Link href="/" className="text-4xl font-display tracking-tighter text-white hover:text-primary transition-all inline-block mb-2">h$</Link>
+                <Link
+                    href="/"
+                    className="brand-logo-jacquard text-[3.2rem] leading-none tracking-tight text-white hover:text-primary transition-all inline-block mb-2"
+                >
+                    h$
+                </Link>
                 <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.2em] text-white/40">
-                    <CheckCircle2 size={12} className="text-green-500" />
+                    <IconCircleCheck size={12} stroke={2} className="text-green-500" />
                     Transaction Completed
                 </div>
             </div>
@@ -123,7 +129,7 @@ export default function SuccessSummary({ downloads, totalAmount, sessionId }: Su
                 </div>
                 <div className="pt-8 border-t border-white/10 flex justify-between items-end">
                     <span className="font-mono text-[11px] text-white/40 uppercase tracking-[0.2em] pb-1">Total Paid</span>
-                    <span className="font-mono text-4xl font-bold text-white tracking-tighter">
+                    <span className="jacquard-24-regular text-5xl md:text-6xl leading-none tracking-tight text-white">
                         ${totalAmount.toFixed(2)}
                     </span>
                 </div>

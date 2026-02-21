@@ -1,28 +1,35 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Download, CheckCircle, ArrowLeft, Package } from 'lucide-react';
+import { IconArrowLeft, IconCircleCheck, IconDownload, IconPackage } from '@tabler/icons-react';
 
 import { getProductFile, FALLBACK_FILE_URL } from '@/lib/products';
 
 type DownloadItem = { id: string; name: string; image?: string };
 
 export default function DownloadsPage() {
-    const [items, setItems] = useState<DownloadItem[]>([]);
-    const [email, setEmail] = useState('');
-    const [downloaded, setDownloaded] = useState<Set<string>>(new Set());
-
-    useEffect(() => {
-        // Load items from localStorage
+    const [items] = useState<DownloadItem[]>(() => {
+        if (typeof window === 'undefined') return [];
         try {
             const stored = localStorage.getItem('hyperslump-download-items');
-            const storedEmail = localStorage.getItem('hyperslump-download-email');
-            if (stored) setItems(JSON.parse(stored));
-            if (storedEmail) setEmail(storedEmail);
-        } catch { }
-    }, []);
+            if (!stored) return [];
+            const parsed = JSON.parse(stored) as unknown;
+            return Array.isArray(parsed) ? parsed as DownloadItem[] : [];
+        } catch {
+            return [];
+        }
+    });
+    const [email] = useState(() => {
+        if (typeof window === 'undefined') return '';
+        try {
+            return localStorage.getItem('hyperslump-download-email') || '';
+        } catch {
+            return '';
+        }
+    });
+    const [downloaded, setDownloaded] = useState<Set<string>>(new Set());
 
     const markDownloaded = (id: string) => {
         setDownloaded(prev => new Set(prev).add(id));
@@ -32,15 +39,15 @@ export default function DownloadsPage() {
 
     if (items.length === 0) {
         return (
-            <div className="min-h-screen flex items-center justify-center font-sans bg-background text-foreground">
+            <div className="flow-page-surface min-h-screen flex items-center justify-center font-sans bg-transparent text-foreground">
                 <div className="text-center space-y-4">
-                    <Package size={40} className="mx-auto text-muted-foreground/40" />
+                    <IconPackage size={40} stroke={1.8} className="mx-auto text-muted-foreground/40" />
                     <p className="text-sm text-muted-foreground">No downloads available</p>
                     <Link
                         href="/"
                         className="inline-flex items-center gap-2 text-sm font-medium hover:opacity-80 transition-opacity text-primary"
                     >
-                        <ArrowLeft size={14} />
+                        <IconArrowLeft size={14} stroke={2} />
                         Continue shopping
                     </Link>
                 </div>
@@ -49,7 +56,7 @@ export default function DownloadsPage() {
     }
 
     return (
-        <div data-lenis-prevent className="min-h-screen font-sans overflow-x-hidden bg-background text-foreground">
+        <div data-lenis-prevent className="flow-page-surface min-h-screen font-sans overflow-x-hidden bg-transparent text-foreground">
             <div className="max-w-[800px] mx-auto px-5 py-8 lg:py-16">
 
                 {/* Header */}
@@ -57,8 +64,8 @@ export default function DownloadsPage() {
 
                     {/* Brand */}
                     <Link href="/" className="inline-flex items-center gap-3 mb-8 group">
-                        <ArrowLeft size={14} className="text-muted-foreground group-hover:-translate-x-0.5 transition-transform" />
-                        <span className="font-display text-xl tracking-tight text-foreground">
+                        <IconArrowLeft size={14} stroke={2} className="text-muted-foreground group-hover:-translate-x-0.5 transition-transform" />
+                        <span className="brand-logo-jacquard text-[2rem] leading-none tracking-tight text-foreground">
                             hyper$lump
                         </span>
                     </Link>
@@ -66,10 +73,10 @@ export default function DownloadsPage() {
                     {/* Confirmation */}
                     <div className="flex items-start gap-4 mb-10">
                         <div className="flex-shrink-0 mt-0.5">
-                            <CheckCircle size={24} className="text-green-500" />
+                            <IconCircleCheck size={24} stroke={2} className="text-green-500" />
                         </div>
                         <div>
-                            <h1 className="text-xl font-semibold mb-1 text-foreground">
+                            <h1 className="heading-h1 text-xl mb-1 text-foreground">
                                 Your downloads are ready
                             </h1>
                             <p className="text-sm text-muted-foreground">
@@ -115,7 +122,7 @@ export default function DownloadsPage() {
                                         {item.image ? (
                                             <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                                         ) : (
-                                            <Package size={14} className="text-muted-foreground/50" />
+                                            <IconPackage size={14} stroke={2} className="text-muted-foreground/50" />
                                         )}
                                     </div>
 
@@ -140,9 +147,9 @@ export default function DownloadsPage() {
                                         title={done ? 'Downloaded' : 'Download file'}
                                     >
                                         {done ? (
-                                            <CheckCircle size={18} />
+                                            <IconCircleCheck size={18} stroke={2} />
                                         ) : (
-                                            <Download size={16} />
+                                            <IconDownload size={16} stroke={2} />
                                         )}
                                     </a>
                                 </div>
@@ -158,17 +165,6 @@ export default function DownloadsPage() {
                     transition={{ duration: 0.4, delay: 0.3 }}
                     className="mt-10 space-y-6"
                 >
-                    {/* CTA: browse more */}
-                    <div className="text-center">
-                        <Link
-                            href="/"
-                            className="inline-flex items-center gap-2 text-sm font-medium transition-opacity hover:opacity-80 text-primary"
-                        >
-                            <ArrowLeft size={14} />
-                            Continue shopping
-                        </Link>
-                    </div>
-
                     {/* Stripe footer */}
                     <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground/50">
                         <span>Powered by</span>

@@ -12,58 +12,48 @@ export default function IndustrialTicker() {
     const row2AnimRef = useRef<gsap.core.Tween | null>(null);
 
     useEffect(() => {
-        // Register ScrollTrigger only on the client
         if (typeof window !== 'undefined') {
             gsap.registerPlugin(ScrollTrigger);
         }
 
         if (!row1Ref.current || !row2Ref.current) return;
 
-        // Ensure row contents are cloned for seamless looping
-        // Row 1: Right to Left (Steady 60BPM Pulse)
         row1AnimRef.current = gsap.to(row1Ref.current, {
             xPercent: -50,
             duration: 240,
-            ease: "none",
+            ease: 'none',
             repeat: -1,
             paused: false
         });
 
-        // Row 2: Left to Right (Steady 60BPM Pulse)
-        // We set initial xPercent to -50 and animate back to 0
         gsap.set(row2Ref.current, { xPercent: -50 });
         row2AnimRef.current = gsap.to(row2Ref.current, {
             xPercent: 0,
             duration: 200,
-            ease: "none",
+            ease: 'none',
             repeat: -1,
             paused: false
         });
 
-        // No ScrollTrigger needed for simple constant crawl
         return () => {
             if (row1AnimRef.current) row1AnimRef.current.kill();
             if (row2AnimRef.current) row2AnimRef.current.kill();
         };
     }, []);
 
-
-    const row1Text = "NEW MERCH OUT NOW — HYPER$LUMP — INDUSTRIAL_CORE_V1 — READ BLOG — SYSTEM_ACTIVE — ";
-    const row2Text = "$ $ $ $ /// REF_ID: 0x8823 /// ANALOG_ACTIVE /// $$$ /// 60.00_BPM_SYNC /// SIGNAL_LOST /// ";
+    const row1Text = 'new drops // hyper$lump // instant access // read blog // mode:live // ';
+    const row2Text = 'cold theme // hot theme // cart ready // checkout live // 60_bpm sync // ';
 
     return (
         <div ref={containerRef} className="w-full py-0 px-0 select-none relative z-20 pointer-events-auto overflow-hidden">
             <div className="border-y border-border bg-background relative">
                 <div className="w-full">
-
-                    {/* Row 1 / Gothic */}
                     <div className="overflow-hidden w-full">
                         <div ref={row1Ref} className="flex whitespace-nowrap py-2 border-b border-primary/5 w-fit">
-                            {/* Double the content for a seamless GSAP loop */}
                             {[...Array(2)].map((_, i) => (
                                 <div key={i} className="flex">
                                     {[...Array(6)].map((_, j) => (
-                                        <span key={j} className="font-mono font-bold text-6xl md:text-8xl text-primary px-12 tracking-tight uppercase">
+                                        <span key={j} className="jacquard-24-regular lowercase text-5xl md:text-7xl text-primary px-12 tracking-[0.03em] leading-none">
                                             {row1Text}
                                         </span>
                                     ))}
@@ -72,13 +62,12 @@ export default function IndustrialTicker() {
                         </div>
                     </div>
 
-                    {/* Row 2 / Mono */}
                     <div className="overflow-hidden w-full">
                         <div ref={row2Ref} className="flex whitespace-nowrap py-1 w-fit">
                             {[...Array(2)].map((_, i) => (
                                 <div key={i} className="flex">
                                     {[...Array(8)].map((_, j) => (
-                                        <span key={j} className="font-mono text-sm md:text-base text-foreground/50 px-16 tracking-[0.4em] uppercase">
+                                        <span key={j} className="jacquard-24-regular uppercase text-xl md:text-2xl text-foreground/55 px-16 tracking-[0.04em] leading-none">
                                             {row2Text}
                                         </span>
                                     ))}
@@ -88,7 +77,6 @@ export default function IndustrialTicker() {
                     </div>
                 </div>
 
-                {/* Technical Detail Overlays */}
                 <div className="absolute top-0 right-4 md:right-12 px-2 bg-background border-x border-primary/20 -translate-y-1/2">
                     <span className="font-mono text-[10px] text-primary/40 uppercase tracking-tighter">Tape_Feed.v1</span>
                 </div>

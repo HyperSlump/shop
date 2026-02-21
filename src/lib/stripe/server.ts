@@ -1,6 +1,9 @@
 import Stripe from 'stripe'
+import dotenv from 'dotenv'
 
-const secretKey = process.env.STRIPE_SECRET_KEY;
+dotenv.config({ path: '.env.local' });
+const secretKey = process.env.STRIPE_SECRET_KEY || process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY;
+
 
 if (!secretKey) {
     console.error('CRITICAL: STRIPE_SECRET_KEY is missing from environment variables.');

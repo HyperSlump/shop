@@ -4,7 +4,9 @@ import React from 'react';
 import { CartProvider } from "@/components/CartProvider";
 import CartDrawer from "@/components/CartDrawer";
 import CustomCursor from "@/components/CustomCursor";
-import { Geist, Geist_Mono, UnifrakturMaguntia } from "next/font/google";
+import PreviewPlayerDock from "@/components/PreviewPlayerDock";
+import { PreviewPlayerProvider } from "@/components/PreviewPlayerProvider";
+import { Geist, Geist_Mono, UnifrakturMaguntia, Jacquard_24 } from "next/font/google";
 
 import SmoothScroll from "@/components/SmoothScroll";
 import MainContent from "@/components/MainContent";
@@ -23,6 +25,13 @@ const unifrakturMaguntia = UnifrakturMaguntia({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-display",
+});
+
+const jacquard24 = Jacquard_24({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-heading",
 });
 
 export const metadata: Metadata = {
@@ -58,27 +67,23 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} ${unifrakturMaguntia.variable} antialiased transition-colors duration-300`}>
-        <div
-          className="fixed inset-0 noise z-[200] pointer-events-none"
-          style={{
-            opacity: 'var(--noise-opacity)',
-            mixBlendMode: 'var(--noise-blend)' as any // eslint-disable-line @typescript-eslint/no-explicit-any
-          }}
-        />
+      <body className={`${geistSans.variable} ${geistMono.variable} ${unifrakturMaguntia.variable} ${jacquard24.variable} antialiased transition-colors duration-300`}>
         <CartProvider>
-          <SmoothScroll>
-            <CustomCursor />
+          <PreviewPlayerProvider>
+            <SmoothScroll>
+              <CustomCursor />
 
-            <div className="relative min-h-screen bg-[var(--background)] flex flex-col">
-              {/* MAIN CONTENT WRAPPER */}
-              <MainContent>
-                {children}
-              </MainContent>
-            </div>
+              <div className="relative min-h-screen bg-transparent flex flex-col">
+                {/* MAIN CONTENT WRAPPER */}
+                <MainContent>
+                  {children}
+                </MainContent>
+              </div>
 
-            <CartDrawer />
-          </SmoothScroll>
+              <PreviewPlayerDock />
+              <CartDrawer />
+            </SmoothScroll>
+          </PreviewPlayerProvider>
         </CartProvider>
       </body>
     </html>

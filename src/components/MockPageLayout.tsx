@@ -20,7 +20,7 @@ export default function MockPageLayout({ title, subtitle, content, status, child
                 {/* Header System Line */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-primary/20 pb-8 gap-6">
                     <div className="space-y-1 pt-4">
-                        <h1 className="text-4xl md:text-6xl lg:text-7xl font-mono font-bold tracking-tighter leading-none uppercase">
+                        <h1 className="heading-h1 text-4xl md:text-6xl lg:text-7xl">
                             {subtitle}
                         </h1>
                     </div>

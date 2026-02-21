@@ -1,0 +1,1365 @@
+
+> shop@0.1.0 dev
+> next dev --port 3000
+
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: ⚙️  write to custom object with { processEnv: myObject }
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\hyper\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\hyper\Desktop\hyperslump\package-lock.json
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.0.0.220:3000
+- Environments: .env.local
+
+✓ Starting...
+✓ Ready in 1492ms
+○ Compiling / ...
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: ⚙️  override existing env vars with { override: true }
+ GET / 200 in 2.1s (compile: 1407ms, render: 645ms)
+ GET / 200 in 196ms (compile: 4ms, render: 192ms)
+ GET / 200 in 221ms (compile: 3ms, render: 217ms)
+ GET / 200 in 483ms (compile: 22ms, render: 461ms)
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: 🤖 agentic secret storage: https://dotenvx.com/as2
+ GET /api/products 200 in 480ms (compile: 184ms, render: 296ms)
+ GET /api/products 200 in 224ms (compile: 2ms, render: 222ms)
+ GET /checkout 200 in 501ms (compile: 472ms, render: 29ms)
+>>> [STRIPE_API] POST RECEIVED
+>>> [STRIPE_API] Payload received: [
+  {
+    "id": "price_1T1cKPHlah70mYw2rGIbLA02",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T1cMCHlah70mYw2AzZRHQ5R",
+    "productId": "prod_TzbZHUNmcWxdAQ",
+    "name": "sample_product_13",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfVTJ0V21jbHpONFU0QURKTlR6M09iRnNS00lq6x8Nnk",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {}
+  },
+  {
+    "id": "price_1T08JPHlah70mYw2Od6zDRPI",
+    "productId": "prod_Ty4SyHPyU1bPE1",
+    "name": "sample_product_12",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNVg2MHpDWFFPVnQybXFIMXZnUUc5aFRI00N7tFve4J",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_11.zip",
+      "key": "test_key_12"
+    }
+  },
+  {
+    "id": "price_1T08InHlah70mYw2H83XimLH",
+    "productId": "prod_Ty4RpQVuuYK0F3",
+    "name": "sample_product_10",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfRlVUNjJzTGFDWkp1Y0REb09vVGh6NmRv00Hj4LbRsn",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_10.zip",
+      "key": "test_key_10"
+    }
+  },
+  {
+    "id": "price_1T08ECHlah70mYw2gFrztxvH",
+    "productId": "prod_Ty4Mkc3rtRCLkN",
+    "name": "sample_product_9",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfUTRsVmllbkhKMlpmTGR1M1U4ZzVtMUdU002kdqIeN6",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_9.zip",
+      "key": "test_key_9"
+    }
+  },
+  {
+    "id": "price_1T08J8Hlah70mYw22717Pb0R",
+    "productId": "prod_Ty4SN3FojK78vl",
+    "name": "sample_product_11",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfUDVvOGpiMVZWSFQxNmszZ2VVMjlmNW9L00On9TgbRH",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_11.zip",
+      "key": "test_key_11"
+    }
+  },
+  {
+    "id": "price_1T086dHlah70mYw21Oyncq50",
+    "productId": "prod_Ty4FGvibp6QDKC",
+    "name": "sample_product_8",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfTDJoaTRVQ3phUXZKS1V0Uzlla3RMTG9s00qWSi1In7",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_8.zip",
+      "key": "test_key_8"
+    }
+  },
+  {
+    "id": "price_1T086LHlah70mYw2KM2LPoCV",
+    "productId": "prod_Ty4EI66OD9n6NY",
+    "name": "sample_product_7",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfc1haV2JXVE5HNTkxd1dDb2gwS000WHVu00rxpDRZLN",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_7.zip",
+      "key": "test_key_7"
+    }
+  },
+  {
+    "id": "price_1T085iHlah70mYw2d6mur9cP",
+    "productId": "prod_Ty4EmLpVRsDu3N",
+    "name": "sample_product_6",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkJuZzZNMXRBcDVINEFES0Yzdm4ySzVt00vDBSFXro",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_6.mp3",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_6.zip",
+      "key": "test_key_6",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T085LHlah70mYw2rHhse1Zz",
+    "productId": "prod_Ty4Da7keUHqvNu",
+    "name": "sample_product_5",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfZlZIa0dXTGFjRnMzR3RhT3Y4bWwzdnho00XNz3zMRa",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_5.mp3",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_5.zip",
+      "key": "test_key_5",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T077bHlah70mYw2Oa6IwZgB",
+    "productId": "prod_Ty3EV5L0vTeXR2",
+    "name": "sample_product_4",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfV05vaTdnRmlQRm9wQUhMMUdmQ1N2aW9M00xADbtnat",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_4.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_4.zip",
+      "key": "test_key_4",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T076PHlah70mYw2D01WCvIT",
+    "productId": "prod_Ty3ClgxrqLyZfY",
+    "name": "sample_product_3",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfYU14SndoeVlWaERaOElSZVJrNjg3Q0pt00xXUko4P1",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_3.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_3.zip",
+      "key": "test_key_3",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T070gHlah70mYw2Oe7IA8q8",
+    "productId": "prod_Ty36beUDsct5BF",
+    "name": "sample_product_2",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfRERPSGxiTG5WemVwTHdUNElxQU9Cc0FP00wL4WKH1Z",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_2.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_2.zip",
+      "key": "test_key_2",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1Szmy3Hlah70mYw2t6BkUO6O",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  }
+]
+>>> [STRIPE_API] Calculated Total: 1
+>>> [STRIPE_API] Requesting PaymentIntent from Stripe...
+>>> [STRIPE_API] POST RECEIVED
+>>> [STRIPE_API] Payload received: [
+  {
+    "id": "price_1T1cKPHlah70mYw2rGIbLA02",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T1cMCHlah70mYw2AzZRHQ5R",
+    "productId": "prod_TzbZHUNmcWxdAQ",
+    "name": "sample_product_13",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfVTJ0V21jbHpONFU0QURKTlR6M09iRnNS00lq6x8Nnk",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {}
+  },
+  {
+    "id": "price_1T08JPHlah70mYw2Od6zDRPI",
+    "productId": "prod_Ty4SyHPyU1bPE1",
+    "name": "sample_product_12",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNVg2MHpDWFFPVnQybXFIMXZnUUc5aFRI00N7tFve4J",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_11.zip",
+      "key": "test_key_12"
+    }
+  },
+  {
+    "id": "price_1T08InHlah70mYw2H83XimLH",
+    "productId": "prod_Ty4RpQVuuYK0F3",
+    "name": "sample_product_10",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfRlVUNjJzTGFDWkp1Y0REb09vVGh6NmRv00Hj4LbRsn",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_10.zip",
+      "key": "test_key_10"
+    }
+  },
+  {
+    "id": "price_1T08ECHlah70mYw2gFrztxvH",
+    "productId": "prod_Ty4Mkc3rtRCLkN",
+    "name": "sample_product_9",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfUTRsVmllbkhKMlpmTGR1M1U4ZzVtMUdU002kdqIeN6",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_9.zip",
+      "key": "test_key_9"
+    }
+  },
+  {
+    "id": "price_1T08J8Hlah70mYw22717Pb0R",
+    "productId": "prod_Ty4SN3FojK78vl",
+    "name": "sample_product_11",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfUDVvOGpiMVZWSFQxNmszZ2VVMjlmNW9L00On9TgbRH",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_11.zip",
+      "key": "test_key_11"
+    }
+  },
+  {
+    "id": "price_1T086dHlah70mYw21Oyncq50",
+    "productId": "prod_Ty4FGvibp6QDKC",
+    "name": "sample_product_8",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfTDJoaTRVQ3phUXZKS1V0Uzlla3RMTG9s00qWSi1In7",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_8.zip",
+      "key": "test_key_8"
+    }
+  },
+  {
+    "id": "price_1T086LHlah70mYw2KM2LPoCV",
+    "productId": "prod_Ty4EI66OD9n6NY",
+    "name": "sample_product_7",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfc1haV2JXVE5HNTkxd1dDb2gwS000WHVu00rxpDRZLN",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_7.zip",
+      "key": "test_key_7"
+    }
+  },
+  {
+    "id": "price_1T085iHlah70mYw2d6mur9cP",
+    "productId": "prod_Ty4EmLpVRsDu3N",
+    "name": "sample_product_6",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkJuZzZNMXRBcDVINEFES0Yzdm4ySzVt00vDBSFXro",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_6.mp3",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_6.zip",
+      "key": "test_key_6",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T085LHlah70mYw2rHhse1Zz",
+    "productId": "prod_Ty4Da7keUHqvNu",
+    "name": "sample_product_5",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfZlZIa0dXTGFjRnMzR3RhT3Y4bWwzdnho00XNz3zMRa",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_5.mp3",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_5.zip",
+      "key": "test_key_5",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T077bHlah70mYw2Oa6IwZgB",
+    "productId": "prod_Ty3EV5L0vTeXR2",
+    "name": "sample_product_4",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfV05vaTdnRmlQRm9wQUhMMUdmQ1N2aW9M00xADbtnat",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_4.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_4.zip",
+      "key": "test_key_4",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T076PHlah70mYw2D01WCvIT",
+    "productId": "prod_Ty3ClgxrqLyZfY",
+    "name": "sample_product_3",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfYU14SndoeVlWaERaOElSZVJrNjg3Q0pt00xXUko4P1",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_3.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_3.zip",
+      "key": "test_key_3",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T070gHlah70mYw2Oe7IA8q8",
+    "productId": "prod_Ty36beUDsct5BF",
+    "name": "sample_product_2",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfRERPSGxiTG5WemVwTHdUNElxQU9Cc0FP00wL4WKH1Z",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_2.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_2.zip",
+      "key": "test_key_2",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1Szmy3Hlah70mYw2t6BkUO6O",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  }
+]
+>>> [STRIPE_API] Calculated Total: 1
+>>> [STRIPE_API] Requesting PaymentIntent from Stripe...
+>>> [STRIPE_API] PaymentIntent Created Successfully: pi_3T34lPHlah70mYw20k3fHYSP
+ POST /api/create-payment-intent 200 in 277ms (compile: 47ms, render: 231ms)
+>>> [STRIPE_API] PaymentIntent Created Successfully: pi_3T34lPHlah70mYw20gAbouf1
+ POST /api/create-payment-intent 200 in 412ms (compile: 59ms, render: 353ms)
+ GET / 200 in 175ms (compile: 13ms, render: 162ms)
+ GET /api/products 200 in 163ms (compile: 2ms, render: 161ms)
+ GET /checkout 200 in 22ms (compile: 4ms, render: 18ms)
+>>> [STRIPE_API] POST RECEIVED
+>>> [STRIPE_API] Payload received: [
+  {
+    "id": "price_1T1cKPHlah70mYw2rGIbLA02",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T1cMCHlah70mYw2AzZRHQ5R",
+    "productId": "prod_TzbZHUNmcWxdAQ",
+    "name": "sample_product_13",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfVTJ0V21jbHpONFU0QURKTlR6M09iRnNS00lq6x8Nnk",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {}
+  },
+  {
+    "id": "price_1T08JPHlah70mYw2Od6zDRPI",
+    "productId": "prod_Ty4SyHPyU1bPE1",
+    "name": "sample_product_12",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNVg2MHpDWFFPVnQybXFIMXZnUUc5aFRI00N7tFve4J",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_11.zip",
+      "key": "test_key_12"
+    }
+  },
+  {
+    "id": "price_1T08InHlah70mYw2H83XimLH",
+    "productId": "prod_Ty4RpQVuuYK0F3",
+    "name": "sample_product_10",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfRlVUNjJzTGFDWkp1Y0REb09vVGh6NmRv00Hj4LbRsn",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_10.zip",
+      "key": "test_key_10"
+    }
+  },
+  {
+    "id": "price_1T08ECHlah70mYw2gFrztxvH",
+    "productId": "prod_Ty4Mkc3rtRCLkN",
+    "name": "sample_product_9",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfUTRsVmllbkhKMlpmTGR1M1U4ZzVtMUdU002kdqIeN6",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_9.zip",
+      "key": "test_key_9"
+    }
+  },
+  {
+    "id": "price_1T08J8Hlah70mYw22717Pb0R",
+    "productId": "prod_Ty4SN3FojK78vl",
+    "name": "sample_product_11",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfUDVvOGpiMVZWSFQxNmszZ2VVMjlmNW9L00On9TgbRH",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_11.zip",
+      "key": "test_key_11"
+    }
+  },
+  {
+    "id": "price_1T086dHlah70mYw21Oyncq50",
+    "productId": "prod_Ty4FGvibp6QDKC",
+    "name": "sample_product_8",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfTDJoaTRVQ3phUXZKS1V0Uzlla3RMTG9s00qWSi1In7",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_8.zip",
+      "key": "test_key_8"
+    }
+  },
+  {
+    "id": "price_1T086LHlah70mYw2KM2LPoCV",
+    "productId": "prod_Ty4EI66OD9n6NY",
+    "name": "sample_product_7",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfc1haV2JXVE5HNTkxd1dDb2gwS000WHVu00rxpDRZLN",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_7.zip",
+      "key": "test_key_7"
+    }
+  },
+  {
+    "id": "price_1T085iHlah70mYw2d6mur9cP",
+    "productId": "prod_Ty4EmLpVRsDu3N",
+    "name": "sample_product_6",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkJuZzZNMXRBcDVINEFES0Yzdm4ySzVt00vDBSFXro",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_6.mp3",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_6.zip",
+      "key": "test_key_6",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T085LHlah70mYw2rHhse1Zz",
+    "productId": "prod_Ty4Da7keUHqvNu",
+    "name": "sample_product_5",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfZlZIa0dXTGFjRnMzR3RhT3Y4bWwzdnho00XNz3zMRa",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_5.mp3",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_5.zip",
+      "key": "test_key_5",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T077bHlah70mYw2Oa6IwZgB",
+    "productId": "prod_Ty3EV5L0vTeXR2",
+    "name": "sample_product_4",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfV05vaTdnRmlQRm9wQUhMMUdmQ1N2aW9M00xADbtnat",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_4.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_4.zip",
+      "key": "test_key_4",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T076PHlah70mYw2D01WCvIT",
+    "productId": "prod_Ty3ClgxrqLyZfY",
+    "name": "sample_product_3",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfYU14SndoeVlWaERaOElSZVJrNjg3Q0pt00xXUko4P1",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_3.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_3.zip",
+      "key": "test_key_3",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T070gHlah70mYw2Oe7IA8q8",
+    "productId": "prod_Ty36beUDsct5BF",
+    "name": "sample_product_2",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfRERPSGxiTG5WemVwTHdUNElxQU9Cc0FP00wL4WKH1Z",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_2.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_2.zip",
+      "key": "test_key_2",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1Szmy3Hlah70mYw2t6BkUO6O",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  }
+]
+>>> [STRIPE_API] Calculated Total: 1
+>>> [STRIPE_API] Requesting PaymentIntent from Stripe...
+>>> [STRIPE_API] POST RECEIVED
+>>> [STRIPE_API] Payload received: [
+  {
+    "id": "price_1T1cKPHlah70mYw2rGIbLA02",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T1cMCHlah70mYw2AzZRHQ5R",
+    "productId": "prod_TzbZHUNmcWxdAQ",
+    "name": "sample_product_13",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfVTJ0V21jbHpONFU0QURKTlR6M09iRnNS00lq6x8Nnk",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {}
+  },
+  {
+    "id": "price_1T08JPHlah70mYw2Od6zDRPI",
+    "productId": "prod_Ty4SyHPyU1bPE1",
+    "name": "sample_product_12",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNVg2MHpDWFFPVnQybXFIMXZnUUc5aFRI00N7tFve4J",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_11.zip",
+      "key": "test_key_12"
+    }
+  },
+  {
+    "id": "price_1T08InHlah70mYw2H83XimLH",
+    "productId": "prod_Ty4RpQVuuYK0F3",
+    "name": "sample_product_10",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfRlVUNjJzTGFDWkp1Y0REb09vVGh6NmRv00Hj4LbRsn",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_10.zip",
+      "key": "test_key_10"
+    }
+  },
+  {
+    "id": "price_1T08ECHlah70mYw2gFrztxvH",
+    "productId": "prod_Ty4Mkc3rtRCLkN",
+    "name": "sample_product_9",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfUTRsVmllbkhKMlpmTGR1M1U4ZzVtMUdU002kdqIeN6",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_9.zip",
+      "key": "test_key_9"
+    }
+  },
+  {
+    "id": "price_1T08J8Hlah70mYw22717Pb0R",
+    "productId": "prod_Ty4SN3FojK78vl",
+    "name": "sample_product_11",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfUDVvOGpiMVZWSFQxNmszZ2VVMjlmNW9L00On9TgbRH",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_11.zip",
+      "key": "test_key_11"
+    }
+  },
+  {
+    "id": "price_1T086dHlah70mYw21Oyncq50",
+    "productId": "prod_Ty4FGvibp6QDKC",
+    "name": "sample_product_8",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfTDJoaTRVQ3phUXZKS1V0Uzlla3RMTG9s00qWSi1In7",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_8.zip",
+      "key": "test_key_8"
+    }
+  },
+  {
+    "id": "price_1T086LHlah70mYw2KM2LPoCV",
+    "productId": "prod_Ty4EI66OD9n6NY",
+    "name": "sample_product_7",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfc1haV2JXVE5HNTkxd1dDb2gwS000WHVu00rxpDRZLN",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_7.zip",
+      "key": "test_key_7"
+    }
+  },
+  {
+    "id": "price_1T085iHlah70mYw2d6mur9cP",
+    "productId": "prod_Ty4EmLpVRsDu3N",
+    "name": "sample_product_6",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkJuZzZNMXRBcDVINEFES0Yzdm4ySzVt00vDBSFXro",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_6.mp3",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_6.zip",
+      "key": "test_key_6",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T085LHlah70mYw2rHhse1Zz",
+    "productId": "prod_Ty4Da7keUHqvNu",
+    "name": "sample_product_5",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfZlZIa0dXTGFjRnMzR3RhT3Y4bWwzdnho00XNz3zMRa",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_5.mp3",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_5.zip",
+      "key": "test_key_5",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T077bHlah70mYw2Oa6IwZgB",
+    "productId": "prod_Ty3EV5L0vTeXR2",
+    "name": "sample_product_4",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfV05vaTdnRmlQRm9wQUhMMUdmQ1N2aW9M00xADbtnat",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_4.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_4.zip",
+      "key": "test_key_4",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T076PHlah70mYw2D01WCvIT",
+    "productId": "prod_Ty3ClgxrqLyZfY",
+    "name": "sample_product_3",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfYU14SndoeVlWaERaOElSZVJrNjg3Q0pt00xXUko4P1",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_3.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_3.zip",
+      "key": "test_key_3",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T070gHlah70mYw2Oe7IA8q8",
+    "productId": "prod_Ty36beUDsct5BF",
+    "name": "sample_product_2",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfRERPSGxiTG5WemVwTHdUNElxQU9Cc0FP00wL4WKH1Z",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_2.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_2.zip",
+      "key": "test_key_2",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1Szmy3Hlah70mYw2t6BkUO6O",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  }
+]
+>>> [STRIPE_API] Calculated Total: 1
+>>> [STRIPE_API] Requesting PaymentIntent from Stripe...
+>>> [STRIPE_API] PaymentIntent Created Successfully: pi_3T34lXHlah70mYw21QRaekaY
+ POST /api/create-payment-intent 200 in 231ms (compile: 5ms, render: 226ms)
+>>> [STRIPE_API] PaymentIntent Created Successfully: pi_3T34lXHlah70mYw20lGOoeXm
+ POST /api/create-payment-intent 200 in 244ms (compile: 11ms, render: 233ms)
+ GET / 200 in 152ms (compile: 4ms, render: 148ms)
+ GET /api/products 200 in 12ms (compile: 3ms, render: 8ms)
+ GET /api/products 200 in 143ms (compile: 1858µs, render: 141ms)
+ GET /blog 200 in 61ms (compile: 36ms, render: 25ms)
+ GET /about 200 in 189ms (compile: 165ms, render: 24ms)
+ GET /archive 200 in 106ms (compile: 83ms, render: 23ms)
+ GET /contact 200 in 102ms (compile: 82ms, render: 20ms)
+ GET /support 200 in 105ms (compile: 84ms, render: 22ms)
+ GET /docs 200 in 118ms (compile: 95ms, render: 23ms)
+ GET /about 200 in 19ms (compile: 3ms, render: 16ms)
+✓ Compiled in 429ms
+ GET /blog 200 in 22ms (compile: 4ms, render: 18ms)
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: ⚙️  suppress all logs with { quiet: true }
+ GET / 200 in 506ms (compile: 118ms, render: 388ms)
+ GET /api/products 200 in 8ms (compile: 3ms, render: 5ms)
+ GET /api/products 200 in 137ms (compile: 3ms, render: 134ms)
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+ GET /product/price_1T08InHlah70mYw2H83XimLH 200 in 1755ms (compile: 1393ms, render: 362ms)
+ GET / 200 in 183ms (compile: 5ms, render: 178ms)
+ GET /api/products 200 in 41ms (compile: 3ms, render: 38ms)
+ GET /api/products 200 in 271ms (compile: 3ms, render: 268ms)
+✓ Compiled in 277ms
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+✓ Compiled in 1212ms
+ GET / 200 in 720ms (compile: 54ms, render: 666ms)
+ GET / 200 in 323ms (compile: 4ms, render: 319ms)
+ GET / 200 in 1510ms (compile: 419ms, render: 1090ms)
+ GET / 200 in 384ms (compile: 5ms, render: 379ms)
+ GET / 200 in 453ms (compile: 6ms, render: 448ms)
+ GET / 200 in 159ms (compile: 3ms, render: 156ms)
+ GET / 200 in 190ms (compile: 6ms, render: 184ms)
+ GET / 200 in 68ms (compile: 7ms, render: 61ms)
+ GET / 200 in 926ms (compile: 14ms, render: 912ms)
+ GET /api/products 200 in 296ms (compile: 3ms, render: 293ms)
+ GET /api/products 200 in 173ms (compile: 15ms, render: 157ms)
+✓ Compiled in 548ms
+✓ Compiled in 229ms
+✓ Compiled in 850ms
+ GET /api/products 200 in 769ms (compile: 68ms, render: 701ms)
+✓ Compiled in 461ms
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: ⚙️  suppress all logs with { quiet: true }
+ GET / 200 in 1558ms (compile: 506ms, render: 1051ms)
+ GET /api/products 200 in 289ms (compile: 13ms, render: 276ms)
+ GET / 200 in 214ms (compile: 6ms, render: 208ms)
+ GET /api/products 200 in 201ms (compile: 3ms, render: 197ms)
+ GET /api/products 200 in 162ms (compile: 9ms, render: 153ms)
+ GET /checkout 200 in 496ms (compile: 410ms, render: 86ms)
+>>> [STRIPE_API] POST RECEIVED
+>>> [STRIPE_API] Payload received: [
+  {
+    "id": "price_1Szmy3Hlah70mYw2t6BkUO6O",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T1cKPHlah70mYw2rGIbLA02",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T1cMCHlah70mYw2AzZRHQ5R",
+    "productId": "prod_TzbZHUNmcWxdAQ",
+    "name": "sample_product_13",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfVTJ0V21jbHpONFU0QURKTlR6M09iRnNS00lq6x8Nnk",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {}
+  },
+  {
+    "id": "price_1T08JPHlah70mYw2Od6zDRPI",
+    "productId": "prod_Ty4SyHPyU1bPE1",
+    "name": "sample_product_12",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNVg2MHpDWFFPVnQybXFIMXZnUUc5aFRI00N7tFve4J",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_11.zip",
+      "key": "test_key_12"
+    }
+  },
+  {
+    "id": "price_1T08J8Hlah70mYw22717Pb0R",
+    "productId": "prod_Ty4SN3FojK78vl",
+    "name": "sample_product_11",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfUDVvOGpiMVZWSFQxNmszZ2VVMjlmNW9L00On9TgbRH",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_11.zip",
+      "key": "test_key_11"
+    }
+  }
+]
+>>> [STRIPE_API] Calculated Total: 1
+>>> [STRIPE_API] Requesting PaymentIntent from Stripe...
+>>> [STRIPE_API] POST RECEIVED
+>>> [STRIPE_API] Payload received: [
+  {
+    "id": "price_1Szmy3Hlah70mYw2t6BkUO6O",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T1cKPHlah70mYw2rGIbLA02",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T1cMCHlah70mYw2AzZRHQ5R",
+    "productId": "prod_TzbZHUNmcWxdAQ",
+    "name": "sample_product_13",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfVTJ0V21jbHpONFU0QURKTlR6M09iRnNS00lq6x8Nnk",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {}
+  },
+  {
+    "id": "price_1T08JPHlah70mYw2Od6zDRPI",
+    "productId": "prod_Ty4SyHPyU1bPE1",
+    "name": "sample_product_12",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNVg2MHpDWFFPVnQybXFIMXZnUUc5aFRI00N7tFve4J",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_11.zip",
+      "key": "test_key_12"
+    }
+  },
+  {
+    "id": "price_1T08J8Hlah70mYw22717Pb0R",
+    "productId": "prod_Ty4SN3FojK78vl",
+    "name": "sample_product_11",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfUDVvOGpiMVZWSFQxNmszZ2VVMjlmNW9L00On9TgbRH",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_11.zip",
+      "key": "test_key_11"
+    }
+  }
+]
+>>> [STRIPE_API] Calculated Total: 1
+>>> [STRIPE_API] Requesting PaymentIntent from Stripe...
+>>> [STRIPE_API] PaymentIntent Created Successfully: pi_3T35C1Hlah70mYw21fX9gMKO
+ POST /api/create-payment-intent 200 in 263ms (compile: 21ms, render: 242ms)
+>>> [STRIPE_API] PaymentIntent Created Successfully: pi_3T35C2Hlah70mYw21yYpW0LD
+ POST /api/create-payment-intent 200 in 454ms (compile: 40ms, render: 414ms)
+ GET / 200 in 159ms (compile: 5ms, render: 154ms)
+ GET /api/products 200 in 137ms (compile: 3ms, render: 134ms)
+⚠ Fast Refresh had to perform a full reload when ./Desktop/hyperslump/src/components/PreviewPlayerProvider.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: ⚙️  write to custom object with { processEnv: myObject }
+✓ Compiled in 639ms
+ GET / 200 in 760ms (compile: 129ms, render: 631ms)
+ GET /api/products 200 in 155ms (compile: 3ms, render: 151ms)
+ GET /api/products 200 in 346ms (compile: 112ms, render: 234ms)
+ GET / 200 in 388ms (compile: 60ms, render: 328ms)
+✓ Compiled in 472ms
+✓ Compiled in 541ms
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: 🛡️ auth for agents: https://vestauth.com
+ GET / 200 in 1077ms (compile: 480ms, render: 597ms)
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+ GET /product/price_1Szmy3Hlah70mYw2t6BkUO6O 200 in 826ms (compile: 410ms, render: 417ms)
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+ GET / 200 in 175ms (compile: 6ms, render: 169ms)
+ GET /api/products 200 in 371ms (compile: 9ms, render: 362ms)
+ GET /product/price_1Szmy3Hlah70mYw2t6BkUO6O 200 in 574ms (compile: 74ms, render: 501ms)
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: ⚡️ secrets for agents: https://dotenvx.com/as2
+ GET / 200 in 456ms (compile: 36ms, render: 420ms)
+ GET /api/products 200 in 290ms (compile: 8ms, render: 282ms)
+ GET / 200 in 417ms (compile: 5ms, render: 412ms)
+ GET /api/products 200 in 146ms (compile: 3ms, render: 143ms)
+ GET /api/products 200 in 155ms (compile: 2ms, render: 153ms)
+ GET /checkout 200 in 286ms (compile: 204ms, render: 82ms)
+>>> [STRIPE_API] POST RECEIVED
+>>> [STRIPE_API] Payload received: [
+  {
+    "id": "price_1Szmy3Hlah70mYw2t6BkUO6O",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T1cKPHlah70mYw2rGIbLA02",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  }
+]
+>>> [STRIPE_API] Calculated Total: 0.5
+>>> [STRIPE_API] Requesting PaymentIntent from Stripe...
+>>> [STRIPE_API] POST RECEIVED
+>>> [STRIPE_API] Payload received: [
+  {
+    "id": "price_1Szmy3Hlah70mYw2t6BkUO6O",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T1cKPHlah70mYw2rGIbLA02",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  }
+]
+>>> [STRIPE_API] Calculated Total: 0.5
+>>> [STRIPE_API] Requesting PaymentIntent from Stripe...
+>>> [STRIPE_API] PaymentIntent Created Successfully: pi_3T35NnHlah70mYw215Jrkeum
+ POST /api/create-payment-intent 200 in 343ms (compile: 12ms, render: 331ms)
+>>> [STRIPE_API] PaymentIntent Created Successfully: pi_3T35NnHlah70mYw20FTKMNqW
+ POST /api/create-payment-intent 200 in 411ms (compile: 33ms, render: 378ms)
+ GET / 200 in 168ms (compile: 5ms, render: 163ms)
+ GET /api/products 200 in 180ms (compile: 12ms, render: 168ms)
+ GET / 200 in 204ms (compile: 4ms, render: 200ms)
+ GET /checkout 200 in 31ms (compile: 8ms, render: 23ms)
+>>> [STRIPE_API] POST RECEIVED
+>>> [STRIPE_API] Payload received: [
+  {
+    "id": "price_1Szmy3Hlah70mYw2t6BkUO6O",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T1cKPHlah70mYw2rGIbLA02",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  }
+]
+>>> [STRIPE_API] Calculated Total: 0.5
+>>> [STRIPE_API] Requesting PaymentIntent from Stripe...
+>>> [STRIPE_API] POST RECEIVED
+>>> [STRIPE_API] Payload received: [
+  {
+    "id": "price_1Szmy3Hlah70mYw2t6BkUO6O",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  },
+  {
+    "id": "price_1T1cKPHlah70mYw2rGIbLA02",
+    "productId": "prod_TxiObybU9w2SKJ",
+    "name": "sample_product_1",
+    "description": null,
+    "image": "https://files.stripe.com/links/MDB8YWNjdF8xU2JaUEVIbGFoNzBtWXcyfGZsX2xpdmVfNkI3QVgzaEdidm1TTEhESWNjT2Z2ZkNk00U3I0RC60",
+    "currency": "usd",
+    "amount": 0.5,
+    "metadata": {
+      "audio_preview": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/audio_sample_1.mp3",
+      "download_url": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/hyperslump_1.zip",
+      "files": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/sample_product_1.zip",
+      "key": "test_key_1",
+      "sample_1": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8ERACK%20KICK%E3%80%8F.wav",
+      "sample_2": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%21%20%E2%98%86%E3%83%BBERISA%20~%E3%80%8EOG%20ATL%20SNARE%E3%80%8F.wav",
+      "sample_3": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8EDISCO%20CLAP%E3%80%8F.wav",
+      "sample_4": "https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/%E2%98%86%E3%83%BBERISA%20~%E3%80%8ECANDY%20OPEN-HAT%E3%80%8F.wav"
+    }
+  }
+]
+>>> [STRIPE_API] Calculated Total: 0.5
+>>> [STRIPE_API] Requesting PaymentIntent from Stripe...
+>>> [STRIPE_API] PaymentIntent Created Successfully: pi_3T35PAHlah70mYw203AzLWHH
+ POST /api/create-payment-intent 200 in 351ms (compile: 4ms, render: 348ms)
+>>> [STRIPE_API] PaymentIntent Created Successfully: pi_3T35PAHlah70mYw20QWpKxAg
+ POST /api/create-payment-intent 200 in 378ms (compile: 3ms, render: 375ms)
+ GET / 200 in 311ms (compile: 6ms, render: 305ms)
+ GET /api/products 200 in 13ms (compile: 5ms, render: 8ms)
+ GET /api/products 200 in 164ms (compile: 3ms, render: 161ms)
+  Reload env: .env.local
+✓ Compiled in 763ms
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+ GET / 200 in 989ms (compile: 325ms, render: 665ms)
+  Reload env: .env.local
+[dotenv@17.3.0] injecting env (0) from .env.local -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+ GET / 200 in 1337ms (compile: 786ms, render: 551ms)

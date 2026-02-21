@@ -1,297 +1,170 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { motion, AnimatePresence, useMotionValue, PanInfo } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { IconPlayerPauseFilled, IconPlayerPlayFilled, IconWaveSine } from '@tabler/icons-react';
 
-import OneShotPlayer from './OneShotPlayer';
+import type { Product } from './CartProvider';
+import { usePreviewPlayer } from './PreviewPlayerProvider';
 
 interface ProductCardProps {
-    product: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+    product: Product;
     isInCart: boolean;
-    onAddToCart: (product: any) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
+    onAddToCart: (product: Product) => void;
 }
 
 export default function ProductCard({ product, isInCart, onAddToCart }: ProductCardProps) {
-    const [showPreview, setShowPreview] = useState(false);
-    const [isHovered, setIsHovered] = useState(false);
-    const containerRef = useRef<HTMLDivElement>(null);
+    const { playTrack, isTrackActive, isPlaying, isOpen } = usePreviewPlayer();
 
-    // Swipe tracking
-    const x = useMotionValue(0);
+    const audioPreviewUrl = typeof product.metadata?.audio_preview === 'string' ? product.metadata.audio_preview : '';
+    const oneShotCount = typeof product.metadata?.count === 'string' ? product.metadata.count : '140';
+    const formatLabel = typeof product.metadata?.format === 'string' ? product.metadata.format.toUpperCase() : 'WAV';
+    const href = `/product/${product.id}`;
+    const isActivePreview = isOpen && isTrackActive(product.id);
 
-    // Audio
-    const audioPreviewUrl = product.metadata?.audio_preview;
-    const samples = [
-        product.metadata?.sample_1,
-        product.metadata?.sample_2,
-        product.metadata?.sample_3,
-        product.metadata?.sample_4,
-    ].filter(Boolean);
+    const addToCart = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        event.stopPropagation();
+        onAddToCart(product);
+    };
 
-    const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-        const threshold = 80;
-        if (!showPreview && info.offset.x < -threshold) {
-            setShowPreview(true);
-        } else if (showPreview && info.offset.x > threshold) {
-            setShowPreview(false);
-        }
+    const playPreview = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (!audioPreviewUrl) return;
+
+        playTrack({
+            id: product.id,
+            title: product.name,
+            subtitle: `${formatLabel} / ${oneShotCount} one-shots`,
+            image: product.image,
+            audioUrl: audioPreviewUrl,
+        });
     };
 
     return (
-        <div
-            ref={containerRef}
-            className="group relative bg-background overflow-hidden rounded cursor-pointer touch-pan-y border border-border hover:border-primary/40 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.4)]"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-        >
-            <AnimatePresence initial={false} mode="popLayout">
-                {!showPreview ? (
-                    <motion.div
-                        key="default"
-                        initial={{ x: '-100%' }}
-                        animate={{ x: 0 }}
-                        exit={{ x: '-100%' }}
-                        transition={{ type: "spring", stiffness: 400, damping: 35 }}
-                        className="flex flex-col"
-                        drag="x"
-                        dragConstraints={{ left: 0, right: 0 }}
-                        dragElastic={0.25}
-                        onDragEnd={handleDragEnd}
-                        style={{ x }}
+        <article className="group relative overflow-hidden rounded-xl border border-border/70 bg-card/75 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-[0_18px_45px_rgba(15,23,42,0.12)] dark:hover:shadow-[0_18px_45px_rgba(0,0,0,0.45)]">
+            <div
+                className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                style={{
+                    background:
+                        'radial-gradient(120% 90% at 8% 0%, color-mix(in srgb, var(--primary) 18%, transparent) 0%, transparent 58%)'
+                }}
+            />
+
+            <div className="relative">
+                <Link href={href} className="relative block">
+                    <div className="relative aspect-[4/3] overflow-hidden border-b border-border/60 px-3 pb-3 pt-3">
+                        <div className="absolute left-5 right-5 top-5 z-20 flex items-center justify-between gap-2">
+                            <span className="inline-flex h-6 items-center rounded-full border border-border/70 bg-background/70 px-2.5 font-mono text-[9px] uppercase tracking-[0.16em] text-muted">
+                                instant download
+                            </span>
+                            <span className="inline-flex h-6 items-center rounded-full border border-primary/25 bg-primary/12 px-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">
+                                {product.amount === 0 ? 'free' : `$${product.amount}`}
+                            </span>
+                        </div>
+
+                        <div className="absolute inset-3 rounded-lg border border-border/65 bg-background/45" />
+                        <div className="relative h-full w-full p-3">
+                            <div className="relative h-full w-full transition-transform duration-500 ease-out group-hover:scale-[1.03]">
+                                <Image
+                                    alt={product.name}
+                                    className="object-contain drop-shadow-[0_12px_28px_rgba(0,0,0,0.34)]"
+                                    src={product.image || 'https://via.placeholder.com/500'}
+                                    fill
+                                    sizes="(max-width: 768px) 92vw, (max-width: 1200px) 46vw, 31vw"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </Link>
+
+                {audioPreviewUrl ? (
+                    <button
+                        type="button"
+                        onClick={playPreview}
+                        className={`absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2 rounded-full border border-border/80 bg-card/88 px-4 py-2.5 backdrop-blur-md transition-all duration-200 ${isActivePreview
+                            ? 'opacity-100 translate-y-0 text-primary shadow-[0_8px_24px_rgba(0,0,0,0.35)]'
+                            : 'pointer-events-none opacity-0 translate-y-2 text-foreground/90 shadow-[0_8px_24px_rgba(0,0,0,0.25)] group-hover:pointer-events-auto group-hover:opacity-100 group-hover:translate-y-0'
+                            }`}
+                        aria-label={`${isActivePreview && isPlaying ? 'Pause' : 'Play'} preview for ${product.name}`}
                     >
-                        {/* ─── IMAGE SECTION ─── */}
-                        <Link
-                            href={`/product/${product.id}`}
-                            className="relative block w-full aspect-[4/3] bg-foreground/[0.02] overflow-hidden"
-                        >
-                            {/* Product Image */}
-                            <div className="relative w-full h-full flex items-center justify-center p-4 md:p-5">
-                                <div className="relative w-full h-full transition-transform duration-500 ease-out group-hover:scale-[1.04]">
-                                    <Image
-                                        alt={product.name}
-                                        className="object-contain drop-shadow-lg transition-all duration-500 group-hover:drop-shadow-2xl"
-                                        src={product.image || 'https://via.placeholder.com/500'}
-                                        fill
-                                        sizes="(max-width: 768px) 50vw, 25vw"
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Subtle format badge */}
-                            <div className="absolute top-2 left-2 font-mono text-[8px] uppercase tracking-wider text-foreground/30 bg-background/80 backdrop-blur-sm px-1.5 py-0.5 border border-border rounded">
-                                {product.metadata?.format || 'WAV'} • {product.metadata?.count || '140'} samples
-                            </div>
-
-                            {/* Free badge if applicable */}
-                            {product.amount === 0 && (
-                                <div className="absolute top-2 right-2 font-mono text-[9px] font-bold uppercase tracking-wider text-[var(--background)] bg-primary px-2 py-0.5">
-                                    Free
-                                </div>
+                        <span className="inline-flex items-center gap-2 font-mono text-[10px] font-semibold uppercase tracking-[0.16em]">
+                            {isActivePreview && isPlaying ? (
+                                <IconPlayerPauseFilled size={12} />
+                            ) : (
+                                <IconPlayerPlayFilled size={12} />
                             )}
-                        </Link>
-
-                        {/* ─── INFO SECTION ─── */}
-                        <div className="px-3 md:px-4 py-3 space-y-2">
-                            {/* Name + Price row */}
-                            <div className="flex items-start justify-between gap-2">
-                                <div className="min-w-0 flex-1">
-                                    <h3 className="font-mono font-bold text-lg md:text-xl text-foreground leading-tight tracking-tight uppercase">
-                                        <Link href={`/product/${product.id}`} className="hover:text-primary transition-colors duration-200">
-                                            {product.name}
-                                        </Link>
-                                    </h3>
-                                    <p className="font-mono text-[10px] text-foreground/40 mt-0.5 line-clamp-1">
-                                        {product.description || "Digital audio sample pack"}
-                                    </p>
-                                </div>
-                                <span className="font-mono text-base md:text-lg font-bold text-primary shrink-0 pt-0.5">
-                                    {product.amount === 0 ? 'Free' : `$${product.amount}`}
-                                </span>
-                            </div>
-
-                            {/* Action row */}
-                            <div className="flex items-center justify-between pt-2 border-t border-border">
-                                {/* Preview */}
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setShowPreview(true);
-                                    }}
-                                    className="font-mono text-[11px] md:text-[10px] lg:text-[11px] font-bold uppercase tracking-wider px-4 py-2.5 md:px-3 md:py-1.5 rounded border border-foreground/15 text-foreground/60 hover:text-primary hover:border-primary/40 transition-all duration-200 flex items-center gap-1.5 active:scale-[0.97]"
-                                >
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-                                        <polygon points="5 3 19 12 5 21 5 3" />
-                                    </svg>
-                                    Preview
-                                </button>
-
-                                {/* Add to cart */}
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        onAddToCart(product);
-                                    }}
-                                    disabled={isInCart}
-                                    className={`font-mono text-[11px] md:text-[10px] lg:text-[11px] font-bold uppercase tracking-wider px-5 py-2.5 md:px-3 md:py-1.5 rounded border transition-all duration-200 active:scale-[0.97] ${isInCart
-                                        ? 'text-primary/50 border-primary/20 cursor-default'
-                                        : 'text-[var(--background)] bg-primary border-primary hover:bg-primary/90'
-                                        }`}
-                                >
-                                    {isInCart ? 'Added ✓' : 'Add to Cart'}
-                                </button>
-                            </div>
-
-                            {/* Mobile swipe hint */}
-                            <div className="md:hidden flex items-center justify-center gap-1.5 pt-0.5">
-                                <span className="font-mono text-[8px] text-foreground/20 uppercase tracking-widest">swipe to preview</span>
-                                <motion.svg
-                                    animate={{ x: [0, 4, 0] }}
-                                    transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-                                    width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                                    className="text-foreground/20"
-                                >
-                                    <polyline points="9 18 15 12 9 6" />
-                                </motion.svg>
-                            </div>
-                        </div>
-                    </motion.div>
+                            {isActivePreview && isPlaying ? 'playing' : 'preview'}
+                        </span>
+                    </button>
                 ) : (
-                    /* ─── PREVIEW PANEL ─── */
-                    <motion.div
-                        key="preview"
-                        initial={{ x: '100%' }}
-                        animate={{ x: 0 }}
-                        exit={{ x: '100%' }}
-                        transition={{ type: "spring", stiffness: 400, damping: 35 }}
-                        className="flex flex-col bg-background z-30"
-                        drag="x"
-                        dragConstraints={{ left: 0, right: 0 }}
-                        dragElastic={0.25}
-                        onDragEnd={handleDragEnd}
-                    >
-                        {/* Top — same aspect-[4/3] as image area, but expandable on mobile to fit all previews */}
-                        <div className="relative w-full h-auto md:aspect-[4/3] min-h-[320px] md:min-h-0 overflow-hidden">
-                            <div className="absolute inset-0 p-2 flex flex-col justify-center">
-                                {/* Header row */}
-                                <div className="flex justify-between items-center mb-1">
-                                    <div className="flex items-center gap-1.5">
-                                        <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
-                                        <span className="font-mono text-[9px] text-foreground/40 uppercase tracking-wider">Preview</span>
-                                    </div>
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setShowPreview(false);
-                                        }}
-                                        className="text-foreground/30 hover:text-foreground transition-colors w-11 h-8 flex items-center justify-center -mr-2"
-                                    >
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                            <line x1="18" y1="6" x2="6" y2="18" />
-                                            <line x1="6" y1="6" x2="18" y2="18" />
-                                        </svg>
-                                    </button>
-                                </div>
-
-                                {/* Main Preview — same component as one-shots, with loop */}
-                                {audioPreviewUrl && showPreview && (
-                                    <div className="w-full h-[40px] mb-2">
-                                        <OneShotPlayer
-                                            audioUrl={audioPreviewUrl}
-                                            isActive={showPreview}
-                                            loop={true}
-                                        />
-                                    </div>
-                                )}
-
-                                {/* One-Shots */}
-                                <div className="flex flex-col gap-2 min-h-0">
-                                    {samples.map((url, index) => (
-                                        <div key={index}>
-                                            <span className="font-mono text-[8px] text-foreground/30 mb-0.5 block">
-                                                {String(index + 1).padStart(2, '0')}
-                                            </span>
-                                            <div className="w-full h-[40px]">
-                                                <OneShotPlayer
-                                                    audioUrl={url}
-                                                    isActive={showPreview}
-                                                />
-                                            </div>
-                                        </div>
-                                    ))}
-                                    {samples.length === 0 && (
-                                        <div className="flex items-center justify-center border border-dashed border-foreground/[0.06] rounded h-[40px]">
-                                            <span className="font-mono text-[9px] text-foreground/20 uppercase">No samples</span>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Bottom — mirrors default card info section exactly */}
-                        <div className="px-3 md:px-4 py-3 space-y-2">
-                            {/* Name + Price */}
-                            <div className="flex items-start justify-between gap-2">
-                                <div className="min-w-0 flex-1">
-                                    <h3 className="font-mono font-bold text-lg md:text-xl text-foreground leading-tight tracking-tight uppercase">
-                                        {product.name}
-                                    </h3>
-                                    <p className="font-mono text-[10px] text-foreground/40 mt-0.5 line-clamp-1">
-                                        {product.description || "Digital audio sample pack"}
-                                    </p>
-                                </div>
-                                <span className="font-mono text-base md:text-lg font-bold text-primary shrink-0 pt-0.5">
-                                    {product.amount === 0 ? 'Free' : `$${product.amount}`}
-                                </span>
-                            </div>
-
-                            {/* Actions */}
-                            <div className="flex items-center justify-between pt-1.5 border-t border-border">
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setShowPreview(false);
-                                    }}
-                                    className="font-mono text-[11px] md:text-[10px] uppercase tracking-wider text-foreground/35 hover:text-foreground transition-colors duration-200 flex items-center gap-1.5 px-2 py-2"
-                                >
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <polyline points="15 18 9 12 15 6" />
-                                    </svg>
-                                    Back
-                                </button>
-
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        onAddToCart(product);
-                                    }}
-                                    disabled={isInCart}
-                                    className={`font-mono text-[11px] md:text-[10px] lg:text-[11px] font-bold uppercase tracking-wider px-5 py-2.5 md:px-3 md:py-1.5 transition-all duration-200 rounded ${isInCart
-                                        ? 'text-primary/50 border border-primary/20 cursor-default'
-                                        : 'text-[var(--background)] bg-primary hover:bg-primary/90 active:scale-[0.97]'
-                                        }`}
-                                >
-                                    {isInCart ? 'Added ✓' : 'Add to Cart'}
-                                </button>
-                            </div>
-
-                            {/* Mobile swipe hint */}
-                            <div className="md:hidden flex items-center justify-center gap-1.5 pt-0.5">
-                                <motion.svg
-                                    animate={{ x: [0, -4, 0] }}
-                                    transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-                                    width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                                    className="text-foreground/20"
-                                >
-                                    <polyline points="15 18 9 12 15 6" />
-                                </motion.svg>
-                                <span className="font-mono text-[8px] text-foreground/20 uppercase tracking-widest">swipe back</span>
-                            </div>
-                        </div>
-                    </motion.div>
+                    <div className="pointer-events-none absolute bottom-4 left-4 z-30 inline-flex items-center gap-1.5 rounded-full border border-border/70 bg-background/75 px-2.5 py-1.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
+                        <IconWaveSine size={12} />
+                        no preview
+                    </div>
                 )}
-            </AnimatePresence>
-        </div>
+            </div>
+
+            <div className="relative space-y-3 p-4">
+                <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0 flex-1">
+                        <h3
+                            className="heading-h1 jacquard-24-regular text-[2rem] leading-[0.92] text-foreground lowercase"
+                            style={{ fontFamily: 'var(--font-heading), "Jacquard 24", "Jacquard 12", system-ui' }}
+                        >
+                            <Link href={href} className="transition-colors duration-150 hover:text-primary">
+                                {product.name}
+                            </Link>
+                        </h3>
+                    </div>
+                    <div className="shrink-0 text-right">
+                        <p className="text-[1.1rem] font-semibold leading-none text-primary">
+                            {product.amount === 0 ? 'free' : `$${product.amount}`}
+                        </p>
+                        <p className="mt-1 font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
+                            lifetime license
+                        </p>
+                    </div>
+                </div>
+
+                <p className="line-clamp-2 text-sm leading-relaxed text-muted/95">
+                    {product.description || 'High-impact one-shot kit for fast production and instant deployment.'}
+                </p>
+
+                <div className="flex flex-wrap gap-1.5">
+                    <span className="inline-flex h-6 items-center rounded-full border border-border bg-background/45 px-2.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
+                        {formatLabel}
+                    </span>
+                    <span className="inline-flex h-6 items-center rounded-full border border-border bg-background/45 px-2.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
+                        {oneShotCount} one-shots
+                    </span>
+                    <span className="inline-flex h-6 items-center rounded-full border border-border bg-background/45 px-2.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
+                        secure checkout
+                    </span>
+                </div>
+
+                <div className="flex items-center gap-2 pt-1">
+                    <Link
+                        href={href}
+                        className="inline-flex h-[42px] flex-1 items-center justify-center rounded-md border border-border bg-background/45 px-3 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-foreground/85 transition-colors hover:border-primary/35 hover:text-primary"
+                    >
+                        view details
+                    </Link>
+                    <button
+                        type="button"
+                        onClick={addToCart}
+                        disabled={isInCart}
+                        className={`inline-flex h-[42px] flex-[1.25] items-center justify-center rounded-md border px-3 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] transition-all ${isInCart
+                            ? 'cursor-default border-primary/25 bg-primary/10 text-primary/75'
+                            : 'border-primary bg-primary text-primary-foreground hover:brightness-110 active:scale-[0.99]'
+                            }`}
+                    >
+                        {isInCart ? 'added' : 'add to cart'}
+                    </button>
+                </div>
+            </div>
+        </article>
     );
 }
