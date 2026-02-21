@@ -17,6 +17,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^17.3.0",
     "framer-motion": "^12.34.0",
+    "grained": "^0.0.2",
     "gsap": "^3.14.2",
     "lenis": "^1.3.17",
     "lucide-react": "^0.563.0",

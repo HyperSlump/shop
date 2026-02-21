@@ -13,6 +13,8 @@ import {
     IconX
 } from '@tabler/icons-react';
 import Link from 'next/link';
+import GrainedNoise from './GrainedNoise';
+import { usePreviewPlayer } from './PreviewPlayerProvider';
 
 interface PromoSlide {
     id: string;
@@ -51,6 +53,24 @@ const promoSlides: PromoSlide[] = [
         image: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/ideogram-v3.0_Amid_a_pulsating_sea_of_vibrant_colors_a_2560x1440_digital_ad_for_top-tier_EDM_s-0%20%282%29.jpg',
         badge: 'BEST SELLER',
         accent: 'rgb(200, 106, 131)'
+    },
+    {
+        id: 'prod_liquid_dynamic_04',
+        title: 'liquid state',
+        subtitle: 'texture pack // vol.1',
+        description: 'Viscous, morphing granular textures and liquid sound design recorded directly from experimental hardware.',
+        image: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/Gemini_Generated_Image_unhreuunhreuunhr_cropped_processed_by_imagy.png',
+        badge: 'EXCLUSIVE',
+        accent: 'rgb(180, 180, 180)'
+    },
+    {
+        id: 'prod_analog_artifacts_05',
+        title: 'analog artifact',
+        subtitle: 'glitch & noise // vol.2',
+        description: 'Broken transmissions and beautiful errors. A massive collection of authentic analog video and audio artifacts.',
+        image: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/Gemini_Generated_Image_1ttktb1ttktb1ttk_cropped_processed_by_imagy.png',
+        badge: 'NEW RELEASE',
+        accent: 'rgb(220, 90, 90)'
     }
 ];
 
@@ -59,6 +79,7 @@ export default function PromoCarousel() {
     const [direction, setDirection] = useState(0);
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
     const router = useRouter();
+    const { isOpen: isDockOpen } = usePreviewPlayer();
 
     useEffect(() => {
         if (!isAutoPlaying) return;
@@ -173,12 +194,13 @@ export default function PromoCarousel() {
                             alt={activePromo.title}
                             fill
                             priority
-                            className="object-cover saturate-[0.25] brightness-[0.8] contrast-[1.1]"
+                            className="object-cover saturate-[0.10] brightness-[0.8] contrast-[1.1]"
                             sizes="100vw"
                         />
                         {/* Dark gradient overlay for text legibility */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/30" />
                         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
+                        <GrainedNoise />
                     </div>
 
                     {/* DISTRIBUTED HUD OVERLAY */}
@@ -190,13 +212,9 @@ export default function PromoCarousel() {
                             transition={{ delay: 1.0, duration: 0.8 }}
                             className="absolute top-24 md:top-32 left-6 md:left-12 lg:left-24 flex items-center gap-4 opacity-60"
                         >
-                            <div className="w-4 h-4 border-l border-t border-primary/50 relative">
-                                <div className="absolute top-1 left-1 w-1 h-1 bg-primary/50" />
-                            </div>
                             <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-white">
                                 [SYS.VER.1.2 // STATUS: ACTIVE]
                             </span>
-                            <div className="h-[1px] w-12 bg-white/20 hidden md:block" />
                             <span className="font-mono text-[9px] text-primary tracking-[0.2em] hidden md:block">
                                 ID: {activePromo.id.split('_')[1]}
                             </span>
@@ -212,7 +230,6 @@ export default function PromoCarousel() {
                             <div className="font-mono text-[10px] tracking-[0.4em] text-white" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
                                 {activePromo.subtitle}
                             </div>
-                            <div className="w-[1px] h-32 bg-gradient-to-b from-white to-transparent" />
                         </motion.div>
 
                         {/* LEFT EDGE ROTATED HUD */}
@@ -222,38 +239,30 @@ export default function PromoCarousel() {
                             transition={{ delay: 1.2, duration: 0.8 }}
                             className="absolute top-1/2 -translate-y-1/2 left-6 md:left-12 lg:left-8 hidden lg:flex flex-col items-center gap-8 opacity-40"
                         >
-                            <div className="w-8 h-[1px] bg-primary" />
                             <div className="font-mono text-[8px] tracking-[0.5em] text-primary" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
                                 {activePromo.badge}
                             </div>
-                            <div className="w-[1px] h-24 bg-white/20" />
                         </motion.div>
 
-                        {/* MASSIVE CENTER-LEFT TITLE */}
-                        <div className="absolute top-[40%] md:top-[45%] -translate-y-1/2 left-6 md:left-24 lg:left-32 z-10">
-                            <motion.div className="relative">
+                        {/* CLEAN HUD TITLE */}
+                        <div className={`absolute -translate-y-1/2 left-6 md:left-24 lg:left-32 z-10 w-full md:w-auto transition-all duration-300 ${isDockOpen ? 'top-[35%] md:top-[40%]' : 'top-[40%] md:top-[45%]'}`}>
+                            <motion.div className="relative inline-block max-w-[80vw]">
                                 <motion.h2
-                                    initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" }}
-                                    className="jacquard-24-regular text-[6rem] md:text-[9rem] lg:text-[14rem] leading-[0.75] lowercase tracking-tighter text-white drop-shadow-2xl"
+                                    className="font-mono text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight text-white leading-none whitespace-normal"
                                     style={{
-                                        textShadow: '0 10px 40px rgba(0,0,0,0.8), 0 0 100px rgba(0,0,0,0.5)'
+                                        textShadow: '0 4px 24px rgba(0,0,0,0.9)'
                                     }}
                                 >
                                     {activePromo.title}
                                 </motion.h2>
-                                <motion.div
-                                    initial={{ width: 0 }}
-                                    animate={{ width: '120px' }}
-                                    transition={{ delay: 0.8, duration: 1 }}
-                                    className="h-[3px] bg-primary absolute -bottom-2 md:-bottom-4 left-2"
-                                />
                             </motion.div>
                         </div>
 
                         {/* BOTTOM DESCRIPTION & CTA (FLOATING) */}
-                        <div className="absolute bottom-32 md:bottom-24 left-6 md:left-24 lg:left-32 w-full md:w-[500px] lg:w-[600px] pointer-events-auto">
+                        <div className={`absolute left-6 md:left-24 lg:left-32 w-full md:w-[500px] lg:w-[600px] pointer-events-auto z-10 transition-all duration-300 ${isDockOpen ? 'bottom-56 md:bottom-48 lg:bottom-40' : 'bottom-32 md:bottom-24 lg:bottom-24'}`}>
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
@@ -261,7 +270,6 @@ export default function PromoCarousel() {
                                 className="flex flex-col gap-4 md:gap-5 max-w-[90%]"
                             >
                                 <div className="flex items-center gap-3">
-                                    <div className="w-1.5 h-1.5 bg-primary rotate-45" />
                                     <p className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.25em] text-primary font-bold">
                                         24-BIT MASTERED / IMMEDIATE DELIVERY
                                     </p>
@@ -300,30 +308,32 @@ export default function PromoCarousel() {
             </AnimatePresence>
 
             {/* BOTTOM PAGINATION & ARROWS */}
-            <div className="absolute bottom-12 left-0 right-0 z-20 px-6 md:px-12 lg:px-24 flex items-center justify-between pointer-events-none">
-                <div className="flex items-center gap-4 pointer-events-auto">
-                    <span className="font-mono text-[16px] font-bold text-white tracking-widest">
-                        {String(currentIndex + 1).padStart(2, '0')}
-                    </span>
-                    <div className="h-[1px] w-12 bg-white/20" />
-                    <span className="font-mono text-[12px] text-white/30 tracking-widest">
-                        {String(promoSlides.length).padStart(2, '0')}
-                    </span>
-                </div>
+            <div className={`absolute left-0 right-0 z-20 px-6 md:px-12 lg:px-24 flex justify-end pointer-events-none transition-all duration-300 ${isDockOpen ? 'bottom-36 md:bottom-32 lg:bottom-28' : 'bottom-12'}`}>
+                <div className="flex flex-col items-end gap-3 pointer-events-auto">
+                    <div className="hidden md:flex items-center gap-2">
+                        <button
+                            onClick={handlePrev}
+                            className="w-12 h-12 flex items-center justify-center rounded-sm bg-black/40 border border-white/10 text-white/60 hover:text-white hover:border-white/30 transition-all"
+                        >
+                            <IconChevronLeft size={24} stroke={1.5} />
+                        </button>
+                        <button
+                            onClick={handleNext}
+                            className="w-12 h-12 flex items-center justify-center rounded-sm bg-black/40 border border-white/10 text-white/60 hover:text-white hover:border-white/30 transition-all"
+                        >
+                            <IconChevronRight size={24} stroke={1.5} />
+                        </button>
+                    </div>
 
-                <div className="hidden md:flex items-center gap-2 pointer-events-auto">
-                    <button
-                        onClick={handlePrev}
-                        className="w-12 h-12 flex items-center justify-center rounded-sm bg-black/40 border border-white/10 text-white/60 hover:text-white hover:border-white/30 transition-all"
-                    >
-                        <IconChevronLeft size={24} stroke={1.5} />
-                    </button>
-                    <button
-                        onClick={handleNext}
-                        className="w-12 h-12 flex items-center justify-center rounded-sm bg-black/40 border border-white/10 text-white/60 hover:text-white hover:border-white/30 transition-all"
-                    >
-                        <IconChevronRight size={24} stroke={1.5} />
-                    </button>
+                    <div className="flex items-center gap-4">
+                        <span className="font-mono text-[16px] font-bold text-white tracking-widest">
+                            {String(currentIndex + 1).padStart(2, '0')}
+                        </span>
+                        <div className="h-[1px] w-12 bg-white/20" />
+                        <span className="font-mono text-[12px] text-white/30 tracking-widest">
+                            {String(promoSlides.length).padStart(2, '0')}
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>

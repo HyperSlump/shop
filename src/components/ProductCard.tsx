@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { IconPlayerPauseFilled, IconPlayerPlayFilled, IconWaveSine } from '@tabler/icons-react';
+import GrainedNoise from './GrainedNoise';
 
 import type { Product } from './CartProvider';
 import { usePreviewPlayer } from './PreviewPlayerProvider';
@@ -92,6 +93,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                     fill
                                     sizes="(max-width: 768px) 92vw, (max-width: 1200px) 46vw, 31vw"
                                 />
+                                <GrainedNoise />
                             </div>
                         </div>
                     </div>

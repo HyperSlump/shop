@@ -36,8 +36,8 @@ export default function HorizontalNav() {
     }, []);
 
     const navOpacityClass = isHome
-        ? (isScrolled ? 'bg-background/95 border-b border-border' : 'bg-transparent border-transparent')
-        : 'bg-background/95 border-b border-border';
+        ? (isScrolled ? 'bg-background/95 border-b border-border text-foreground' : 'bg-transparent border-transparent text-white')
+        : 'bg-background/95 border-b border-border text-foreground';
 
     return (
         <>
@@ -115,7 +115,7 @@ export default function HorizontalNav() {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="lg:hidden site-backdrop border-t border-border overflow-hidden"
+                            className="lg:hidden site-backdrop border-t border-border overflow-hidden text-foreground"
                         >
                             <div className="flex flex-col p-6 gap-2">
                                 <div className="flex items-center justify-between mb-4 px-4">

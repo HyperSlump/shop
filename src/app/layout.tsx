@@ -83,7 +83,6 @@ export default function RootLayout({
 
               <PreviewPlayerDock />
               <CartDrawer />
-              <GrainedNoise />
             </SmoothScroll>
           </PreviewPlayerProvider>
         </CartProvider>
