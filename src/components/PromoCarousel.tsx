@@ -155,10 +155,10 @@ export default function PromoCarousel() {
                     initial="enter"
                     animate="center"
                     exit="exit"
-                    className="absolute inset-0 flex flex-col md:flex-row items-center justify-center px-6 md:px-12 lg:px-24 z-10"
+                    className="absolute inset-0 flex flex-col md:flex-row items-center justify-center px-6 md:px-12 lg:px-24 z-10 pt-32 pb-20 md:py-0"
                 >
                     {/* LEFT CONTENT */}
-                    <div className="relative z-10 w-full md:w-3/5 flex flex-col items-start text-left gap-6">
+                    <div className="w-full md:w-3/5 flex flex-col items-center md:items-start text-center md:text-left gap-6 md:gap-4">
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -223,17 +223,17 @@ export default function PromoCarousel() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.8, duration: 0.5 }}
-                            className="flex flex-wrap items-center gap-4 mt-4"
+                            className="flex flex-col sm:flex-row items-center gap-4 mt-8 md:mt-4"
                         >
                             <button
                                 onClick={() => router.push(`/product/${activePromo.id}`)}
-                                className="h-[48px] px-8 rounded-sm bg-primary text-white font-mono text-[11px] uppercase tracking-[0.2em] font-bold hover:brightness-110 transition-all shadow-[0_4px_20px_rgba(216,58,61,0.25)] flex items-center justify-center"
+                                className="w-full sm:w-auto h-[48px] px-10 rounded-sm bg-primary text-white font-mono text-[11px] uppercase tracking-[0.2em] font-bold hover:brightness-110 transition-all shadow-[0_4px_20px_rgba(216,58,61,0.25)] flex items-center justify-center"
                             >
                                 Get Instant Access
                             </button>
                             <Link
                                 href="/#catalog"
-                                className="h-[48px] px-10 rounded-sm border border-white/10 bg-black/40 backdrop-blur-sm text-white font-mono text-[11px] uppercase tracking-[0.2em] hover:bg-white/5 transition-all flex items-center justify-center"
+                                className="w-full sm:w-auto h-[48px] px-12 rounded-sm border border-white/10 bg-black/40 backdrop-blur-sm text-white font-mono text-[11px] uppercase tracking-[0.2em] hover:bg-white/5 transition-all flex items-center justify-center"
                             >
                                 Browse Catalog
                             </Link>

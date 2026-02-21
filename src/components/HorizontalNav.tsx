@@ -81,11 +81,13 @@ export default function HorizontalNav() {
 
                 {/* RIGHT: Controls */}
                 <div className="flex-shrink-0 w-[140px] flex items-center justify-end gap-4 md:gap-6">
-                    <ThemeToggle />
+                    <div className="hidden lg:block">
+                        <ThemeToggle />
+                    </div>
 
                     <button
                         onClick={toggleCart}
-                        className="p-2.5 hover:text-primary transition-colors relative group"
+                        className="hidden lg:flex p-2.5 hover:text-primary transition-colors relative group"
                     >
                         <IconShoppingCart size={22} stroke={2} className="group-hover:scale-110 transition-transform" />
                         {cart.length > 0 && (
@@ -112,9 +114,14 @@ export default function HorizontalNav() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="lg:hidden bg-background border-t border-border overflow-hidden"
+                        className="lg:hidden site-backdrop border-t border-border overflow-hidden"
                     >
-                        <div className="flex flex-col p-4 gap-2">
+                        <div className="flex flex-col p-6 gap-2">
+                            <div className="flex items-center justify-between mb-4 px-4">
+                                <span className="text-[10px] font-mono uppercase tracking-[0.2em] opacity-40">System Settings</span>
+                                <ThemeToggle />
+                            </div>
+                            <div className="h-[1px] bg-border/50 mb-4 mx-4" />
                             {navLinks.map((link) => (
                                 <Link
                                     key={link.id}
@@ -132,6 +139,21 @@ export default function HorizontalNav() {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* FIXED MOBILE CART ICON */}
+            <div className="lg:hidden fixed bottom-6 right-6 z-[110]">
+                <button
+                    onClick={toggleCart}
+                    className="w-14 h-14 bg-primary text-white rounded-sm shadow-[0_8px_32px_rgba(var(--primary-rgb),0.3)] flex items-center justify-center relative active:scale-95 transition-transform"
+                >
+                    <IconShoppingCart size={24} stroke={2.5} />
+                    {cart.length > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-white text-primary text-[11px] font-black w-6 h-6 rounded-xs flex items-center justify-center shadow-lg border-2 border-primary">
+                            {cart.length}
+                        </span>
+                    )}
+                </button>
+            </div>
         </nav>
     );
 }
