@@ -62,17 +62,16 @@ export default function ThemeToggle() {
             <motion.span
                 className="relative z-10 flex h-6 w-6 items-center justify-center rounded-none border border-border/80 bg-background text-foreground shadow-[0_1px_4px_rgba(0,0,0,0.22)]"
                 animate={{
-                    x: isDark ? 0 : 24,
-                    rotate: isDark ? -12 : 12
+                    x: isDark ? 0 : 24
                 }}
-                transition={{ type: 'spring', stiffness: 500, damping: 32, mass: 0.9 }}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
             >
                 <motion.span
                     key={isDark ? 'moon' : 'sun'}
-                    initial={{ opacity: 0, scale: 0.8, rotate: -24 }}
-                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                    exit={{ opacity: 0, scale: 0.8, rotate: 24 }}
-                    transition={{ duration: 0.18, ease: 'easeOut' }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.15 }}
                     className="inline-flex"
                 >
                     {isDark ? (
