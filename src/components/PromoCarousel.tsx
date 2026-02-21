@@ -30,7 +30,7 @@ const promoSlides: PromoSlide[] = [
         title: 'industrial etherea',
         subtitle: 'collection 001 // v1.2',
         description: 'High-fidelity cinematic soundscapes and aggressive industrial textures. Engineered for forward-thinking productions.',
-        image: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?auto=format&fit=crop&q=80&w=2070',
+        image: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/ideogram-v3.0_generate_a_2560x1440_abstract_digital_ad_for_edm_sample_packs-0.jpg',
         badge: 'NEW ARRIVAL',
         accent: 'rgb(216, 58, 61)'
     },
@@ -39,7 +39,7 @@ const promoSlides: PromoSlide[] = [
         title: 'basement grit',
         subtitle: 'one-shot series // vol.4',
         description: 'Authentic analog distortion and raw, unpolished drum hits. Recorded through vintage preamps for maximum heat.',
-        image: 'https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=80&w=2029',
+        image: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/ideogram-v3.0_Amid_a_pulsating_sea_of_vibrant_colors_and_mesmerizing_patterns_a_2560x1440_digi-0.jpg',
         badge: 'MOST POPULAR',
         accent: 'rgb(123, 170, 178)'
     },
@@ -48,7 +48,7 @@ const promoSlides: PromoSlide[] = [
         title: 'chrome pulse',
         subtitle: 'serum presets // neon',
         description: 'Liquid wavetables and futuristic modulation. 60+ presets designed for the next wave of electronic music.',
-        image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=1964',
+        image: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/ideogram-v3.0_Amid_a_pulsating_sea_of_vibrant_colors_a_2560x1440_digital_ad_for_top-tier_EDM_s-0%20%282%29.jpg',
         badge: 'BEST SELLER',
         accent: 'rgb(200, 106, 131)'
     }
@@ -79,6 +79,23 @@ export default function PromoCarousel() {
         setIsAutoPlaying(false);
         setDirection(1);
         setCurrentIndex((prev) => (prev + 1) % promoSlides.length);
+    };
+
+    // Touch swipe support for mobile
+    const [touchStart, setTouchStart] = useState<number | null>(null);
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        setTouchStart(e.touches[0].clientX);
+    };
+
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        if (touchStart === null) return;
+        const diff = touchStart - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) {
+            if (diff > 0) handleNext();
+            else handlePrev();
+        }
+        setTouchStart(null);
     };
 
     const activePromo = promoSlides[currentIndex];
@@ -125,7 +142,11 @@ export default function PromoCarousel() {
             : 'border-[#C86A83]/30 text-[#C86A83] hover:bg-[#C86A83]/5';
 
     return (
-        <div className="relative w-full h-full group/carousel flex flex-col items-center justify-center overflow-hidden">
+        <div
+            className="relative w-full h-full group/carousel flex flex-col items-center justify-center overflow-hidden"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+        >
             {/* DYNAMIC BACKGROUND GRADIENT */}
             <div
                 className="absolute inset-0 z-0 transition-opacity duration-1000"
@@ -135,18 +156,6 @@ export default function PromoCarousel() {
                 }}
             />
 
-            {/* TECHNICAL GRID BACKGROUND */}
-            <div className="absolute inset-0 z-1 pointer-events-none"
-                style={{
-                    backgroundImage: `
-                        linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px),
-                        linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px)
-                    `,
-                    backgroundSize: '40px 40px'
-                }}
-            />
-            <div className="absolute inset-0 z-1 pointer-events-none opacity-[0.02] grayscale bg-[url('https://www.transparenttextures.com/patterns/micro-carbon.png')]" />
-
             <AnimatePresence initial={false} custom={direction}>
                 <motion.div
                     key={currentIndex}
@@ -155,137 +164,106 @@ export default function PromoCarousel() {
                     initial="enter"
                     animate="center"
                     exit="exit"
-                    className="absolute inset-0 flex flex-col md:flex-row items-center justify-center px-6 md:px-12 lg:px-24 z-10 pt-32 pb-20 md:py-0"
+                    className="absolute inset-0 z-10"
                 >
-                    {/* LEFT CONTENT */}
-                    <div className="w-full md:w-3/5 flex flex-col items-center md:items-start text-center md:text-left gap-6 md:gap-4">
-                        <motion.div
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.2, duration: 0.5 }}
-                            className="flex flex-col gap-1"
-                        >
-                            <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-primary font-bold">
-                                FEATURED ASSET PACK
-                            </span>
-                        </motion.div>
-
-                        <motion.div className="relative">
-                            <motion.h2
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.3, duration: 0.5 }}
-                                className="jacquard-24-regular text-[5rem] md:text-[7rem] lg:text-[8rem] leading-[0.82] lowercase tracking-tight text-white mb-2"
-                            >
-                                {activePromo.title}
-                            </motion.h2>
-                            <motion.div
-                                initial={{ width: 0 }}
-                                animate={{ width: '80px' }}
-                                transition={{ delay: 0.6, duration: 0.8 }}
-                                className="h-[2px] bg-primary absolute -bottom-1 left-0"
-                            />
-                        </motion.div>
-
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.5, duration: 0.5 }}
-                            className="flex items-center gap-4 mt-4"
-                        >
-                            <div className="h-4 w-[2px] bg-primary" />
-                            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-foreground/80 font-bold">
-                                24-BIT MASTERED / IMMEDIATE DELIVERY
-                            </p>
-                        </motion.div>
-
-                        <motion.p
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.6, duration: 0.5 }}
-                            className="text-muted text-[14px] md:text-[16px] leading-relaxed max-w-lg font-sans tracking-tight opacity-70"
-                        >
-                            {activePromo.description}
-                        </motion.p>
-
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.7, duration: 0.5 }}
-                            className="flex flex-wrap items-center gap-x-6 gap-y-2 opacity-40"
-                        >
-                            {['INSTANT DOWNLOAD', 'LIFETIME LICENSE', 'SECURE CHECKOUT'].map((tag) => (
-                                <span key={tag} className="font-mono text-[9px] uppercase tracking-[0.2em]">{tag}</span>
-                            ))}
-                        </motion.div>
-
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.8, duration: 0.5 }}
-                            className="flex flex-col sm:flex-row items-center gap-4 mt-8 md:mt-4"
-                        >
-                            <button
-                                onClick={() => router.push(`/product/${activePromo.id}`)}
-                                className="w-full sm:w-auto h-[48px] px-10 rounded-sm bg-primary text-white font-mono text-[11px] uppercase tracking-[0.2em] font-bold hover:brightness-110 transition-all shadow-[0_4px_20px_rgba(216,58,61,0.25)] flex items-center justify-center"
-                            >
-                                Get Instant Access
-                            </button>
-                            <Link
-                                href="/#catalog"
-                                className="w-full sm:w-auto h-[48px] px-12 rounded-sm border border-white/10 bg-black/40 backdrop-blur-sm text-white font-mono text-[11px] uppercase tracking-[0.2em] hover:bg-white/5 transition-all flex items-center justify-center"
-                            >
-                                Browse Catalog
-                            </Link>
-                        </motion.div>
+                    {/* FULL-BLEED BACKGROUND IMAGE */}
+                    <div className="absolute inset-0">
+                        <Image
+                            src={activePromo.image}
+                            alt={activePromo.title}
+                            fill
+                            priority
+                            className="object-cover"
+                            sizes="100vw"
+                        />
+                        {/* Dark gradient overlay for text legibility */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/30" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
                     </div>
 
-                    {/* RIGHT IMAGE SECTION */}
-                    <div className="relative w-full md:w-2/5 h-full flex items-center justify-center p-8 lg:p-12">
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9, rotateY: -15 }}
-                            animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-                            transition={{ delay: 0.4, duration: 0.8 }}
-                            className="relative w-full max-w-[440px] aspect-[4/5] perspective-1000"
-                        >
-                            <div className="relative w-full h-full rounded-sm border border-white/10 bg-[#0f1113]/80 backdrop-blur-md overflow-hidden shadow-2xl flex flex-col">
-                                {/* CARD HEADER */}
-                                <div className="p-4 flex items-center justify-between border-b border-white/5">
-                                    <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/40 font-bold border border-white/20 px-2 py-0.5 rounded-xs">
-                                        PREVIEW
-                                    </span>
-                                </div>
+                    {/* CONTENT OVERLAY */}
+                    <div className="relative h-full flex flex-col justify-end px-6 md:px-12 lg:px-24 pb-32 md:pb-24 pt-32 md:pt-0">
+                        <div className="max-w-2xl flex flex-col gap-4 md:gap-3">
+                            <motion.div
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.2, duration: 0.5 }}
+                                className="flex flex-col gap-1"
+                            >
+                                <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-primary font-bold">
+                                    FEATURED ASSET PACK
+                                </span>
+                            </motion.div>
 
-                                {/* IMAGE CONTAINER */}
-                                <div className="flex-1 relative m-4 rounded-xs overflow-hidden bg-black/40 border border-white/5">
-                                    <Image
-                                        src={activePromo.image}
-                                        alt={activePromo.title}
-                                        fill
-                                        className="object-cover opacity-80"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                                </div>
+                            <motion.div className="relative">
+                                <motion.h2
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.3, duration: 0.5 }}
+                                    className="jacquard-24-regular text-[4rem] md:text-[7rem] lg:text-[8rem] leading-[0.82] lowercase tracking-tight text-white mb-2"
+                                >
+                                    {activePromo.title}
+                                </motion.h2>
+                                <motion.div
+                                    initial={{ width: 0 }}
+                                    animate={{ width: '80px' }}
+                                    transition={{ delay: 0.6, duration: 0.8 }}
+                                    className="h-[2px] bg-primary absolute -bottom-1 left-0"
+                                />
+                            </motion.div>
 
-                                {/* CARD FOOTER */}
-                                <div className="p-5 flex flex-col gap-2">
-                                    <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-primary font-bold opacity-80">
-                                        CURRENT FEATURE
-                                    </span>
-                                    <h3 className="jacquard-24-regular text-2xl text-white lowercase leading-none">
-                                        {activePromo.title}
-                                    </h3>
-                                </div>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.5, duration: 0.5 }}
+                                className="flex items-center gap-4 mt-2"
+                            >
+                                <div className="h-4 w-[2px] bg-primary" />
+                                <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-white/70 font-bold">
+                                    24-BIT MASTERED / IMMEDIATE DELIVERY
+                                </p>
+                            </motion.div>
 
-                                <div className="absolute top-4 right-4 text-white/20">
-                                    <IconDownload size={20} stroke={1.5} />
-                                </div>
-                            </div>
+                            <motion.p
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.6, duration: 0.5 }}
+                                className="text-white/60 text-[14px] md:text-[16px] leading-relaxed max-w-lg font-sans tracking-tight"
+                            >
+                                {activePromo.description}
+                            </motion.p>
 
-                            {/* DECORATIVE ACCENTS */}
-                            <div className="absolute -top-2 -right-2 w-12 h-12 border-t-2 border-r-2 border-primary/20" />
-                            <div className="absolute -bottom-2 -left-2 w-12 h-12 border-b-2 border-l-2 border-primary/20" />
-                        </motion.div>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.7, duration: 0.5 }}
+                                className="flex flex-wrap items-center gap-x-6 gap-y-2 opacity-40"
+                            >
+                                {['INSTANT DOWNLOAD', 'LIFETIME LICENSE', 'SECURE CHECKOUT'].map((tag) => (
+                                    <span key={tag} className="font-mono text-[9px] uppercase tracking-[0.2em] text-white">{tag}</span>
+                                ))}
+                            </motion.div>
+
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.8, duration: 0.5 }}
+                                className="flex flex-col sm:flex-row items-start gap-4 mt-4"
+                            >
+                                <button
+                                    onClick={() => router.push(`/product/${activePromo.id}`)}
+                                    className="w-full sm:w-auto h-[48px] px-10 rounded-sm bg-primary text-white font-mono text-[11px] uppercase tracking-[0.2em] font-bold hover:brightness-110 transition-all shadow-[0_4px_20px_rgba(216,58,61,0.25)] flex items-center justify-center"
+                                >
+                                    Get Instant Access
+                                </button>
+                                <Link
+                                    href="/#catalog"
+                                    className="w-full sm:w-auto h-[48px] px-12 rounded-sm border border-white/20 bg-white/5 backdrop-blur-sm text-white font-mono text-[11px] uppercase tracking-[0.2em] hover:bg-white/10 transition-all flex items-center justify-center"
+                                >
+                                    Browse Catalog
+                                </Link>
+                            </motion.div>
+                        </div>
                     </div>
                 </motion.div>
             </AnimatePresence>
@@ -302,7 +280,7 @@ export default function PromoCarousel() {
                     </span>
                 </div>
 
-                <div className="flex items-center gap-2 pointer-events-auto">
+                <div className="hidden md:flex items-center gap-2 pointer-events-auto">
                     <button
                         onClick={handlePrev}
                         className="w-12 h-12 flex items-center justify-center rounded-sm bg-black/40 border border-white/10 text-white/60 hover:text-white hover:border-white/30 transition-all"
