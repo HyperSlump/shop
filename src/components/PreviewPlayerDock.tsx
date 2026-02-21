@@ -196,7 +196,7 @@ export default function PreviewPlayerDock() {
                                 </div>
 
                                 {/* Playlist Toggle Button */}
-                                <div className="hidden lg:flex items-center border-r border-border/50 pr-4 mr-1">
+                                <div className="flex items-center lg:border-r lg:border-border/50 lg:pr-4 lg:mr-1">
                                     <button
                                         onClick={() => setIsPlaylistOpen(!isPlaylistOpen)}
                                         className={`flex items-center gap-2 px-3 py-1.5 rounded-md font-mono text-[10px] uppercase tracking-[0.15em] transition-all duration-300 group
@@ -205,11 +205,11 @@ export default function PreviewPlayerDock() {
                                                 : 'bg-background/40 text-muted hover:text-foreground hover:bg-background/60 border border-border/50'}`}
                                     >
                                         <IconPlaylist size={14} stroke={2} className={`${isPlaylistOpen ? 'animate-pulse' : 'group-hover:rotate-12 transition-transform'}`} />
-                                        <span>{isPlaylistOpen ? 'Hide Playlist' : 'Playlist'}</span>
+                                        <span className="hidden sm:inline">{isPlaylistOpen ? 'Hide Playlist' : 'Playlist'}</span>
                                         <IconChevronUp
                                             size={12}
                                             stroke={2.5}
-                                            className={`transition-transform duration-500 ${isPlaylistOpen ? 'rotate-180' : ''}`}
+                                            className={`transition-transform duration-500 sm:ml-0 ${isPlaylistOpen ? 'rotate-180' : ''}`}
                                         />
                                     </button>
                                 </div>
