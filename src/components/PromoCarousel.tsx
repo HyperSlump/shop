@@ -173,7 +173,7 @@ export default function PromoCarousel() {
                             alt={activePromo.title}
                             fill
                             priority
-                            className="object-cover"
+                            className="object-cover saturate-[0.25] brightness-[0.8] contrast-[1.1]"
                             sizes="100vw"
                         />
                         {/* Dark gradient overlay for text legibility */}
