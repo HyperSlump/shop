@@ -85,8 +85,8 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                         type="button"
                         onClick={playPreview}
                         className={`absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2 rounded-full border border-border/80 bg-card/88 px-4 py-2.5 backdrop-blur-md transition-all duration-200 ${isActivePreview
-                            ? 'opacity-100 translate-y-0 text-primary shadow-[0_8px_24px_rgba(0,0,0,0.35)]'
-                            : 'pointer-events-none opacity-0 translate-y-2 text-foreground/90 shadow-[0_8px_24px_rgba(0,0,0,0.25)] group-hover:pointer-events-auto group-hover:opacity-100 group-hover:translate-y-0'
+                            ? 'opacity-100 translate-y-0 text-primary shadow-[0_8px_24px_rgba(0,0,0,0.35)] pointer-events-auto'
+                            : 'opacity-100 translate-y-0 text-foreground/90 shadow-[0_8px_24px_rgba(0,0,0,0.25)] pointer-events-auto md:pointer-events-none md:translate-y-2 md:opacity-0 md:group-hover:pointer-events-auto md:group-hover:translate-y-0 md:group-hover:opacity-100'
                             }`}
                         aria-label={`${isActivePreview && isPlaying ? 'Pause' : 'Play'} preview for ${product.name}`}
                     >
