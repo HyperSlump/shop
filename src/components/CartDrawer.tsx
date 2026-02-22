@@ -270,9 +270,9 @@ export default function CartDrawer() {
                         animate={{ x: 0 }}
                         exit={{ x: '100%' }}
                         transition={{ type: 'spring', stiffness: 400, damping: 35, mass: 0.8 }}
-                        className="drawer-surface fixed inset-y-0 right-0 h-full w-full md:w-[420px] z-[150] flex flex-col overflow-hidden border-l border-border shadow-2xl"
+                        className="drawer-surface relative fixed inset-y-0 right-0 h-full w-full md:w-[420px] z-[150] flex flex-col overflow-hidden border-l border-border shadow-2xl"
                     >
-                        <GrainedNoise animate={false} />
+                        <GrainedNoise />
                         <div className="flex-shrink-0 px-6 py-5 border-b border-border/70 backdrop-blur-sm">
                             <div className="flex items-start justify-between gap-4">
                                 <div>
