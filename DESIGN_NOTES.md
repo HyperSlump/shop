@@ -93,5 +93,9 @@ This document tracks critical design decisions and technical standards to mainta
     3.  **Cleanup**: Removed all unused imports and tags from the storefront, checkout, and download flows.
 - **Hero Pagination**: Restored the `Current // Total` numeric display (e.g., `01 // 05`) in a refined `8px` HUD style. Removed all color and scale animations in favor of a static, high-fidelity monospaced aesthetic that maintains brand consistency while maximizing legibility.
 - **Hero Mobile Centering**: Unified the separate Title and CTA blocks into a single interactive flex container for mobile. By using `justify-center` on an inset-0 container, the entire content group is now perfectly locked to the 50% VH midpoint on mobile, creating a much more balanced and "intentional" look while preserving the HUD layout for desktop.
+- **Reactive Variant Mockups**: Integrated a reactive image swapping system for physical products. 
+    1.  **State Synchronization**: The `ProductPageLayout` now updates the primary image `src` based on the `selectedVariant`.
+    2.  **Catalog Support**: The `catalog` service and `Product` type now support variant-specific image URLs.
+    3.  **Vercel Blob Integration**: Designers can now map variant IDs to specific high-quality transparent mockups (Vercel Blob) via the `IMAGE_OVERRIDES` record in `src/lib/services/catalog.ts`.
 
 

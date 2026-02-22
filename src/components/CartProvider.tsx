@@ -16,6 +16,7 @@ export type Product = {
     name: string;
     retail_price: string;
     currency: string;
+    image?: string;
   }>;
 };
 

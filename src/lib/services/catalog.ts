@@ -38,7 +38,8 @@ export async function getUnifiedProducts(): Promise<Product[]> {
         // Smart Mapping: Automatically check for higher-quality transparent mockups
         // named pf_{printful_id}.png in your Vercel Blob storage.
         const IMAGE_OVERRIDES: Record<string, string> = {
-            '420681159': `${VERCEL_BLOB_BASE}/classic-dad-hat-black-front-699a3d27d359e.png`,
+            '420681159': `${VERCEL_BLOB_BASE}/classic-dad-hat-black-front-699a3d27d359e.png`, // Example Product Override
+            // '123456789': `${VERCEL_BLOB_BASE}/blue-variant.png`, // Example Variant Override (Stripe Price ID or Printful Variant ID)
             // Add more manual overrides here if they don't follow the naming convention
         };
 
@@ -71,7 +72,8 @@ export async function getUnifiedProducts(): Promise<Product[]> {
                     id: v.id,
                     name: v.name,
                     retail_price: v.retail_price,
-                    currency: v.currency
+                    currency: v.currency,
+                    image: IMAGE_OVERRIDES[String(v.id)] || v.thumbnail_url
                 }))
             };
             return product;

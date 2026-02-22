@@ -67,6 +67,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
             ...product,
             id: `pf_${product.metadata?.printful_id}_${selectedVariant.id}`,
             amount: parseFloat(selectedVariant.retail_price),
+            image: selectedVariant.image || product.image,
             metadata: {
                 ...product.metadata,
                 variant_id: String(selectedVariant.id),
@@ -131,7 +132,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                         <div className="relative aspect-square overflow-hidden group bg-foreground/5 dark:bg-white/5 border border-primary/10 rounded">
                             <Image
                                 alt={product.name}
-                                src={product.image || 'https://via.placeholder.com/1000'}
+                                src={selectedVariant?.image || product.image || 'https://via.placeholder.com/1000'}
                                 fill
                                 className="object-contain opacity-80 contrast-125 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000"
                                 priority
