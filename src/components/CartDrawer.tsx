@@ -260,7 +260,7 @@ export default function CartDrawer() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="fixed inset-0 z-[140] bg-black/60 backdrop-blur-[4px]"
+                        className="fixed inset-0 z-[140] bg-black/40"
                         onClick={toggleCart}
                     />
 
@@ -269,13 +269,11 @@ export default function CartDrawer() {
                         initial={{ x: '100%' }}
                         animate={{ x: 0 }}
                         exit={{ x: '100%' }}
-                        transition={{ type: 'spring', stiffness: 400, damping: 35, mass: 0.8 }}
-                        className="drawer-surface fixed inset-y-0 right-0 h-full w-full md:w-[420px] z-[150] flex flex-col overflow-hidden border-l border-border shadow-2xl"
+                        transition={{ type: 'spring', stiffness: 450, damping: 40, mass: 1 }}
+                        className="drawer-surface fixed inset-y-0 right-0 h-full w-full md:w-[420px] z-[150] flex flex-col overflow-hidden border-l border-border [transform:translateZ(0)]"
                     >
-                        <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-                            <GrainedNoise />
-                        </div>
-                        <div className="flex-shrink-0 px-6 py-5 border-b border-border/70 backdrop-blur-sm relative z-10">
+                        <GrainedNoise />
+                        <div className="flex-shrink-0 px-6 py-5 border-b border-border/70 relative z-10">
                             <div className="flex items-start justify-between gap-4">
                                 <div>
                                     <h2
@@ -398,7 +396,7 @@ export default function CartDrawer() {
                         </div>
 
                         {cart.length > 0 && (
-                            <div className="flex-shrink-0 px-6 py-5 border-t border-border/70 bg-card/60 backdrop-blur-lg relative z-10">
+                            <div className="flex-shrink-0 px-6 py-5 border-t border-border/70 bg-card relative z-10">
                                 <div className="mb-4">
                                     {renderOneShotPreview(footerOneShotProduct, footerOneShots)}
                                 </div>

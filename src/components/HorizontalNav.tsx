@@ -8,6 +8,7 @@ import ThemeToggle from './ThemeToggle';
 import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { IconShoppingCart } from '@tabler/icons-react';
+import GrainedNoise from './GrainedNoise';
 
 const navLinks = [
     { label: 'Shop', href: '/', id: 'shop', note: '//MAIN' },
@@ -134,9 +135,10 @@ export default function HorizontalNav() {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="lg:hidden site-backdrop border-t border-border overflow-hidden text-foreground"
+                            className="lg:hidden site-backdrop border-t border-border overflow-hidden text-foreground relative"
                         >
-                            <div className="flex flex-col p-6 gap-2">
+                            <GrainedNoise />
+                            <div className="flex flex-col p-6 gap-2 relative z-10">
                                 <div className="flex items-center justify-between mb-4 px-4">
                                     <span className="text-[10px] font-mono uppercase tracking-[0.2em] opacity-40">System Settings</span>
                                     <ThemeToggle />

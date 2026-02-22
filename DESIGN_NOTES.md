@@ -72,6 +72,16 @@ This document tracks critical design decisions and technical standards to mainta
 - **Summary**: All major checkout blockers (character limits, price display issues, cart persistence) have been resolved.
 - **Visuals**: Standardized receipt UI with monospace totals and industrial minimalist aesthetic.
 
+## [2026-02-22] Technical Polish: Mobile Flicker & Drawer Optimization
+- **Issue**: Mobile users reported "black flashes" around the edges of the cart drawer during transitions.
+- **Root Cause**: Excessive use of `backdrop-filter` (blur) on animating drawer layers combined with semi-transparent background gradients, straining the mobile GPU's tiling engine.
+- **Resolution**: 
+    1.  Removed all `backdrop-blur` effects from the `CartDrawer` overlay, header, and footer.
+    2.  Standardized the `.drawer-surface` background to be a solid, opaque linear gradient to prevent "over-blending" artifacts.
+    3.  Added `transform: translateZ(0)` to the drawer container to force hardware acceleration.
+- **Workflow Compliance**: Verified a "clean install" of the `<GrainedNoise />` component. Noise is now the primary visual texture over an opaque industrial gradient, matching the site-wide "Liquid Tech" standard without redundant layering.
+- **Mobile Navigation**: Added `<GrainedNoise />` to the mobile navigation dropdown to ensure the industrial texture is present even in high-level navigation states.
+
 ---
 *Next entry [ID: LQD_G9_V9]*
 
