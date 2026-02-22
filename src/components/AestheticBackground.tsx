@@ -5,6 +5,7 @@ import GrainedNoise from './GrainedNoise';
 
 interface AestheticBackgroundProps {
     showScanlines?: boolean;
+    showGrain?: boolean;
     scanlineOpacity?: string;
     className?: string;
 }
@@ -15,6 +16,7 @@ interface AestheticBackgroundProps {
  */
 export default function AestheticBackground({
     showScanlines = true,
+    showGrain = false,
     scanlineOpacity = "opacity-10",
     className = ""
 }: AestheticBackgroundProps) {
@@ -24,7 +26,7 @@ export default function AestheticBackground({
             <div className="site-backdrop absolute inset-0 -z-20" aria-hidden />
 
             {/* 2. The standardized noise grain layer */}
-            <GrainedNoise />
+            {showGrain && <GrainedNoise />}
 
             {/* 3. The industrial scanning CRT overlay */}
             {showScanlines && (

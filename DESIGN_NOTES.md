@@ -87,8 +87,9 @@ This document tracks critical design decisions and technical standards to mainta
     3.  **Labelling**: Reverted to simplified, human-readable labels (e.g., `preview`, `playing`, `add to cart`, `added`) used on the product cards to ensure cross-page consistency. The monospaced uppercase styling maintains the industrial aesthetic without sacrificing clarity.
     4.  **Polish**: Aligned hover states and shadows to use the primary color glow.
 - **UI Consistency**: Updated the `CartDrawer` header to match the site's `HorizontalNav` aesthetic. It now uses `bg-background/95` with `backdrop-blur-[2px]` and a full-opacity `border-border`, creating a cohesive "System Bar" look across all transient UI surfaces in both light and dark modes.
-
----
-*Next entry [ID: LQD_G9_V9]*
+- **Grain Restriction**: Restricted the `<GrainedNoise />` effect exclusively to the Hero section (`PromoCarousel`).
+    1.  **Reason**: Eliminated potential animation conflicts and GPU strain during the checkout process and mobile navigation.
+    2.  **Implementation**: Added a `showGrain` prop to `AestheticBackground` (default: `false`) and removed manual injections from all UI components except the central hero carousel.
+    3.  **Cleanup**: Removed all unused imports and tags from the storefront, checkout, and download flows.
 
 

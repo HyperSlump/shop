@@ -10,7 +10,6 @@ import { Geist, Geist_Mono, UnifrakturMaguntia, Jacquard_24 } from "next/font/go
 
 import SmoothScroll from "@/components/SmoothScroll";
 import MainContent from "@/components/MainContent";
-import GrainedNoise from '@/components/GrainedNoise';
 
 const geistSans = Geist({
   variable: "--font-sans",

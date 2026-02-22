@@ -9,7 +9,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { IconArrowLeft, IconChevronDown, IconLock, IconTruck } from '@tabler/icons-react';
-import GrainedNoise from '@/components/GrainedNoise';
 import AestheticBackground from '@/components/AestheticBackground';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
@@ -188,7 +187,6 @@ export default function CheckoutPage() {
 
             <div className="flex-1 flex flex-col lg:flex-row relative z-10">
                 <div className="w-full lg:w-[44%] drawer-surface border-b lg:border-b-0 lg:border-r border-border relative overflow-hidden">
-                    <GrainedNoise />
                     <div className="flex flex-col w-full max-w-[500px] ml-auto px-6 lg:px-12 py-8 lg:py-12">
                         <div className="flex-shrink-0 mb-6 lg:mb-8">
                             <Link href="/" className="inline-flex items-center gap-3 mb-8 group">

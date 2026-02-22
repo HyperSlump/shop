@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { IconPlayerPlayFilled, IconPlayerPauseFilled } from '@tabler/icons-react';
 import MatrixSpace from './MatrixSpace';
-import GrainedNoise from './GrainedNoise';
 import { useCart, Product } from './CartProvider';
 import { usePreviewPlayer } from './PreviewPlayerProvider';
 import { useEffect, useState } from 'react';
@@ -137,7 +136,6 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                                 className="object-contain opacity-80 contrast-125 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000"
                                 priority
                             />
-                            <GrainedNoise />
                             <div className="absolute inset-0 z-10 opacity-[0.03] pointer-events-none">
                                 <MatrixSpace isVisible={true} />
                             </div>

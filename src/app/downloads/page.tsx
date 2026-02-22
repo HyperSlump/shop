@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { IconArrowLeft, IconCircleCheck, IconDownload, IconPackage } from '@tabler/icons-react';
 import { useCart } from '@/components/CartProvider';
-import GrainedNoise from '@/components/GrainedNoise';
 import AestheticBackground from '@/components/AestheticBackground';
 
 import { getProductFile, FALLBACK_FILE_URL } from '@/lib/products';

@@ -4,7 +4,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { IconPlayerPauseFilled, IconPlayerPlayFilled, IconWaveSine } from '@tabler/icons-react';
-import GrainedNoise from './GrainedNoise';
 
 import type { Product } from './CartProvider';
 import { usePreviewPlayer } from './PreviewPlayerProvider';
@@ -77,8 +76,8 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                     <div className="relative aspect-[4/3] overflow-hidden border-b border-border/60 px-3 pb-3 pt-3">
                         <div className="absolute left-5 right-5 top-5 z-20 flex items-center justify-between gap-2">
                             <span className={`inline-flex h-6 items-center rounded-xs border px-2.5 font-mono text-[9px] uppercase tracking-[0.16em] ${isPhysical
-                                    ? 'border-primary/30 bg-primary/5 text-primary'
-                                    : 'border-border/70 bg-background/70 text-muted'
+                                ? 'border-primary/30 bg-primary/5 text-primary'
+                                : 'border-border/70 bg-background/70 text-muted'
                                 }`}>
                                 {isPhysical ? 'physical merch' : 'instant download'}
                             </span>
@@ -97,7 +96,6 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                     fill
                                     sizes="(max-width: 768px) 92vw, (max-width: 1200px) 46vw, 31vw"
                                 />
-                                <GrainedNoise />
                             </div>
                         </div>
                     </div>

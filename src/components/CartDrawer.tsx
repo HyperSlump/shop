@@ -8,7 +8,6 @@ import { IconArrowRight, IconChevronDown, IconLock, IconPlus, IconShoppingCart, 
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Product } from './CartProvider';
 import OneShotPlayer from './OneShotPlayer';
-import GrainedNoise from './GrainedNoise';
 
 function formatPrice(amount: number, currency: string) {
     try {
@@ -272,7 +271,6 @@ export default function CartDrawer() {
                         transition={{ type: 'spring', stiffness: 450, damping: 40, mass: 1 }}
                         className="drawer-surface fixed inset-y-0 right-0 h-full w-full md:w-[420px] z-[150] flex flex-col overflow-hidden border-l border-border [transform:translateZ(0)]"
                     >
-                        <GrainedNoise />
                         <div className="flex-shrink-0 px-6 py-6 border-b border-border bg-background/95 backdrop-blur-[2px] relative z-20">
                             <div className="flex items-start justify-between gap-4">
                                 <div>
