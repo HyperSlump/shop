@@ -47,8 +47,19 @@ export async function getUnifiedProducts(): Promise<Product[]> {
             const p = fullProduct.sync_product;
             const variants = fullProduct.sync_variants || [];
 
+            // Helper to find the best image for a subset of data (product or variant)
+            const findBestImage = (data: any) => {
+                if (data.thumbnail_url) return data.thumbnail_url;
+                if (data.files && Array.isArray(data.files)) {
+                    const preview = data.files.find((f: any) => f.type === 'preview' || f.type === 'mockup');
+                    return preview?.preview_url || preview?.thumbnail_url || null;
+                }
+                return null;
+            };
+
             const printfulId = String(p.id);
-            const finalImage = IMAGE_OVERRIDES[printfulId] || p.thumbnail_url;
+            const baseThumbnail = findBestImage(p) || (variants.length > 0 ? findBestImage(variants[0]) : null);
+            const finalImage = IMAGE_OVERRIDES[printfulId] || baseThumbnail;
 
             // Get price from the first variant
             const amount = variants.length > 0 ? parseFloat(variants[0].retail_price) : 32.00;
@@ -72,7 +83,7 @@ export async function getUnifiedProducts(): Promise<Product[]> {
                     name: v.name,
                     retail_price: v.retail_price,
                     currency: v.currency,
-                    image: IMAGE_OVERRIDES[String(v.id)] || v.thumbnail_url
+                    image: IMAGE_OVERRIDES[String(v.id)] || findBestImage(v) || finalImage
                 }))
             };
             return product;
