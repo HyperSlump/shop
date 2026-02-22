@@ -258,7 +258,7 @@ export default function PromoCarousel() {
                         </motion.div>
 
                         {/* CLEAN HUD TITLE */}
-                        <div className={`absolute -translate-y-1/2 left-6 md:left-24 lg:left-32 z-10 w-full md:w-auto transition-all duration-300 ${((isDockOpen || hasMobileCart) && isAtTop) ? 'top-[35%] md:top-[40%]' : 'top-[40%] md:top-[45%]'}`}>
+                        <div className={`absolute -translate-y-1/2 left-0 right-0 px-6 md:left-24 md:right-auto lg:left-32 z-10 w-full md:w-auto text-center md:text-left transition-all duration-300 ${((isDockOpen || hasMobileCart) && isAtTop) ? 'top-[35%] md:top-[40%]' : 'top-[40%] md:top-[45%]'}`}>
                             <motion.div className="relative inline-block max-w-[80vw]">
                                 <motion.h2
                                     initial={{ opacity: 0, y: 20 }}
@@ -275,30 +275,30 @@ export default function PromoCarousel() {
                         </div>
 
                         {/* BOTTOM DESCRIPTION & CTA (FLOATING) */}
-                        <div className={`absolute left-6 md:left-24 lg:left-32 w-full md:w-[500px] lg:w-[600px] pointer-events-auto z-10 transition-all duration-300 ${((isDockOpen || hasMobileCart) && isAtTop) ? 'bottom-56 md:bottom-48 lg:bottom-40' : 'bottom-32 md:bottom-24 lg:bottom-24'}`}>
+                        <div className={`absolute left-0 right-0 px-6 md:left-24 md:right-auto lg:left-32 w-full md:w-[500px] lg:w-[600px] pointer-events-auto z-10 transition-all duration-300 ${((isDockOpen || hasMobileCart) && isAtTop) ? 'bottom-56 md:bottom-48 lg:bottom-40' : 'bottom-32 md:bottom-24 lg:bottom-24'}`}>
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.6, duration: 0.6 }}
-                                className="flex flex-col gap-4 md:gap-5 max-w-[90%]"
+                                className="flex flex-col gap-4 md:gap-5 items-center md:items-start max-w-full"
                             >
                                 <div className="flex items-center gap-3">
-                                    <p className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.25em] text-primary font-bold">
+                                    <p className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.25em] text-primary font-bold text-center md:text-left">
                                         24-BIT MASTERED / IMMEDIATE DELIVERY
                                     </p>
                                 </div>
 
-                                <p className="text-white/80 text-[14px] md:text-[16px] leading-relaxed font-sans tracking-tight bg-black/40 backdrop-blur-sm p-4 rounded-sm border-l-2 border-primary/50 shadow-xl">
+                                <p className="text-white/80 text-[14px] md:text-[16px] leading-relaxed font-sans tracking-tight bg-black/40 backdrop-blur-sm p-4 rounded-sm border-l-2 border-primary/50 shadow-xl text-center md:text-left">
                                     {activePromo.description}
                                 </p>
 
-                                <div className="flex flex-wrap items-center gap-x-6 gap-y-2 opacity-50 mt-1">
+                                <div className="flex flex-wrap justify-center md:justify-start items-center gap-x-6 gap-y-2 opacity-50 mt-1">
                                     {['INSTANT DOWNLOAD', 'LIFETIME LICENSE', 'SECURE CHECKOUT'].map((tag) => (
                                         <span key={tag} className="font-mono text-[8px] md:text-[9px] uppercase tracking-[0.2em] text-white">[{tag}]</span>
                                     ))}
                                 </div>
 
-                                <div className="flex flex-col sm:flex-row items-center gap-4 mt-2">
+                                <div className="flex flex-col sm:flex-row items-center gap-4 mt-2 w-full md:w-auto">
                                     <button
                                         onClick={() => router.push(`/product/${activePromo.id}`)}
                                         className="w-full sm:w-auto h-[48px] px-10 rounded-sm bg-primary text-white font-mono text-[11px] uppercase tracking-[0.2em] font-bold hover:brightness-110 transition-all shadow-[0_0_30px_rgba(216,58,61,0.3)] flex items-center justify-center relative group overflow-hidden"
