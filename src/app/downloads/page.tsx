@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { IconArrowLeft, IconCircleCheck, IconDownload, IconPackage } from '@tabler/icons-react';
+import { useCart } from '@/components/CartProvider';
 import GrainedNoise from '@/components/GrainedNoise';
 import AestheticBackground from '@/components/AestheticBackground';
 
@@ -32,6 +33,11 @@ export default function DownloadsPage() {
         }
     });
     const [downloaded, setDownloaded] = useState<Set<string>>(new Set());
+    const { clearCart } = useCart();
+
+    React.useEffect(() => {
+        clearCart();
+    }, [clearCart]);
 
     const markDownloaded = (id: string) => {
         setDownloaded(prev => new Set(prev).add(id));

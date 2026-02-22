@@ -375,7 +375,6 @@ function FreeOrderPanel({ cart }: { cart: Product[] }) {
             cart.map(item => ({ id: item.id, name: item.name, image: item.image }))
         ));
 
-        clearCart();
         await new Promise(r => setTimeout(r, 400));
         router.push('/downloads');
     };

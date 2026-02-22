@@ -65,6 +65,7 @@ This document tracks critical design decisions and technical standards to mainta
 - **Reliability Fix**: Corrected variable definition order in `SuccessPage` to ensure product catalog is loaded before metadata parsing, fixing $0.00 price display issues.
 - **Cart Lifecycle**: Integrated `useCart` into the success page and free-order logic to automatically clear the session cart upon purchase.
 - **Aggressive Clearing**: Updated `clearCart` logic to explicitly wipe `localStorage` for immediate redundancy, preventing "phantom" items on return.
+- **UI Navigation Fix**: Moved `clearCart` calls to the destination landing pages (`/success` and `/downloads`) to prevent the checkout page from flashing a "Cart is Empty" state before the redirect completes.
 
 ## [2026-02-22] Stable Version: Checkout & Receipt Refinement
 - **Milestone**: Version 1.2 Stable.
