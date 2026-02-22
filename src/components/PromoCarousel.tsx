@@ -254,64 +254,70 @@ export default function PromoCarousel() {
                             </div>
                         </motion.div>
 
-                        {/* CLEAN HUD TITLE */}
-                        <div className={`absolute -translate-y-1/2 left-0 right-0 px-6 md:left-24 md:right-auto lg:left-32 z-10 w-full md:w-auto text-center md:text-left transition-all duration-300 ${(isDockOpen && isAtTop) ? 'top-[22%] md:top-[40%]' : 'top-[28%] md:top-[45%]'}`}>
-                            <motion.div className="relative inline-block max-w-[80vw]">
-                                <motion.h2
+                        {/* UNIFIED HUD CONTENT CONTAINER - CENTERED AT 50% VH ON MOBILE */}
+                        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center md:block px-6 md:px-0 transition-all duration-500 pointer-events-none">
+
+                            {/* TITLE BLOCK */}
+                            <div className={`w-full md:w-auto md:absolute md:left-24 lg:left-32 text-center md:text-left transition-all duration-300 
+                                ${(isDockOpen && isAtTop) ? 'md:top-[40%] md:-translate-y-1/2' : 'md:top-[45%] md:-translate-y-1/2'}`}>
+                                <motion.div className="relative inline-block max-w-[90vw] md:max-w-[80vw]">
+                                    <motion.h2
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" }}
+                                        className="font-mono text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight text-white leading-none whitespace-normal"
+                                        style={{
+                                            textShadow: '0 4px 24px rgba(0,0,0,0.9)'
+                                        }}
+                                    >
+                                        {activePromo.title}
+                                    </motion.h2>
+                                </motion.div>
+                            </div>
+
+                            {/* CTA BLOCK */}
+                            <div className={`w-full md:w-[500px] lg:w-[600px] mt-8 md:mt-0 md:absolute md:left-24 lg:left-32 pointer-events-auto transition-all duration-300
+                                ${(isDockOpen && isAtTop) ? 'bottom-[12rem] md:bottom-48 lg:bottom-40' : 'bottom-[5.5rem] md:bottom-24 lg:bottom-24'}`}>
+                                <motion.div
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" }}
-                                    className="font-mono text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight text-white leading-none whitespace-normal"
-                                    style={{
-                                        textShadow: '0 4px 24px rgba(0,0,0,0.9)'
-                                    }}
+                                    transition={{ delay: 0.6, duration: 0.6 }}
+                                    className="flex flex-col gap-4 md:gap-5 items-center md:items-start max-w-full"
                                 >
-                                    {activePromo.title}
-                                </motion.h2>
-                            </motion.div>
-                        </div>
+                                    <div className="flex items-center gap-3">
+                                        <p className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.25em] text-primary font-bold text-center md:text-left">
+                                            24-BIT MASTERED / IMMEDIATE DELIVERY
+                                        </p>
+                                    </div>
 
-                        {/* BOTTOM DESCRIPTION & CTA (FLOATING) */}
-                        <div className={`absolute left-0 right-0 px-6 md:left-24 md:right-auto lg:left-32 w-full md:w-[500px] lg:w-[600px] pointer-events-auto z-10 transition-all duration-300 ${(isDockOpen && isAtTop) ? 'bottom-[12rem] md:bottom-48 lg:bottom-40' : 'bottom-[5.5rem] md:bottom-24 lg:bottom-24'}`}>
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.6, duration: 0.6 }}
-                                className="flex flex-col gap-4 md:gap-5 items-center md:items-start max-w-full"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <p className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.25em] text-primary font-bold text-center md:text-left">
-                                        24-BIT MASTERED / IMMEDIATE DELIVERY
+                                    <p className="text-white/80 text-[14px] md:text-[16px] leading-relaxed font-sans tracking-tight bg-black/40 backdrop-blur-sm p-4 rounded-sm border-l-2 border-primary/50 shadow-xl text-center md:text-left">
+                                        {activePromo.description}
                                     </p>
-                                </div>
 
-                                <p className="text-white/80 text-[14px] md:text-[16px] leading-relaxed font-sans tracking-tight bg-black/40 backdrop-blur-sm p-4 rounded-sm border-l-2 border-primary/50 shadow-xl text-center md:text-left">
-                                    {activePromo.description}
-                                </p>
+                                    <div className="flex flex-wrap justify-center md:justify-start items-center gap-x-6 gap-y-2 opacity-50 mt-1">
+                                        {['INSTANT DOWNLOAD', 'LIFETIME LICENSE', 'SECURE CHECKOUT'].map((tag) => (
+                                            <span key={tag} className="font-mono text-[8px] md:text-[9px] uppercase tracking-[0.2em] text-white">[{tag}]</span>
+                                        ))}
+                                    </div>
 
-                                <div className="flex flex-wrap justify-center md:justify-start items-center gap-x-6 gap-y-2 opacity-50 mt-1">
-                                    {['INSTANT DOWNLOAD', 'LIFETIME LICENSE', 'SECURE CHECKOUT'].map((tag) => (
-                                        <span key={tag} className="font-mono text-[8px] md:text-[9px] uppercase tracking-[0.2em] text-white">[{tag}]</span>
-                                    ))}
-                                </div>
-
-                                <div className="flex flex-col sm:flex-row items-center gap-4 mt-2 w-full md:w-auto">
-                                    <button
-                                        onClick={() => router.push(`/product/${activePromo.id}`)}
-                                        className="w-full sm:w-auto h-[48px] px-10 rounded-sm bg-primary text-white font-mono text-[11px] uppercase tracking-[0.2em] font-bold hover:brightness-110 transition-all shadow-[0_0_30px_rgba(216,58,61,0.3)] flex items-center justify-center relative group overflow-hidden"
-                                    >
-                                        <span className="relative z-10">Get Instant Access</span>
-                                        <div className="absolute inset-0 bg-white/20 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300" />
-                                    </button>
-                                    <Link
-                                        href="/#catalog"
-                                        className="w-full sm:w-auto h-[48px] px-10 rounded-sm border border-white/20 bg-black/40 backdrop-blur-md text-white font-mono text-[11px] uppercase tracking-[0.2em] hover:bg-white/10 hover:border-white/40 transition-all flex items-center justify-center gap-2"
-                                    >
-                                        Browse Catalog
-                                        <IconArrowRight size={14} className="opacity-50" />
-                                    </Link>
-                                </div>
-                            </motion.div>
+                                    <div className="flex flex-col sm:flex-row items-center gap-4 mt-2 w-full md:w-auto">
+                                        <button
+                                            onClick={() => router.push(`/product/${activePromo.id}`)}
+                                            className="w-full sm:w-auto h-[48px] px-10 rounded-sm bg-primary text-white font-mono text-[11px] uppercase tracking-[0.2em] font-bold hover:brightness-110 transition-all shadow-[0_0_30px_rgba(216,58,61,0.3)] flex items-center justify-center relative group overflow-hidden"
+                                        >
+                                            <span className="relative z-10">Get Instant Access</span>
+                                            <div className="absolute inset-0 bg-white/20 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300" />
+                                        </button>
+                                        <Link
+                                            href="/#catalog"
+                                            className="w-full sm:w-auto h-[48px] px-10 rounded-sm border border-white/20 bg-black/40 backdrop-blur-md text-white font-mono text-[11px] uppercase tracking-[0.2em] hover:bg-white/10 hover:border-white/40 transition-all flex items-center justify-center gap-2"
+                                        >
+                                            Browse Catalog
+                                            <IconArrowRight size={14} className="opacity-50" />
+                                        </Link>
+                                    </div>
+                                </motion.div>
+                            </div>
                         </div>
                     </div>
                 </motion.div>
