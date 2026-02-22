@@ -258,7 +258,7 @@ export default function PromoCarousel() {
                         </motion.div>
 
                         {/* CLEAN HUD TITLE */}
-                        <div className={`absolute -translate-y-1/2 left-0 right-0 px-6 md:left-24 md:right-auto lg:left-32 z-10 w-full md:w-auto text-center md:text-left transition-all duration-300 ${((isDockOpen || hasMobileCart) && isAtTop) ? 'top-[35%] md:top-[40%]' : 'top-[40%] md:top-[45%]'}`}>
+                        <div className={`absolute -translate-y-1/2 left-0 right-0 px-6 md:left-24 md:right-auto lg:left-32 z-10 w-full md:w-auto text-center md:text-left transition-all duration-300 ${((isDockOpen || hasMobileCart) && isAtTop) ? 'top-[22%] md:top-[40%]' : 'top-[28%] md:top-[45%]'}`}>
                             <motion.div className="relative inline-block max-w-[80vw]">
                                 <motion.h2
                                     initial={{ opacity: 0, y: 20 }}
@@ -275,7 +275,7 @@ export default function PromoCarousel() {
                         </div>
 
                         {/* BOTTOM DESCRIPTION & CTA (FLOATING) */}
-                        <div className={`absolute left-0 right-0 px-6 md:left-24 md:right-auto lg:left-32 w-full md:w-[500px] lg:w-[600px] pointer-events-auto z-10 transition-all duration-300 ${((isDockOpen || hasMobileCart) && isAtTop) ? 'bottom-56 md:bottom-48 lg:bottom-40' : 'bottom-32 md:bottom-24 lg:bottom-24'}`}>
+                        <div className={`absolute left-0 right-0 px-6 md:left-24 md:right-auto lg:left-32 w-full md:w-[500px] lg:w-[600px] pointer-events-auto z-10 transition-all duration-300 ${((isDockOpen || hasMobileCart) && isAtTop) ? 'bottom-[13.5rem] md:bottom-48 lg:bottom-40' : 'bottom-[5.5rem] md:bottom-24 lg:bottom-24'}`}>
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
