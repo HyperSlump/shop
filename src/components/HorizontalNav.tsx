@@ -98,6 +98,25 @@ export default function HorizontalNav() {
                             )}
                         </button>
 
+                        {/* Mobile Cart Icon */}
+                        <AnimatePresence>
+                            {cart.length > 0 && (
+                                <motion.button
+                                    initial={{ scale: 0, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    exit={{ scale: 0, opacity: 0 }}
+                                    transition={{ type: 'spring', stiffness: 400, damping: 28 }}
+                                    onClick={toggleCart}
+                                    className="lg:hidden p-2 hover:text-primary transition-colors relative flex items-center justify-center"
+                                >
+                                    <IconShoppingCart size={24} stroke={2} />
+                                    <span className="absolute top-0 right-0 bg-primary text-black text-[10px] font-black w-4 h-4 rounded-xs flex items-center justify-center shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)]">
+                                        {cart.length}
+                                    </span>
+                                </motion.button>
+                            )}
+                        </AnimatePresence>
+
                         {/* Mobile Menu Toggle */}
                         <button
                             className="lg:hidden p-2 hover:text-primary transition-colors"
@@ -141,29 +160,6 @@ export default function HorizontalNav() {
                     )}
                 </AnimatePresence>
             </nav>
-
-            {/* FIXED MOBILE CART ICON — only shown when cart has items */}
-            <AnimatePresence>
-                {cart.length > 0 && (
-                    <motion.div
-                        initial={{ scale: 0, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0, opacity: 0 }}
-                        transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-                        className="lg:hidden fixed bottom-6 right-6 z-[110]"
-                    >
-                        <button
-                            onClick={toggleCart}
-                            className="w-14 h-14 bg-card/90 backdrop-blur-md text-foreground border border-border rounded-sm shadow-lg flex items-center justify-center relative active:scale-95 transition-transform"
-                        >
-                            <IconShoppingCart size={24} stroke={2.5} />
-                            <span className="absolute -top-1.5 -right-1.5 bg-primary text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-md">
-                                {cart.length}
-                            </span>
-                        </button>
-                    </motion.div>
-                )}
-            </AnimatePresence>
         </>
     );
 }

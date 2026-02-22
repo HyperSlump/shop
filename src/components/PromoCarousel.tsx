@@ -15,7 +15,6 @@ import {
 import Link from 'next/link';
 import GrainedNoise from './GrainedNoise';
 import { usePreviewPlayer } from './PreviewPlayerProvider';
-import { useCart } from './CartProvider';
 
 interface PromoSlide {
     id: string;
@@ -82,8 +81,6 @@ export default function PromoCarousel() {
     const [isAtTop, setIsAtTop] = useState(true);
     const router = useRouter();
     const { isOpen: isDockOpen } = usePreviewPlayer();
-    const { cart } = useCart();
-    const hasMobileCart = cart.length > 0;
 
     useEffect(() => {
         const handleScroll = () => {
@@ -258,7 +255,7 @@ export default function PromoCarousel() {
                         </motion.div>
 
                         {/* CLEAN HUD TITLE */}
-                        <div className={`absolute -translate-y-1/2 left-0 right-0 px-6 md:left-24 md:right-auto lg:left-32 z-10 w-full md:w-auto text-center md:text-left transition-all duration-300 ${((isDockOpen || hasMobileCart) && isAtTop) ? 'top-[22%] md:top-[40%]' : 'top-[28%] md:top-[45%]'}`}>
+                        <div className={`absolute -translate-y-1/2 left-0 right-0 px-6 md:left-24 md:right-auto lg:left-32 z-10 w-full md:w-auto text-center md:text-left transition-all duration-300 ${(isDockOpen && isAtTop) ? 'top-[22%] md:top-[40%]' : 'top-[28%] md:top-[45%]'}`}>
                             <motion.div className="relative inline-block max-w-[80vw]">
                                 <motion.h2
                                     initial={{ opacity: 0, y: 20 }}
@@ -275,7 +272,7 @@ export default function PromoCarousel() {
                         </div>
 
                         {/* BOTTOM DESCRIPTION & CTA (FLOATING) */}
-                        <div className={`absolute left-0 right-0 px-6 md:left-24 md:right-auto lg:left-32 w-full md:w-[500px] lg:w-[600px] pointer-events-auto z-10 transition-all duration-300 ${((isDockOpen || hasMobileCart) && isAtTop) ? 'bottom-[13.5rem] md:bottom-48 lg:bottom-40' : 'bottom-[5.5rem] md:bottom-24 lg:bottom-24'}`}>
+                        <div className={`absolute left-0 right-0 px-6 md:left-24 md:right-auto lg:left-32 w-full md:w-[500px] lg:w-[600px] pointer-events-auto z-10 transition-all duration-300 ${(isDockOpen && isAtTop) ? 'bottom-[12rem] md:bottom-48 lg:bottom-40' : 'bottom-[5.5rem] md:bottom-24 lg:bottom-24'}`}>
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
@@ -321,7 +318,7 @@ export default function PromoCarousel() {
             </AnimatePresence>
 
             {/* BOTTOM PAGINATION & ARROWS */}
-            <div className={`absolute left-0 right-0 z-20 px-6 md:px-12 lg:px-24 flex justify-end pointer-events-none transition-all duration-300 ${((isDockOpen || hasMobileCart) && isAtTop) ? 'bottom-36 md:bottom-32 lg:bottom-28' : 'bottom-12'}`}>
+            <div className={`absolute left-0 right-0 z-20 px-6 md:px-12 lg:px-24 flex justify-end pointer-events-none transition-all duration-300 ${(isDockOpen && isAtTop) ? 'bottom-36 md:bottom-32 lg:bottom-28' : 'bottom-12'}`}>
                 <div className="flex flex-col items-end gap-3 pointer-events-auto">
                     <div className="hidden md:flex items-center gap-2">
                         <button
