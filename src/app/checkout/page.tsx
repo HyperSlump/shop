@@ -106,6 +106,12 @@ export default function CheckoutPage() {
                     paymentIntentId: paymentIntentId || undefined
                 }),
             });
+
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.error || `Server responded with ${response.status}`);
+            }
+
             const data = await response.json();
             if (data.clientSecret) {
                 setClientSecret(data.clientSecret);
@@ -352,6 +358,7 @@ export default function CheckoutPage() {
 }
 
 function FreeOrderPanel({ cart }: { cart: Product[] }) {
+    const { clearCart } = useCart();
     const [email, setEmail] = useState('');
     const [newsletter, setNewsletter] = useState(true);
     const [submitting, setSubmitting] = useState(false);
@@ -368,6 +375,7 @@ function FreeOrderPanel({ cart }: { cart: Product[] }) {
             cart.map(item => ({ id: item.id, name: item.name, image: item.image }))
         ));
 
+        clearCart();
         await new Promise(r => setTimeout(r, 400));
         router.push('/downloads');
     };

@@ -32,11 +32,14 @@ export async function POST(req: Request) {
             amount: Math.round(total * 100),
             currency: 'usd',
             metadata: {
-                items: cart.map((item: any) => `${item.name} (${item.metadata?.variant_name || 'Basic'})`).join(', '),
+                // Keep items list short to avoid char limit
+                items: cart.slice(0, 3).map((item: any) => `${(item.name || 'Item').substring(0, 20)}`).join(', ') + (cart.length > 3 ? '...' : ''),
+                // Store minimal info, let success page look up the rest from catalog
                 item_details: JSON.stringify(cart.map((item: any) => ({
                     id: item.id,
-                    variant_id: item.metadata?.variant_id,
-                    type: item.metadata?.type
+                    type: item.metadata?.type || 'DIGITAL',
+                    v_id: item.metadata?.variant_id, // Compact key
+                    qty: 1
                 }))),
             },
         };
@@ -73,9 +76,14 @@ export async function POST(req: Request) {
         });
     } catch (error: any) {
         console.error('>>> [STRIPE_API] ERROR CAUGHT:', error);
+
+        // Return a cleaner error message to the client
+        const message = error.message || 'Internal Server Error';
+        const code = error.code || 'UNKNOWN_ERROR';
+
         return new NextResponse(JSON.stringify({
-            error: error.message,
-            code: error.code,
+            error: message,
+            code: code,
             type: error.type
         }), {
             status: 500,

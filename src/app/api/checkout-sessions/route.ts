@@ -63,18 +63,18 @@ export async function POST(req: Request) {
                 metadata: {
                     item_details: JSON.stringify(cart.map((item: any) => ({
                         id: item.id,
-                        name: item.name,
-                        variant_id: item.metadata?.variant_id,
-                        type: item.metadata?.type || 'DIGITAL'
+                        type: item.metadata?.type || 'DIGITAL',
+                        v_id: item.metadata?.variant_id,
+                        qty: 1
                     }))),
                 }
             },
             metadata: {
                 item_details: JSON.stringify(cart.map((item: any) => ({
                     id: item.id,
-                    name: item.name,
-                    variant_id: item.metadata?.variant_id,
-                    type: item.metadata?.type || 'DIGITAL'
+                    type: item.metadata?.type || 'DIGITAL',
+                    v_id: item.metadata?.variant_id,
+                    qty: 1
                 }))),
             }
         });
