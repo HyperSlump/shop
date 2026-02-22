@@ -22,18 +22,6 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
     const formatLabel = typeof product.metadata?.format === 'string' ? product.metadata.format.toUpperCase() : 'WAV';
     const oneShotCount = typeof product.metadata?.count === 'string' ? product.metadata.count : '140';
 
-    // DEV HELPER: Log IDs to console for easy mapping
-    useEffect(() => {
-        if (process.env.NODE_ENV === 'development' && isPhysical && product.variants) {
-            console.group('🛠️ [DEV] PRINTFUL VARIANT MAP');
-            console.log('Use these IDs in IMAGE_OVERRIDES in src/lib/services/catalog.ts');
-            product.variants.forEach(v => {
-                console.log(`${v.name} -> ID: ${v.id}`);
-            });
-            console.groupEnd();
-        }
-    }, [isPhysical, product.variants, product.name]);
-
     const { playTrack, isTrackActive, isPlaying, isOpen, registerTrack, unregisterTrack } = usePreviewPlayer();
 
     useEffect(() => {

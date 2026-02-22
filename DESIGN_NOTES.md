@@ -95,7 +95,7 @@ This document tracks critical design decisions and technical standards to mainta
 - **Hero Mobile Centering**: Unified the separate Title and CTA blocks into a single interactive flex container for mobile. By using `justify-center` on an inset-0 container, the entire content group is now perfectly locked to the 50% VH midpoint on mobile, creating a much more balanced and "intentional" look while preserving the HUD layout for desktop.
 - **Reactive Variant Mockups**: Integrated a reactive image swapping system for physical products. 
     1.  **State Synchronization**: The `ProductPageLayout` now updates the primary image `src` based on the `selectedVariant`.
-    2.  **Catalog Support**: The `catalog` service and `Product` type now support variant-specific image URLs.
-    3.  **Vercel Blob Integration**: Designers can now map variant IDs to specific high-quality transparent mockups (Vercel Blob) via the `IMAGE_OVERRIDES` record in `src/lib/services/catalog.ts`.
+    2.  **Catalog Support**: The `catalog` service and `Product` type support variant-specific image URLs.
+    3.  **Vercel Blob Integration**: The architecture is ready for manual mapping via `IMAGE_OVERRIDES` in `src/lib/services/catalog.ts`. (Currently reverting to Printful defaults for stability).
 
 

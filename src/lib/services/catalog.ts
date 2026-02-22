@@ -38,25 +38,8 @@ export async function getUnifiedProducts(): Promise<Product[]> {
         // Smart Mapping: Automatically check for higher-quality transparent mockups
         // named pf_{printful_id}.png in your Vercel Blob storage.
         const IMAGE_OVERRIDES: Record<string, string> = {
-            '420681159': `${VERCEL_BLOB_BASE}/classic-dad-hat-black-front-699a3d27d359e.png`, // Hat Default
-            '5205813685': `${VERCEL_BLOB_BASE}/classic-dad-hat-black-front-699a3d27d359e.png`, // Hat Variant
-
-            // T-SHIRT (Default + All Sizes)
-            '420705470': `${VERCEL_BLOB_BASE}/champion-t-shirt-black-front-699b7dd15b47e.png`,
-            // Black Variants (S, M, L, XL, 2XL)
-            '5205970689': `${VERCEL_BLOB_BASE}/champion-t-shirt-black-front-699b7dd15b47e.png`,
-            '5205970690': `${VERCEL_BLOB_BASE}/champion-t-shirt-black-front-699b7dd15b47e.png`,
-            '5205970691': `${VERCEL_BLOB_BASE}/champion-t-shirt-black-front-699b7dd15b47e.png`,
-            '5205970692': `${VERCEL_BLOB_BASE}/champion-t-shirt-black-front-699b7dd15b47e.png`,
-            '5205970693': `${VERCEL_BLOB_BASE}/champion-t-shirt-black-front-699b7dd15b47e.png`,
-            // White Variants (S, M, L, XL, 2XL)
-            '5205970694': `${VERCEL_BLOB_BASE}/champion-t-shirt-white-front-699b800de6639.png`,
-            '5205970695': `${VERCEL_BLOB_BASE}/champion-t-shirt-white-front-699b800de6639.png`,
-            '5205970696': `${VERCEL_BLOB_BASE}/champion-t-shirt-white-front-699b800de6639.png`,
-            '5205970697': `${VERCEL_BLOB_BASE}/champion-t-shirt-white-front-699b800de6639.png`,
-            '5205970698': `${VERCEL_BLOB_BASE}/champion-t-shirt-white-front-699b800de6639.png`,
-
-            // Add more manual overrides here if they don't follow the naming convention
+            // Manual overrides are disabled. Pulling directly from Printful images.
+            // Format: 'ID': `${VERCEL_BLOB_BASE}/filename.png`
         };
 
         const unifiedPrintful = (printfulProducts.map(fullProduct => {
