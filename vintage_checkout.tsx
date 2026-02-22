@@ -1,6 +1,6 @@
-'use client';
+﻿'use client';
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { loadStripe, type Appearance } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { useCart, type Product } from '@/components/CartProvider';
@@ -8,9 +8,7 @@ import CheckoutForm from '@/components/CheckoutForm';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { IconArrowLeft, IconChevronDown, IconLock, IconTruck } from '@tabler/icons-react';
-import GrainedNoise from '@/components/GrainedNoise';
-import AestheticBackground from '@/components/AestheticBackground';
+import { IconArrowLeft, IconChevronDown, IconLock } from '@tabler/icons-react';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -76,91 +74,33 @@ export default function CheckoutPage() {
     const isDark = useTheme();
 
     const [clientSecret, setClientSecret] = useState('');
-    const [paymentIntentId, setPaymentIntentId] = useState('');
-    const [shippingCost, setShippingCost] = useState(0);
-    const [isCalculating, setIsCalculating] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [mobileOpen, setMobileOpen] = useState(false);
     const [productsOpen, setProductsOpen] = useState(false);
 
-    const hasPhysicalItems = cart.some(item => item.metadata?.type === 'PHYSICAL');
     const isFreeOrder = cartTotal === 0 && cart.length > 0;
 
-    const refreshIntent = useCallback(async (currentShipping = 0, address: any = null) => {
-        try {
-            const recipientData = address ? {
-                name: address.name,
-                address1: address.address.line1,
-                city: address.address.city,
-                state: address.address.state,
-                zip: address.address.postal_code,
-                country_code: address.address.country
-            } : null;
-
-            const response = await fetch('/api/create-payment-intent', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    cart,
-                    shippingAmount: currentShipping,
-                    recipient: recipientData,
-                    paymentIntentId: paymentIntentId || undefined
-                }),
-            });
-            const data = await response.json();
-            if (data.clientSecret) {
-                setClientSecret(data.clientSecret);
-                setPaymentIntentId(data.id);
-            }
-        } catch (err: any) {
-            console.error('Intent error:', err);
-            setError(err.message);
-        }
-    }, [cart, paymentIntentId]);
-
     useEffect(() => {
-        if (cart.length > 0 && !clientSecret && !isFreeOrder) {
-            refreshIntent(0);
-        }
-    }, [cart.length, clientSecret, refreshIntent, isFreeOrder]);
-
-    const handleAddressChange = async (addressValue: any) => {
-        if (!hasPhysicalItems) return;
-        setIsCalculating(true);
-        try {
-            const res = await fetch('/api/printful/shipping-rates', {
+        if (cartTotal > 0 && cart.length > 0) {
+            fetch('/api/create-payment-intent', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    recipient: {
-                        address1: addressValue.address.line1,
-                        city: addressValue.address.city,
-                        state_code: addressValue.address.state,
-                        country_code: addressValue.address.country,
-                        zip: addressValue.address.postal_code
-                    },
-                    items: cart
+                body: JSON.stringify({ cart })
+            })
+                .then(async (res) => {
+                    if (!res.ok) throw new Error(`API ${res.status}`);
+                    return res.json();
                 })
-            });
-            const data = await res.json();
-            if (data.rates && data.rates.length > 0) {
-                const cost = parseFloat(data.rates[0].rate);
-                setShippingCost(cost);
-                await refreshIntent(cost, addressValue);
-            }
-        } catch (err) {
-            console.error('Shipping calculation error:', err);
-        } finally {
-            setIsCalculating(false);
+                .then((d) => setClientSecret(d.clientSecret))
+                .catch((e) => setError(e.message));
         }
-    };
-
-    const finalTotal = cartTotal + shippingCost;
+    }, [cartTotal, cart]);
 
     if (cart.length === 0) {
         return (
-            <div className="h-screen flex items-center justify-center bg-transparent text-foreground relative">
-                <div className="text-center space-y-6 px-6 relative z-10">
-                    <p className="font-sans text-xs uppercase tracking-[0.24em] text-muted-foreground">Your cart is empty</p>
+            <div className="h-screen flex items-center justify-center bg-background text-foreground">
+                <div className="text-center space-y-6 px-6">
+                    <p className="font-sans text-xs uppercase tracking-[0.24em] text-muted">Your cart is empty</p>
                     <h1 className="font-sans text-[1.75rem] font-semibold tracking-tight">Nothing here yet</h1>
                     <Link
                         href="/"
@@ -170,7 +110,6 @@ export default function CheckoutPage() {
                         Continue shopping
                     </Link>
                 </div>
-                <AestheticBackground showScanlines={true} />
             </div>
         );
     }
@@ -178,13 +117,12 @@ export default function CheckoutPage() {
     const appearance = stripeAppearance(isDark);
 
     return (
-        <div className="min-h-screen flex flex-col bg-[#060708] text-foreground relative overflow-x-hidden">
+        <div className="flow-page-surface min-h-screen flex flex-col bg-background text-foreground">
 
-            <div className="flex-1 flex flex-col lg:flex-row relative z-10">
-                <div className="w-full lg:w-[44%] drawer-surface border-b lg:border-b-0 lg:border-r border-border relative overflow-hidden">
-                    <GrainedNoise />
-                    <div className="flex flex-col w-full max-w-[500px] ml-auto px-6 lg:px-12 py-8 lg:py-12">
-                        <div className="flex-shrink-0 mb-6 lg:mb-8">
+            <div className="flex-1 flex flex-col lg:flex-row">
+                <div className="w-full lg:w-[44%] drawer-surface border-b lg:border-b-0 lg:border-r border-border">
+                    <div className="flex flex-col w-full max-w-[500px] ml-auto px-8 lg:px-12 py-10 lg:py-12">
+                        <div className="flex-shrink-0 mb-8">
                             <Link href="/" className="inline-flex items-center gap-3 mb-8 group">
                                 <IconArrowLeft size={14} stroke={2} className="text-muted group-hover:-translate-x-0.5 transition-transform" />
                                 <span
@@ -199,7 +137,7 @@ export default function CheckoutPage() {
                             </Link>
 
                             <p className="font-sans text-[40px] font-semibold tracking-tight leading-none text-foreground">
-                                ${finalTotal.toFixed(2)}
+                                ${cartTotal.toFixed(2)}
                             </p>
                         </div>
 
@@ -294,15 +232,11 @@ export default function CheckoutPage() {
                                 </div>
                                 <div className="flex justify-between text-sm">
                                     <span className="text-muted">Shipping</span>
-                                    {isCalculating ? (
-                                        <span className="text-primary animate-pulse text-xs uppercase tracking-widest font-mono">Calculating...</span>
-                                    ) : (
-                                        <span className="text-foreground">${shippingCost.toFixed(2)}</span>
-                                    )}
+                                    <span className="text-foreground">$0.00</span>
                                 </div>
                                 <div className="flex justify-between text-sm pt-4 font-semibold border-t border-border">
                                     <span className="text-foreground">Total due today</span>
-                                    <span className="text-foreground">${finalTotal.toFixed(2)}</span>
+                                    <span className="text-foreground">${cartTotal.toFixed(2)}</span>
                                 </div>
                             </div>
                         </div>
@@ -320,18 +254,16 @@ export default function CheckoutPage() {
                 <div className="flex-1 bg-background">
                     <div className="w-full max-w-[520px] mr-auto px-5 lg:px-12 py-8 lg:py-12">
                         {isFreeOrder ? (
-                            <FreeOrderPanel cart={cart} />
+                            <div className="rounded-xl border border-border bg-card p-6 md:p-8 shadow-[0_2px_8px_rgba(15,23,42,0.08)]">
+                                <FreeOrderPanel cart={cart} />
+                            </div>
                         ) : clientSecret ? (
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
-                                <Elements options={{ clientSecret, appearance }} stripe={stripePromise}>
-                                    <CheckoutForm
-                                        amount={finalTotal}
-                                        isDark={isDark}
-                                        hasPhysicalItems={hasPhysicalItems}
-                                        onAddressChange={handleAddressChange}
-                                        isCalculating={isCalculating}
-                                    />
-                                </Elements>
+                                <div className="rounded-xl border border-border bg-card p-6 md:p-8 shadow-[0_2px_8px_rgba(15,23,42,0.08)]">
+                                    <Elements options={{ clientSecret, appearance }} stripe={stripePromise}>
+                                        <CheckoutForm amount={cartTotal} isDark={isDark} />
+                                    </Elements>
+                                </div>
                             </motion.div>
                         ) : error ? (
                             <div className="p-4 rounded-md bg-alert/10 border border-alert/30 text-alert font-medium">
@@ -346,7 +278,52 @@ export default function CheckoutPage() {
                     </div>
                 </div>
             </div>
+        </div>
+    );
+}
 
+function OrderSummary({ cart, total }: { cart: Product[]; total: number }) {
+    return (
+        <div className="font-sans">
+            <div className="space-y-5">
+                {cart.map((item, i) => (
+                    <div key={item.id} className="flex items-center gap-4">
+                        <div className="w-[64px] h-[64px] flex-shrink-0 rounded-md overflow-hidden flex items-center justify-center border border-border bg-background/60">
+                            {item.image ? (
+                                <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                            ) : (
+                                <span className="text-xs font-medium text-muted/70">
+                                    {String(i + 1).padStart(2, '0')}
+                                </span>
+                            )}
+                        </div>
+                        <div className="flex-1 min-w-0 flex items-start justify-between gap-3">
+                            <div className="min-w-0">
+                                <p className="text-sm font-medium leading-snug text-foreground">{item.name}</p>
+                                <p className="text-xs mt-0.5 text-muted">Qty 1</p>
+                            </div>
+                            <span className="text-sm font-medium flex-shrink-0 text-foreground">
+                                ${(item.amount || 0).toFixed(2)}
+                            </span>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            <div className="mt-8 pt-6 space-y-3 border-t border-border">
+                <div className="flex justify-between text-sm">
+                    <span className="text-muted">Subtotal</span>
+                    <span className="text-foreground">${total.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                    <span className="text-muted">Shipping</span>
+                    <span className="text-foreground">$0.00</span>
+                </div>
+                <div className="flex justify-between text-sm pt-4 font-semibold border-t border-border">
+                    <span className="text-foreground">Total due today</span>
+                    <span className="text-foreground">${total.toFixed(2)}</span>
+                </div>
+            </div>
         </div>
     );
 }

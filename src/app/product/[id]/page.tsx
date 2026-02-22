@@ -1,4 +1,4 @@
-import { getProductById } from '@/lib/stripe/products';
+import { getUnifiedProductById } from '@/lib/services/catalog';
 import { notFound } from 'next/navigation';
 import ProductPageLayout from '@/components/ProductPageLayout';
 
@@ -13,7 +13,7 @@ interface ProductPageProps {
 
 export default async function ProductPage({ params }: ProductPageProps) {
     const { id } = await params;
-    const product = await getProductById(id);
+    const product = await getUnifiedProductById(id);
 
     if (!product) {
         notFound();

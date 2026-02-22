@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 export type Product = {
-  id: string; // This is the Price ID
+  id: string; // This is the Price ID or pf_id
   productId: string;
   name: string;
   description: string | null;
@@ -11,6 +11,12 @@ export type Product = {
   currency: string;
   amount: number;
   metadata: Record<string, string>;
+  variants?: Array<{
+    id: number;
+    name: string;
+    retail_price: string;
+    currency: string;
+  }>;
 };
 
 interface CartContextType {

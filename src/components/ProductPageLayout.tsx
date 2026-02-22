@@ -9,17 +9,17 @@ import MatrixSpace from './MatrixSpace';
 import GrainedNoise from './GrainedNoise';
 import { useCart, Product } from './CartProvider';
 import { usePreviewPlayer } from './PreviewPlayerProvider';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface ProductPageLayoutProps {
     product: Product;
 }
 
 export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
+    const [selectedVariant, setSelectedVariant] = useState(product.variants?.[0] || null);
     const { addToCart, cart } = useCart();
-    const isInCart = cart.some(item => item.id === product.id);
-
-    const audioPreviewUrl = product.metadata?.audio_preview;
+    const isPhysical = product.metadata?.type === 'PHYSICAL';
+    const audioPreviewUrl = !isPhysical ? product.metadata?.audio_preview : undefined;
     const formatLabel = typeof product.metadata?.format === 'string' ? product.metadata.format.toUpperCase() : 'WAV';
     const oneShotCount = typeof product.metadata?.count === 'string' ? product.metadata.count : '140';
 
@@ -49,6 +49,33 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
             audioUrl: audioPreviewUrl,
         });
     };
+    const isInCart = cart.some(item => {
+        if (isPhysical) {
+            return item.metadata?.variant_id === String(selectedVariant?.id);
+        }
+        return item.id === product.id;
+    });
+
+    const handleAddToCart = () => {
+        if (!isPhysical) {
+            addToCart(product);
+            return;
+        }
+
+        if (!selectedVariant) return;
+
+        const cartProduct: Product = {
+            ...product,
+            id: `pf_${product.metadata?.printful_id}_${selectedVariant.id}`,
+            amount: parseFloat(selectedVariant.retail_price),
+            metadata: {
+                ...product.metadata,
+                variant_id: String(selectedVariant.id),
+                variant_name: selectedVariant.name,
+            }
+        };
+        addToCart(cartProduct);
+    };
 
     const containerVariants = {
         initial: { opacity: 0 },
@@ -61,7 +88,6 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
         }
     };
 
-    // Extended "Verbage" / Lore Map
     const DETAILED_DESCRIPTIONS: Record<string, string> = {
         'VOID_TEXTURES_01': "A collection of high-fidelity audio artifacts harvested from corrupted data streams. These textures have been processed through analog distortion circuits and granular synthesis engines to create a sense of vast, empty space. ideal for cinematic sound design, dark ambient, and industrial techno. Expect heavy sub-bass drones, metallic scrapes, and digital interference patterns.",
         'BROKEN_DRUMS_X': "Rhythmic glitches and decimated percussion loops. Each sample has been rigorously tested for maximum impact and textural grit. This pack contains hard-hitting kicks, snapping snares, and erratic hi-hat patterns that defy standard quantization. Perfect for adding a chaotic, human feel to mechanical beats.",
@@ -75,7 +101,11 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
     };
 
     const extendedDescription = DETAILED_DESCRIPTIONS[product.name] ||
-        "This asset pack contains high-fidelity audio recordings processed via proprietary analog and digital chains. Optimal for advanced sound design, cinematic scoring, and experimental electronic music production. All files are rendered at 24-bit / 48kHz for maximum headroom and dynamic range. Expect minimal noise floor and maximum signal integrity.";
+        (isPhysical ? "Exclusive physical merchandise. Professionally printed on demand and shipped globally using high-quality materials. Optimized for durability and comfort." : "This asset pack contains high-fidelity audio recordings processed via proprietary analog and digital chains. Optimal for advanced sound design, cinematic scoring, and experimental electronic music production. All files are rendered at 24-bit / 48kHz for maximum headroom and dynamic range. Expect minimal noise floor and maximum signal integrity.");
+
+    const displayPrice = isPhysical && selectedVariant
+        ? parseFloat(selectedVariant.retail_price)
+        : product.amount;
 
     return (
         <motion.div
@@ -92,7 +122,6 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                             {product.name}
                         </h1>
                     </div>
-
                 </div>
 
                 {/* 2. Primary Content Grid - CONDENSED */}
@@ -109,7 +138,6 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                                 priority
                             />
                             <GrainedNoise />
-                            {/* Matrix Overlay Overlay */}
                             <div className="absolute inset-0 z-10 opacity-[0.03] pointer-events-none">
                                 <MatrixSpace isVisible={true} />
                             </div>
@@ -119,10 +147,10 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                         <div className="p-5 border border-primary/10 bg-black/20 flex flex-col gap-4 font-mono rounded">
                             <div className="grid grid-cols-2 gap-4">
                                 {[
-                                    { k: 'TYPE', v: product.metadata?.category || 'SAMPLE_PACK' },
-                                    { k: 'SIZE', v: product.metadata?.size || 'UNSPECIFIED' },
-                                    { k: 'DEPTH', v: '24-BIT / 96' },
-                                    { k: 'FORMAT', v: product.metadata?.format || 'WAV' }
+                                    { k: 'TYPE', v: isPhysical ? 'PHYSICAL_MERCH' : (product.metadata?.category || 'SAMPLE_PACK') },
+                                    { k: isPhysical ? 'WEIGHT' : 'SIZE', v: isPhysical ? 'ESTIMATED_400G' : (product.metadata?.size || 'UNSPECIFIED') },
+                                    { k: 'EDITION', v: isPhysical ? 'PRINT_ON_DEMAND' : 'LIFETIME_LICENSE' },
+                                    { k: isPhysical ? 'SOURCE' : 'DEPTH', v: isPhysical ? 'PRINTFUL_NODE' : '24-BIT / 96' }
                                 ].map((spec) => (
                                     <div key={spec.k} className="flex flex-col gap-1">
                                         <span className="text-[8px] text-primary/30 uppercase tracking-tighter">{spec.k}</span>
@@ -136,9 +164,14 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                     {/* RIGHT COLUMN: Lore & Audio Console */}
                     <div className="lg:col-span-7 space-y-8">
                         <div className="space-y-4">
-                            <p className="font-mono text-base md:text-lg leading-relaxed opacity-90 max-w-prose whitespace-pre-wrap">
-                                {product.description}
-                            </p>
+                            <div className="flex items-center justify-between">
+                                <p className="font-mono text-base md:text-lg leading-relaxed opacity-90 max-w-prose whitespace-pre-wrap">
+                                    {product.description}
+                                </p>
+                                <span className="text-2xl font-bold text-primary font-mono ml-4">
+                                    ${displayPrice.toFixed(2)}
+                                </span>
+                            </div>
 
                             <div className="mt-8 border-l-2 border-primary/20 pl-6 py-2">
                                 <h3 className="font-mono text-[10px] text-primary/50 uppercase tracking-widest mb-3">
@@ -151,7 +184,30 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                         </div>
 
                         {/* Action Bar */}
-                        <div className="pt-2 space-y-4">
+                        <div className="pt-2 space-y-6">
+                            {isPhysical && product.variants && product.variants.length > 0 && (
+                                <div className="space-y-4">
+                                    <h4 className="font-mono text-[10px] text-primary/50 uppercase tracking-widest">
+                                        VARIANT_SELECT //
+                                    </h4>
+                                    <div className="flex flex-wrap gap-2">
+                                        {product.variants.map((v) => (
+                                            <button
+                                                key={v.id}
+                                                onClick={() => setSelectedVariant(v)}
+                                                className={`h-10 px-4 border transition-all font-mono text-[10px] rounded uppercase flex flex-col items-center justify-center min-w-[80px]
+                                                    ${selectedVariant?.id === v.id
+                                                        ? 'border-primary bg-primary/20 text-primary shadow-[0_0_15px_rgba(216,58,61,0.2)]'
+                                                        : 'border-foreground/20 text-foreground/60 hover:border-primary/50 hover:bg-primary/5 hover:text-primary'
+                                                    }`}
+                                            >
+                                                <span>{v.name.split(' - ').pop()}</span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
                             {audioPreviewUrl && (
                                 <button
                                     onClick={playPreview}
@@ -171,7 +227,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                             )}
 
                             <button
-                                onClick={() => !isInCart && addToCart(product)}
+                                onClick={handleAddToCart}
                                 disabled={isInCart}
                                 className={`w-full h-16 flex items-center justify-center gap-6 font-mono text-sm font-bold tracking-[0.4em] uppercase transition-all duration-700 rounded
                                     ${isInCart
@@ -179,7 +235,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                                         : 'bg-primary text-black border-2 border-primary hover:bg-transparent hover:text-primary'
                                     }`}
                             >
-                                <span>{isInCart ? 'ACCESS_GRANTED' : 'DOWNLOAD_ACCESS'}</span>
+                                <span>{isInCart ? 'ACCESS_GRANTED' : (isPhysical ? 'ADD_TO_CART' : 'DOWNLOAD_ACCESS')}</span>
                                 {!isInCart && <span className="text-xl">→</span>}
                             </button>
 
@@ -188,12 +244,20 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                                     <span className="w-1 h-1 bg-primary rounded-full" />
                                     <span>Trans_Encrypted</span>
                                 </div>
-                                <span>BPM: {product.metadata?.bpm || 'NONE'}</span>
-                                <span>KEY: {product.metadata?.key || 'NONE'}</span>
-                                <span>Format: {product.metadata?.format || 'WAV'}</span>
+                                {isPhysical ? (
+                                    <>
+                                        <span>Tracking_Available</span>
+                                        <span>Shipping: Worldwide</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <span>BPM: {product.metadata?.bpm || 'NONE'}</span>
+                                        <span>KEY: {product.metadata?.key || 'NONE'}</span>
+                                        <span>Format: {product.metadata?.format || 'WAV'}</span>
+                                    </>
+                                )}
                             </div>
                         </div>
-
                     </div>
                 </div>
 
@@ -206,7 +270,6 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                     ))}
                 </div>
             </div>
-
         </motion.div>
     );
 }

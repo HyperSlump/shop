@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { IconArrowLeft, IconCircleCheck, IconDownload, IconPackage } from '@tabler/icons-react';
+import GrainedNoise from '@/components/GrainedNoise';
+import AestheticBackground from '@/components/AestheticBackground';
 
 import { getProductFile, FALLBACK_FILE_URL } from '@/lib/products';
 
@@ -56,8 +58,12 @@ export default function DownloadsPage() {
     }
 
     return (
-        <div data-lenis-prevent className="flow-page-surface min-h-screen font-sans overflow-x-hidden bg-transparent text-foreground">
-            <div className="max-w-[800px] mx-auto px-5 py-8 lg:py-16">
+        <div data-lenis-prevent className="min-h-screen font-sans overflow-x-hidden bg-transparent text-foreground relative">
+            {/* Aesthetic Background Layer (Standardized) */}
+            <AestheticBackground showScanlines={true} scanlineOpacity="opacity-10" />
+
+            <div className="relative z-10 max-w-[800px] mx-auto px-5 py-8 lg:py-16">
+
 
                 {/* Header */}
                 <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
@@ -70,21 +76,6 @@ export default function DownloadsPage() {
                         </span>
                     </Link>
 
-                    {/* Confirmation */}
-                    <div className="flex items-start gap-4 mb-10">
-                        <div className="flex-shrink-0 mt-0.5">
-                            <IconCircleCheck size={24} stroke={2} className="text-green-500" />
-                        </div>
-                        <div>
-                            <h1 className="heading-h1 text-xl mb-1 text-foreground">
-                                Your downloads are ready
-                            </h1>
-                            <p className="text-sm text-muted-foreground">
-                                {email && <>A confirmation has been sent to <strong className="text-foreground">{email}</strong>. </>}
-                                Download your files below.
-                            </p>
-                        </div>
-                    </div>
                 </motion.div>
 
                 {/* Download grid */}

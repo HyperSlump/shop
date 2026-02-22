@@ -34,7 +34,8 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
         return () => unregisterTrack(product.id);
     }, [product, registerTrack, unregisterTrack]);
 
-    const audioPreviewUrl = typeof product.metadata?.audio_preview === 'string' ? product.metadata.audio_preview : '';
+    const isPhysical = product.metadata?.type === 'PHYSICAL';
+    const audioPreviewUrl = !isPhysical && typeof product.metadata?.audio_preview === 'string' ? product.metadata.audio_preview : '';
     const oneShotCount = typeof product.metadata?.count === 'string' ? product.metadata.count : '140';
     const formatLabel = typeof product.metadata?.format === 'string' ? product.metadata.format.toUpperCase() : 'WAV';
     const href = `/product/${product.id}`;
@@ -75,8 +76,11 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 <Link href={href} className="relative block">
                     <div className="relative aspect-[4/3] overflow-hidden border-b border-border/60 px-3 pb-3 pt-3">
                         <div className="absolute left-5 right-5 top-5 z-20 flex items-center justify-between gap-2">
-                            <span className="inline-flex h-6 items-center rounded-xs border border-border/70 bg-background/70 px-2.5 font-mono text-[9px] uppercase tracking-[0.16em] text-muted">
-                                instant download
+                            <span className={`inline-flex h-6 items-center rounded-xs border px-2.5 font-mono text-[9px] uppercase tracking-[0.16em] ${isPhysical
+                                    ? 'border-primary/30 bg-primary/5 text-primary'
+                                    : 'border-border/70 bg-background/70 text-muted'
+                                }`}>
+                                {isPhysical ? 'physical merch' : 'instant download'}
                             </span>
                             <span className="inline-flex h-6 items-center rounded-xs border border-primary/25 bg-primary/12 px-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">
                                 {product.amount === 0 ? 'free' : `$${product.amount}`}
@@ -118,6 +122,8 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                             {isActivePreview && isPlaying ? 'playing' : 'preview'}
                         </span>
                     </button>
+                ) : isPhysical ? (
+                    null
                 ) : (
                     <div className="pointer-events-none absolute bottom-4 left-4 z-30 inline-flex items-center gap-1.5 rounded-full border border-border/70 bg-background/75 px-2.5 py-1.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
                         <IconWaveSine size={12} />

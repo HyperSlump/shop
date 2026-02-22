@@ -5,17 +5,27 @@ import {
     PaymentElement,
     LinkAuthenticationElement,
     ExpressCheckoutElement,
+    AddressElement,
     useStripe,
     useElements,
 } from '@stripe/react-stripe-js';
-import { IconLock } from '@tabler/icons-react';
+import { IconLock, IconTruck } from '@tabler/icons-react';
 
 interface CheckoutFormProps {
     amount: number;
     isDark?: boolean;
+    hasPhysicalItems?: boolean;
+    onAddressChange?: (value: any) => void;
+    isCalculating?: boolean;
 }
 
-export default function CheckoutForm({ amount, isDark = true }: CheckoutFormProps) {
+export default function CheckoutForm({
+    amount,
+    isDark = true,
+    hasPhysicalItems = false,
+    onAddressChange,
+    isCalculating = false
+}: CheckoutFormProps) {
     const stripe = useStripe();
     const elements = useElements();
 
@@ -92,12 +102,33 @@ export default function CheckoutForm({ amount, isDark = true }: CheckoutFormProp
                 <div className={`flex-1 h-px ${divider}`} />
             </div>
 
-            <div className="mb-6">
+            <div className="mb-8">
                 <label className={`block text-sm font-medium mb-3 ${labelText}`}>
                     Contact information
                 </label>
                 <LinkAuthenticationElement id="link-authentication-element" />
             </div>
+
+            {hasPhysicalItems && (
+                <div className="mb-8 animate-fade-in">
+                    <div className="flex items-center justify-between mb-3">
+                        <label className={`block text-sm font-medium ${labelText}`}>
+                            Shipping address
+                        </label>
+                        {isCalculating && (
+                            <span className="text-[10px] text-primary animate-pulse font-mono uppercase tracking-widest flex items-center gap-1">
+                                <IconTruck size={12} /> Updating rates...
+                            </span>
+                        )}
+                    </div>
+                    <AddressElement
+                        options={{ mode: 'shipping', allowedCountries: ['US', 'CA', 'GB', 'AU'] }}
+                        onChange={(e) => {
+                            if (e.complete && onAddressChange) onAddressChange(e.value);
+                        }}
+                    />
+                </div>
+            )}
 
             <div className="mb-8">
                 <label className={`block text-sm font-medium mb-3 ${labelText}`}>

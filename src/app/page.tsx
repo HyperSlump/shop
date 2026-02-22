@@ -1,11 +1,11 @@
-import { getActiveProducts } from '@/lib/stripe/products';
+import { getUnifiedProducts } from '@/lib/services/catalog';
 import ProductGrid from '@/components/ProductGrid';
 
 
 export const revalidate = 60; // Re-fetch products every 60 seconds
 
 export default async function Home() {
-  const products = await getActiveProducts();
+  const products = await getUnifiedProducts();
 
   return (
     <>

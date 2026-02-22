@@ -6,6 +6,7 @@ import Link from 'next/link';
 import HeroSchema from "@/components/HeroSchema";
 import HorizontalNav from "@/components/HorizontalNav";
 import IndustrialTicker from "@/components/IndustrialTicker";
+import AestheticBackground from "@/components/AestheticBackground";
 
 export default function MainContent({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
@@ -15,7 +16,7 @@ export default function MainContent({ children }: { children: React.ReactNode })
     return (
         <main className={`relative isolate flex-1 flex flex-col min-w-0 min-h-screen ${isHome || isCheckout ? 'pt-0' : 'pt-20'}`}>
             {!isCheckout && (
-                <div className="site-backdrop fixed inset-0 -z-20 pointer-events-none" aria-hidden />
+                <AestheticBackground showScanlines={isHome} />
             )}
 
             {/* Global header */}

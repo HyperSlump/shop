@@ -23,6 +23,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'gusukas6vq4zp6uu.public.blob.vercel-storage.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'files.cdn.printful.com',
+      },
     ],
   },
 };

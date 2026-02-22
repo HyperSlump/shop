@@ -16,11 +16,10 @@ export default function SuccessSummary({ downloads, totalAmount, sessionId }: Su
 
     useEffect(() => {
         // Persist downloads for paid users so they can access /downloads later
-        if (downloads.length > 0) {
+        const digitalItems = downloads.filter(d => d.type !== 'PHYSICAL');
+        if (digitalItems.length > 0) {
             try {
-                // Determine format expected by DownloadsPage: { id, name, image? }
-                // success/page.tsx constructs downloads with: id, name, url, label, amount, image
-                const itemsToStore = downloads.map(d => ({
+                const itemsToStore = digitalItems.map(d => ({
                     id: d.id,
                     name: d.name,
                     image: d.image
@@ -66,7 +65,10 @@ export default function SuccessSummary({ downloads, totalAmount, sessionId }: Su
                             <div className="py-6 space-y-2">
                                 {downloads.map((item, i) => (
                                     <div key={i} className="flex items-center justify-between gap-4 py-2 opacity-60">
-                                        <span className="font-mono text-[10px] uppercase tracking-wider truncate max-w-[200px]">{item.name}</span>
+                                        <div className="flex flex-col">
+                                            <span className="font-mono text-[10px] uppercase tracking-wider truncate max-w-[200px]">{item.name}</span>
+                                            <span className="font-mono text-[8px] opacity-40 uppercase tracking-widest">{item.type === 'PHYSICAL' ? 'MERCHANDISE' : 'DIGITAL_ASSET'}</span>
+                                        </div>
                                         <span className="font-mono text-[10px]">${item.amount.toFixed(2)}</span>
                                     </div>
                                 ))}
@@ -95,7 +97,6 @@ export default function SuccessSummary({ downloads, totalAmount, sessionId }: Su
                 {downloads.map((item, i) => (
                     <div key={i} className="flex items-center gap-6 py-4 border-b border-white/5 last:border-0">
                         <div className="w-14 h-14 bg-white/[0.03] border border-white/10 flex-shrink-0 flex items-center justify-center rounded-lg overflow-hidden">
-
                             <div className="font-mono text-[10px] text-white/20 uppercase">
                                 {String(i + 1).padStart(2, '0')}
                             </div>
@@ -106,7 +107,7 @@ export default function SuccessSummary({ downloads, totalAmount, sessionId }: Su
                                     {item.name}
                                 </p>
                                 <p className="font-mono text-[8px] text-white/30 uppercase tracking-[0.1em]">
-                                    Digital Item • Qty 1
+                                    {item.type === 'PHYSICAL' ? 'Merchandise • Qty 1' : 'Digital Item • Qty 1'}
                                 </p>
                             </div>
                             <span className="font-mono text-[11px] text-white/70 flex-shrink-0">
@@ -115,6 +116,18 @@ export default function SuccessSummary({ downloads, totalAmount, sessionId }: Su
                         </div>
                     </div>
                 ))}
+
+                {downloads.some(d => d.type === 'PHYSICAL') && (
+                    <div className="mt-8 p-6 border border-primary/20 bg-primary/5 rounded-lg relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 p-2 opacity-10">
+                            <IconCircleCheck size={40} className="text-primary" />
+                        </div>
+                        <p className="font-mono text-[10px] text-primary uppercase tracking-[0.12em] leading-relaxed relative z-10">
+                            <span className="font-bold border-b border-primary/30 pb-0.5 mb-2 inline-block">FULFILLMENT_PROTOCOL_INITIATED</span><br />
+                            Your physical items are being prepared for fulfillment. A secure tracking sequence will be transmitted via email once the shipment enters transit.
+                        </p>
+                    </div>
+                )}
             </div>
 
             {/* Totals Section */}

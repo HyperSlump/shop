@@ -42,7 +42,7 @@ export default function GrainedNoise() {
     return (
         <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-20 overflow-hidden"
+            className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
         >
             <div
                 className="absolute -inset-[100%] w-[300%] h-[300%] opacity-40 mix-blend-screen"

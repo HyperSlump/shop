@@ -42,7 +42,12 @@ To prevent layout "skewing" or horizontal shifts during swipes:
 - **Typography**: Mono-spaced fonts for technical data. Gothic/Display fonts for branding.
 - **Numbers**: Cart counts and statuses should be raw numbers or bracketed data `[X]`, avoiding standard retail "bubble" badges.
 - **Accents**: 4-corner accents and vertical "accent stripes" on cards to maintain an industrial feel.
+- **Grain & Texture**: The `GrainedNoise` component is the standardized texture layer. Direct URL-based noise backgrounds are deprecated in favor of this React-native implementation to ensure synchronized animation and consistent density across all surfaces.
 
----
+## 6. Global Textures [NOISE_LAYER]
+To maintain the site-wide "Liquid Tech" depth:
+- **Component**: `src/components/AestheticBackground.tsx` is the primary entry point for full-page backgrounds. It encapsulates the `site-backdrop` gradients, `GrainedNoise`, and CRT scanlines.
+- **Implementation**: Avoid manual `site-backdrop` or `GrainedNoise` injection at the page level. Use `<AestheticBackground />` as the first child of the root container.
+- **Calibration**: Standard scanline opacity is `10%` for general content and `15%` for checkout/industrial dashboard views.
 *Document Generated: 2026-02-16*
 *Status: ARCHIVE_STABLE*

@@ -7,11 +7,12 @@ import { getProductFile } from '@/lib/products';
 export default async function SuccessPage({
     searchParams,
 }: {
-    searchParams: Promise<{ session_id: string }>;
+    searchParams: Promise<{ session_id?: string; payment_intent?: string }>;
 }) {
-    const { session_id: sessionId } = await searchParams;
+    const { session_id, payment_intent } = await searchParams;
+    const orderId = session_id || payment_intent;
 
-    if (!sessionId) {
+    if (!orderId) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-transparent text-foreground font-mono">
                 <div className="border border-alert/30 p-8 rounded bg-alert/10 backdrop-blur-sm">
@@ -22,15 +23,33 @@ export default async function SuccessPage({
         );
     }
 
-    // Verify session
-    let session;
-    let lineItems;
+    // Verify session or payment intent
+    let session: any;
+    let lineItems: any[] = [];
+
     try {
-        session = await stripe.checkout.sessions.retrieve(sessionId, {
-            expand: ['line_items']
-        });
-        lineItems = session.line_items?.data || [];
-    } catch {
+        if (session_id) {
+            session = await stripe.checkout.sessions.retrieve(session_id, {
+                expand: ['line_items']
+            });
+            lineItems = session.line_items?.data || [];
+        } else if (payment_intent) {
+            const pi = await stripe.paymentIntents.retrieve(payment_intent);
+            session = pi;
+
+            const itemsJson = pi.metadata?.item_details;
+            if (itemsJson) {
+                const parsedItems = JSON.parse(itemsJson);
+                lineItems = parsedItems.map((item: any) => ({
+                    description: item.name,
+                    amount_total: Math.round((item.amount || 0) * 100),
+                    metadata: { type: item.type, ...item },
+                    price: { id: item.id }
+                }));
+            }
+        }
+    } catch (err) {
+        console.error('Success verification error:', err);
         return (
             <div className="min-h-screen flex items-center justify-center bg-transparent text-foreground font-mono">
                 <div className="border border-alert/30 p-8 rounded bg-alert/10 backdrop-blur-sm">
@@ -41,10 +60,10 @@ export default async function SuccessPage({
         );
     }
 
-    // Map price IDs to file URLs
     const downloads = lineItems.map(item => {
         const priceId = item.price?.id;
         const fileInfo = getProductFile(priceId);
+        const itemType = item.metadata?.type || 'DIGITAL';
 
         let productImage: string | undefined;
         if (item.price?.product && typeof item.price.product !== 'string' && 'images' in item.price.product) {
@@ -52,12 +71,13 @@ export default async function SuccessPage({
         }
 
         return {
-            id: priceId || 'unknown', // persist ID for localStorage
+            id: priceId || 'unknown',
             name: item.description || 'Unknown Asset',
             url: fileInfo.url,
             label: fileInfo.label,
             amount: (item.amount_total || 0) / 100,
-            image: productImage
+            image: productImage,
+            type: itemType
         };
     });
 
@@ -73,7 +93,7 @@ export default async function SuccessPage({
                 <div className="lg:w-1/2 bg-card/55 backdrop-blur-md border-r border-border flex flex-col relative order-2 lg:order-1">
                     {/* Desktop Static / Mobile Accordion Container */}
                     <div className="flex-1 flex flex-col justify-center max-w-xl mx-auto lg:ml-auto lg:mr-0 w-full px-8 md:px-12 xl:px-20 py-12 lg:py-16">
-                        <SuccessSummary downloads={downloads} totalAmount={totalAmount} sessionId={sessionId} />
+                        <SuccessSummary downloads={downloads} totalAmount={totalAmount} sessionId={orderId} />
                     </div>
                 </div>
 
@@ -136,7 +156,7 @@ export default async function SuccessPage({
                             <div className="pt-8 flex flex-col gap-4">
                                 <div className="flex items-center gap-3 text-[10px] font-mono text-muted uppercase tracking-widest">
                                     <span>Email Sent To:</span>
-                                    <span className="text-foreground/80">{session.customer_details?.email}</span>
+                                    <span className="text-foreground/80">{session.customer_details?.email || session.receipt_email || session.metadata?.email}</span>
                                 </div>
                                 <Link
                                     href="/"
