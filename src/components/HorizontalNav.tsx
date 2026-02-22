@@ -142,20 +142,28 @@ export default function HorizontalNav() {
                 </AnimatePresence>
             </nav>
 
-            {/* FIXED MOBILE CART ICON — outside nav to avoid stacking context issues */}
-            <div className="lg:hidden fixed bottom-6 right-6 z-[110]">
-                <button
-                    onClick={toggleCart}
-                    className="w-14 h-14 bg-card/90 backdrop-blur-md text-foreground border border-border rounded-sm shadow-lg flex items-center justify-center relative active:scale-95 transition-transform"
-                >
-                    <IconShoppingCart size={24} stroke={2.5} />
-                    {cart.length > 0 && (
-                        <span className="absolute -top-1.5 -right-1.5 bg-primary text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-md">
-                            {cart.length}
-                        </span>
-                    )}
-                </button>
-            </div>
+            {/* FIXED MOBILE CART ICON — only shown when cart has items */}
+            <AnimatePresence>
+                {cart.length > 0 && (
+                    <motion.div
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0, opacity: 0 }}
+                        transition={{ type: 'spring', stiffness: 400, damping: 28 }}
+                        className="lg:hidden fixed bottom-6 right-6 z-[110]"
+                    >
+                        <button
+                            onClick={toggleCart}
+                            className="w-14 h-14 bg-card/90 backdrop-blur-md text-foreground border border-border rounded-sm shadow-lg flex items-center justify-center relative active:scale-95 transition-transform"
+                        >
+                            <IconShoppingCart size={24} stroke={2.5} />
+                            <span className="absolute -top-1.5 -right-1.5 bg-primary text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-md">
+                                {cart.length}
+                            </span>
+                        </button>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </>
     );
 }
