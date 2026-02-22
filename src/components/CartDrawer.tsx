@@ -270,10 +270,12 @@ export default function CartDrawer() {
                         animate={{ x: 0 }}
                         exit={{ x: '100%' }}
                         transition={{ type: 'spring', stiffness: 400, damping: 35, mass: 0.8 }}
-                        className="drawer-surface relative fixed inset-y-0 right-0 h-full w-full md:w-[420px] z-[150] flex flex-col overflow-hidden border-l border-border shadow-2xl"
+                        className="drawer-surface fixed inset-y-0 right-0 h-full w-full md:w-[420px] z-[150] flex flex-col overflow-hidden border-l border-border shadow-2xl"
                     >
-                        <GrainedNoise />
-                        <div className="flex-shrink-0 px-6 py-5 border-b border-border/70 backdrop-blur-sm">
+                        <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+                            <GrainedNoise />
+                        </div>
+                        <div className="flex-shrink-0 px-6 py-5 border-b border-border/70 backdrop-blur-sm relative z-10">
                             <div className="flex items-start justify-between gap-4">
                                 <div>
                                     <h2
@@ -301,7 +303,7 @@ export default function CartDrawer() {
                             </div>
                         </div>
 
-                        <div className="flex-1 overflow-y-auto px-6 no-scrollbar flex flex-col">
+                        <div className="flex-1 overflow-y-auto px-6 no-scrollbar flex flex-col relative z-10">
                             {cart.length === 0 ? (
                                 <div className="flex-1 flex flex-col items-center justify-center py-12 text-center">
                                     <div className="w-full max-w-[300px] space-y-6">
@@ -396,7 +398,7 @@ export default function CartDrawer() {
                         </div>
 
                         {cart.length > 0 && (
-                            <div className="flex-shrink-0 px-6 py-5 border-t border-border/70">
+                            <div className="flex-shrink-0 px-6 py-5 border-t border-border/70 bg-card/60 backdrop-blur-lg relative z-10">
                                 <div className="mb-4">
                                     {renderOneShotPreview(footerOneShotProduct, footerOneShots)}
                                 </div>
