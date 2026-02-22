@@ -91,6 +91,6 @@ This document tracks critical design decisions and technical standards to mainta
     1.  **Reason**: Eliminated potential animation conflicts and GPU strain during the checkout process and mobile navigation.
     2.  **Implementation**: Added a `showGrain` prop to `AestheticBackground` (default: `false`) and removed manual injections from all UI components except the central hero carousel.
     3.  **Cleanup**: Removed all unused imports and tags from the storefront, checkout, and download flows.
-- **Hero Pagination**: Replaced the numeric `01 / 05` counter with an industrial symbol animation (`▰` / `▱`). Symbols act as interactive pagination points, enhancing the "HUD" feel of the hero landing.
+- **Hero Pagination**: Restored the `Current // Total` numeric display (e.g., `01 // 05`) in a refined `8px` HUD style. Removed all color and scale animations in favor of a static, high-fidelity monospaced aesthetic that maintains brand consistency while maximizing legibility.
 
 
