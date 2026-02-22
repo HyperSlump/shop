@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 
 // Replicating grained.js natively in React to avoid SSR / window mutation issues
-export default function GrainedNoise() {
+export default function GrainedNoise({ animate = true }: { animate?: boolean }) {
     const [noiseUrl, setNoiseUrl] = useState('');
 
     useEffect(() => {
@@ -48,26 +48,27 @@ export default function GrainedNoise() {
                 className="absolute -inset-[100%] w-[300%] h-[300%] opacity-40 mix-blend-screen"
                 style={{
                     backgroundImage: `url(${noiseUrl})`,
-                    animation: 'grained 0.5s steps(20, end) infinite'
+                    ...(animate && { animation: 'grained 0.5s steps(20, end) infinite' })
                 }}
             />
-            {/* Inject the grained keyframes here locally */}
-            <style dangerouslySetInnerHTML={{
-                __html: `
-                @keyframes grained {
-                    0% { transform: translate(-10%, 10%); }
-                    10% { transform: translate(-25%, 0%); }
-                    20% { transform: translate(-30%, 10%); }
-                    30% { transform: translate(-30%, 30%); }
-                    40% { transform: translate(-20%, 20%); }
-                    50% { transform: translate(-15%, 10%); }
-                    60% { transform: translate(-20%, 20%); }
-                    70% { transform: translate(-5%, 20%); }
-                    80% { transform: translate(-25%, 5%); }
-                    90% { transform: translate(-30%, 25%); }
-                    100% { transform: translate(-10%, 10%); }
-                }
-            `}} />
+            {animate && (
+                <style dangerouslySetInnerHTML={{
+                    __html: `
+                    @keyframes grained {
+                        0% { transform: translate(-10%, 10%); }
+                        10% { transform: translate(-25%, 0%); }
+                        20% { transform: translate(-30%, 10%); }
+                        30% { transform: translate(-30%, 30%); }
+                        40% { transform: translate(-20%, 20%); }
+                        50% { transform: translate(-15%, 10%); }
+                        60% { transform: translate(-20%, 20%); }
+                        70% { transform: translate(-5%, 20%); }
+                        80% { transform: translate(-25%, 5%); }
+                        90% { transform: translate(-30%, 25%); }
+                        100% { transform: translate(-10%, 10%); }
+                    }
+                `}} />
+            )}
         </div>
     );
 }
