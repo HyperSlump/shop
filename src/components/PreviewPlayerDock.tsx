@@ -55,9 +55,9 @@ export default function PreviewPlayerDock() {
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: 120, opacity: 0 }}
                     transition={{ type: 'spring', stiffness: 420, damping: 34, mass: 0.9 }}
-                    className="fixed inset-x-0 bottom-0 z-[125] px-3 pb-3 pointer-events-none"
+                    className="fixed inset-x-0 bottom-0 z-[125] pointer-events-none"
                 >
-                    <div className="mx-auto w-full max-w-[1480px] pointer-events-auto">
+                    <div className="w-full pointer-events-auto">
                         <AnimatePresence>
                             {isPlaylistOpen && (
                                 <motion.div
@@ -65,7 +65,7 @@ export default function PreviewPlayerDock() {
                                     animate={{ height: 'auto', opacity: 1, y: 0 }}
                                     exit={{ height: 0, opacity: 0, y: 10 }}
                                     transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-                                    className="overflow-hidden mb-2 rounded-lg border border-border/80 bg-card/95 shadow-[0_-12px_40px_rgba(0,0,0,0.3)] backdrop-blur-2xl"
+                                    className="overflow-hidden mb-0 border-t border-border/40 bg-card/40 shadow-[0_-12px_40px_rgba(0,0,0,0.3)] backdrop-blur-2xl"
                                 >
                                     <div className="p-4 md:p-6">
                                         <div className="flex items-center justify-between mb-5 px-1">
@@ -142,8 +142,8 @@ export default function PreviewPlayerDock() {
                             )}
                         </AnimatePresence>
 
-                        <div className="overflow-hidden rounded-lg border border-border/80 bg-card/90 shadow-[0_12px_30px_rgba(0,0,0,0.3)] backdrop-blur-xl">
-                            <div className="flex flex-col gap-2 p-3 md:flex-row md:items-center md:gap-4 md:px-4 md:py-3">
+                        <div className="overflow-hidden border-t border-border/40 bg-card/40 shadow-[0_-8px_30px_rgba(0,0,0,0.2)] backdrop-blur-2xl">
+                            <div className="flex flex-col gap-2 p-3 md:flex-row md:items-center md:gap-4 px-5 md:px-10 py-3 lg:px-16">
                                 {/* Top row for mobile (Controls + Info + Close) / Left section for desktop */}
                                 <div className="flex items-center justify-between md:w-auto md:justify-start md:gap-4">
                                     <div className="flex items-center gap-3">
