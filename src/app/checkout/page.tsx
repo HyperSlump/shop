@@ -432,20 +432,19 @@ function FreeOrderPanel({ cart }: { cart: Product[] }) {
                 <button
                     type="submit"
                     disabled={submitting || !email}
-                    className="group relative w-full h-[48px] rounded-md font-medium text-[15px] transition-all duration-200
+                    className="group relative w-full h-[48px] rounded-md font-mono text-[11px] font-bold uppercase tracking-[0.2em] transition-all duration-200
                          disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer
                          bg-primary text-primary-foreground
-                         shadow-[0_0_0_1px_rgba(255,255,255,0.1),0_2px_8px_rgba(0,0,0,0.24)]
-                         hover:shadow-[0_0_0_1px_rgba(255,255,255,0.2),0_4px_14px_rgba(0,0,0,0.34)]
-                         hover:-translate-y-0.5 active:translate-y-0 active:shadow-none"
+                         shadow-[0_4px_16px_rgba(var(--primary-rgb),0.18)]
+                         hover:brightness-110 active:scale-[0.99]"
                 >
                     {submitting ? (
                         <span className="flex items-center justify-center gap-2">
                             <span className="w-4 h-4 border-2 border-transparent border-t-white rounded-full animate-spin" />
-                            Preparing...
+                            preparing_assets
                         </span>
                     ) : (
-                        'Complete order'
+                        'complete_order'
                     )}
                 </button>
             </form>

@@ -146,15 +146,15 @@ export default function CheckoutForm({
             <button
                 disabled={isLoading || !stripe || !elements}
                 type="submit"
-                className={`group relative w-full h-[48px] rounded-md font-medium text-[15px] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer hover:-translate-y-0.5 active:translate-y-0 active:shadow-none ${submitButton}`}
+                className={`group relative w-full h-[48px] rounded-md font-mono text-[11px] font-bold uppercase tracking-[0.2em] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer ${submitButton}`}
             >
                 {isLoading ? (
                     <span className="flex items-center justify-center gap-2">
                         <span className="w-4 h-4 border-2 border-transparent border-t-white rounded-full animate-spin" />
-                        Processing...
+                        processing_payment
                     </span>
                 ) : (
-                    <span>Pay ${amount.toFixed(2)}</span>
+                    <span>complete_order // ${amount.toFixed(2)}</span>
                 )}
             </button>
 

@@ -81,6 +81,12 @@ This document tracks critical design decisions and technical standards to mainta
     3.  Added `transform: translateZ(0)` to the drawer container to force hardware acceleration.
 - **Workflow Compliance**: Verified a "clean install" of the `<GrainedNoise />` component. Noise is now the primary visual texture over an opaque industrial gradient, matching the site-wide "Liquid Tech" standard without redundant layering.
 - **Mobile Navigation**: Added `<GrainedNoise />` to the mobile navigation dropdown to ensure the industrial texture is present even in high-level navigation states.
+- **Button Standardization**: Unified all primary and secondary buttons across the product page, checkout flows, and cart drawer. 
+    1.  **Typography**: Switched to `font-mono`, `uppercase`, and widened `tracking` (0.14em to 0.25em).
+    2.  **Geometry**: Standardized on `rounded-md` (8px) corners across all button types.
+    3.  **Labelling**: Reverted to simplified, human-readable labels (e.g., `preview`, `playing`, `add to cart`, `added`) used on the product cards to ensure cross-page consistency. The monospaced uppercase styling maintains the industrial aesthetic without sacrificing clarity.
+    4.  **Polish**: Aligned hover states and shadows to use the primary color glow.
+- **UI Consistency**: Updated the `CartDrawer` header to match the site's `HorizontalNav` aesthetic. It now uses `bg-background/95` with `backdrop-blur-[2px]` and a full-opacity `border-border`, creating a cohesive "System Bar" look across all transient UI surfaces in both light and dark modes.
 
 ---
 *Next entry [ID: LQD_G9_V9]*

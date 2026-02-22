@@ -238,14 +238,14 @@ export default function SuccessClient({ downloads, physical, session, upsellItem
                         <button
                             type="submit"
                             disabled={emailSubmitting || emailSuccess}
-                            className={`px-5 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2
+                            className={`px-6 py-2.5 h-[42px] rounded-md font-mono text-[10px] font-bold uppercase tracking-[0.16em] transition-all flex items-center gap-2
                                 ${emailSuccess
                                     ? 'bg-green-500/10 text-green-500 border border-green-500/20 cursor-default'
                                     : 'bg-foreground text-background hover:opacity-90 active:scale-[0.98]'
                                 }`}
                         >
-                            {emailSuccess ? 'Subscribed' : emailSubmitting ? '...' : (
-                                <>Join <IconArrowRight size={14} /></>
+                            {emailSuccess ? 'subscribed' : emailSubmitting ? '...' : (
+                                <>join_protocol <IconArrowRight size={14} /></>
                             )}
                         </button>
                     </form>

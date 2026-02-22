@@ -195,10 +195,10 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                                             <button
                                                 key={v.id}
                                                 onClick={() => setSelectedVariant(v)}
-                                                className={`h-10 px-4 border transition-all font-mono text-[10px] rounded uppercase flex flex-col items-center justify-center min-w-[80px]
+                                                className={`h-[42px] px-6 border transition-all font-mono text-[10px] font-semibold rounded-md uppercase flex items-center justify-center min-w-[100px] tracking-[0.14em]
                                                     ${selectedVariant?.id === v.id
-                                                        ? 'border-primary bg-primary/20 text-primary shadow-[0_0_15px_rgba(216,58,61,0.2)]'
-                                                        : 'border-foreground/20 text-foreground/60 hover:border-primary/50 hover:bg-primary/5 hover:text-primary'
+                                                        ? 'border-primary bg-primary/15 text-primary shadow-[0_4px_12px_rgba(var(--primary-rgb),0.12)]'
+                                                        : 'border-border/60 bg-background/45 text-muted hover:border-primary/40 hover:text-primary transition-all duration-300'
                                                     }`}
                                             >
                                                 <span>{v.name.split(' - ').pop()}</span>
@@ -211,32 +211,32 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                             {audioPreviewUrl && (
                                 <button
                                     onClick={playPreview}
-                                    className={`w-full h-14 flex items-center justify-center gap-4 font-mono text-sm font-bold tracking-[0.3em] uppercase transition-all duration-300 rounded border
+                                    className={`w-full h-[48px] flex items-center justify-center gap-4 font-mono text-[10px] font-semibold tracking-[0.16em] uppercase transition-all duration-300 rounded-md border
                                         ${isActivePreview && isPlaying
-                                            ? 'bg-primary/20 text-primary border-primary/50'
-                                            : 'bg-transparent text-foreground/90 border-foreground/20 hover:border-primary/50 hover:text-primary hover:bg-primary/5'
+                                            ? 'bg-primary/15 text-primary border-primary/40'
+                                            : 'border-border/60 bg-background/45 text-foreground/85 hover:border-primary/40 hover:text-primary'
                                         }`}
                                 >
                                     {isActivePreview && isPlaying ? (
-                                        <IconPlayerPauseFilled size={18} />
+                                        <IconPlayerPauseFilled size={14} />
                                     ) : (
-                                        <IconPlayerPlayFilled size={18} />
+                                        <IconPlayerPlayFilled size={14} />
                                     )}
-                                    <span>{isActivePreview && isPlaying ? 'PLAYING_PREVIEW' : 'STREAM_AUDIO_DEMO'}</span>
+                                    <span>{isActivePreview && isPlaying ? 'playing' : 'preview'}</span>
                                 </button>
                             )}
 
                             <button
                                 onClick={handleAddToCart}
                                 disabled={isInCart}
-                                className={`w-full h-16 flex items-center justify-center gap-6 font-mono text-sm font-bold tracking-[0.4em] uppercase transition-all duration-700 rounded
+                                className={`w-full h-[48px] flex items-center justify-center gap-4 font-mono text-[10px] font-bold tracking-[0.16em] uppercase transition-all duration-500 rounded-md border
                                     ${isInCart
-                                        ? 'bg-primary/5 border border-primary/10 text-primary/30 cursor-not-allowed'
-                                        : 'bg-primary text-black border-2 border-primary hover:bg-transparent hover:text-primary'
+                                        ? 'bg-primary/10 border-primary/20 text-primary/60 cursor-default'
+                                        : 'bg-primary text-primary-foreground border-primary hover:brightness-110 active:scale-[0.99] shadow-[0_4px_20px_rgba(var(--primary-rgb),0.2)]'
                                     }`}
                             >
-                                <span>{isInCart ? 'ACCESS_GRANTED' : (isPhysical ? 'ADD_TO_CART' : 'DOWNLOAD_ACCESS')}</span>
-                                {!isInCart && <span className="text-xl">→</span>}
+                                <span>{isInCart ? 'added' : (isPhysical ? 'add to cart' : 'add to cart')}</span>
+                                {!isInCart && <span className="opacity-60 text-base">→</span>}
                             </button>
 
                             <div className="mt-6 flex flex-wrap gap-4 opacity-30 text-[9px] font-mono uppercase tracking-widest">

@@ -273,7 +273,7 @@ export default function CartDrawer() {
                         className="drawer-surface fixed inset-y-0 right-0 h-full w-full md:w-[420px] z-[150] flex flex-col overflow-hidden border-l border-border [transform:translateZ(0)]"
                     >
                         <GrainedNoise />
-                        <div className="flex-shrink-0 px-6 py-5 border-b border-border/70 relative z-10">
+                        <div className="flex-shrink-0 px-6 py-6 border-b border-border bg-background/95 backdrop-blur-[2px] relative z-20">
                             <div className="flex items-start justify-between gap-4">
                                 <div>
                                     <h2
@@ -318,18 +318,18 @@ export default function CartDrawer() {
                                         <div className="space-y-3 pt-4">
                                             <button
                                                 onClick={() => goTo('/#catalog')}
-                                                className="w-full h-[46px] rounded-sm bg-primary text-primary-foreground font-semibold text-[13px] transition-all duration-150 hover:brightness-110 cursor-pointer inline-flex items-center justify-center gap-2 group"
+                                                className="w-full h-[48px] rounded-md bg-primary text-primary-foreground font-mono text-[10px] font-bold uppercase tracking-[0.16em] transition-all duration-150 hover:brightness-110 cursor-pointer inline-flex items-center justify-center gap-2 group"
                                             >
-                                                Browse catalog
+                                                browse_catalog
                                                 <IconArrowRight size={14} stroke={2.2} className="group-hover:translate-x-1 transition-transform" />
                                             </button>
 
                                             <button
                                                 onClick={() => goTo('/')}
-                                                className="w-full h-[44px] rounded-sm border border-border bg-transparent text-foreground/85 font-medium text-[12px] transition-colors duration-150 hover:bg-foreground/5 cursor-pointer inline-flex items-center justify-center gap-2"
+                                                className="w-full h-[46px] rounded-md border border-border bg-background/45 text-foreground/85 font-mono text-[10px] font-bold uppercase tracking-[0.16em] transition-colors duration-150 hover:bg-foreground/5 cursor-pointer inline-flex items-center justify-center gap-2"
                                             >
                                                 <IconSparkles size={14} stroke={2} />
-                                                New merch drops
+                                                new_merch_drops
                                             </button>
                                         </div>
 
@@ -396,7 +396,7 @@ export default function CartDrawer() {
                         </div>
 
                         {cart.length > 0 && (
-                            <div className="flex-shrink-0 px-6 py-5 border-t border-border/70 bg-card relative z-10">
+                            <div className="flex-shrink-0 px-6 py-6 border-t border-border bg-background/95 backdrop-blur-[2px] relative z-20">
                                 <div className="mb-4">
                                     {renderOneShotPreview(footerOneShotProduct, footerOneShots)}
                                 </div>
@@ -419,9 +419,9 @@ export default function CartDrawer() {
                                 <button
                                     onClick={handleCheckout}
                                     disabled={cart.length === 0 || loading}
-                                    className="w-full h-[44px] rounded-sm font-medium text-[15px] transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-primary text-primary-foreground hover:brightness-110 shadow-[0_4px_12px_rgba(15,23,42,0.16)] dark:shadow-[0_8px_18px_rgba(0,0,0,0.28)]"
+                                    className="w-full h-[48px] rounded-md font-mono text-[11px] font-bold uppercase tracking-[0.2em] transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-primary text-primary-foreground hover:brightness-110 shadow-[0_4px_16px_rgba(var(--primary-rgb),0.18)]"
                                 >
-                                    {loading ? 'Redirecting...' : 'Continue to checkout'}
+                                    {loading ? 'redirecting...' : 'continue_to_checkout'}
                                 </button>
 
                                 <div className="mt-4 flex items-center justify-center gap-1.5 text-xs text-muted/65">
