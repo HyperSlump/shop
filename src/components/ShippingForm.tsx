@@ -71,8 +71,8 @@ export default function ShippingForm({ onRatesFetched, isDark }: ShippingFormPro
     };
 
     const inputClass = `w-full h-11 px-3 rounded-md text-sm outline-none transition-all duration-150 border ${isDark
-            ? 'bg-card border-border/40 focus:border-primary focus:ring-1 focus:ring-primary/20 shadow-sm text-foreground placeholder:text-muted/50'
-            : 'bg-white border-border focus:border-primary focus:ring-1 focus:ring-primary/20 shadow-sm text-foreground'
+        ? 'bg-card border-border/40 focus:border-primary focus:ring-1 focus:ring-primary/20 shadow-sm text-foreground placeholder:text-muted/50'
+        : 'bg-white border-border focus:border-primary focus:ring-1 focus:ring-primary/20 shadow-sm text-foreground'
         }`;
 
     const labelClass = "block text-[10px] font-bold uppercase tracking-widest text-muted mb-2 font-mono";
@@ -178,7 +178,7 @@ export default function ShippingForm({ onRatesFetched, isDark }: ShippingFormPro
                     <IconLoader2 size={18} className="animate-spin" />
                 ) : (
                     <>
-                        <span>CALCULATE_SHIPPING</span>
+                        <span>calculate shipping</span>
                         <IconChevronRight size={16} />
                     </>
                 )}

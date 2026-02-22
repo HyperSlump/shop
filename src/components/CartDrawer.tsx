@@ -318,7 +318,7 @@ export default function CartDrawer() {
                                                 onClick={() => goTo('/#catalog')}
                                                 className="w-full h-[48px] rounded-md bg-primary text-primary-foreground font-mono text-[10px] font-bold uppercase tracking-[0.16em] transition-all duration-150 hover:brightness-110 cursor-pointer inline-flex items-center justify-center gap-2 group"
                                             >
-                                                browse_catalog
+                                                browse catalog
                                                 <IconArrowRight size={14} stroke={2.2} className="group-hover:translate-x-1 transition-transform" />
                                             </button>
 
@@ -327,7 +327,7 @@ export default function CartDrawer() {
                                                 className="w-full h-[46px] rounded-md border border-border bg-background/45 text-foreground/85 font-mono text-[10px] font-bold uppercase tracking-[0.16em] transition-colors duration-150 hover:bg-foreground/5 cursor-pointer inline-flex items-center justify-center gap-2"
                                             >
                                                 <IconSparkles size={14} stroke={2} />
-                                                new_merch_drops
+                                                new merch drops
                                             </button>
                                         </div>
 
@@ -419,7 +419,7 @@ export default function CartDrawer() {
                                     disabled={cart.length === 0 || loading}
                                     className="w-full h-[48px] rounded-md font-mono text-[11px] font-bold uppercase tracking-[0.2em] transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-primary text-primary-foreground hover:brightness-110 shadow-[0_4px_16px_rgba(var(--primary-rgb),0.18)]"
                                 >
-                                    {loading ? 'redirecting...' : 'continue_to_checkout'}
+                                    {loading ? 'redirecting...' : 'continue to checkout'}
                                 </button>
 
                                 <div className="mt-4 flex items-center justify-center gap-1.5 text-xs text-muted/65">

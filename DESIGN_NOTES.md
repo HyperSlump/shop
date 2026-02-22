@@ -97,5 +97,4 @@ This document tracks critical design decisions and technical standards to mainta
     1.  **State Synchronization**: The `ProductPageLayout` now updates the primary image `src` based on the `selectedVariant`.
     2.  **Catalog Support**: The `catalog` service and `Product` type support variant-specific image URLs.
     3.  **Vercel Blob Integration**: The architecture is ready for manual mapping via `IMAGE_OVERRIDES` in `src/lib/services/catalog.ts`. (Currently reverting to Printful defaults for stability).
-
-
+- **UI Text Standards**: Standardized all button labels and system metadata to exclude underscores. All occurrences of `_` in customer-facing text (e.g., `browse catalog`, `complete order`, `processing payment`) have been replaced with spaces to maintain a cleaner, more professional aesthetic.

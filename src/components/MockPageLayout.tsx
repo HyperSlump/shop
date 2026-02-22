@@ -37,7 +37,7 @@ export default function MockPageLayout({ title, subtitle, content, status, child
                                 {[
                                     { k: 'ENCRYPTION', v: 'AES-256' },
                                     { k: 'PROTOCOL', v: 'QUIC/HTTP3' },
-                                    { k: 'ACCESS', v: 'V.4_AUTH' },
+                                    { k: 'ACCESS', v: 'V.4 AUTH' },
                                     { k: 'SERVER', v: 'HYPER-CORE' }
                                 ].map((spec) => (
                                     <div key={spec.k} className="flex flex-col gap-1">
@@ -62,7 +62,7 @@ export default function MockPageLayout({ title, subtitle, content, status, child
 
                             <div className="mt-8 border-l-2 border-primary/20 pl-6 py-4 space-y-4">
                                 <h3 className="font-mono text-[10px] text-primary/50 uppercase tracking-widest">
-                                    SYSTEM_QUERY_LOG //
+                                    SYSTEM QUERY LOG //
                                 </h3>
                                 <p className="font-mono text-sm text-foreground/60 leading-relaxed italic">
                                     Documenting the architectural shifts and sonic exploration of the hyper$lump collective.
@@ -76,7 +76,7 @@ export default function MockPageLayout({ title, subtitle, content, status, child
                             <div className="mt-8 flex flex-wrap gap-4 opacity-30 text-[9px] font-mono uppercase tracking-widest">
                                 <div className="flex items-center gap-2">
                                     <span className="w-1 h-1 bg-primary rounded-full" />
-                                    <span>Signal_Online</span>
+                                    <span>Signal Online</span>
                                 </div>
                                 <span>LAST_UPDATE: {new Date().toLocaleDateString()}</span>
                                 <span>STATUS: {status}</span>

@@ -241,11 +241,11 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                             <div className="mt-6 flex flex-wrap gap-4 opacity-30 text-[9px] font-mono uppercase tracking-widest">
                                 <div className="flex items-center gap-2">
                                     <span className="w-1 h-1 bg-primary rounded-full" />
-                                    <span>Trans_Encrypted</span>
+                                    <span>Trans Encrypted</span>
                                 </div>
                                 {isPhysical ? (
                                     <>
-                                        <span>Tracking_Available</span>
+                                        <span>Tracking Available</span>
                                         <span>Shipping: Worldwide</span>
                                     </>
                                 ) : (

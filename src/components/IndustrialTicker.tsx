@@ -42,7 +42,7 @@ export default function IndustrialTicker() {
     }, []);
 
     const row1Text = 'new drops // hyper$lump // instant access // read blog // mode:live // ';
-    const row2Text = 'cold theme // hot theme // cart ready // checkout live // 60_bpm sync // ';
+    const row2Text = 'cold theme // hot theme // cart ready // checkout live // 60 bpm sync // ';
 
     return (
         <div ref={containerRef} className="w-full py-0 px-0 select-none relative z-20 pointer-events-auto overflow-hidden">

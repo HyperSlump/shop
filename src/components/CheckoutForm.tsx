@@ -151,10 +151,10 @@ export default function CheckoutForm({
                 {isLoading ? (
                     <span className="flex items-center justify-center gap-2">
                         <span className="w-4 h-4 border-2 border-transparent border-t-white rounded-full animate-spin" />
-                        processing_payment
+                        processing payment
                     </span>
                 ) : (
-                    <span>complete_order // ${amount.toFixed(2)}</span>
+                    <span>complete order // ${amount.toFixed(2)}</span>
                 )}
             </button>
 

@@ -245,7 +245,7 @@ export default function SuccessClient({ downloads, physical, session, upsellItem
                                 }`}
                         >
                             {emailSuccess ? 'subscribed' : emailSubmitting ? '...' : (
-                                <>join_protocol <IconArrowRight size={14} /></>
+                                <>join protocol <IconArrowRight size={14} /></>
                             )}
                         </button>
                     </form>
