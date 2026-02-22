@@ -335,14 +335,24 @@ export default function PromoCarousel() {
                         </button>
                     </div>
 
-                    <div className="flex items-center gap-4">
-                        <span className="font-mono text-[16px] font-bold text-white tracking-widest">
-                            {String(currentIndex + 1).padStart(2, '0')}
-                        </span>
-                        <div className="h-[1px] w-12 bg-white/20" />
-                        <span className="font-mono text-[12px] text-white/30 tracking-widest">
-                            {String(promoSlides.length).padStart(2, '0')}
-                        </span>
+                    <div className="flex items-center gap-2 font-mono text-[8px] tracking-[0.2em] text-white/40 px-2 lg:px-0">
+                        {promoSlides.map((_, i) => (
+                            <motion.span
+                                key={i}
+                                animate={{
+                                    opacity: i === currentIndex ? 1 : 0.15,
+                                    scale: i === currentIndex ? 1.1 : 0.9,
+                                }}
+                                className="cursor-pointer transition-all duration-300 hover:opacity-100 text-white"
+                                onClick={() => {
+                                    setDirection(i > currentIndex ? 1 : -1);
+                                    setCurrentIndex(i);
+                                    setIsAutoPlaying(false);
+                                }}
+                            >
+                                {i === currentIndex ? '▰' : '▱'}
+                            </motion.span>
+                        ))}
                     </div>
                 </div>
             </div>
