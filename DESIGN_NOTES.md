@@ -98,3 +98,34 @@ This document tracks critical design decisions and technical standards to mainta
     2.  **Catalog Support**: The `catalog` service and `Product` type support variant-specific image URLs.
     3.  **Vercel Blob Integration**: The architecture is ready for manual mapping via `IMAGE_OVERRIDES` in `src/lib/services/catalog.ts`. (Currently reverting to Printful defaults for stability).
 - **UI Text Standards**: Standardized all button labels and system metadata to exclude underscores. All occurrences of `_` in customer-facing text (e.g., `browse catalog`, `complete order`, `processing payment`) have been replaced with spaces to maintain a cleaner, more professional aesthetic.
+
+## [2026-02-23] Product Page: E-Commerce Standard Redesign
+- **Decision**: Redesigned `ProductPageLayout.tsx` to match a professional e-commerce standard (Kit & Ace / Stripe reference).
+- **Layout**: Two-column grid. Left: Thumbnail gallery strip + main product image with animated swap. Right: Structured product details.
+- **Variant Parsing**: Printful variant names (`"Product Name - Size / Color"`) are now parsed into separate **Color** and **Size** selectors, replacing the previous flat variant button list.
+- **Size Selector**: Pill-style buttons showing extracted size options (XXS–5XL). Unavailable sizes for the selected color are greyed out and `line-through`.
+- **Color Selector**: Pill-style buttons. Selecting a color cross-references with the current size to find the correct variant.
+- **Quantity Picker**: Clean `−` / `+` stepper added to the CTA row for the Stripe checkout feel. (Note: Cart system currently adds 1 item per entry; quantity support can be extended later.)
+- **CTA States**: Three visual states — `select size` (muted, disabled), `add to cart` (primary filled), `added` (primary outline).
+- **Description Accordion**: Extended description is now collapsible via a `<ChevronDown>` toggle, with technical metadata grid revealed inside.
+- **Breadcrumb**: Replaced the full-width heading system line with a compact monospaced breadcrumb (`store / product name`).
+- **Trust Badges**: Contextual badges at the bottom (physical: worldwide shipping, tracking, secure checkout; digital: instant download, format, lifetime license).
+- **Future-Proofing**: Digital products use a generic variant selector that will support promo add-ons and free-version variants when added later.
+- **Preserved**: All DESIGN_LOCK standards (colors, fonts, button styles, animations, z-indices, AestheticBackground rules). Audio preview dock integration unchanged.
+
+## [2026-02-23] Product Page: Real-Time Shipping Estimation
+- **Decision**: Added live shipping cost estimation to the product page for physical merchandise.
+- **API**: New lightweight endpoint at `/api/printful/estimate` — accepts `{ country_code, variant_id, quantity }`, returns sorted Printful shipping rates.
+- **UI**: Country dropdown appears below the CTA row for physical products. Selecting a country triggers a fetch and displays all available shipping options with rates and estimated delivery days.
+- **Estimated Total**: Shows product price + cheapest shipping rate as a combined total.
+- **Caching**: Results are cached per `variant_id + country_code` combo in a `useRef` map to avoid redundant API calls within the same session.
+- **Error Handling**: Graceful states for loading (spinner), no options available, and API errors using the `--alert` color token.
+- **Coverage**: 25 countries supported in the dropdown (US, CA, GB, AU, DE, FR, JP, KR, NL, SE, NO, DK, IT, ES, PT, BE, AT, CH, PL, IE, NZ, FI, MX, BR, SG).
+- **Preserved**: No changes to existing API routes, cart system, or design tokens.
+
+## [2026-02-23] Checkout Page: Expanded Shipping Estimation
+- **Decision**: Expanded checkout page shipping estimation capabilities based on user input.
+- **Coverage Expansion**: The Stripe `AddressElement` `allowedCountries` was updated from just 4 countries (`['US', 'CA', 'GB', 'AU']`) to the full 25 shipping countries array used on the product page.
+- **Detailed Rate Breakdown**: The checkout summary now maps and displays *all* available Printful shipping options (Standard, Express, etc.), complete with pricing and estimated delivery windows (e.g., "3-5 business days"), rather than just silently applying the cheapest option. 
+- **Component Update**: `CheckoutFormProps` was updated to accept an `allowedCountries?: string[]` array.
+- **Preserved**: Retained all existing aesthetic properties and error handling.

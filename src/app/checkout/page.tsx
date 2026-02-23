@@ -11,6 +11,21 @@ import { useRouter } from 'next/navigation';
 import { IconArrowLeft, IconChevronDown, IconLock, IconTruck } from '@tabler/icons-react';
 import AestheticBackground from '@/components/AestheticBackground';
 
+interface ShippingRateOption {
+    id: string;
+    name: string;
+    rate: string;
+    currency: string;
+    min_delivery_days?: number;
+    max_delivery_days?: number;
+}
+
+const ALLOWED_SHIPPING_COUNTRIES: string[] = [
+    'US', 'CA', 'GB', 'AU', 'DE', 'FR', 'JP', 'KR', 'NL', 'SE',
+    'NO', 'DK', 'IT', 'ES', 'PT', 'BE', 'AT', 'CH', 'PL', 'IE',
+    'NZ', 'FI', 'MX', 'BR', 'SG',
+];
+
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 function useTheme() {
@@ -77,6 +92,7 @@ export default function CheckoutPage() {
     const [clientSecret, setClientSecret] = useState('');
     const [paymentIntentId, setPaymentIntentId] = useState('');
     const [shippingCost, setShippingCost] = useState(0);
+    const [shippingRateOptions, setShippingRateOptions] = useState<ShippingRateOption[]>([]);
     const [isCalculating, setIsCalculating] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [productsOpen, setProductsOpen] = useState(false);
@@ -148,12 +164,21 @@ export default function CheckoutPage() {
             });
             const data = await res.json();
             if (data.rates && data.rates.length > 0) {
-                const cost = parseFloat(data.rates[0].rate);
+                // Sort by price ascending and store all options
+                const sorted = [...data.rates].sort(
+                    (a: ShippingRateOption, b: ShippingRateOption) => parseFloat(a.rate) - parseFloat(b.rate)
+                );
+                setShippingRateOptions(sorted);
+                const cost = parseFloat(sorted[0].rate);
                 setShippingCost(cost);
                 await refreshIntent(cost, addressValue);
+            } else {
+                setShippingRateOptions([]);
+                setShippingCost(0);
             }
         } catch (err) {
             console.error('Shipping calculation error:', err);
+            setShippingRateOptions([]);
         } finally {
             setIsCalculating(false);
         }
@@ -300,10 +325,61 @@ export default function CheckoutPage() {
                                     <span className="text-muted">Shipping</span>
                                     {isCalculating ? (
                                         <span className="text-primary animate-pulse text-xs uppercase tracking-widest font-mono">Calculating...</span>
-                                    ) : (
+                                    ) : shippingCost > 0 ? (
                                         <span className="text-foreground">${shippingCost.toFixed(2)}</span>
+                                    ) : hasPhysicalItems ? (
+                                        <span className="text-muted text-xs italic">Enter address</span>
+                                    ) : (
+                                        <span className="text-foreground">$0.00</span>
                                     )}
                                 </div>
+
+                                {/* Shipping rate breakdown */}
+                                <AnimatePresence>
+                                    {shippingRateOptions.length > 0 && !isCalculating && (
+                                        <motion.div
+                                            initial={{ height: 0, opacity: 0 }}
+                                            animate={{ height: 'auto', opacity: 1 }}
+                                            exit={{ height: 0, opacity: 0 }}
+                                            transition={{ duration: 0.25, ease: 'easeInOut' }}
+                                            className="overflow-hidden"
+                                        >
+                                            <div className="space-y-2 pb-1">
+                                                {shippingRateOptions.map((rate, i) => (
+                                                    <div
+                                                        key={rate.id}
+                                                        className={`flex items-center justify-between py-1.5 px-2.5 rounded text-xs transition-colors
+                                                            ${i === 0
+                                                                ? 'bg-primary/8 border border-primary/15'
+                                                                : 'border border-transparent'
+                                                            }`}
+                                                    >
+                                                        <div className="flex flex-col">
+                                                            <span className={`font-medium ${i === 0 ? 'text-foreground' : 'text-muted'}`}>
+                                                                {rate.name}
+                                                                {i === 0 && <span className="text-primary ml-1.5 text-[9px] uppercase tracking-wider font-mono">selected</span>}
+                                                            </span>
+                                                            {(rate.min_delivery_days || rate.max_delivery_days) && (
+                                                                <span className="text-[10px] text-muted mt-0.5">
+                                                                    {rate.min_delivery_days && rate.max_delivery_days
+                                                                        ? `${rate.min_delivery_days}\u2013${rate.max_delivery_days} business days`
+                                                                        : rate.max_delivery_days
+                                                                            ? `Up to ${rate.max_delivery_days} business days`
+                                                                            : `From ${rate.min_delivery_days} business days`
+                                                                    }
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                        <span className={`font-medium tabular-nums ${i === 0 ? 'text-foreground' : 'text-muted'}`}>
+                                                            {parseFloat(rate.rate) === 0 ? 'Free' : `$${parseFloat(rate.rate).toFixed(2)}`}
+                                                        </span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+
                                 <div className="flex justify-between text-sm pt-4 font-semibold border-t border-border">
                                     <span className="text-foreground">Total due today</span>
                                     <span className="text-foreground">${finalTotal.toFixed(2)}</span>
@@ -332,6 +408,7 @@ export default function CheckoutPage() {
                                         amount={finalTotal}
                                         isDark={isDark}
                                         hasPhysicalItems={hasPhysicalItems}
+                                        allowedCountries={ALLOWED_SHIPPING_COUNTRIES}
                                         onAddressChange={handleAddressChange}
                                         isCalculating={isCalculating}
                                     />

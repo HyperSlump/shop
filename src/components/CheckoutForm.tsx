@@ -17,6 +17,7 @@ interface CheckoutFormProps {
     hasPhysicalItems?: boolean;
     onAddressChange?: (value: any) => void;
     isCalculating?: boolean;
+    allowedCountries?: string[];
 }
 
 export default function CheckoutForm({
@@ -24,7 +25,8 @@ export default function CheckoutForm({
     isDark = true,
     hasPhysicalItems = false,
     onAddressChange,
-    isCalculating = false
+    isCalculating = false,
+    allowedCountries = ['US', 'CA', 'GB', 'AU']
 }: CheckoutFormProps) {
     const stripe = useStripe();
     const elements = useElements();
@@ -122,7 +124,7 @@ export default function CheckoutForm({
                         )}
                     </div>
                     <AddressElement
-                        options={{ mode: 'shipping', allowedCountries: ['US', 'CA', 'GB', 'AU'] }}
+                        options={{ mode: 'shipping', allowedCountries }}
                         onChange={(e) => {
                             if (e.complete && onAddressChange) onAddressChange(e.value);
                         }}
