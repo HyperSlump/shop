@@ -4,7 +4,7 @@ import { useCart } from './CartProvider';
 import { useEffect, useState } from 'react';
 import NextImage from 'next/image';
 import { useRouter } from 'next/navigation';
-import { IconArrowRight, IconChevronDown, IconLock, IconPlus, IconShoppingCart, IconSparkles, IconX } from '@tabler/icons-react';
+import { IconX, IconShoppingCart, IconArrowRight, IconLock, IconSparkles, IconChevronDown, IconPlus, IconMinus, IconTrash } from '@tabler/icons-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Product } from './CartProvider';
 import OneShotPlayer from './OneShotPlayer';
@@ -31,7 +31,7 @@ function getOneShots(metadata?: Record<string, string>) {
 }
 
 export default function CartDrawer() {
-    const { cart, isCartOpen, toggleCart, removeFromCart, addToCart, cartTotal } = useCart();
+    const { cart, isCartOpen, toggleCart, removeFromCart, addToCart, cartTotal, updateQuantity } = useCart();
     const [loading, setLoading] = useState(false);
     const [upsellProducts, setUpsellProducts] = useState<Product[]>([]);
     const [upsellLoading, setUpsellLoading] = useState(false);
@@ -363,18 +363,32 @@ export default function CartDrawer() {
                                                             />
                                                         </div>
 
-                                                        <div className="flex-1 min-w-0">
+                                                        <div className="flex-1 min-w-0 pr-4">
                                                             <p className="text-sm font-medium leading-snug text-foreground">
                                                                 {item.name}
                                                             </p>
-                                                            <p className="text-xs mt-0.5 text-muted">
-                                                                Digital item / Qty 1
-                                                            </p>
+                                                            {item.metadata?.type === 'PHYSICAL' ? (
+                                                                <div className="mt-2 flex items-center gap-3 bg-muted/10 rounded px-2 py-1 w-fit">
+                                                                    <button onClick={() => updateQuantity(item.id, Math.max(0, (item.quantity ?? 1) - 1))} className="text-muted hover:text-foreground transition-colors cursor-pointer">
+                                                                        {(item.quantity ?? 1) <= 1 ? <IconTrash size={12} stroke={2} /> : <IconMinus size={12} stroke={2} />}
+                                                                    </button>
+                                                                    <span className="text-xs font-medium w-4 text-center text-foreground cursor-default">{item.quantity ?? 1}</span>
+                                                                    <button onClick={() => updateQuantity(item.id, (item.quantity ?? 1) + 1)} className="text-muted hover:text-foreground transition-colors cursor-pointer">
+                                                                        <IconPlus size={12} stroke={2} />
+                                                                    </button>
+                                                                </div>
+                                                            ) : (
+                                                                <p className="text-xs mt-0.5 text-muted">
+                                                                    Digital item / Qty {item.quantity ?? 1}
+                                                                </p>
+                                                            )}
                                                         </div>
 
-                                                        <span className="text-sm font-medium flex-shrink-0 text-foreground">
-                                                            ${(item.amount || 0).toFixed(2)}
-                                                        </span>
+                                                        <div className="flex flex-col items-end gap-2 pr-2">
+                                                            <span className="text-sm font-medium flex-shrink-0 text-foreground pt-0.5">
+                                                                ${((item.amount ?? 0) * (item.quantity ?? 1)).toFixed(2)}
+                                                            </span>
+                                                        </div>
 
                                                         <button
                                                             onClick={() => removeFromCart(item.id)}

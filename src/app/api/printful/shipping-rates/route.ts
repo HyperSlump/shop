@@ -14,10 +14,27 @@ export async function POST(req: Request) {
         // We only care about physical items for Printful shipping estimation
         const physicalItems = items
             .filter((item: any) => item.metadata?.type === 'PHYSICAL')
-            .map((item: any) => ({
-                variant_id: parseInt(item.metadata?.variant_id),
-                quantity: 1, // Currently assuming quantity 1 per item added to cart
-            }));
+            .map((item: any) => {
+                // Find the selected variant object or default to the first one
+                const selectedVariant = item.variants?.find((v: any) => String(v.id) === String(item.selectedVariantId)) || item.variants?.[0];
+
+                // The shipping rates API expects the Printful Catalog variant_id, NOT the Sync variant_id
+                const variantId = selectedVariant?.catalog_variant_id
+                    || item.metadata?.variant_id
+                    || selectedVariant?.id;
+
+                console.log('>>> [SHIPPING_API] Item mapping for:', item.name);
+                console.log('>>> [SHIPPING_API] Item metadata raw variant_id:', item.metadata?.variant_id);
+                console.log('>>> [SHIPPING_API] Selected Variant ID (Sync):', selectedVariant?.id);
+                console.log('>>> [SHIPPING_API] Selected Variant Catalog ID:', selectedVariant?.catalog_variant_id);
+                console.log('>>> [SHIPPING_API] Chosen variant_id for payload:', parseInt(variantId));
+
+                return {
+                    variant_id: parseInt(variantId),
+                    quantity: 1, // Currently assuming quantity 1 per item added to cart
+                };
+            })
+            .filter((item: any) => !isNaN(item.variant_id));
 
         if (physicalItems.length === 0) {
             // No physical items, shipping is zero or not applicable
@@ -26,9 +43,12 @@ export async function POST(req: Request) {
 
         const rates = await printfulService.estimateShipping(recipient, physicalItems);
 
+        console.log('>>> [SHIPPING_API] Incoming recipient payload:', recipient);
+        console.log('>>> [SHIPPING_API] Printful returned rates:', rates);
+
         return NextResponse.json({ rates });
     } catch (error: any) {
-        console.error('Shipping rates API error:', error);
+        console.error('>>> [SHIPPING_API] Error:', error);
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

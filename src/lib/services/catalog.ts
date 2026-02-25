@@ -80,6 +80,8 @@ export async function getUnifiedProducts(): Promise<Product[]> {
                 },
                 variants: variants.map((v: any) => ({
                     id: v.id,
+                    catalog_variant_id: v.variant_id,
+                    external_id: v.external_id,
                     name: v.name,
                     retail_price: v.retail_price,
                     currency: v.currency,

@@ -10,9 +10,12 @@ export type Product = {
   image: string;
   currency: string;
   amount: number;
+  quantity?: number;
   metadata: Record<string, string>;
   variants?: Array<{
     id: number;
+    catalog_variant_id?: number;
+    external_id?: string;
     name: string;
     retail_price: string;
     currency: string;
@@ -24,6 +27,7 @@ interface CartContextType {
   cart: Product[];
   addToCart: (product: Product) => void;
   removeFromCart: (priceId: string) => void;
+  updateQuantity: (priceId: string, quantity: number) => void;
   clearCart: () => void;
   isCartOpen: boolean;
   toggleCart: () => void;
@@ -63,15 +67,38 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
 
     setCart((prev) => {
-      // For digital products, we usually only want 1 of each
       const exists = prev.find((item) => item.id === product.id);
-      if (exists) return prev;
-      return [...prev, product];
+
+      // If DIGITAL, restrict to quantity 1
+      if (exists && product.metadata?.type !== 'PHYSICAL') {
+        return prev;
+      }
+
+      // If PHYSICAL, increment quantity
+      if (exists) {
+        return prev.map(item =>
+          item.id === product.id
+            ? { ...item, quantity: (item.quantity || 1) + 1 }
+            : item
+        );
+      }
+
+      return [...prev, { ...product, quantity: product.quantity || 1 }];
     });
   };
 
   const removeFromCart = (priceId: string) => {
     setCart((prev) => prev.filter((item) => item.id !== priceId));
+  };
+
+  const updateQuantity = (priceId: string, quantity: number) => {
+    if (quantity <= 0) {
+      removeFromCart(priceId);
+      return;
+    }
+    setCart((prev) => prev.map(item =>
+      item.id === priceId ? { ...item, quantity } : item
+    ));
   };
 
   const clearCart = () => {
@@ -85,7 +112,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setIsCartOpen((prev) => !prev);
   };
 
-  const cartTotal = cart.reduce((total, item) => total + item.amount, 0);
+  const cartTotal = cart.reduce((total, item) => total + (item.amount * (item.quantity || 1)), 0);
 
   // Avoid hydration mismatch by not rendering anything cart-related until mounted? 
   // No, we should render children, but maybe not the cart state dependent UI immediately if it flickers.
@@ -97,6 +124,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         cart,
         addToCart,
         removeFromCart,
+        updateQuantity,
         clearCart,
         isCartOpen,
         toggleCart,

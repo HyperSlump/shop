@@ -5,9 +5,9 @@ export async function POST(req: Request) {
     console.log('>>> [STRIPE_API] POST RECEIVED');
     try {
         const body = await req.json();
-        const { cart, shippingAmount, recipient } = body;
+        const { cart, shippingAmount, recipient, shippingId } = body;
 
-        console.log('>>> [STRIPE_API] Payload received:', JSON.stringify({ cart, shippingAmount, recipient }, null, 2));
+        console.log('>>> [STRIPE_API] Payload received:', JSON.stringify({ cart, shippingAmount, recipient, shippingId }, null, 2));
 
         if (!cart || !Array.isArray(cart) || cart.length === 0) {
             console.error('>>> [STRIPE_API] Validation Failed: Empty or invalid cart');
@@ -28,20 +28,29 @@ export async function POST(req: Request) {
         console.log('>>> [STRIPE_API] Requesting PaymentIntent from Stripe...');
 
         let paymentIntent;
+        const itemDetailsStr = JSON.stringify(cart.map((item: any) => ({
+            id: item.id,
+            type: item.metadata?.type || 'DIGITAL',
+            v_id: item.metadata?.variant_id, // Compact key
+            qty: 1
+        })));
+
+        const metadata: any = {
+            // Keep items list short to avoid char limit
+            items: cart.slice(0, 3).map((item: any) => `${(item.name || 'Item').substring(0, 20)}`).join(', ') + (cart.length > 3 ? '...' : ''),
+            shipping_id: shippingId || 'STANDARD',
+        };
+
+        // Chunk the item details into 450-character strings to bypass Stripe's 500-character single-key limit
+        const chunks = itemDetailsStr.match(/.{1,450}/g) || [];
+        chunks.forEach((chunk, index) => {
+            metadata[`item_details_${index}`] = chunk;
+        });
+
         const intentParams: any = {
             amount: Math.round(total * 100),
             currency: 'usd',
-            metadata: {
-                // Keep items list short to avoid char limit
-                items: cart.slice(0, 3).map((item: any) => `${(item.name || 'Item').substring(0, 20)}`).join(', ') + (cart.length > 3 ? '...' : ''),
-                // Store minimal info, let success page look up the rest from catalog
-                item_details: JSON.stringify(cart.map((item: any) => ({
-                    id: item.id,
-                    type: item.metadata?.type || 'DIGITAL',
-                    v_id: item.metadata?.variant_id, // Compact key
-                    qty: 1
-                }))),
-            },
+            metadata: metadata,
         };
 
         if (recipient) {

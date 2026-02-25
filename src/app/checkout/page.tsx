@@ -5,10 +5,11 @@ import { loadStripe, type Appearance } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { useCart, type Product } from '@/components/CartProvider';
 import CheckoutForm from '@/components/CheckoutForm';
+import ShippingForm, { type ShippingAddress } from '@/components/ShippingForm';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { IconArrowLeft, IconChevronDown, IconLock, IconTruck } from '@tabler/icons-react';
+import { IconArrowLeft, IconChevronDown, IconLock, IconTruck, IconAlertTriangle, IconTrash, IconMinus, IconPlus } from '@tabler/icons-react';
 import AestheticBackground from '@/components/AestheticBackground';
 
 interface ShippingRateOption {
@@ -86,29 +87,34 @@ function stripeAppearance(isDark: boolean): Appearance {
 }
 
 export default function CheckoutPage() {
-    const { cartTotal, cart } = useCart();
+    const { cartTotal, cart, removeFromCart, updateQuantity } = useCart();
     const isDark = useTheme();
 
     const [clientSecret, setClientSecret] = useState('');
     const [paymentIntentId, setPaymentIntentId] = useState('');
     const [shippingCost, setShippingCost] = useState(0);
     const [shippingRateOptions, setShippingRateOptions] = useState<ShippingRateOption[]>([]);
+    const [selectedShippingId, setSelectedShippingId] = useState<string>('');
+    const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
+    const [checkoutAddress, setCheckoutAddress] = useState<ShippingAddress | null>(null);
     const [isCalculating, setIsCalculating] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [shippingError, setShippingError] = useState<string | null>(null);
     const [productsOpen, setProductsOpen] = useState(false);
+    const [isEditingOrder, setIsEditingOrder] = useState(false);
 
     const hasPhysicalItems = cart.some(item => item.metadata?.type === 'PHYSICAL');
     const isFreeOrder = cartTotal === 0 && cart.length > 0;
 
-    const refreshIntent = useCallback(async (currentShipping = 0, address: any = null) => {
+    const refreshIntent = useCallback(async (currentShipping = 0, address: ShippingAddress | null = null, shippingId?: string) => {
         try {
             const recipientData = address ? {
-                name: address.name,
-                address1: address.address.line1,
-                city: address.address.city,
-                state: address.address.state,
-                zip: address.address.postal_code,
-                country_code: address.address.country
+                name: `${address.firstName} ${address.lastName}`.trim(),
+                address1: address.address1,
+                city: address.city,
+                state: address.state_code,
+                zip: address.zip,
+                country_code: address.country_code
             } : null;
 
             const response = await fetch('/api/create-payment-intent', {
@@ -117,6 +123,7 @@ export default function CheckoutPage() {
                 body: JSON.stringify({
                     cart,
                     shippingAmount: currentShipping,
+                    shippingId,
                     recipient: recipientData,
                     paymentIntentId: paymentIntentId || undefined
                 }),
@@ -144,44 +151,76 @@ export default function CheckoutPage() {
         }
     }, [cart.length, clientSecret, refreshIntent, isFreeOrder]);
 
-    const handleAddressChange = async (addressValue: any) => {
+    const handleAddressChange = useCallback(async (addressValue: ShippingAddress) => {
         if (!hasPhysicalItems) return;
         setIsCalculating(true);
+        setShippingError(null);
+        setCheckoutAddress(addressValue);
+
+        // Use a timeout to simulate a smooth interaction if the API is too fast
+        const searchStartTime = Date.now();
         try {
             const res = await fetch('/api/printful/shipping-rates', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     recipient: {
-                        address1: addressValue.address.line1,
-                        city: addressValue.address.city,
-                        state_code: addressValue.address.state,
-                        country_code: addressValue.address.country,
-                        zip: addressValue.address.postal_code
+                        address1: addressValue.address1,
+                        city: addressValue.city,
+                        state_code: addressValue.state_code,
+                        country_code: addressValue.country_code,
+                        zip: addressValue.zip
                     },
                     items: cart
                 })
             });
             const data = await res.json();
+            const delay = Math.max(0, 600 - (Date.now() - searchStartTime));
+            if (delay > 0) await new Promise(r => setTimeout(r, delay));
+
             if (data.rates && data.rates.length > 0) {
                 // Sort by price ascending and store all options
                 const sorted = [...data.rates].sort(
                     (a: ShippingRateOption, b: ShippingRateOption) => parseFloat(a.rate) - parseFloat(b.rate)
                 );
                 setShippingRateOptions(sorted);
-                const cost = parseFloat(sorted[0].rate);
+
+                // Try to keep previously selected tier if it still exists (e.g. they just fixed a typo)
+                let targetRate = sorted[0];
+                if (selectedShippingId) {
+                    const match = sorted.find((r: ShippingRateOption) => r.id === selectedShippingId);
+                    if (match) targetRate = match;
+                }
+
+                setSelectedShippingId(targetRate.id);
+                const cost = parseFloat(targetRate.rate);
                 setShippingCost(cost);
-                await refreshIntent(cost, addressValue);
+                await refreshIntent(cost, addressValue, targetRate.id);
             } else {
                 setShippingRateOptions([]);
+                setSelectedShippingId('');
                 setShippingCost(0);
+                if (data.error) setShippingError(data.error);
             }
-        } catch (err) {
+        } catch (err: any) {
             console.error('Shipping calculation error:', err);
+            setShippingError(err.message || 'Failed to calculate shipping');
             setShippingRateOptions([]);
+            setSelectedShippingId('');
+            setShippingCost(0);
         } finally {
             setIsCalculating(false);
         }
+    }, [hasPhysicalItems, cart, selectedShippingId, refreshIntent]);
+
+    const handleRateSelect = async (rate: ShippingRateOption) => {
+        if (isCalculating || rate.id === selectedShippingId) return;
+        setIsCalculating(true);
+        setSelectedShippingId(rate.id);
+        const cost = parseFloat(rate.rate);
+        setShippingCost(cost);
+        await refreshIntent(cost, checkoutAddress, rate.id);
+        setIsCalculating(false);
     };
 
     const finalTotal = cartTotal + shippingCost;
@@ -208,10 +247,10 @@ export default function CheckoutPage() {
     const appearance = stripeAppearance(isDark);
 
     return (
-        <div className="min-h-screen flex flex-col bg-[#060708] text-foreground relative overflow-x-hidden">
+        <div className="min-h-screen flex flex-col bg-background text-foreground relative overflow-x-hidden">
 
             <div className="flex-1 flex flex-col lg:flex-row relative z-10">
-                <div className="w-full lg:w-[44%] drawer-surface border-b lg:border-b-0 lg:border-r border-border relative overflow-hidden">
+                <div className="w-full lg:w-[44%] drawer-surface dark:bg-[#0c0d0f] border-b lg:border-b-0 border-border relative overflow-hidden">
                     <div className="flex flex-col w-full max-w-[500px] ml-auto px-6 lg:px-12 py-8 lg:py-12">
                         <div className="flex-shrink-0 mb-6 lg:mb-8">
                             <Link href="/" className="inline-flex items-center gap-3 mb-8 group">
@@ -222,14 +261,24 @@ export default function CheckoutPage() {
                                 >
                                     hyper$lump
                                 </span>
-                                <span className="text-[9px] bg-primary/10 text-primary px-1.5 py-0.5 rounded font-semibold uppercase tracking-wider">
+                                <span className="text-[9px] bg-slate-500/10 text-slate-500 dark:text-slate-400 px-1.5 py-0.5 rounded font-semibold uppercase tracking-wider">
                                     Test
                                 </span>
                             </Link>
 
-                            <p className="font-sans text-[40px] font-semibold tracking-tight leading-none text-foreground">
-                                ${finalTotal.toFixed(2)}
-                            </p>
+                            <div className="flex items-end justify-between w-full">
+                                <p className="font-sans text-[40px] font-semibold tracking-tight leading-none text-foreground">
+                                    ${finalTotal.toFixed(2)}
+                                </p>
+                                {cart.length > 0 && (
+                                    <button
+                                        onClick={() => setIsEditingOrder(!isEditingOrder)}
+                                        className="font-sans text-xs text-muted hover:underline pb-1 cursor-pointer transition-colors hover:text-foreground"
+                                    >
+                                        {isEditingOrder ? 'Done Editing' : 'Edit Order'}
+                                    </button>
+                                )}
+                            </div>
                         </div>
 
                         <div className="flex-shrink-0 space-y-4">
@@ -243,12 +292,37 @@ export default function CheckoutPage() {
                                         )}
                                     </div>
                                     <div className="flex-1 min-w-0 flex items-start justify-between gap-3">
-                                        <div className="min-w-0">
-                                            <p className="text-sm font-medium leading-snug text-foreground">{cart[0].name}</p>
-                                            <p className="text-xs mt-0.5 text-muted">Qty 1</p>
+                                        <div className="min-w-0 flex-1">
+                                            <p className="text-sm font-medium leading-snug text-foreground truncate">{cart[0].name}</p>
+
+                                            {isEditingOrder ? (
+                                                <div className="mt-2 flex items-center gap-3">
+                                                    {cart[0].metadata?.type === 'PHYSICAL' ? (
+                                                        <div className="flex items-center gap-3 bg-muted/10 rounded px-2 py-1">
+                                                            <button onClick={() => updateQuantity(cart[0].id, Math.max(0, (cart[0]?.quantity ?? 1) - 1))} className="text-muted hover:text-foreground transition-colors">
+                                                                {(cart[0]?.quantity ?? 1) <= 1 ? <IconTrash size={12} stroke={2} /> : <IconMinus size={12} stroke={2} />}
+                                                            </button>
+                                                            <span className="text-xs font-medium w-4 text-center text-foreground">{cart[0]?.quantity ?? 1}</span>
+                                                            <button onClick={() => updateQuantity(cart[0].id, (cart[0]?.quantity ?? 1) + 1)} className="text-muted hover:text-foreground transition-colors">
+                                                                <IconPlus size={12} stroke={2} />
+                                                            </button>
+                                                        </div>
+                                                    ) : (
+                                                        <button
+                                                            onClick={() => removeFromCart(cart[0].id)}
+                                                            className="flex items-center gap-1.5 text-xs text-muted hover:text-destructive transition-colors mt-1"
+                                                        >
+                                                            <IconTrash size={12} stroke={2} />
+                                                            <span>Remove</span>
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            ) : (
+                                                <p className="text-xs mt-0.5 text-muted">Qty {cart[0]?.quantity ?? 1}</p>
+                                            )}
                                         </div>
-                                        <span className="text-sm font-medium flex-shrink-0 text-foreground">
-                                            ${(cart[0].amount || 0).toFixed(2)}
+                                        <span className="text-sm font-medium flex-shrink-0 text-foreground pt-0.5">
+                                            ${((cart[0]?.amount ?? 0) * (cart[0]?.quantity ?? 1)).toFixed(2)}
                                         </span>
                                     </div>
                                 </div>
@@ -296,12 +370,37 @@ export default function CheckoutPage() {
                                                                     )}
                                                                 </div>
                                                                 <div className="flex-1 min-w-0 flex items-start justify-between gap-3">
-                                                                    <div className="min-w-0">
-                                                                        <p className="text-sm font-medium leading-snug text-foreground">{item.name}</p>
-                                                                        <p className="text-xs mt-0.5 text-muted">Qty 1</p>
+                                                                    <div className="min-w-0 flex-1">
+                                                                        <p className="text-sm font-medium leading-snug text-foreground truncate">{item.name}</p>
+
+                                                                        {isEditingOrder ? (
+                                                                            <div className="mt-2 flex items-center gap-3">
+                                                                                {item.metadata?.type === 'PHYSICAL' ? (
+                                                                                    <div className="flex items-center gap-3 bg-muted/10 rounded px-2 py-1">
+                                                                                        <button onClick={() => updateQuantity(item.id, Math.max(0, (item.quantity ?? 1) - 1))} className="text-muted hover:text-foreground transition-colors">
+                                                                                            {(item.quantity ?? 1) <= 1 ? <IconTrash size={12} stroke={2} /> : <IconMinus size={12} stroke={2} />}
+                                                                                        </button>
+                                                                                        <span className="text-xs font-medium w-4 text-center text-foreground">{item.quantity ?? 1}</span>
+                                                                                        <button onClick={() => updateQuantity(item.id, (item.quantity ?? 1) + 1)} className="text-muted hover:text-foreground transition-colors">
+                                                                                            <IconPlus size={12} stroke={2} />
+                                                                                        </button>
+                                                                                    </div>
+                                                                                ) : (
+                                                                                    <button
+                                                                                        onClick={() => removeFromCart(item.id)}
+                                                                                        className="flex items-center gap-1.5 text-xs text-muted hover:text-destructive transition-colors mt-1"
+                                                                                    >
+                                                                                        <IconTrash size={12} stroke={2} />
+                                                                                        <span>Remove</span>
+                                                                                    </button>
+                                                                                )}
+                                                                            </div>
+                                                                        ) : (
+                                                                            <p className="text-xs mt-0.5 text-muted">Qty {item.quantity ?? 1}</p>
+                                                                        )}
                                                                     </div>
-                                                                    <span className="text-sm font-medium flex-shrink-0 text-foreground">
-                                                                        ${(item.amount || 0).toFixed(2)}
+                                                                    <span className="text-sm font-medium flex-shrink-0 text-foreground pt-0.5">
+                                                                        ${((item.amount ?? 0) * (item.quantity ?? 1)).toFixed(2)}
                                                                     </span>
                                                                 </div>
                                                             </div>
@@ -324,7 +423,7 @@ export default function CheckoutPage() {
                                 <div className="flex justify-between text-sm">
                                     <span className="text-muted">Shipping</span>
                                     {isCalculating ? (
-                                        <span className="text-primary animate-pulse text-xs uppercase tracking-widest font-mono">Calculating...</span>
+                                        <span className="text-muted text-xs italic">Calculating...</span>
                                     ) : shippingCost > 0 ? (
                                         <span className="text-foreground">${shippingCost.toFixed(2)}</span>
                                     ) : hasPhysicalItems ? (
@@ -337,49 +436,67 @@ export default function CheckoutPage() {
                                 {/* Shipping rate breakdown */}
                                 <AnimatePresence>
                                     {shippingRateOptions.length > 0 && !isCalculating && (
+                                        <div className="overflow-hidden">
+                                            <div className="space-y-3 pb-2 pt-1">
+                                                {shippingRateOptions.map((rate) => {
+                                                    const isSelected = rate.id === selectedShippingId;
+                                                    return (
+                                                        <label
+                                                            key={rate.id}
+                                                            className={`w-full flex items-center justify-between p-3 rounded-lg text-sm transition-none cursor-pointer border
+                                                                ${isSelected
+                                                                    ? 'bg-primary/5 border-primary'
+                                                                    : 'border-border/50 bg-background/40 hover:border-border hover:bg-background'
+                                                                }`}
+                                                        >
+                                                            <div className="flex items-center gap-3">
+                                                                <input
+                                                                    type="radio"
+                                                                    name="shipping_rate"
+                                                                    value={rate.id}
+                                                                    checked={isSelected}
+                                                                    onChange={() => handleRateSelect(rate)}
+                                                                    className="w-4 h-4 shrink-0 text-primary bg-background focus:ring-primary focus:ring-2 border-muted-foreground/40 accent-primary cursor-pointer transition-none"
+                                                                />
+                                                                <div className="flex flex-col">
+                                                                    <span className={`font-medium leading-none ${isSelected ? 'text-foreground' : 'text-muted-foreground'}`}>
+                                                                        {rate.name}
+                                                                    </span>
+                                                                    {(rate.min_delivery_days || rate.max_delivery_days) && (
+                                                                        <span className="text-xs text-muted mt-1 leading-none">
+                                                                            {rate.min_delivery_days && rate.max_delivery_days
+                                                                                ? `${rate.min_delivery_days}-${rate.max_delivery_days} days`
+                                                                                : `${rate.max_delivery_days || rate.min_delivery_days} days`
+                                                                            }
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                            <span className={`font-medium tabular-nums ${isSelected ? 'text-foreground' : 'text-muted-foreground'}`}>
+                                                                {parseFloat(rate.rate) === 0 ? 'Free' : `$${parseFloat(rate.rate).toFixed(2)}`}
+                                                            </span>
+                                                        </label>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    )}
+                                    {shippingError && !isCalculating && (
                                         <motion.div
                                             initial={{ height: 0, opacity: 0 }}
                                             animate={{ height: 'auto', opacity: 1 }}
-                                            exit={{ height: 0, opacity: 0 }}
-                                            transition={{ duration: 0.25, ease: 'easeInOut' }}
-                                            className="overflow-hidden"
+                                            className="overflow-hidden mt-2"
                                         >
-                                            <div className="space-y-2 pb-1">
-                                                {shippingRateOptions.map((rate, i) => (
-                                                    <div
-                                                        key={rate.id}
-                                                        className={`flex items-center justify-between py-1.5 px-2.5 rounded text-xs transition-colors
-                                                            ${i === 0
-                                                                ? 'bg-primary/8 border border-primary/15'
-                                                                : 'border border-transparent'
-                                                            }`}
-                                                    >
-                                                        <div className="flex flex-col">
-                                                            <span className={`font-medium ${i === 0 ? 'text-foreground' : 'text-muted'}`}>
-                                                                {rate.name}
-                                                                {i === 0 && <span className="text-primary ml-1.5 text-[9px] uppercase tracking-wider font-mono">selected</span>}
-                                                            </span>
-                                                            {(rate.min_delivery_days || rate.max_delivery_days) && (
-                                                                <span className="text-[10px] text-muted mt-0.5">
-                                                                    {rate.min_delivery_days && rate.max_delivery_days
-                                                                        ? `${rate.min_delivery_days}\u2013${rate.max_delivery_days} business days`
-                                                                        : rate.max_delivery_days
-                                                                            ? `Up to ${rate.max_delivery_days} business days`
-                                                                            : `From ${rate.min_delivery_days} business days`
-                                                                    }
-                                                                </span>
-                                                            )}
-                                                        </div>
-                                                        <span className={`font-medium tabular-nums ${i === 0 ? 'text-foreground' : 'text-muted'}`}>
-                                                            {parseFloat(rate.rate) === 0 ? 'Free' : `$${parseFloat(rate.rate).toFixed(2)}`}
-                                                        </span>
-                                                    </div>
-                                                ))}
+                                            <div className="bg-destructive/10 border border-destructive/20 rounded p-2 text-[10px] text-destructive flex items-start gap-1.5">
+                                                <IconAlertTriangle size={12} className="shrink-0 mt-0.5" />
+                                                <p className="leading-tight">
+                                                    <strong className="font-semibold block mb-0.5">Shipping Error:</strong>
+                                                    {shippingError}
+                                                </p>
                                             </div>
                                         </motion.div>
                                     )}
                                 </AnimatePresence>
-
                                 <div className="flex justify-between text-sm pt-4 font-semibold border-t border-border">
                                     <span className="text-foreground">Total due today</span>
                                     <span className="text-foreground">${finalTotal.toFixed(2)}</span>
@@ -397,20 +514,41 @@ export default function CheckoutPage() {
                     </div>
                 </div>
 
-                <div className="flex-1 bg-background">
+                <div
+                    className="flex-1 bg-background relative z-20"
+                    style={{
+                        boxShadow: isDark
+                            ? '-12px 0 48px -12px rgba(0,0,0,0.5)'
+                            : '-12px 0 32px -12px rgba(50,20,30,0.12)'
+                    }}
+                >
                     <div className="w-full max-w-[520px] mr-auto px-5 lg:px-12 py-8 lg:py-12">
                         {isFreeOrder ? (
                             <FreeOrderPanel cart={cart} />
                         ) : clientSecret ? (
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
-                                <Elements options={{ clientSecret, appearance }} stripe={stripePromise}>
+                                {hasPhysicalItems && (
+                                    <div className="mb-8 pb-8 border-b border-border">
+                                        <ShippingForm
+                                            onAddressSelected={handleAddressChange}
+                                            isDark={isDark}
+                                            isCalculating={isCalculating}
+                                        />
+                                    </div>
+                                )}
+                                <Elements
+                                    options={{
+                                        clientSecret,
+                                        appearance,
+                                    }}
+                                    stripe={stripePromise}
+                                >
                                     <CheckoutForm
                                         amount={finalTotal}
                                         isDark={isDark}
-                                        hasPhysicalItems={hasPhysicalItems}
-                                        allowedCountries={ALLOWED_SHIPPING_COUNTRIES}
-                                        onAddressChange={handleAddressChange}
-                                        isCalculating={isCalculating}
+                                        billingSameAsShipping={billingSameAsShipping}
+                                        setBillingSameAsShipping={setBillingSameAsShipping}
+                                        checkoutAddress={checkoutAddress}
                                     />
                                 </Elements>
                             </motion.div>

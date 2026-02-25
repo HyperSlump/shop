@@ -12,6 +12,19 @@ export async function POST(req: Request) {
         }
 
         console.log('[API] Contacting Stripe for Embedded Session...');
+        const itemDetailsStr = JSON.stringify(cart.map((item: any) => ({
+            id: item.id,
+            type: item.metadata?.type || 'DIGITAL',
+            v_id: item.metadata?.variant_id,
+            qty: 1
+        })));
+
+        const metadata: any = {};
+        const chunks = itemDetailsStr.match(/.{1,450}/g) || [];
+        chunks.forEach((chunk, index) => {
+            metadata[`item_details_${index}`] = chunk;
+        });
+
         const session = await stripe.checkout.sessions.create({
             mode: 'payment',
             line_items: cart.map((item: any) => ({
@@ -60,23 +73,9 @@ export async function POST(req: Request) {
             success_url: `${req.headers.get('origin')}/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${req.headers.get('origin')}/checkout`,
             payment_intent_data: {
-                metadata: {
-                    item_details: JSON.stringify(cart.map((item: any) => ({
-                        id: item.id,
-                        type: item.metadata?.type || 'DIGITAL',
-                        v_id: item.metadata?.variant_id,
-                        qty: 1
-                    }))),
-                }
+                metadata: metadata
             },
-            metadata: {
-                item_details: JSON.stringify(cart.map((item: any) => ({
-                    id: item.id,
-                    type: item.metadata?.type || 'DIGITAL',
-                    v_id: item.metadata?.variant_id,
-                    qty: 1
-                }))),
-            }
+            metadata: metadata
         });
 
         console.log('[API] Session created successfully:', session.id);

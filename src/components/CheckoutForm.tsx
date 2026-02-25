@@ -5,28 +5,25 @@ import {
     PaymentElement,
     LinkAuthenticationElement,
     ExpressCheckoutElement,
-    AddressElement,
     useStripe,
     useElements,
 } from '@stripe/react-stripe-js';
-import { IconLock, IconTruck } from '@tabler/icons-react';
+import { IconLock } from '@tabler/icons-react';
 
 interface CheckoutFormProps {
     amount: number;
+    billingSameAsShipping: boolean;
+    setBillingSameAsShipping: (val: boolean) => void;
+    checkoutAddress: any | null;
     isDark?: boolean;
-    hasPhysicalItems?: boolean;
-    onAddressChange?: (value: any) => void;
-    isCalculating?: boolean;
-    allowedCountries?: string[];
 }
 
 export default function CheckoutForm({
     amount,
+    billingSameAsShipping,
+    setBillingSameAsShipping,
+    checkoutAddress,
     isDark = true,
-    hasPhysicalItems = false,
-    onAddressChange,
-    isCalculating = false,
-    allowedCountries = ['US', 'CA', 'GB', 'AU']
 }: CheckoutFormProps) {
     const stripe = useStripe();
     const elements = useElements();
@@ -111,32 +108,44 @@ export default function CheckoutForm({
                 <LinkAuthenticationElement id="link-authentication-element" />
             </div>
 
-            {hasPhysicalItems && (
-                <div className="mb-8 animate-fade-in">
-                    <div className="flex items-center justify-between mb-3">
-                        <label className={`block text-sm font-medium ${labelText}`}>
-                            Shipping address
-                        </label>
-                        {isCalculating && (
-                            <span className="text-[10px] text-primary animate-pulse font-mono uppercase tracking-widest flex items-center gap-1">
-                                <IconTruck size={12} /> Updating rates...
-                            </span>
-                        )}
-                    </div>
-                    <AddressElement
-                        options={{ mode: 'shipping', allowedCountries }}
-                        onChange={(e) => {
-                            if (e.complete && onAddressChange) onAddressChange(e.value);
-                        }}
-                    />
-                </div>
-            )}
 
             <div className="mb-8">
                 <label className={`block text-sm font-medium mb-3 ${labelText}`}>
                     Payment details
                 </label>
-                <PaymentElement id="payment-element" options={{ layout: 'tabs' }} />
+                <PaymentElement
+                    id="payment-element"
+                    options={{
+                        layout: 'tabs',
+                        defaultValues: billingSameAsShipping && checkoutAddress ? {
+                            billingDetails: {
+                                name: `${checkoutAddress.firstName} ${checkoutAddress.lastName}`.trim(),
+                                address: {
+                                    line1: checkoutAddress.address1,
+                                    line2: checkoutAddress.address2 || undefined,
+                                    city: checkoutAddress.city,
+                                    state: checkoutAddress.state_code,
+                                    postal_code: checkoutAddress.zip,
+                                    country: checkoutAddress.country_code,
+                                }
+                            }
+                        } : undefined
+                    }}
+                />
+
+                <div className="mt-4 pt-4 border-t border-border/50">
+                    <label className="flex items-center gap-2.5 cursor-pointer group">
+                        <input
+                            type="checkbox"
+                            checked={billingSameAsShipping}
+                            onChange={(e) => setBillingSameAsShipping(e.target.checked)}
+                            className="w-4 h-4 shrink-0 rounded-[4px] border border-border bg-background text-primary focus:ring-primary focus:ring-offset-1 focus:ring-offset-background accent-primary cursor-pointer transition-none"
+                        />
+                        <span className={`text-sm font-medium ${labelText} group-hover:opacity-80 transition-opacity select-none`}>
+                            Billing same as shipping
+                        </span>
+                    </label>
+                </div>
             </div>
 
             {message && (

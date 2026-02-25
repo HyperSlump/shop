@@ -28,7 +28,19 @@ export async function POST(req: Request) {
 
         const customerEmail = isSession ? object.customer_details?.email : (object.receipt_email || object.metadata?.email);
         const metadata = object.metadata || {};
-        const itemsJson = metadata.item_details;
+
+        let itemsJson: string | null = '';
+        if (metadata.item_details) {
+            itemsJson = metadata.item_details;
+        } else {
+            let i = 0;
+            while (metadata[`item_details_${i}`]) {
+                itemsJson += metadata[`item_details_${i}`];
+                i++;
+            }
+        }
+
+        itemsJson = itemsJson || null;
 
         let items: any[] = [];
         if (itemsJson) {
@@ -76,6 +88,7 @@ export async function POST(req: Request) {
         if (physicalItems.length > 0 && shipping) {
             try {
                 const orderData = {
+                    shipping: metadata.shipping_id || 'STANDARD',
                     recipient: {
                         name: shipping.name,
                         address1: shipping.address.line1,

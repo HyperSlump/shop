@@ -12,6 +12,19 @@ export default async function SuccessPage({
     const { session_id, payment_intent } = await searchParams;
     const orderId = session_id || payment_intent;
 
+    const getChunkedMetadata = (metadata: any, keyPrefix: string) => {
+        if (!metadata) return null;
+        if (metadata[keyPrefix]) return metadata[keyPrefix]; // legacy single key
+
+        let result = '';
+        let i = 0;
+        while (metadata[`${keyPrefix}_${i}`]) {
+            result += metadata[`${keyPrefix}_${i}`];
+            i++;
+        }
+        return result || null;
+    };
+
     if (!orderId) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-transparent text-foreground font-mono">
@@ -37,7 +50,7 @@ export default async function SuccessPage({
             const pi = await stripe.paymentIntents.retrieve(payment_intent);
             session = pi;
 
-            const itemsJson = pi.metadata?.item_details;
+            const itemsJson = getChunkedMetadata(pi.metadata, 'item_details');
             if (itemsJson) {
                 const parsedItems = JSON.parse(itemsJson);
                 lineItems = parsedItems.map((item: any) => ({
@@ -67,7 +80,7 @@ export default async function SuccessPage({
     const physicalItems = [];
 
     // Try to get items from metadata first (richer data including images and types)
-    const metaJson = session?.metadata?.item_details;
+    const metaJson = getChunkedMetadata(session?.metadata, 'item_details');
     if (metaJson) {
         try {
             const parsed = JSON.parse(metaJson);
