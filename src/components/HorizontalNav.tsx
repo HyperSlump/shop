@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useCart } from './CartProvider';
 import ThemeToggle from './ThemeToggle';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { IconShoppingCart } from '@tabler/icons-react';
 
@@ -23,8 +23,9 @@ export default function HorizontalNav() {
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
-    const { toggleCart, cart } = useCart();
+    const { toggleCart, cart, hasVisitedCheckout } = useCart();
     const pathname = usePathname();
+    const router = useRouter();
     const isHome = pathname === '/';
 
     useEffect(() => {
@@ -87,7 +88,13 @@ export default function HorizontalNav() {
                         </div>
 
                         <button
-                            onClick={toggleCart}
+                            onClick={() => {
+                                if (hasVisitedCheckout && pathname !== '/checkout') {
+                                    router.push('/checkout');
+                                } else {
+                                    toggleCart();
+                                }
+                            }}
                             className="hidden lg:flex p-2.5 hover:text-primary transition-colors relative group"
                         >
                             <IconShoppingCart size={22} stroke={2} className="group-hover:scale-110 transition-transform" />
@@ -106,7 +113,13 @@ export default function HorizontalNav() {
                                     animate={{ scale: 1, opacity: 1 }}
                                     exit={{ scale: 0, opacity: 0 }}
                                     transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-                                    onClick={toggleCart}
+                                    onClick={() => {
+                                        if (hasVisitedCheckout && pathname !== '/checkout') {
+                                            router.push('/checkout');
+                                        } else {
+                                            toggleCart();
+                                        }
+                                    }}
                                     className="lg:hidden p-2 hover:text-primary transition-colors relative flex items-center justify-center"
                                 >
                                     <IconShoppingCart size={24} stroke={2} />

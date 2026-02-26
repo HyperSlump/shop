@@ -1,10 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
     PaymentElement,
     LinkAuthenticationElement,
     ExpressCheckoutElement,
+    AddressElement,
     useStripe,
     useElements,
 } from '@stripe/react-stripe-js';
@@ -134,7 +136,7 @@ export default function CheckoutForm({
                 />
 
                 <div className="mt-4 pt-4 border-t border-border/50">
-                    <label className="flex items-center gap-2.5 cursor-pointer group">
+                    <label className="flex items-center gap-2.5 cursor-pointer group mb-4">
                         <input
                             type="checkbox"
                             checked={billingSameAsShipping}
@@ -145,6 +147,38 @@ export default function CheckoutForm({
                             Billing same as shipping
                         </span>
                     </label>
+
+                    <AnimatePresence>
+                        {!billingSameAsShipping && (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                className="mt-6 pt-6 pb-2 border-t border-border/40 overflow-hidden"
+                            >
+                                <label className={`block text-sm font-medium mb-3 ${labelText}`}>
+                                    Billing address
+                                </label>
+                                <AddressElement
+                                    options={{
+                                        mode: 'billing',
+                                        defaultValues: checkoutAddress ? {
+                                            name: `${checkoutAddress.firstName} ${checkoutAddress.lastName}`.trim(),
+                                            address: {
+                                                line1: checkoutAddress.address1,
+                                                line2: checkoutAddress.address2 || '',
+                                                city: checkoutAddress.city,
+                                                state: checkoutAddress.state_code,
+                                                postal_code: checkoutAddress.zip,
+                                                country: checkoutAddress.country_code,
+                                            }
+                                        } : undefined
+                                    }}
+                                />
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
             </div>
 

@@ -32,6 +32,8 @@ interface CartContextType {
   isCartOpen: boolean;
   toggleCart: () => void;
   cartTotal: number;
+  hasVisitedCheckout: boolean;
+  setHasVisitedCheckout: (val: boolean) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -39,6 +41,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<Product[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [hasVisitedCheckout, setHasVisitedCheckout] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
   // Prevent hydration errors by only rendering after mount
@@ -52,13 +55,34 @@ export function CartProvider({ children }: { children: ReactNode }) {
         console.error('Failed to parse cart', e);
       }
     }
+
+    const savedCheckout = localStorage.getItem('hyperslump-checkout-visited');
+    if (savedCheckout === 'true') {
+      setHasVisitedCheckout(true);
+    }
   }, []);
 
   useEffect(() => {
     if (isMounted) {
       localStorage.setItem('hyperslump-cart', JSON.stringify(cart));
+
+      // If cart becomes empty, reset checkout visited status
+      if (cart.length === 0 && hasVisitedCheckout) {
+        setHasVisitedCheckout(false);
+        localStorage.removeItem('hyperslump-checkout-visited');
+      }
     }
-  }, [cart, isMounted]);
+  }, [cart, isMounted, hasVisitedCheckout]);
+
+  useEffect(() => {
+    if (isMounted) {
+      if (hasVisitedCheckout) {
+        localStorage.setItem('hyperslump-checkout-visited', 'true');
+      } else {
+        localStorage.removeItem('hyperslump-checkout-visited');
+      }
+    }
+  }, [hasVisitedCheckout, isMounted]);
 
   const addToCart = (product: Product) => {
     // Only open the cart if it's the first item being added
@@ -78,7 +102,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       if (exists) {
         return prev.map(item =>
           item.id === product.id
-            ? { ...item, quantity: (item.quantity || 1) + 1 }
+            ? { ...item, quantity: Math.min(10, (item.quantity || 1) + 1) }
             : item
         );
       }
@@ -97,14 +121,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
       return;
     }
     setCart((prev) => prev.map(item =>
-      item.id === priceId ? { ...item, quantity } : item
+      item.id === priceId
+        ? { ...item, quantity: item.metadata?.type === 'PHYSICAL' ? Math.min(10, quantity) : 1 }
+        : item
     ));
   };
 
   const clearCart = () => {
     setCart([]);
+    setHasVisitedCheckout(false);
     if (typeof window !== 'undefined') {
       localStorage.removeItem('hyperslump-cart');
+      localStorage.removeItem('hyperslump-checkout-visited');
     }
   };
 
@@ -129,6 +157,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         isCartOpen,
         toggleCart,
         cartTotal,
+        hasVisitedCheckout,
+        setHasVisitedCheckout,
       }}
     >
       {children}

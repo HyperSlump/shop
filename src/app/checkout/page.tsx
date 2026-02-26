@@ -87,8 +87,12 @@ function stripeAppearance(isDark: boolean): Appearance {
 }
 
 export default function CheckoutPage() {
-    const { cartTotal, cart, removeFromCart, updateQuantity } = useCart();
+    const { cartTotal, cart, removeFromCart, updateQuantity, setHasVisitedCheckout } = useCart();
     const isDark = useTheme();
+
+    useEffect(() => {
+        setHasVisitedCheckout(true);
+    }, [setHasVisitedCheckout]);
 
     const [clientSecret, setClientSecret] = useState('');
     const [paymentIntentId, setPaymentIntentId] = useState('');
@@ -153,9 +157,19 @@ export default function CheckoutPage() {
 
     const handleAddressChange = useCallback(async (addressValue: ShippingAddress) => {
         if (!hasPhysicalItems) return;
+        setCheckoutAddress(addressValue);
+
+        // Clear rates if address is incomplete
+        if (!addressValue.address1 || !addressValue.city || !addressValue.country_code || !addressValue.zip) {
+            setShippingRateOptions([]);
+            setSelectedShippingId('');
+            setShippingCost(0);
+            setShippingError(null);
+            return;
+        }
+
         setIsCalculating(true);
         setShippingError(null);
-        setCheckoutAddress(addressValue);
 
         // Use a timeout to simulate a smooth interaction if the API is too fast
         const searchStartTime = Date.now();
@@ -179,23 +193,19 @@ export default function CheckoutPage() {
             if (delay > 0) await new Promise(r => setTimeout(r, delay));
 
             if (data.rates && data.rates.length > 0) {
-                // Sort by price ascending and store all options
+                // Sort by price ascending and auto-select cheapest
                 const sorted = [...data.rates].sort(
                     (a: ShippingRateOption, b: ShippingRateOption) => parseFloat(a.rate) - parseFloat(b.rate)
                 );
-                setShippingRateOptions(sorted);
 
-                // Try to keep previously selected tier if it still exists (e.g. they just fixed a typo)
-                let targetRate = sorted[0];
-                if (selectedShippingId) {
-                    const match = sorted.find((r: ShippingRateOption) => r.id === selectedShippingId);
-                    if (match) targetRate = match;
-                }
+                // Override name for UI simplicity
+                const cheapest = { ...sorted[0], name: 'Standard Shipping' };
+                setShippingRateOptions([cheapest]);
+                setSelectedShippingId(cheapest.id);
 
-                setSelectedShippingId(targetRate.id);
-                const cost = parseFloat(targetRate.rate);
+                const cost = parseFloat(cheapest.rate);
                 setShippingCost(cost);
-                await refreshIntent(cost, addressValue, targetRate.id);
+                await refreshIntent(cost, addressValue, cheapest.id);
             } else {
                 setShippingRateOptions([]);
                 setSelectedShippingId('');
@@ -211,7 +221,7 @@ export default function CheckoutPage() {
         } finally {
             setIsCalculating(false);
         }
-    }, [hasPhysicalItems, cart, selectedShippingId, refreshIntent]);
+    }, [hasPhysicalItems, cart, refreshIntent]);
 
     const handleRateSelect = async (rate: ShippingRateOption) => {
         if (isCalculating || rate.id === selectedShippingId) return;
@@ -303,7 +313,11 @@ export default function CheckoutPage() {
                                                                 {(cart[0]?.quantity ?? 1) <= 1 ? <IconTrash size={12} stroke={2} /> : <IconMinus size={12} stroke={2} />}
                                                             </button>
                                                             <span className="text-xs font-medium w-4 text-center text-foreground">{cart[0]?.quantity ?? 1}</span>
-                                                            <button onClick={() => updateQuantity(cart[0].id, (cart[0]?.quantity ?? 1) + 1)} className="text-muted hover:text-foreground transition-colors">
+                                                            <button
+                                                                onClick={() => updateQuantity(cart[0].id, (cart[0]?.quantity ?? 1) + 1)}
+                                                                disabled={(cart[0]?.quantity ?? 1) >= 10}
+                                                                className={`text-muted transition-colors ${(cart[0]?.quantity ?? 1) >= 10 ? 'opacity-20 cursor-not-allowed' : 'hover:text-foreground'}`}
+                                                            >
                                                                 <IconPlus size={12} stroke={2} />
                                                             </button>
                                                         </div>
@@ -381,7 +395,11 @@ export default function CheckoutPage() {
                                                                                             {(item.quantity ?? 1) <= 1 ? <IconTrash size={12} stroke={2} /> : <IconMinus size={12} stroke={2} />}
                                                                                         </button>
                                                                                         <span className="text-xs font-medium w-4 text-center text-foreground">{item.quantity ?? 1}</span>
-                                                                                        <button onClick={() => updateQuantity(item.id, (item.quantity ?? 1) + 1)} className="text-muted hover:text-foreground transition-colors">
+                                                                                        <button
+                                                                                            onClick={() => updateQuantity(item.id, (item.quantity ?? 1) + 1)}
+                                                                                            disabled={(item.quantity ?? 1) >= 10}
+                                                                                            className={`text-muted transition-colors ${(item.quantity ?? 1) >= 10 ? 'opacity-20 cursor-not-allowed' : 'hover:text-foreground'}`}
+                                                                                        >
                                                                                             <IconPlus size={12} stroke={2} />
                                                                                         </button>
                                                                                     </div>
@@ -420,83 +438,20 @@ export default function CheckoutPage() {
                                     <span className="text-muted">Subtotal</span>
                                     <span className="text-foreground">${cartTotal.toFixed(2)}</span>
                                 </div>
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-muted">Shipping</span>
-                                    {isCalculating ? (
-                                        <span className="text-muted text-xs italic">Calculating...</span>
-                                    ) : shippingCost > 0 ? (
-                                        <span className="text-foreground">${shippingCost.toFixed(2)}</span>
-                                    ) : hasPhysicalItems ? (
-                                        <span className="text-muted text-xs italic">Enter address</span>
-                                    ) : (
-                                        <span className="text-foreground">$0.00</span>
-                                    )}
-                                </div>
-
-                                {/* Shipping rate breakdown */}
-                                <AnimatePresence>
-                                    {shippingRateOptions.length > 0 && !isCalculating && (
-                                        <div className="overflow-hidden">
-                                            <div className="space-y-3 pb-2 pt-1">
-                                                {shippingRateOptions.map((rate) => {
-                                                    const isSelected = rate.id === selectedShippingId;
-                                                    return (
-                                                        <label
-                                                            key={rate.id}
-                                                            className={`w-full flex items-center justify-between p-3 rounded-lg text-sm transition-none cursor-pointer border
-                                                                ${isSelected
-                                                                    ? 'bg-primary/5 border-primary'
-                                                                    : 'border-border/50 bg-background/40 hover:border-border hover:bg-background'
-                                                                }`}
-                                                        >
-                                                            <div className="flex items-center gap-3">
-                                                                <input
-                                                                    type="radio"
-                                                                    name="shipping_rate"
-                                                                    value={rate.id}
-                                                                    checked={isSelected}
-                                                                    onChange={() => handleRateSelect(rate)}
-                                                                    className="w-4 h-4 shrink-0 text-primary bg-background focus:ring-primary focus:ring-2 border-muted-foreground/40 accent-primary cursor-pointer transition-none"
-                                                                />
-                                                                <div className="flex flex-col">
-                                                                    <span className={`font-medium leading-none ${isSelected ? 'text-foreground' : 'text-muted-foreground'}`}>
-                                                                        {rate.name}
-                                                                    </span>
-                                                                    {(rate.min_delivery_days || rate.max_delivery_days) && (
-                                                                        <span className="text-xs text-muted mt-1 leading-none">
-                                                                            {rate.min_delivery_days && rate.max_delivery_days
-                                                                                ? `${rate.min_delivery_days}-${rate.max_delivery_days} days`
-                                                                                : `${rate.max_delivery_days || rate.min_delivery_days} days`
-                                                                            }
-                                                                        </span>
-                                                                    )}
-                                                                </div>
-                                                            </div>
-                                                            <span className={`font-medium tabular-nums ${isSelected ? 'text-foreground' : 'text-muted-foreground'}`}>
-                                                                {parseFloat(rate.rate) === 0 ? 'Free' : `$${parseFloat(rate.rate).toFixed(2)}`}
-                                                            </span>
-                                                        </label>
-                                                    );
-                                                })}
-                                            </div>
-                                        </div>
-                                    )}
-                                    {shippingError && !isCalculating && (
-                                        <motion.div
-                                            initial={{ height: 0, opacity: 0 }}
-                                            animate={{ height: 'auto', opacity: 1 }}
-                                            className="overflow-hidden mt-2"
-                                        >
-                                            <div className="bg-destructive/10 border border-destructive/20 rounded p-2 text-[10px] text-destructive flex items-start gap-1.5">
-                                                <IconAlertTriangle size={12} className="shrink-0 mt-0.5" />
-                                                <p className="leading-tight">
-                                                    <strong className="font-semibold block mb-0.5">Shipping Error:</strong>
-                                                    {shippingError}
-                                                </p>
-                                            </div>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
+                                {hasPhysicalItems && (
+                                    <div className="flex justify-between text-sm">
+                                        <span className="text-muted">
+                                            {shippingCost > 0 ? 'Standard Shipping' : 'Shipping'}
+                                        </span>
+                                        {isCalculating ? (
+                                            <span className="text-muted text-xs italic">--</span>
+                                        ) : shippingCost > 0 ? (
+                                            <span className="text-foreground">${shippingCost.toFixed(2)}</span>
+                                        ) : (
+                                            <span className="text-muted text-xs italic">--</span>
+                                        )}
+                                    </div>
+                                )}
                                 <div className="flex justify-between text-sm pt-4 font-semibold border-t border-border">
                                     <span className="text-foreground">Total due today</span>
                                     <span className="text-foreground">${finalTotal.toFixed(2)}</span>

@@ -373,7 +373,11 @@ export default function CartDrawer() {
                                                                         {(item.quantity ?? 1) <= 1 ? <IconTrash size={12} stroke={2} /> : <IconMinus size={12} stroke={2} />}
                                                                     </button>
                                                                     <span className="text-xs font-medium w-4 text-center text-foreground cursor-default">{item.quantity ?? 1}</span>
-                                                                    <button onClick={() => updateQuantity(item.id, (item.quantity ?? 1) + 1)} className="text-muted hover:text-foreground transition-colors cursor-pointer">
+                                                                    <button
+                                                                        onClick={() => updateQuantity(item.id, (item.quantity ?? 1) + 1)}
+                                                                        disabled={(item.quantity ?? 1) >= 10}
+                                                                        className={`text-muted transition-colors cursor-pointer ${(item.quantity ?? 1) >= 10 ? 'opacity-20 cursor-not-allowed' : 'hover:text-foreground'}`}
+                                                                    >
                                                                         <IconPlus size={12} stroke={2} />
                                                                     </button>
                                                                 </div>
@@ -418,10 +422,12 @@ export default function CartDrawer() {
                                         <span className="text-muted">Subtotal</span>
                                         <span className="text-foreground">${(cartTotal || 0).toFixed(2)}</span>
                                     </div>
-                                    <div className="flex justify-between text-sm">
-                                        <span className="text-muted">Shipping</span>
-                                        <span className="text-muted">Calculated at checkout</span>
-                                    </div>
+                                    {cart.some(item => item.metadata?.type === 'PHYSICAL') && (
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-muted">Shipping</span>
+                                            <span className="text-muted">Calculated at checkout</span>
+                                        </div>
+                                    )}
                                     <div className="flex justify-between text-base font-semibold pt-4 border-t border-border/70">
                                         <span className="text-foreground">Total</span>
                                         <span className="text-foreground">${(cartTotal || 0).toFixed(2)}</span>
