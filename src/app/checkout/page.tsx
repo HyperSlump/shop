@@ -97,6 +97,7 @@ export default function CheckoutPage() {
     const [clientSecret, setClientSecret] = useState('');
     const [paymentIntentId, setPaymentIntentId] = useState('');
     const [shippingCost, setShippingCost] = useState(0);
+    const [taxCost, setTaxCost] = useState(0);
     const [shippingRateOptions, setShippingRateOptions] = useState<ShippingRateOption[]>([]);
     const [selectedShippingId, setSelectedShippingId] = useState<string>('');
     const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
@@ -142,6 +143,8 @@ export default function CheckoutPage() {
             if (data.clientSecret) {
                 setClientSecret(data.clientSecret);
                 setPaymentIntentId(data.id);
+                // Stripe returns amounts in cents
+                setTaxCost((data.amount_tax || 0) / 100);
             }
         } catch (err: any) {
             console.error('Intent error:', err);
@@ -164,6 +167,7 @@ export default function CheckoutPage() {
             setShippingRateOptions([]);
             setSelectedShippingId('');
             setShippingCost(0);
+            setTaxCost(0);
             setShippingError(null);
             return;
         }
@@ -205,11 +209,13 @@ export default function CheckoutPage() {
 
                 const cost = parseFloat(cheapest.rate);
                 setShippingCost(cost);
+                if (typeof data.tax === 'number') setTaxCost(data.tax);
                 await refreshIntent(cost, addressValue, cheapest.id);
             } else {
                 setShippingRateOptions([]);
                 setSelectedShippingId('');
                 setShippingCost(0);
+                setTaxCost(0);
                 if (data.error) setShippingError(data.error);
             }
         } catch (err: any) {
@@ -218,6 +224,7 @@ export default function CheckoutPage() {
             setShippingRateOptions([]);
             setSelectedShippingId('');
             setShippingCost(0);
+            setTaxCost(0);
         } finally {
             setIsCalculating(false);
         }
@@ -233,7 +240,7 @@ export default function CheckoutPage() {
         setIsCalculating(false);
     };
 
-    const finalTotal = cartTotal + shippingCost;
+    const finalTotal = cartTotal + shippingCost + taxCost;
 
     if (cart.length === 0) {
         return (
@@ -452,6 +459,16 @@ export default function CheckoutPage() {
                                         )}
                                     </div>
                                 )}
+                                <div className="flex justify-between text-sm">
+                                    <span className="text-muted">Tax</span>
+                                    {isCalculating ? (
+                                        <span className="text-muted text-xs italic">--</span>
+                                    ) : taxCost > 0 ? (
+                                        <span className="text-foreground">${taxCost.toFixed(2)}</span>
+                                    ) : (
+                                        <span className="text-muted text-xs italic">$0.00</span>
+                                    )}
+                                </div>
                                 <div className="flex justify-between text-sm pt-4 font-semibold border-t border-border">
                                     <span className="text-foreground">Total due today</span>
                                     <span className="text-foreground">${finalTotal.toFixed(2)}</span>

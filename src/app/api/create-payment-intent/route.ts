@@ -81,7 +81,9 @@ export async function POST(req: Request) {
         console.log('>>> [STRIPE_API] PaymentIntent Ready:', paymentIntent.id);
         return NextResponse.json({
             clientSecret: paymentIntent.client_secret,
-            id: paymentIntent.id
+            id: paymentIntent.id,
+            amount_tax: (paymentIntent as any).total_details?.amount_tax || 0,
+            amount_shipping: (paymentIntent as any).total_details?.amount_shipping || 0,
         });
     } catch (error: any) {
         console.error('>>> [STRIPE_API] ERROR CAUGHT:', error);

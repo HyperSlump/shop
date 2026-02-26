@@ -118,7 +118,6 @@ class PrintfulService {
     async estimateShipping(recipient: any, items: any[]) {
         if (!PRINTFUL_API_KEY) {
             console.warn('PRINTFUL_API_KEY is not defined. Using mock shipping rates.');
-            // Pulled from actual Printful CSV for "Shirts" category
             const isIntl = recipient?.country_code && recipient.country_code !== 'US';
             const baseRateCost = isIntl ? 11.99 : 4.75;
             const additionalCost = isIntl ? 6.00 : 2.20;
@@ -132,24 +131,12 @@ class PrintfulService {
                     name: 'Economy',
                     rate: baseRate.toFixed(2),
                     currency: 'USD',
-                    min_delivery_days: 5,
-                    max_delivery_days: 8,
                 },
                 {
                     id: 'standard',
                     name: 'Standard',
                     rate: (baseRate + (isIntl ? 3.00 : 2.25)).toFixed(2),
                     currency: 'USD',
-                    min_delivery_days: 3,
-                    max_delivery_days: 5,
-                },
-                {
-                    id: 'express',
-                    name: 'Express',
-                    rate: (baseRate + (isIntl ? 15.00 : 12.00)).toFixed(2),
-                    currency: 'USD',
-                    min_delivery_days: 1,
-                    max_delivery_days: 3,
                 },
             ] as PrintfulShippingRate[];
         }
@@ -162,7 +149,6 @@ class PrintfulService {
             });
 
             if (!response.ok) {
-                // Return a clear error format
                 const errData = await response.json().catch(() => ({}));
                 throw new Error(`Printful API error: ${response.status} - ${errData.error?.message || response.statusText}`);
             }
@@ -171,7 +157,51 @@ class PrintfulService {
             return data.result as PrintfulShippingRate[];
         } catch (error: any) {
             console.error('Failed to estimate shipping rates:', error.message);
-            throw error; // Re-throw to be caught by the API route
+            throw error;
+        }
+    }
+
+    /**
+     * Estimate full costs (shipping + tax) for a potential order.
+     */
+    async estimateCosts(recipient: any, items: any[]) {
+        if (!PRINTFUL_API_KEY) {
+            console.warn('PRINTFUL_API_KEY is not defined. Using mock tax/shipping costs.');
+            // Mock 7.5% tax for US recipients for demonstration
+            const isUS = recipient?.country_code === 'US';
+            const subtotal = items.reduce((acc: number, item: any) => acc + (parseFloat(item.amount || '0') * (item.quantity || 1)), 0);
+            const estimatedTax = isUS ? subtotal * 0.075 : 0;
+
+            return {
+                costs: {
+                    shipping: "4.75",
+                    tax: estimatedTax.toFixed(2),
+                    vat: "0.00",
+                    total: (subtotal + 4.75 + estimatedTax).toFixed(2)
+                },
+                shipping_rates: [
+                    { id: 'standard', name: 'Standard Shipping', rate: '4.75', currency: 'USD' }
+                ]
+            };
+        }
+
+        try {
+            const response = await fetch(`${PRINTFUL_API_URL}/orders/estimate-costs`, {
+                method: 'POST',
+                headers: this.headers,
+                body: JSON.stringify({ recipient, items }),
+            });
+
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(`Printful API error: ${response.status} - ${errData.error?.message || response.statusText}`);
+            }
+
+            const data = await response.json();
+            return data.result;
+        } catch (error: any) {
+            console.error('Failed to estimate costs:', error.message);
+            throw error;
         }
     }
 

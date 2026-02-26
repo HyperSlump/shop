@@ -34,6 +34,10 @@ interface CartContextType {
   cartTotal: number;
   hasVisitedCheckout: boolean;
   setHasVisitedCheckout: (val: boolean) => void;
+  locationEstimate: { country: string; region: string } | null;
+  estimatedShipping: number | null;
+  estimatedTax: number | null;
+  isEstimatingShipping: boolean;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -42,6 +46,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<Product[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [hasVisitedCheckout, setHasVisitedCheckout] = useState(false);
+  const [locationEstimate, setLocationEstimate] = useState<{ country: string; region: string } | null>(null);
+  const [estimatedShipping, setEstimatedShipping] = useState<number | null>(null);
+  const [estimatedTax, setEstimatedTax] = useState<number | null>(null);
+  const [isEstimatingShipping, setIsEstimatingShipping] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
   // Prevent hydration errors by only rendering after mount
@@ -60,19 +68,81 @@ export function CartProvider({ children }: { children: ReactNode }) {
     if (savedCheckout === 'true') {
       setHasVisitedCheckout(true);
     }
+
+    // Fetch geolocation
+    const fetchGeo = async () => {
+      try {
+        const res = await fetch('/api/geo');
+        if (res.ok) {
+          const data = await res.json();
+          setLocationEstimate(data);
+        }
+      } catch (e) {
+        console.error('Failed to fetch geo', e);
+      }
+    };
+    fetchGeo();
   }, []);
 
   useEffect(() => {
     if (isMounted) {
       localStorage.setItem('hyperslump-cart', JSON.stringify(cart));
 
-      // If cart becomes empty, reset checkout visited status
-      if (cart.length === 0 && hasVisitedCheckout) {
-        setHasVisitedCheckout(false);
-        localStorage.removeItem('hyperslump-checkout-visited');
+      // If cart becomes empty, reset checkout visited status and shipping
+      if (cart.length === 0) {
+        setEstimatedShipping(null);
+        setEstimatedTax(null);
+        if (hasVisitedCheckout) {
+          setHasVisitedCheckout(false);
+          localStorage.removeItem('hyperslump-checkout-visited');
+        }
       }
     }
   }, [cart, isMounted, hasVisitedCheckout]);
+
+  // Handle estimated shipping
+  useEffect(() => {
+    const physicalItems = cart.filter(item => item.metadata?.type === 'PHYSICAL');
+    if (!isMounted || physicalItems.length === 0 || !locationEstimate) {
+      setEstimatedShipping(null);
+      setEstimatedTax(null);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setIsEstimatingShipping(true);
+      try {
+        const res = await fetch('/api/printful/shipping-rates', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            recipient: {
+              country_code: locationEstimate.country,
+              state_code: locationEstimate.region,
+            },
+            items: cart
+          })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.rates && data.rates.length > 0) {
+            const sorted = [...data.rates].sort((a, b) => parseFloat(a.rate) - parseFloat(b.rate));
+            setEstimatedShipping(parseFloat(sorted[0].rate));
+            if (typeof data.tax === 'number') {
+              setEstimatedTax(data.tax);
+            }
+          }
+        }
+      } catch (e) {
+        console.error('Failed to estimate shipping', e);
+      } finally {
+        setIsEstimatingShipping(false);
+      }
+    }, 1000); // Debounce to avoid too many requests
+
+    return () => clearTimeout(timer);
+  }, [cart, locationEstimate, isMounted]);
 
   useEffect(() => {
     if (isMounted) {
@@ -159,6 +229,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
         cartTotal,
         hasVisitedCheckout,
         setHasVisitedCheckout,
+        locationEstimate,
+        estimatedShipping,
+        estimatedTax,
+        isEstimatingShipping,
       }}
     >
       {children}

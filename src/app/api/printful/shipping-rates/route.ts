@@ -41,12 +41,18 @@ export async function POST(req: Request) {
             return NextResponse.json({ rates: [] });
         }
 
-        const rates = await printfulService.estimateShipping(recipient, physicalItems);
+        const estimate = await printfulService.estimateCosts(recipient, physicalItems);
 
         console.log('>>> [SHIPPING_API] Incoming recipient payload:', recipient);
-        console.log('>>> [SHIPPING_API] Printful returned rates:', rates);
+        console.log('>>> [SHIPPING_API] Printful estimate result:', estimate);
 
-        return NextResponse.json({ rates });
+        // Printful returns tax and vat as strings. We want to return them as numbers.
+        const taxAmount = (parseFloat(estimate.costs?.tax || '0') + parseFloat(estimate.costs?.vat || '0'));
+
+        return NextResponse.json({
+            rates: estimate.shipping_rates || [],
+            tax: taxAmount
+        });
     } catch (error: any) {
         console.error('>>> [SHIPPING_API] Error:', error);
         return NextResponse.json({ error: error.message }, { status: 500 });

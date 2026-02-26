@@ -31,7 +31,7 @@ function getOneShots(metadata?: Record<string, string>) {
 }
 
 export default function CartDrawer() {
-    const { cart, isCartOpen, toggleCart, removeFromCart, addToCart, cartTotal, updateQuantity } = useCart();
+    const { cart, isCartOpen, toggleCart, removeFromCart, addToCart, cartTotal, updateQuantity, locationEstimate, estimatedShipping, estimatedTax, isEstimatingShipping } = useCart();
     const [loading, setLoading] = useState(false);
     const [upsellProducts, setUpsellProducts] = useState<Product[]>([]);
     const [upsellLoading, setUpsellLoading] = useState(false);
@@ -423,14 +423,37 @@ export default function CartDrawer() {
                                         <span className="text-foreground">${(cartTotal || 0).toFixed(2)}</span>
                                     </div>
                                     {cart.some(item => item.metadata?.type === 'PHYSICAL') && (
-                                        <div className="flex justify-between text-sm">
-                                            <span className="text-muted">Shipping</span>
-                                            <span className="text-muted">Calculated at checkout</span>
-                                        </div>
+                                        <>
+                                            <div className="flex justify-between text-sm">
+                                                <div className="flex flex-col">
+                                                    <span className="text-muted">Shipping (Est.)</span>
+                                                    {locationEstimate && (
+                                                        <span className="text-[9px] font-mono uppercase tracking-wider text-muted/40">
+                                                            to {locationEstimate.region || locationEstimate.country}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                {isEstimatingShipping ? (
+                                                    <span className="text-muted text-[10px] italic animate-pulse">Calculating...</span>
+                                                ) : estimatedShipping !== null ? (
+                                                    <span className="text-foreground">${estimatedShipping.toFixed(2)}</span>
+                                                ) : (
+                                                    <span className="text-muted text-[10px] italic">Calculated at checkout</span>
+                                                )}
+                                            </div>
+                                            {(estimatedTax !== null && estimatedTax > 0) && (
+                                                <div className="flex justify-between text-sm">
+                                                    <span className="text-muted">Tax (Est.)</span>
+                                                    <span className="text-foreground">${estimatedTax.toFixed(2)}</span>
+                                                </div>
+                                            )}
+                                        </>
                                     )}
                                     <div className="flex justify-between text-base font-semibold pt-4 border-t border-border/70">
-                                        <span className="text-foreground">Total</span>
-                                        <span className="text-foreground">${(cartTotal || 0).toFixed(2)}</span>
+                                        <span className="text-foreground">Total (Est.)</span>
+                                        <span className="text-foreground">
+                                            ${((cartTotal || 0) + (estimatedShipping || 0) + (estimatedTax || 0)).toFixed(2)}
+                                        </span>
                                     </div>
                                 </div>
 
