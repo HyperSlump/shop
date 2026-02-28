@@ -14,11 +14,31 @@ export async function POST(req: Request) {
             return new NextResponse('INVALID_CART_DATA', { status: 400 });
         }
 
-        // Always calculate total on the server to prevent price tampering
-        const productsTotal = cart.reduce((sum: number, item: any) => sum + ((item.amount || 0) * (item.quantity || 1)), 0);
-        const total = productsTotal + (shippingAmount || 0) + (taxAmount || 0);
+        const normalizeLineQuantity = (item: any): number => {
+            const parsedQuantity = Number(item.quantity ?? 1);
+            const safeQuantity = Number.isFinite(parsedQuantity) ? parsedQuantity : 1;
+            if (item.metadata?.type !== 'PHYSICAL') return 1;
+            return Math.max(0, Math.min(10, safeQuantity));
+        };
 
-        console.log('>>> [STRIPE_API] Calculated Total:', total, `(Products: ${productsTotal}, Shipping: ${shippingAmount || 0}, Tax: ${taxAmount || 0})`);
+        if (cart.some((item: any) => item.metadata?.type === 'PHYSICAL' && normalizeLineQuantity(item) <= 0)) {
+            return NextResponse.json(
+                { error: 'Please choose a quantity above 0 or remove highlighted item(s).' },
+                { status: 400 }
+            );
+        }
+
+        const normalizedShippingAmount = Math.max(0, Number(shippingAmount) || 0);
+        const normalizedTaxAmount = Math.max(0, Number(taxAmount) || 0);
+
+        // Always calculate total on the server to prevent price tampering
+        const productsTotal = cart.reduce(
+            (sum: number, item: any) => sum + ((Number(item.amount) || 0) * normalizeLineQuantity(item)),
+            0
+        );
+        const total = productsTotal + normalizedShippingAmount + normalizedTaxAmount;
+
+        console.log('>>> [STRIPE_API] Calculated Total:', total, `(Products: ${productsTotal}, Shipping: ${normalizedShippingAmount}, Tax: ${normalizedTaxAmount})`);
 
         if (total <= 0) {
             console.error('>>> [STRIPE_API] Total is 0 or negative');
@@ -32,7 +52,7 @@ export async function POST(req: Request) {
             id: item.id,
             type: item.metadata?.type || 'DIGITAL',
             v_id: item.metadata?.variant_id || item.selectedVariantId, // Robust mapping
-            qty: item.quantity || 1
+            qty: normalizeLineQuantity(item)
         })));
 
         const metadata: any = {
@@ -82,8 +102,8 @@ export async function POST(req: Request) {
         return NextResponse.json({
             clientSecret: paymentIntent.client_secret,
             id: paymentIntent.id,
-            amount_shipping: shippingAmount || 0,
-            amount_tax: taxAmount || 0
+            amount_shipping: normalizedShippingAmount,
+            amount_tax: normalizedTaxAmount
         });
     } catch (error: any) {
         console.error('>>> [STRIPE_API] ERROR CAUGHT:', error);

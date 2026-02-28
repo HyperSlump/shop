@@ -93,7 +93,11 @@ export async function POST(req: Request) {
         const physicalItems = items
             .filter((item: any) => item.metadata?.type === 'PHYSICAL')
             .map((item: any) => {
-                const qty = item.quantity || 1;
+                const parsedQty = Number(item.quantity ?? 1);
+                const qty = Number.isFinite(parsedQty) ? Math.max(0, Math.min(10, Math.floor(parsedQty))) : 1;
+                if (qty <= 0) {
+                    return null;
+                }
                 const price = item.amount?.toString() || "0.00";
                 const { parsedCatalog, parsedSync } = resolveVariantIds(item);
 

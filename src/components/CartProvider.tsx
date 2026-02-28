@@ -30,6 +30,7 @@ interface CartContextType {
   addToCart: (product: Product) => void;
   removeFromCart: (priceId: string) => void;
   updateQuantity: (priceId: string, quantity: number) => void;
+  updatePhysicalVariant: (priceId: string, variantId: string) => void;
   clearCart: () => void;
   isCartOpen: boolean;
   toggleCart: () => void;
@@ -174,12 +175,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
       if (exists) {
         return prev.map(item =>
           item.id === product.id
-            ? { ...item, quantity: Math.min(10, (item.quantity || 1) + 1) }
+            ? { ...item, quantity: Math.min(10, (item.quantity ?? 1) + 1) }
             : item
         );
       }
 
-      return [...prev, { ...product, quantity: product.quantity || 1 }];
+      return [...prev, { ...product, quantity: product.quantity ?? 1 }];
     });
   };
 
@@ -188,15 +189,86 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const updateQuantity = (priceId: string, quantity: number) => {
-    if (quantity <= 0) {
-      removeFromCart(priceId);
-      return;
-    }
-    setCart((prev) => prev.map(item =>
-      item.id === priceId
-        ? { ...item, quantity: item.metadata?.type === 'PHYSICAL' ? Math.min(10, quantity) : 1 }
-        : item
-    ));
+    setCart((prev) => {
+      const current = prev.find((item) => item.id === priceId);
+      if (!current) return prev;
+
+      // Digital items are single-quantity products; a non-positive amount removes them.
+      if (current.metadata?.type !== 'PHYSICAL') {
+        if (quantity <= 0) {
+          return prev.filter((item) => item.id !== priceId);
+        }
+        return prev.map((item) => (
+          item.id === priceId ? { ...item, quantity: 1 } : item
+        ));
+      }
+
+      const nextQuantity = Math.max(0, Math.min(10, quantity));
+      return prev.map((item) => (
+        item.id === priceId ? { ...item, quantity: nextQuantity } : item
+      ));
+    });
+  };
+
+  const updatePhysicalVariant = (priceId: string, variantId: string) => {
+    setCart((prev) => {
+      const currentIndex = prev.findIndex((item) => item.id === priceId);
+      if (currentIndex === -1) return prev;
+
+      const current = prev[currentIndex];
+      if (current.metadata?.type !== 'PHYSICAL' || !current.variants?.length) return prev;
+
+      const nextVariant = current.variants.find((variant) => String(variant.id) === String(variantId));
+      if (!nextVariant) return prev;
+
+      const currentVariantId = current.metadata?.variant_id || current.selectedVariantId;
+      if (String(currentVariantId) === String(nextVariant.id)) return prev;
+
+      const resolvedCatalogVariantId = nextVariant.catalog_variant_id ?? nextVariant.id;
+      const nextItemId = `pf_${current.metadata?.printful_id || current.productId}_${nextVariant.id}`;
+
+      const updatedCurrent: Product = {
+        ...current,
+        id: nextItemId,
+        amount: Number.parseFloat(nextVariant.retail_price) || current.amount,
+        image: nextVariant.image || current.image,
+        metadata: {
+          ...current.metadata,
+          variant_id: String(nextVariant.id),
+          catalog_variant_id: String(resolvedCatalogVariantId),
+          variant_name: nextVariant.name,
+        },
+        selectedVariantId: String(nextVariant.id),
+        selectedCatalogVariantId: String(resolvedCatalogVariantId),
+      };
+
+      const duplicateIndex = prev.findIndex((item, idx) => idx !== currentIndex && item.id === nextItemId);
+      if (duplicateIndex === -1) {
+        const next = [...prev];
+        next[currentIndex] = updatedCurrent;
+        return next;
+      }
+
+      const duplicate = prev[duplicateIndex];
+      const mergedQuantity = Math.min(10, (duplicate.quantity ?? 1) + (current.quantity ?? 1));
+      const mergedItem: Product = {
+        ...duplicate,
+        amount: updatedCurrent.amount,
+        image: updatedCurrent.image,
+        metadata: {
+          ...duplicate.metadata,
+          ...updatedCurrent.metadata,
+        },
+        selectedVariantId: updatedCurrent.selectedVariantId,
+        selectedCatalogVariantId: updatedCurrent.selectedCatalogVariantId,
+        quantity: mergedQuantity,
+      };
+
+      const next = [...prev];
+      next[duplicateIndex] = mergedItem;
+      next.splice(currentIndex, 1);
+      return next;
+    });
   };
 
   const clearCart = () => {
@@ -212,7 +284,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setIsCartOpen((prev) => !prev);
   };
 
-  const cartTotal = cart.reduce((total, item) => total + (item.amount * (item.quantity || 1)), 0);
+  const cartTotal = cart.reduce((total, item) => total + (item.amount * (item.quantity ?? 1)), 0);
 
   // Avoid hydration mismatch by not rendering anything cart-related until mounted? 
   // No, we should render children, but maybe not the cart state dependent UI immediately if it flickers.
@@ -225,6 +297,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         addToCart,
         removeFromCart,
         updateQuantity,
+        updatePhysicalVariant,
         clearCart,
         isCartOpen,
         toggleCart,

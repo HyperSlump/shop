@@ -18,6 +18,8 @@ interface CheckoutFormProps {
     setBillingSameAsShipping: (val: boolean) => void;
     checkoutAddress: any | null;
     isDark?: boolean;
+    hasInvalidPhysicalQuantities?: boolean;
+    onInvalidQuantityAttempt?: () => void;
 }
 
 export default function CheckoutForm({
@@ -26,6 +28,8 @@ export default function CheckoutForm({
     setBillingSameAsShipping,
     checkoutAddress,
     isDark = true,
+    hasInvalidPhysicalQuantities = false,
+    onInvalidQuantityAttempt,
 }: CheckoutFormProps) {
     const stripe = useStripe();
     const elements = useElements();
@@ -42,6 +46,11 @@ export default function CheckoutForm({
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!stripe || !elements) return;
+        if (hasInvalidPhysicalQuantities) {
+            setMessage('Choose a quantity above 0 or remove the highlighted item(s).');
+            onInvalidQuantityAttempt?.();
+            return;
+        }
 
         setIsLoading(true);
         setMessage(null);
@@ -64,6 +73,11 @@ export default function CheckoutForm({
 
     const onExpressCheckoutConfirm = async () => {
         if (!stripe || !elements) return;
+        if (hasInvalidPhysicalQuantities) {
+            setMessage('Choose a quantity above 0 or remove the highlighted item(s).');
+            onInvalidQuantityAttempt?.();
+            return;
+        }
 
         const { error } = await stripe.confirmPayment({
             elements,

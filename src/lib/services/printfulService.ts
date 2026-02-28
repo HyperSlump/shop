@@ -122,7 +122,7 @@ class PrintfulService {
             const baseRateCost = isIntl ? 11.99 : 4.75;
             const additionalCost = isIntl ? 6.00 : 2.20;
 
-            const totalItems = items.reduce((acc: number, item: any) => acc + (item.quantity || 1), 0);
+            const totalItems = items.reduce((acc: number, item: any) => acc + (item.quantity ?? 1), 0);
             const baseRate = baseRateCost + (Math.max(0, totalItems - 1) * additionalCost);
 
             return [

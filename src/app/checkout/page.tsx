@@ -9,7 +9,7 @@ import ShippingForm, { type ShippingAddress } from '@/components/ShippingForm';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { IconArrowLeft, IconChevronDown, IconLock, IconTruck, IconAlertTriangle, IconTrash, IconMinus, IconPlus } from '@tabler/icons-react';
+import { IconArrowLeft, IconChevronDown, IconLock, IconTruck, IconAlertTriangle, IconTrash, IconMinus, IconPlus, IconX } from '@tabler/icons-react';
 import AestheticBackground from '@/components/AestheticBackground';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
 
@@ -27,6 +27,11 @@ const ALLOWED_SHIPPING_COUNTRIES: string[] = [
     'NO', 'DK', 'IT', 'ES', 'PT', 'BE', 'AT', 'CH', 'PL', 'IE',
     'NZ', 'FI', 'MX', 'BR', 'SG',
 ];
+
+const VARIANT_SIZE_SET = new Set([
+    'xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl', '4xl', '5xl',
+    'small', 'medium', 'large', 'extra large', 'one size', 'os', 'osfa',
+]);
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -93,6 +98,7 @@ export default function CheckoutPage() {
         cart,
         removeFromCart,
         updateQuantity,
+        updatePhysicalVariant,
         setHasVisitedCheckout,
         estimatedShipping,
         estimatedTax,
@@ -115,13 +121,162 @@ export default function CheckoutPage() {
     const [isCalculating, setIsCalculating] = useState(false);
     const [isRefreshingQuote, setIsRefreshingQuote] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [shippingError, setShippingError] = useState<string | null>(null);
+    const [, setShippingError] = useState<string | null>(null);
     const [productsOpen, setProductsOpen] = useState(false);
     const [isEditingOrder, setIsEditingOrder] = useState(false);
     const [hasSeededEstimate, setHasSeededEstimate] = useState(false);
+    const [showInvalidQuantityMessage, setShowInvalidQuantityMessage] = useState(false);
+    const [showDoneEditingTooltip, setShowDoneEditingTooltip] = useState(false);
+    const [doneEditingTooltipNonce, setDoneEditingTooltipNonce] = useState(0);
 
     const hasPhysicalItems = cart.some(item => item.metadata?.type === 'PHYSICAL');
-    const isFreeOrder = cartTotal === 0 && cart.length > 0;
+    const invalidPhysicalItemIds = cart
+        .filter((item) => item.metadata?.type === 'PHYSICAL' && (item.quantity ?? 1) <= 0)
+        .map((item) => item.id);
+    const hasInvalidPhysicalQuantities = invalidPhysicalItemIds.length > 0;
+    const hasCheckoutEligibleItems = cart.some(
+        (item) => item.metadata?.type !== 'PHYSICAL' || (item.quantity ?? 1) > 0
+    );
+    const requiresOrderEditBeforeCheckout = cart.length > 0 && !hasCheckoutEligibleItems;
+    const isFreeOrder = cartTotal === 0 && cart.length > 0 && hasCheckoutEligibleItems;
+
+    const getVariantName = useCallback((item: Product): string | null => {
+        const fromMetadata = item.metadata?.variant_name?.trim();
+        if (fromMetadata) return fromMetadata;
+
+        const selectedVariantId = item.metadata?.variant_id || item.selectedVariantId;
+        const selected = item.variants?.find((variant) => String(variant.id) === String(selectedVariantId));
+        if (selected?.name) return selected.name;
+
+        if (item.variants && item.variants.length > 0) {
+            return item.variants[0].name;
+        }
+
+        return null;
+    }, []);
+
+    const parseVariantDescriptor = useCallback((item: Product, variantName: string): { color: string; size: string; raw: string } => {
+        const raw = variantName.split(' - ').pop()?.trim() || variantName.trim();
+        const parts = raw.split('/').map((value) => value.trim()).filter(Boolean);
+
+        if (parts.length > 1 && item.name) {
+            const normalizedName = item.name.toLowerCase().replace(/\s+/g, '');
+            const normalizedHead = parts[0].toLowerCase().replace(/\s+/g, '');
+            if (normalizedHead === normalizedName) {
+                parts.shift();
+            }
+        }
+
+        let size = '';
+        const colorParts: string[] = [];
+
+        parts.forEach((part) => {
+            if (VARIANT_SIZE_SET.has(part.toLowerCase())) {
+                size = part;
+            } else {
+                colorParts.push(part);
+            }
+        });
+
+        return {
+            color: colorParts.join(' / '),
+            size,
+            raw,
+        };
+    }, []);
+
+    const formatVariantDescriptor = useCallback((item: Product, variantName: string): string => {
+        const parsed = parseVariantDescriptor(item, variantName);
+
+        if (parsed.color && parsed.size) return `Color ${parsed.color} | Size ${parsed.size}`;
+        if (parsed.color) return `Color ${parsed.color}`;
+        if (parsed.size) return `Size ${parsed.size}`;
+        return parsed.raw;
+    }, [parseVariantDescriptor]);
+
+    const getItemDescriptor = useCallback((item: Product): string => {
+        if (item.metadata?.type !== 'PHYSICAL') return 'Digital download';
+
+        const variantName = getVariantName(item);
+        if (variantName) return formatVariantDescriptor(item, variantName);
+
+        const fallbackVariantId = item.metadata?.variant_id || item.selectedVariantId;
+        if (fallbackVariantId) return `Variant ${fallbackVariantId}`;
+
+        return 'Physical item';
+    }, [formatVariantDescriptor, getVariantName]);
+
+    const renderPhysicalEditControls = useCallback((item: Product) => {
+        const selectedVariantId = item.metadata?.variant_id || item.selectedVariantId || String(item.variants?.[0]?.id || '');
+        const currentQuantity = item.quantity ?? 1;
+        const isZeroQuantity = currentQuantity <= 0;
+        const shouldHighlightQuantity = showInvalidQuantityMessage && isZeroQuantity;
+        const variants = item.variants ?? [];
+        const hasVariants = variants.length > 0;
+        return (
+            <div className="mt-2 w-full max-w-[360px] space-y-1.5">
+                <p className="text-[9px] font-mono uppercase tracking-[0.14em] text-muted/70">
+                    Variant
+                </p>
+                <div className={`grid w-full items-center gap-2 ${hasVariants ? 'grid-cols-[minmax(0,1fr)_82px_24px]' : 'grid-cols-[82px_24px] justify-end'}`}>
+                    {hasVariants && (
+                        <div className="relative min-w-0 flex-1">
+                            <select
+                                value={String(selectedVariantId)}
+                                onChange={(event) => updatePhysicalVariant(item.id, event.target.value)}
+                                className="w-full h-[34px] pl-2.5 pr-8 border border-border/60 rounded-md bg-card/70 text-foreground font-mono text-[10px] uppercase tracking-[0.08em] appearance-none focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20"
+                            >
+                                {variants.map((variant) => (
+                                    <option key={variant.id} value={variant.id}>
+                                        {formatVariantDescriptor(item, variant.name)}
+                                    </option>
+                                ))}
+                            </select>
+                            <IconChevronDown
+                                size={12}
+                                stroke={2}
+                                className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-muted"
+                            />
+                        </div>
+                    )}
+
+                    <div
+                        className={`inline-flex h-[34px] w-[82px] items-center justify-between rounded-md px-2 py-1 transition-colors ${shouldHighlightQuantity
+                            ? 'border border-alert/60 bg-alert/10'
+                            : 'border border-border/40 bg-muted/10'}`}
+                    >
+                        <button
+                            onClick={() => updateQuantity(item.id, Math.max(0, currentQuantity - 1))}
+                            disabled={currentQuantity <= 0}
+                            className={`transition-colors ${currentQuantity <= 0 ? 'text-muted/40 cursor-not-allowed' : 'text-muted hover:text-foreground'}`}
+                        >
+                            <IconMinus size={12} stroke={2} />
+                        </button>
+                        <span className="text-xs font-medium w-4 text-center text-foreground tabular-nums">{currentQuantity}</span>
+                        <button
+                            onClick={() => updateQuantity(item.id, currentQuantity + 1)}
+                            disabled={currentQuantity >= 10}
+                            className={`text-muted transition-colors ${currentQuantity >= 10 ? 'opacity-20 cursor-not-allowed' : 'hover:text-foreground'}`}
+                        >
+                            <IconPlus size={12} stroke={2} />
+                        </button>
+                    </div>
+                    <div className="h-[24px] w-[24px]">
+                        <button
+                            onClick={() => removeFromCart(item.id)}
+                            disabled={!isZeroQuantity}
+                            tabIndex={isZeroQuantity ? 0 : -1}
+                            aria-hidden={!isZeroQuantity}
+                            aria-label={`Remove ${item.name} from order`}
+                            className={`h-[24px] w-[24px] inline-flex items-center justify-center rounded-sm text-muted/60 hover:text-foreground transition-opacity ${isZeroQuantity ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                        >
+                            <IconX size={12} stroke={2} />
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }, [formatVariantDescriptor, removeFromCart, showInvalidQuantityMessage, updatePhysicalVariant, updateQuantity]);
 
     const refreshIntent = useCallback(async (currentShipping = 0, address: ShippingAddress | null = null, shippingId?: string, taxAmount: number = taxCost) => {
         try {
@@ -167,10 +322,10 @@ export default function CheckoutPage() {
     }, [cart, paymentIntentId, taxCost]);
 
     useEffect(() => {
-        if (cart.length > 0 && !clientSecret && !isFreeOrder) {
+        if (cart.length > 0 && hasCheckoutEligibleItems && !clientSecret && !isFreeOrder) {
             refreshIntent(0);
         }
-    }, [cart.length, clientSecret, refreshIntent, isFreeOrder]);
+    }, [cart.length, clientSecret, hasCheckoutEligibleItems, refreshIntent, isFreeOrder]);
 
     useEffect(() => {
         setHasSeededEstimate(false);
@@ -202,6 +357,61 @@ export default function CheckoutPage() {
         isFreeOrder,
         refreshIntent,
     ]);
+
+    useEffect(() => {
+        if (!hasInvalidPhysicalQuantities && showInvalidQuantityMessage) {
+            setShowInvalidQuantityMessage(false);
+        }
+    }, [hasInvalidPhysicalQuantities, showInvalidQuantityMessage]);
+
+    useEffect(() => {
+        if (!requiresOrderEditBeforeCheckout) return;
+
+        setShippingRateOptions([]);
+        setSelectedShippingId('');
+        setShippingCost(0);
+        setTaxCost(0);
+        setClientSecret('');
+        setPaymentIntentId('');
+    }, [requiresOrderEditBeforeCheckout]);
+
+    useEffect(() => {
+        if (!showDoneEditingTooltip) return;
+
+        const timer = window.setTimeout(() => {
+            setShowDoneEditingTooltip(false);
+        }, 2400);
+
+        return () => window.clearTimeout(timer);
+    }, [showDoneEditingTooltip, doneEditingTooltipNonce]);
+
+    const handleInvalidQuantityAttempt = useCallback(() => {
+        setShowInvalidQuantityMessage(true);
+        setIsEditingOrder(true);
+        if (cart.length > 1) {
+            setProductsOpen(true);
+        }
+    }, [cart.length]);
+
+    const handleEditOrderToggle = useCallback(() => {
+        if (isEditingOrder && hasInvalidPhysicalQuantities) {
+            handleInvalidQuantityAttempt();
+            setShowDoneEditingTooltip(true);
+            setDoneEditingTooltipNonce((prev) => prev + 1);
+            return;
+        }
+
+        setShowDoneEditingTooltip(false);
+        setIsEditingOrder((prev) => !prev);
+    }, [handleInvalidQuantityAttempt, hasInvalidPhysicalQuantities, isEditingOrder]);
+
+    const handleEditOrderRequiredAction = useCallback(() => {
+        setIsEditingOrder(true);
+        setShowInvalidQuantityMessage(true);
+        if (cart.length > 1) {
+            setProductsOpen(true);
+        }
+    }, [cart.length]);
 
     const handleAddressChange = useCallback(async (addressValue: ShippingAddress) => {
         if (!hasPhysicalItems) return;
@@ -329,6 +539,21 @@ export default function CheckoutPage() {
 
     const finalTotal = cartTotal + shippingCost + taxCost;
     const showingPrefillEstimate = hasPhysicalItems && !checkoutAddress?.address1 && (hasSeededEstimate || isEstimatingShipping);
+    const hasQuoteContext = Boolean(checkoutAddress?.address1 || hasSeededEstimate);
+    const shippingDisplayValue = (isCalculating && !isRefreshingQuote)
+        ? '--'
+        : shippingCost > 0
+            ? `$${shippingCost.toFixed(2)}`
+            : hasQuoteContext
+                ? '$0.00'
+                : '--';
+    const taxDisplayValue = (isCalculating && !isRefreshingQuote)
+        ? '--'
+        : taxCost > 0
+            ? `$${taxCost.toFixed(2)}`
+            : hasQuoteContext
+                ? '$0.00'
+                : '--';
 
     if (cart.length === 0) {
         return (
@@ -384,12 +609,27 @@ export default function CheckoutPage() {
                                     ${finalTotal.toFixed(2)}
                                 </p>
                                 {cart.length > 0 && (
-                                    <button
-                                        onClick={() => setIsEditingOrder(!isEditingOrder)}
-                                        className="font-sans text-xs text-muted hover:underline pb-1 cursor-pointer transition-colors hover:text-foreground"
-                                    >
-                                        {isEditingOrder ? 'Done Editing' : 'Edit Order'}
-                                    </button>
+                                    <div className="relative pb-1">
+                                        <button
+                                            onClick={handleEditOrderToggle}
+                                            className="font-sans text-xs text-muted hover:underline cursor-pointer transition-colors hover:text-foreground"
+                                        >
+                                            {isEditingOrder ? 'Done Editing' : 'Edit Order'}
+                                        </button>
+                                        <AnimatePresence>
+                                            {showDoneEditingTooltip && isEditingOrder && hasInvalidPhysicalQuantities && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, y: 4 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    exit={{ opacity: 0, y: 4 }}
+                                                    transition={{ duration: 0.18, ease: 'easeOut' }}
+                                                    className="pointer-events-none absolute right-0 -top-9 whitespace-nowrap rounded-md border border-alert/35 bg-background/95 px-2.5 py-1.5 text-[10px] font-medium text-alert shadow-[0_8px_20px_rgba(0,0,0,0.24)] backdrop-blur-sm"
+                                                >
+                                                    Add quantity above 0 or remove item.
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
                                 )}
                             </div>
                         </div>
@@ -407,23 +647,14 @@ export default function CheckoutPage() {
                                     <div className="flex-1 min-w-0 flex items-start justify-between gap-3">
                                         <div className="min-w-0 flex-1">
                                             <p className="text-sm font-medium leading-snug text-foreground truncate">{cart[0].name}</p>
+                                            <p className="text-[10px] mt-0.5 text-muted font-mono uppercase tracking-[0.12em] truncate">
+                                                {getItemDescriptor(cart[0])}
+                                            </p>
 
                                             {isEditingOrder ? (
-                                                <div className="mt-2 flex items-center gap-3">
+                                                <div className="mt-2">
                                                     {cart[0].metadata?.type === 'PHYSICAL' ? (
-                                                        <div className="flex items-center gap-3 bg-muted/10 rounded px-2 py-1">
-                                                            <button onClick={() => updateQuantity(cart[0].id, Math.max(0, (cart[0]?.quantity ?? 1) - 1))} className="text-muted hover:text-foreground transition-colors">
-                                                                {(cart[0]?.quantity ?? 1) <= 1 ? <IconTrash size={12} stroke={2} /> : <IconMinus size={12} stroke={2} />}
-                                                            </button>
-                                                            <span className="text-xs font-medium w-4 text-center text-foreground">{cart[0]?.quantity ?? 1}</span>
-                                                            <button
-                                                                onClick={() => updateQuantity(cart[0].id, (cart[0]?.quantity ?? 1) + 1)}
-                                                                disabled={(cart[0]?.quantity ?? 1) >= 10}
-                                                                className={`text-muted transition-colors ${(cart[0]?.quantity ?? 1) >= 10 ? 'opacity-20 cursor-not-allowed' : 'hover:text-foreground'}`}
-                                                            >
-                                                                <IconPlus size={12} stroke={2} />
-                                                            </button>
-                                                        </div>
+                                                        renderPhysicalEditControls(cart[0])
                                                     ) : (
                                                         <button
                                                             onClick={() => removeFromCart(cart[0].id)}
@@ -438,7 +669,7 @@ export default function CheckoutPage() {
                                                 <p className="text-xs mt-0.5 text-muted">Qty {cart[0]?.quantity ?? 1}</p>
                                             )}
                                         </div>
-                                        <span className="text-sm font-medium flex-shrink-0 text-foreground pt-0.5">
+                                        <span className="text-sm font-medium flex-shrink-0 text-foreground pt-0.5 tabular-nums text-right w-[76px]">
                                             ${((cart[0]?.amount ?? 0) * (cart[0]?.quantity ?? 1)).toFixed(2)}
                                         </span>
                                     </div>
@@ -489,23 +720,14 @@ export default function CheckoutPage() {
                                                                 <div className="flex-1 min-w-0 flex items-start justify-between gap-3">
                                                                     <div className="min-w-0 flex-1">
                                                                         <p className="text-sm font-medium leading-snug text-foreground truncate">{item.name}</p>
+                                                                        <p className="text-[10px] mt-0.5 text-muted font-mono uppercase tracking-[0.12em] truncate">
+                                                                            {getItemDescriptor(item)}
+                                                                        </p>
 
                                                                         {isEditingOrder ? (
-                                                                            <div className="mt-2 flex items-center gap-3">
+                                                                            <div className="mt-2">
                                                                                 {item.metadata?.type === 'PHYSICAL' ? (
-                                                                                    <div className="flex items-center gap-3 bg-muted/10 rounded px-2 py-1">
-                                                                                        <button onClick={() => updateQuantity(item.id, Math.max(0, (item.quantity ?? 1) - 1))} className="text-muted hover:text-foreground transition-colors">
-                                                                                            {(item.quantity ?? 1) <= 1 ? <IconTrash size={12} stroke={2} /> : <IconMinus size={12} stroke={2} />}
-                                                                                        </button>
-                                                                                        <span className="text-xs font-medium w-4 text-center text-foreground">{item.quantity ?? 1}</span>
-                                                                                        <button
-                                                                                            onClick={() => updateQuantity(item.id, (item.quantity ?? 1) + 1)}
-                                                                                            disabled={(item.quantity ?? 1) >= 10}
-                                                                                            className={`text-muted transition-colors ${(item.quantity ?? 1) >= 10 ? 'opacity-20 cursor-not-allowed' : 'hover:text-foreground'}`}
-                                                                                        >
-                                                                                            <IconPlus size={12} stroke={2} />
-                                                                                        </button>
-                                                                                    </div>
+                                                                                    renderPhysicalEditControls(item)
                                                                                 ) : (
                                                                                     <button
                                                                                         onClick={() => removeFromCart(item.id)}
@@ -520,7 +742,7 @@ export default function CheckoutPage() {
                                                                             <p className="text-xs mt-0.5 text-muted">Qty {item.quantity ?? 1}</p>
                                                                         )}
                                                                     </div>
-                                                                    <span className="text-sm font-medium flex-shrink-0 text-foreground pt-0.5">
+                                                                    <span className="text-sm font-medium flex-shrink-0 text-foreground pt-0.5 tabular-nums text-right w-[76px]">
                                                                         ${((item.amount ?? 0) * (item.quantity ?? 1)).toFixed(2)}
                                                                     </span>
                                                                 </div>
@@ -535,66 +757,42 @@ export default function CheckoutPage() {
                             )}
                         </div>
 
+                        {showInvalidQuantityMessage && hasInvalidPhysicalQuantities && (
+                            <div className="flex-shrink-0 mt-3 mb-4 flex items-start gap-2 rounded-md border border-alert/30 bg-alert/10 px-3 py-2.5">
+                                <IconAlertTriangle size={14} stroke={2} className="mt-0.5 text-alert shrink-0" />
+                                <p className="text-xs text-alert/90">
+                                    Please choose a quantity above 0 or remove highlighted item(s) before checkout.
+                                </p>
+                            </div>
+                        )}
+
                         <div className="flex-shrink-0 font-sans">
                             <div className="pt-4 space-y-3 border-t border-border">
                                 <div className="flex justify-between text-sm">
                                     <span className="text-muted">Subtotal</span>
-                                    <span className="text-foreground">${cartTotal.toFixed(2)}</span>
+                                    <span className="text-foreground tabular-nums text-right min-w-[96px]">${cartTotal.toFixed(2)}</span>
                                 </div>
                                 {hasPhysicalItems && (
                                     <div className="flex justify-between text-sm">
-                                        <span className="text-muted">
-                                            {shippingCost > 0 ? 'Standard Shipping' : 'Shipping'}
+                                        <span className="text-muted">Shipping</span>
+                                        <span className="text-foreground tabular-nums text-right min-w-[96px]">
+                                            {isEstimatingShipping && !hasSeededEstimate && !checkoutAddress?.address1
+                                                ? '--'
+                                                : shippingDisplayValue}
                                         </span>
-                                        {isCalculating && !isRefreshingQuote ? (
-                                            <span className="text-muted text-xs italic">--</span>
-                                        ) : shippingCost > 0 ? (
-                                            <span className="text-foreground">${shippingCost.toFixed(2)}</span>
-                                        ) : showingPrefillEstimate ? (
-                                            <span className="text-muted text-xs italic">
-                                                {isEstimatingShipping ? 'Calculating estimate...' : '$0.00'}
-                                            </span>
-                                        ) : (
-                                            <span className="text-muted text-xs italic">
-                                                {checkoutAddress?.address1 ? 'Unavailable' : 'Enter address below'}
-                                            </span>
-                                        )}
                                     </div>
                                 )}
                                 <div className="flex justify-between text-sm">
                                     <span className="text-muted">Tax</span>
-                                    {isCalculating && !isRefreshingQuote ? (
-                                        <span className="text-muted text-xs italic">--</span>
-                                    ) : taxCost > 0 ? (
-                                        <span className="text-foreground">${taxCost.toFixed(2)}</span>
-                                    ) : showingPrefillEstimate ? (
-                                        <span className="text-muted text-xs italic">
-                                            {isEstimatingShipping ? 'Calculating estimate...' : '$0.00'}
-                                        </span>
-                                    ) : (
-                                        <span className="text-muted text-xs italic">
-                                            {checkoutAddress?.address1 ? '$0.00' : '--'}
-                                        </span>
-                                    )}
+                                    <span className="text-foreground tabular-nums text-right min-w-[96px]">
+                                        {isEstimatingShipping && !hasSeededEstimate && !checkoutAddress?.address1
+                                            ? '--'
+                                            : taxDisplayValue}
+                                    </span>
                                 </div>
-                                {showingPrefillEstimate && !isCalculating && (
-                                    <div className="pt-1 text-[11px] text-muted italic">
-                                        Estimated by location. Finalized after full address entry.
-                                    </div>
-                                )}
-                                {isCalculating && isRefreshingQuote && (
-                                    <div className="pt-1 text-[11px] text-muted italic">
-                                        Refreshing latest shipping and tax quote...
-                                    </div>
-                                )}
-                                {shippingError && (
-                                    <div className="pt-1 text-[11px] text-alert/80">
-                                        {shippingError}
-                                    </div>
-                                )}
                                 <div className="flex justify-between text-sm pt-4 font-semibold border-t border-border">
                                     <span className="text-foreground">Total due today</span>
-                                    <span className="text-foreground">${finalTotal.toFixed(2)}</span>
+                                    <span className="text-foreground tabular-nums text-right min-w-[96px]">${finalTotal.toFixed(2)}</span>
                                 </div>
                             </div>
                         </div>
@@ -618,7 +816,21 @@ export default function CheckoutPage() {
                     }}
                 >
                     <div className="w-full max-w-[520px] mr-auto px-5 lg:px-12 py-8 lg:py-12">
-                        {isFreeOrder ? (
+                        {requiresOrderEditBeforeCheckout ? (
+                            <div className="py-20">
+                                <div className="rounded-md border border-alert/30 bg-alert/10 px-4 py-4">
+                                    <p className="font-sans text-sm font-medium text-alert">
+                                        Please edit order to add items before checkout.
+                                    </p>
+                                    <button
+                                        onClick={handleEditOrderRequiredAction}
+                                        className="mt-3 inline-flex items-center gap-2 text-xs font-medium text-alert hover:underline cursor-pointer"
+                                    >
+                                        Edit order
+                                    </button>
+                                </div>
+                            </div>
+                        ) : isFreeOrder ? (
                             <FreeOrderPanel cart={cart} />
                         ) : clientSecret ? (
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
@@ -644,6 +856,8 @@ export default function CheckoutPage() {
                                         billingSameAsShipping={billingSameAsShipping}
                                         setBillingSameAsShipping={setBillingSameAsShipping}
                                         checkoutAddress={checkoutAddress}
+                                        hasInvalidPhysicalQuantities={hasInvalidPhysicalQuantities}
+                                        onInvalidQuantityAttempt={handleInvalidQuantityAttempt}
                                     />
                                 </Elements>
                             </motion.div>
