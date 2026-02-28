@@ -3,15 +3,19 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { IconArrowLeft, IconCircleCheck, IconDownload, IconPackage } from '@tabler/icons-react';
 import { useCart } from '@/components/CartProvider';
 import AestheticBackground from '@/components/AestheticBackground';
+import PageBreadcrumb from '@/components/PageBreadcrumb';
 
 import { getProductFile, FALLBACK_FILE_URL } from '@/lib/products';
+import { downloadAsset } from '@/lib/clientDownloads';
 
 type DownloadItem = { id: string; name: string; image?: string };
 
 export default function DownloadsPage() {
+    const router = useRouter();
     const [items] = useState<DownloadItem[]>(() => {
         if (typeof window === 'undefined') return [];
         try {
@@ -32,14 +36,53 @@ export default function DownloadsPage() {
         }
     });
     const [downloaded, setDownloaded] = useState<Set<string>>(new Set());
+    const [downloading, setDownloading] = useState<Set<string>>(new Set());
     const { clearCart } = useCart();
 
     React.useEffect(() => {
         clearCart();
     }, [clearCart]);
 
+    const handleHomeNav = React.useCallback((event: React.MouseEvent<HTMLAnchorElement>) => {
+        // Preserve native behavior for modified/new-tab clicks.
+        if (
+            event.defaultPrevented ||
+            event.button !== 0 ||
+            event.metaKey ||
+            event.ctrlKey ||
+            event.shiftKey ||
+            event.altKey
+        ) {
+            return;
+        }
+
+        event.preventDefault();
+        router.push('/');
+
+        // Fallback in case client navigation is interrupted after file downloads.
+        window.setTimeout(() => {
+            if (window.location.pathname !== '/') {
+                window.location.assign('/');
+            }
+        }, 250);
+    }, [router]);
+
     const markDownloaded = (id: string) => {
         setDownloaded(prev => new Set(prev).add(id));
+    };
+
+    const handleDownload = async (item: DownloadItem, fileUrl: string) => {
+        setDownloading(prev => new Set(prev).add(item.id));
+        markDownloaded(item.id);
+        try {
+            await downloadAsset(fileUrl, item.name);
+        } finally {
+            setDownloading(prev => {
+                const next = new Set(prev);
+                next.delete(item.id);
+                return next;
+            });
+        }
     };
 
     const allDownloaded = items.length > 0 && items.every(item => downloaded.has(item.id));
@@ -52,7 +95,8 @@ export default function DownloadsPage() {
                     <p className="text-sm text-muted-foreground">No downloads available</p>
                     <Link
                         href="/"
-                        className="inline-flex items-center gap-2 text-sm font-medium hover:opacity-80 transition-opacity text-primary"
+                        onClick={handleHomeNav}
+                        className="inline-flex items-center gap-2 text-sm font-medium hover:opacity-80 transition-opacity text-primary relative z-[130] pointer-events-auto"
                     >
                         <IconArrowLeft size={14} stroke={2} />
                         Continue shopping
@@ -72,9 +116,20 @@ export default function DownloadsPage() {
 
                 {/* Header */}
                 <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+                    <PageBreadcrumb
+                        items={[
+                            { label: 'store', href: '/' },
+                            { label: 'downloads' },
+                        ]}
+                        className="mb-6"
+                    />
 
                     {/* Brand */}
-                    <Link href="/" className="inline-flex items-center gap-3 mb-8 group">
+                    <Link
+                        href="/"
+                        onClick={handleHomeNav}
+                        className="inline-flex items-center gap-3 mb-8 group relative z-[130] pointer-events-auto"
+                    >
                         <IconArrowLeft size={14} stroke={2} className="text-muted-foreground group-hover:-translate-x-0.5 transition-transform" />
                         <span className="brand-logo-jacquard text-[2rem] leading-none tracking-tight text-foreground">
                             hyper$lump
@@ -106,6 +161,7 @@ export default function DownloadsPage() {
                             const fileInfo = getProductFile(item.id);
                             const fileUrl = fileInfo.url || FALLBACK_FILE_URL;
                             const done = downloaded.has(item.id);
+                            const isDownloading = downloading.has(item.id);
                             return (
                                 <div
                                     key={item.id}
@@ -131,15 +187,15 @@ export default function DownloadsPage() {
                                     </div>
 
                                     {/* Download button */}
-                                    <a
-                                        href={fileUrl}
-                                        download
-                                        onClick={() => markDownloaded(item.id)}
+                                    <button
+                                        type="button"
+                                        onClick={() => handleDownload(item, fileUrl)}
+                                        disabled={isDownloading}
                                         className={`inline-flex items-center justify-center w-9 h-9 rounded-full transition-all duration-150 flex-shrink-0
                                             ${done
                                                 ? 'bg-transparent text-green-500 border border-border'
                                                 : 'bg-foreground text-background hover:bg-foreground/80'
-                                            }`}
+                                            } ${isDownloading ? 'opacity-70 cursor-not-allowed' : ''}`}
                                         title={done ? 'Downloaded' : 'Download file'}
                                     >
                                         {done ? (
@@ -147,7 +203,7 @@ export default function DownloadsPage() {
                                         ) : (
                                             <IconDownload size={16} stroke={2} />
                                         )}
-                                    </a>
+                                    </button>
                                 </div>
                             );
                         })}

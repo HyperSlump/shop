@@ -142,21 +142,26 @@ class PrintfulService {
         }
 
         try {
+            const payload = { recipient, items };
+            console.log('>>> [PRINTFUL_SERVICE] Calling /shipping/rates:', JSON.stringify(payload, null, 2));
+
             const response = await fetch(`${PRINTFUL_API_URL}/shipping/rates`, {
                 method: 'POST',
                 headers: this.headers,
-                body: JSON.stringify({ recipient, items }),
+                body: JSON.stringify(payload),
             });
 
             if (!response.ok) {
-                const errData = await response.json().catch(() => ({}));
-                throw new Error(`Printful API error: ${response.status} - ${errData.error?.message || response.statusText}`);
+                const errText = await response.text();
+                console.error('>>> [PRINTFUL_SERVICE] /shipping/rates Error:', response.status, errText);
+                throw new Error(`Printful API error: ${response.status} - ${errText}`);
             }
 
             const data = await response.json();
+            console.log('>>> [PRINTFUL_SERVICE] /shipping/rates Response:', JSON.stringify(data, null, 2));
             return data.result as PrintfulShippingRate[];
         } catch (error: any) {
-            console.error('Failed to estimate shipping rates:', error.message);
+            console.error('>>> [PRINTFUL_SERVICE] estimateShipping error:', error.message);
             throw error;
         }
     }
@@ -165,42 +170,31 @@ class PrintfulService {
      * Estimate full costs (shipping + tax) for a potential order.
      */
     async estimateCosts(recipient: any, items: any[]) {
-        if (!PRINTFUL_API_KEY) {
-            console.warn('PRINTFUL_API_KEY is not defined. Using mock tax/shipping costs.');
-            // Mock 7.5% tax for US recipients for demonstration
-            const isUS = recipient?.country_code === 'US';
-            const subtotal = items.reduce((acc: number, item: any) => acc + (parseFloat(item.amount || '0') * (item.quantity || 1)), 0);
-            const estimatedTax = isUS ? subtotal * 0.075 : 0;
-
-            return {
-                costs: {
-                    shipping: "4.75",
-                    tax: estimatedTax.toFixed(2),
-                    vat: "0.00",
-                    total: (subtotal + 4.75 + estimatedTax).toFixed(2)
-                },
-                shipping_rates: [
-                    { id: 'standard', name: 'Standard Shipping', rate: '4.75', currency: 'USD' }
-                ]
-            };
+        if (!PRINTFUL_API_KEY || PRINTFUL_API_KEY === 'undefined') {
+            throw new Error('Printful API key not configured');
         }
 
         try {
+            const payload = { recipient, items };
+            console.log('>>> [PRINTFUL_SERVICE] Calling /orders/estimate-costs:', JSON.stringify(payload, null, 2));
+
             const response = await fetch(`${PRINTFUL_API_URL}/orders/estimate-costs`, {
                 method: 'POST',
                 headers: this.headers,
-                body: JSON.stringify({ recipient, items }),
+                body: JSON.stringify(payload),
             });
 
             if (!response.ok) {
-                const errData = await response.json().catch(() => ({}));
-                throw new Error(`Printful API error: ${response.status} - ${errData.error?.message || response.statusText}`);
+                const errText = await response.text();
+                console.error('>>> [PRINTFUL_SERVICE] /orders/estimate-costs Error:', response.status, errText);
+                throw new Error(`Printful API error: ${response.status} - ${errText}`);
             }
 
             const data = await response.json();
+            console.log('>>> [PRINTFUL_SERVICE] /orders/estimate-costs Response:', JSON.stringify(data, null, 2));
             return data.result;
         } catch (error: any) {
-            console.error('Failed to estimate costs:', error.message);
+            console.error('>>> [PRINTFUL_SERVICE] estimateCosts error:', error.message);
             throw error;
         }
     }

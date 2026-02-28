@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { IconArrowLeft, IconChevronDown, IconLock, IconTruck, IconAlertTriangle, IconTrash, IconMinus, IconPlus } from '@tabler/icons-react';
 import AestheticBackground from '@/components/AestheticBackground';
+import PageBreadcrumb from '@/components/PageBreadcrumb';
 
 interface ShippingRateOption {
     id: string;
@@ -87,7 +88,16 @@ function stripeAppearance(isDark: boolean): Appearance {
 }
 
 export default function CheckoutPage() {
-    const { cartTotal, cart, removeFromCart, updateQuantity, setHasVisitedCheckout } = useCart();
+    const {
+        cartTotal,
+        cart,
+        removeFromCart,
+        updateQuantity,
+        setHasVisitedCheckout,
+        estimatedShipping,
+        estimatedTax,
+        isEstimatingShipping,
+    } = useCart();
     const isDark = useTheme();
 
     useEffect(() => {
@@ -103,15 +113,17 @@ export default function CheckoutPage() {
     const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
     const [checkoutAddress, setCheckoutAddress] = useState<ShippingAddress | null>(null);
     const [isCalculating, setIsCalculating] = useState(false);
+    const [isRefreshingQuote, setIsRefreshingQuote] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [shippingError, setShippingError] = useState<string | null>(null);
     const [productsOpen, setProductsOpen] = useState(false);
     const [isEditingOrder, setIsEditingOrder] = useState(false);
+    const [hasSeededEstimate, setHasSeededEstimate] = useState(false);
 
     const hasPhysicalItems = cart.some(item => item.metadata?.type === 'PHYSICAL');
     const isFreeOrder = cartTotal === 0 && cart.length > 0;
 
-    const refreshIntent = useCallback(async (currentShipping = 0, address: ShippingAddress | null = null, shippingId?: string) => {
+    const refreshIntent = useCallback(async (currentShipping = 0, address: ShippingAddress | null = null, shippingId?: string, taxAmount: number = taxCost) => {
         try {
             const recipientData = address ? {
                 name: `${address.firstName} ${address.lastName}`.trim(),
@@ -128,6 +140,7 @@ export default function CheckoutPage() {
                 body: JSON.stringify({
                     cart,
                     shippingAmount: currentShipping,
+                    taxAmount: taxAmount,
                     shippingId,
                     recipient: recipientData,
                     paymentIntentId: paymentIntentId || undefined
@@ -143,14 +156,15 @@ export default function CheckoutPage() {
             if (data.clientSecret) {
                 setClientSecret(data.clientSecret);
                 setPaymentIntentId(data.id);
-                // Stripe returns amounts in cents
-                setTaxCost((data.amount_tax || 0) / 100);
+                // Unconditionally update taxCost from the server response
+                // This ensures it resets to 0 if the server says it's 0 (e.g. non-taxable address)
+                setTaxCost(data.amount_tax || 0);
             }
         } catch (err: any) {
             console.error('Intent error:', err);
             setError(err.message);
         }
-    }, [cart, paymentIntentId]);
+    }, [cart, paymentIntentId, taxCost]);
 
     useEffect(() => {
         if (cart.length > 0 && !clientSecret && !isFreeOrder) {
@@ -158,77 +172,150 @@ export default function CheckoutPage() {
         }
     }, [cart.length, clientSecret, refreshIntent, isFreeOrder]);
 
+    useEffect(() => {
+        setHasSeededEstimate(false);
+    }, [cart]);
+
+    useEffect(() => {
+        if (!hasPhysicalItems) return;
+        if (checkoutAddress?.address1) return;
+        if (hasSeededEstimate) return;
+        if (estimatedShipping === null && estimatedTax === null) return;
+
+        const seededShipping = estimatedShipping ?? 0;
+        const seededTax = estimatedTax ?? 0;
+
+        setShippingCost(seededShipping);
+        setTaxCost(seededTax);
+        setShippingError(null);
+        setHasSeededEstimate(true);
+
+        if (!isFreeOrder) {
+            void refreshIntent(seededShipping, null, undefined, seededTax);
+        }
+    }, [
+        hasPhysicalItems,
+        checkoutAddress?.address1,
+        hasSeededEstimate,
+        estimatedShipping,
+        estimatedTax,
+        isFreeOrder,
+        refreshIntent,
+    ]);
+
     const handleAddressChange = useCallback(async (addressValue: ShippingAddress) => {
         if (!hasPhysicalItems) return;
-        setCheckoutAddress(addressValue);
+        const normalizedAddress: ShippingAddress = {
+            ...addressValue,
+            country_code: (addressValue.country_code || '').toUpperCase(),
+        };
+        setCheckoutAddress(normalizedAddress);
 
         // Clear rates if address is incomplete
-        if (!addressValue.address1 || !addressValue.city || !addressValue.country_code || !addressValue.zip) {
+        if (!normalizedAddress.address1 || !normalizedAddress.city || !normalizedAddress.country_code || !normalizedAddress.zip) {
             setShippingRateOptions([]);
             setSelectedShippingId('');
             setShippingCost(0);
             setTaxCost(0);
+            setHasSeededEstimate(false);
             setShippingError(null);
+            setIsRefreshingQuote(false);
             return;
         }
 
-        setIsCalculating(true);
-        setShippingError(null);
+        if (!ALLOWED_SHIPPING_COUNTRIES.includes(normalizedAddress.country_code)) {
+            setShippingRateOptions([]);
+            setSelectedShippingId('');
+            setShippingCost(0);
+            setTaxCost(0);
+            setHasSeededEstimate(false);
+            setShippingError('Shipping is not available for this destination yet.');
+            setIsRefreshingQuote(false);
+            return;
+        }
 
-        // Use a timeout to simulate a smooth interaction if the API is too fast
-        const searchStartTime = Date.now();
+        const hasExistingQuote = Boolean(selectedShippingId || shippingCost > 0 || taxCost > 0);
+        setIsCalculating(true);
+        setIsRefreshingQuote(hasExistingQuote);
+        setShippingError(null);
         try {
             const res = await fetch('/api/printful/shipping-rates', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     recipient: {
-                        address1: addressValue.address1,
-                        city: addressValue.city,
-                        state_code: addressValue.state_code,
-                        country_code: addressValue.country_code,
-                        zip: addressValue.zip
+                        address1: normalizedAddress.address1,
+                        city: normalizedAddress.city,
+                        state_code: normalizedAddress.state_code,
+                        country_code: normalizedAddress.country_code,
+                        zip: normalizedAddress.zip
                     },
                     items: cart
                 })
             });
-            const data = await res.json();
-            const delay = Math.max(0, 600 - (Date.now() - searchStartTime));
-            if (delay > 0) await new Promise(r => setTimeout(r, delay));
 
-            if (data.rates && data.rates.length > 0) {
-                // Sort by price ascending and auto-select cheapest
-                const sorted = [...data.rates].sort(
-                    (a: ShippingRateOption, b: ShippingRateOption) => parseFloat(a.rate) - parseFloat(b.rate)
-                );
+            if (res.ok) {
+                const data = await res.json();
+                console.log('>>> [CHECKOUT_PAGE] Shipping rates fetched:', data);
 
-                // Override name for UI simplicity
-                const cheapest = { ...sorted[0], name: 'Standard Shipping' };
-                setShippingRateOptions([cheapest]);
-                setSelectedShippingId(cheapest.id);
+                if (!data.rates || data.rates.length === 0) {
+                    console.warn('>>> [CHECKOUT_PAGE] No shipping rates returned');
+                    setShippingRateOptions([]);
+                    setSelectedShippingId('');
+                    setShippingCost(0);
+                    setTaxCost(0);
+                    if (data.error) setShippingError(data.error);
+                } else {
+                    const sorted = [...data.rates].sort(
+                        (a: ShippingRateOption, b: ShippingRateOption) => parseFloat(a.rate) - parseFloat(b.rate)
+                    );
+                    const cheapest = sorted[0];
+                    setShippingRateOptions(sorted);
+                    setSelectedShippingId(cheapest.id);
 
-                const cost = parseFloat(cheapest.rate);
-                setShippingCost(cost);
-                if (typeof data.tax === 'number') setTaxCost(data.tax);
-                await refreshIntent(cost, addressValue, cheapest.id);
+                    const cost = parseFloat(cheapest.rate);
+                    setShippingCost(cost);
+
+                    if (typeof data.tax === 'number') {
+                        console.log('>>> [CHECKOUT_PAGE] Setting tax cost from Printful:', data.tax);
+                        setTaxCost(data.tax);
+                        await refreshIntent(cost, normalizedAddress, cheapest.id, data.tax);
+                    } else {
+                        // Reset tax if no tax is returned from Printful
+                        setTaxCost(0);
+                        await refreshIntent(cost, normalizedAddress, cheapest.id, 0);
+                    }
+                }
             } else {
+                const errorData = await res.json().catch(() => ({}));
+                console.error('>>> [CHECKOUT_PAGE] API Error:', errorData);
+                if (hasExistingQuote) {
+                    setShippingError('Unable to refresh shipping quote. Showing last known quote.');
+                } else {
+                    setShippingError(errorData.error || 'Failed to calculate shipping');
+                    setShippingRateOptions([]);
+                    setSelectedShippingId('');
+                    setShippingCost(0);
+                    setTaxCost(0);
+                }
+            }
+        } catch (err: any) {
+            console.error('Shipping calculation error:', err);
+            if (hasExistingQuote) {
+                setShippingError('Unable to refresh shipping quote. Showing last known quote.');
+            } else {
+                setShippingError(err.message || 'Failed to calculate shipping');
                 setShippingRateOptions([]);
                 setSelectedShippingId('');
                 setShippingCost(0);
                 setTaxCost(0);
-                if (data.error) setShippingError(data.error);
             }
-        } catch (err: any) {
-            console.error('Shipping calculation error:', err);
-            setShippingError(err.message || 'Failed to calculate shipping');
-            setShippingRateOptions([]);
-            setSelectedShippingId('');
-            setShippingCost(0);
-            setTaxCost(0);
         } finally {
             setIsCalculating(false);
+            setIsRefreshingQuote(false);
         }
-    }, [hasPhysicalItems, cart, refreshIntent]);
+    }, [hasPhysicalItems, cart, refreshIntent, selectedShippingId, shippingCost, taxCost]);
+
 
     const handleRateSelect = async (rate: ShippingRateOption) => {
         if (isCalculating || rate.id === selectedShippingId) return;
@@ -241,6 +328,7 @@ export default function CheckoutPage() {
     };
 
     const finalTotal = cartTotal + shippingCost + taxCost;
+    const showingPrefillEstimate = hasPhysicalItems && !checkoutAddress?.address1 && (hasSeededEstimate || isEstimatingShipping);
 
     if (cart.length === 0) {
         return (
@@ -267,9 +355,17 @@ export default function CheckoutPage() {
         <div className="min-h-screen flex flex-col bg-background text-foreground relative overflow-x-hidden">
 
             <div className="flex-1 flex flex-col lg:flex-row relative z-10">
-                <div className="w-full lg:w-[44%] drawer-surface dark:bg-[#0c0d0f] border-b lg:border-b-0 border-border relative overflow-hidden">
+                <div className="order-2 lg:order-1 w-full lg:w-[44%] drawer-surface dark:bg-[#0c0d0f] border-b lg:border-b-0 border-border relative overflow-hidden">
                     <div className="flex flex-col w-full max-w-[500px] ml-auto px-6 lg:px-12 py-8 lg:py-12">
                         <div className="flex-shrink-0 mb-6 lg:mb-8">
+                            <PageBreadcrumb
+                                items={[
+                                    { label: 'store', href: '/' },
+                                    { label: 'checkout' },
+                                ]}
+                                className="mb-6"
+                            />
+
                             <Link href="/" className="inline-flex items-center gap-3 mb-8 group">
                                 <IconArrowLeft size={14} stroke={2} className="text-muted group-hover:-translate-x-0.5 transition-transform" />
                                 <span
@@ -450,25 +546,52 @@ export default function CheckoutPage() {
                                         <span className="text-muted">
                                             {shippingCost > 0 ? 'Standard Shipping' : 'Shipping'}
                                         </span>
-                                        {isCalculating ? (
+                                        {isCalculating && !isRefreshingQuote ? (
                                             <span className="text-muted text-xs italic">--</span>
                                         ) : shippingCost > 0 ? (
                                             <span className="text-foreground">${shippingCost.toFixed(2)}</span>
+                                        ) : showingPrefillEstimate ? (
+                                            <span className="text-muted text-xs italic">
+                                                {isEstimatingShipping ? 'Calculating estimate...' : '$0.00'}
+                                            </span>
                                         ) : (
-                                            <span className="text-muted text-xs italic">--</span>
+                                            <span className="text-muted text-xs italic">
+                                                {checkoutAddress?.address1 ? 'Unavailable' : 'Enter address below'}
+                                            </span>
                                         )}
                                     </div>
                                 )}
                                 <div className="flex justify-between text-sm">
                                     <span className="text-muted">Tax</span>
-                                    {isCalculating ? (
+                                    {isCalculating && !isRefreshingQuote ? (
                                         <span className="text-muted text-xs italic">--</span>
                                     ) : taxCost > 0 ? (
                                         <span className="text-foreground">${taxCost.toFixed(2)}</span>
+                                    ) : showingPrefillEstimate ? (
+                                        <span className="text-muted text-xs italic">
+                                            {isEstimatingShipping ? 'Calculating estimate...' : '$0.00'}
+                                        </span>
                                     ) : (
-                                        <span className="text-muted text-xs italic">$0.00</span>
+                                        <span className="text-muted text-xs italic">
+                                            {checkoutAddress?.address1 ? '$0.00' : '--'}
+                                        </span>
                                     )}
                                 </div>
+                                {showingPrefillEstimate && !isCalculating && (
+                                    <div className="pt-1 text-[11px] text-muted italic">
+                                        Estimated by location. Finalized after full address entry.
+                                    </div>
+                                )}
+                                {isCalculating && isRefreshingQuote && (
+                                    <div className="pt-1 text-[11px] text-muted italic">
+                                        Refreshing latest shipping and tax quote...
+                                    </div>
+                                )}
+                                {shippingError && (
+                                    <div className="pt-1 text-[11px] text-alert/80">
+                                        {shippingError}
+                                    </div>
+                                )}
                                 <div className="flex justify-between text-sm pt-4 font-semibold border-t border-border">
                                     <span className="text-foreground">Total due today</span>
                                     <span className="text-foreground">${finalTotal.toFixed(2)}</span>
@@ -487,7 +610,7 @@ export default function CheckoutPage() {
                 </div>
 
                 <div
-                    className="flex-1 bg-background relative z-20"
+                    className="order-1 lg:order-2 flex-1 bg-background relative z-20"
                     style={{
                         boxShadow: isDark
                             ? '-12px 0 48px -12px rgba(0,0,0,0.5)'

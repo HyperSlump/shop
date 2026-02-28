@@ -5,9 +5,9 @@ export async function POST(req: Request) {
     console.log('>>> [STRIPE_API] POST RECEIVED');
     try {
         const body = await req.json();
-        const { cart, shippingAmount, recipient, shippingId } = body;
+        const { cart, shippingAmount, taxAmount, recipient, shippingId } = body;
 
-        console.log('>>> [STRIPE_API] Payload received:', JSON.stringify({ cart, shippingAmount, recipient, shippingId }, null, 2));
+        console.log('>>> [STRIPE_API] Payload received:', JSON.stringify({ cart, shippingAmount, taxAmount, recipient, shippingId }, null, 2));
 
         if (!cart || !Array.isArray(cart) || cart.length === 0) {
             console.error('>>> [STRIPE_API] Validation Failed: Empty or invalid cart');
@@ -15,10 +15,10 @@ export async function POST(req: Request) {
         }
 
         // Always calculate total on the server to prevent price tampering
-        const productsTotal = cart.reduce((sum: number, item: any) => sum + (item.amount || 0), 0);
-        const total = productsTotal + (shippingAmount || 0);
+        const productsTotal = cart.reduce((sum: number, item: any) => sum + ((item.amount || 0) * (item.quantity || 1)), 0);
+        const total = productsTotal + (shippingAmount || 0) + (taxAmount || 0);
 
-        console.log('>>> [STRIPE_API] Calculated Total:', total, `(Products: ${productsTotal}, Shipping: ${shippingAmount || 0})`);
+        console.log('>>> [STRIPE_API] Calculated Total:', total, `(Products: ${productsTotal}, Shipping: ${shippingAmount || 0}, Tax: ${taxAmount || 0})`);
 
         if (total <= 0) {
             console.error('>>> [STRIPE_API] Total is 0 or negative');
@@ -31,8 +31,8 @@ export async function POST(req: Request) {
         const itemDetailsStr = JSON.stringify(cart.map((item: any) => ({
             id: item.id,
             type: item.metadata?.type || 'DIGITAL',
-            v_id: item.metadata?.variant_id, // Compact key
-            qty: 1
+            v_id: item.metadata?.variant_id || item.selectedVariantId, // Robust mapping
+            qty: item.quantity || 1
         })));
 
         const metadata: any = {
@@ -82,8 +82,8 @@ export async function POST(req: Request) {
         return NextResponse.json({
             clientSecret: paymentIntent.client_secret,
             id: paymentIntent.id,
-            amount_tax: (paymentIntent as any).total_details?.amount_tax || 0,
-            amount_shipping: (paymentIntent as any).total_details?.amount_shipping || 0,
+            amount_shipping: shippingAmount || 0,
+            amount_tax: taxAmount || 0
         });
     } catch (error: any) {
         console.error('>>> [STRIPE_API] ERROR CAUGHT:', error);

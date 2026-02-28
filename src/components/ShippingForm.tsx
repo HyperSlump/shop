@@ -17,6 +17,7 @@ export interface ShippingAddress {
 }
 
 interface ShippingFormProps {
+    address?: ShippingAddress | null;
     onAddressSelected: (address: ShippingAddress) => void;
     isDark: boolean;
     isCalculating?: boolean;
@@ -24,8 +25,8 @@ interface ShippingFormProps {
 
 const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY || '';
 
-export default function ShippingForm({ onAddressSelected, isDark, isCalculating }: ShippingFormProps) {
-    const [address, setAddress] = useState<ShippingAddress>({
+export default function ShippingForm({ address: initialAddress, onAddressSelected, isDark, isCalculating }: ShippingFormProps) {
+    const [address, setAddress] = useState<ShippingAddress>(initialAddress || {
         firstName: '',
         lastName: '',
         address1: '',
@@ -35,6 +36,18 @@ export default function ShippingForm({ onAddressSelected, isDark, isCalculating 
         country_code: 'US',
         zip: '',
     });
+
+    // Sync local state with initialAddress prop
+    useEffect(() => {
+        if (initialAddress) {
+            setAddress(prev => {
+                // Only update if actually different to avoid cycles
+                if (JSON.stringify(prev) === JSON.stringify(initialAddress)) return prev;
+                return { ...prev, ...initialAddress };
+            });
+        }
+    }, [initialAddress]);
+
     const [placesLoaded, setPlacesLoaded] = useState(false);
     const [placesError, setPlacesError] = useState(false);
 
@@ -65,6 +78,26 @@ export default function ShippingForm({ onAddressSelected, isDark, isCalculating 
         });
     }, []);
 
+    // Parse Google Places address_components into our structured format
+    function parseAddressComponents(components: google.maps.GeocoderAddressComponent[]) {
+        const get = (type: string) => components.find(c => c.types.includes(type));
+
+        const streetNumber = get('street_number')?.long_name || '';
+        const route = get('route')?.long_name || '';
+        const city = get('locality')?.long_name || get('sublocality_level_1')?.long_name || get('administrative_area_level_2')?.long_name || '';
+        const state = get('administrative_area_level_1')?.short_name || '';
+        const country = get('country')?.short_name || 'US';
+        const zip = get('postal_code')?.long_name || '';
+
+        return {
+            address1: `${streetNumber} ${route}`.trim(),
+            city,
+            state_code: state,
+            country_code: country,
+            zip,
+        };
+    }
+
     // Initialize autocomplete via ref callback when input mounts
     const initAutocomplete = useCallback((inputElement: HTMLInputElement | null) => {
         autocompleteInputRef.current = inputElement;
@@ -82,57 +115,31 @@ export default function ShippingForm({ onAddressSelected, isDark, isCalculating 
             if (!place.address_components) return;
 
             const parsed = parseAddressComponents(place.address_components);
-            const newAddress: ShippingAddress = {
-                firstName: address.firstName,
-                lastName: address.lastName,
-                address1: parsed.address1,
-                address2: '',
-                city: parsed.city,
-                state_code: parsed.state_code,
-                country_code: parsed.country_code,
-                zip: parsed.zip,
-            };
 
-            setAddress(newAddress);
+            setAddress(prev => {
+                const newAddress: ShippingAddress = {
+                    ...prev,
+                    address1: parsed.address1,
+                    address2: '',
+                    city: parsed.city,
+                    state_code: parsed.state_code,
+                    country_code: parsed.country_code,
+                    zip: parsed.zip,
+                };
 
-            // Only trigger rate fetch if we have enough address data
-            if (newAddress.address1 && newAddress.city && newAddress.country_code && newAddress.zip) {
-                onAddressSelected(newAddress);
-            }
+                return newAddress;
+            });
         });
 
         autocompleteRef.current = autocomplete;
-    }, [placesLoaded, onAddressSelected, address.firstName, address.lastName]);
+    }, [placesLoaded]);
 
-    // Parse Google Places address_components into our structured format
-    const parseAddressComponents = (components: google.maps.GeocoderAddressComponent[]) => {
-        const get = (type: string) => components.find(c => c.types.includes(type));
-
-        const streetNumber = get('street_number')?.long_name || '';
-        const route = get('route')?.long_name || '';
-        const city = get('locality')?.long_name || get('sublocality_level_1')?.long_name || get('administrative_area_level_2')?.long_name || '';
-        const state = get('administrative_area_level_1')?.short_name || '';
-        const country = get('country')?.short_name || 'US';
-        const zip = get('postal_code')?.long_name || '';
-
-        return {
-            address1: `${streetNumber} ${route}`.trim(),
-            city,
-            state_code: state,
-            country_code: country,
-            zip,
-        };
-    };
-
-    // Trigger address selection whenever key fields are filled
+    // Trigger address selection whenever any field changes
     useEffect(() => {
-        if (address.firstName && address.lastName && address.address1 && address.city && address.country_code && address.zip) {
-            // Wait for user to stop typing
-            const timer = setTimeout(() => {
-                onAddressSelected(address);
-            }, 800);
-            return () => clearTimeout(timer);
-        }
+        const timer = setTimeout(() => {
+            onAddressSelected(address);
+        }, 800);
+        return () => clearTimeout(timer);
     }, [address, onAddressSelected]);
 
     const inputClass = `w-full h-11 px-3 rounded-md text-sm outline-none transition-all duration-150 border ${isDark
@@ -161,6 +168,9 @@ export default function ShippingForm({ onAddressSelected, isDark, isCalculating 
                     <input
                         required
                         type="text"
+                        id="shipping-first-name"
+                        name="shipping_first_name"
+                        autoComplete="shipping given-name"
                         className={inputClass}
                         value={address.firstName}
                         onChange={(e) => setAddress({ ...address, firstName: e.target.value })}
@@ -171,6 +181,9 @@ export default function ShippingForm({ onAddressSelected, isDark, isCalculating 
                     <input
                         required
                         type="text"
+                        id="shipping-last-name"
+                        name="shipping_last_name"
+                        autoComplete="shipping family-name"
                         className={inputClass}
                         value={address.lastName}
                         onChange={(e) => setAddress({ ...address, lastName: e.target.value })}
@@ -188,13 +201,15 @@ export default function ShippingForm({ onAddressSelected, isDark, isCalculating 
                             <input
                                 ref={initAutocomplete}
                                 type="text"
-                                id="address-search-force-no-autofill"
-                                name="address-search-force-no-autofill"
+                                id="location-lookup"
+                                name="location_lookup"
                                 placeholder="Start typing your address..."
                                 className={inputClass}
-                                autoComplete="new-password"
-                                role="presentation"
-                                aria-autocomplete="none"
+                                autoComplete="off"
+                                inputMode="search"
+                                autoCorrect="off"
+                                spellCheck={false}
+                                data-form-type="other"
                                 data-lpignore="true"
                             />
                         </div>
@@ -207,6 +222,8 @@ export default function ShippingForm({ onAddressSelected, isDark, isCalculating 
                         <input
                             required
                             type="text"
+                            id="shipping-address-line1"
+                            name="shipping_address_line1"
                             autoComplete="shipping address-line1"
                             className={inputClass}
                             value={address.address1}
@@ -219,6 +236,8 @@ export default function ShippingForm({ onAddressSelected, isDark, isCalculating 
                         </label>
                         <input
                             type="text"
+                            id="shipping-address-line2"
+                            name="shipping_address_line2"
                             autoComplete="shipping address-line2"
                             className={inputClass}
                             value={address.address2 || ''}
@@ -233,6 +252,9 @@ export default function ShippingForm({ onAddressSelected, isDark, isCalculating 
                         <input
                             required
                             type="text"
+                            id="shipping-city"
+                            name="shipping_city"
+                            autoComplete="shipping address-level2"
                             className={inputClass}
                             value={address.city}
                             onChange={(e) => setAddress({ ...address, city: e.target.value })}
@@ -243,6 +265,9 @@ export default function ShippingForm({ onAddressSelected, isDark, isCalculating 
                         <input
                             required
                             type="text"
+                            id="shipping-state"
+                            name="shipping_state"
+                            autoComplete="shipping address-level1"
                             maxLength={2}
                             className={inputClass}
                             value={address.state_code}
@@ -257,6 +282,9 @@ export default function ShippingForm({ onAddressSelected, isDark, isCalculating 
                         <input
                             required
                             type="text"
+                            id="shipping-postal-code"
+                            name="shipping_postal_code"
+                            autoComplete="shipping postal-code"
                             className={inputClass}
                             value={address.zip}
                             onChange={(e) => setAddress({ ...address, zip: e.target.value })}
@@ -265,6 +293,8 @@ export default function ShippingForm({ onAddressSelected, isDark, isCalculating 
                     {/* Hidden Country Code Input */}
                     <input
                         type="hidden"
+                        name="shipping_country"
+                        autoComplete="shipping country"
                         value={address.country_code}
                     />
                 </div>

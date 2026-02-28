@@ -3,16 +3,18 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Minus, Plus, ChevronDown, Truck, Loader2 } from 'lucide-react';
+import { Minus, Plus } from 'lucide-react';
 import { IconPlayerPlayFilled, IconPlayerPauseFilled } from '@tabler/icons-react';
 import MatrixSpace from './MatrixSpace';
 import { useCart, Product } from './CartProvider';
 import { usePreviewPlayer } from './PreviewPlayerProvider';
-import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 
 interface ProductPageLayoutProps {
     product: Product;
 }
+
+type ProductVariant = NonNullable<Product['variants']>[number];
 
 /* ─── Variant Parsing ─── */
 const SIZE_LABELS = [
@@ -46,58 +48,12 @@ function parseVariantName(fullName: string): { size: string; color: string; raw:
     return { size, color, raw: variantPart };
 }
 
-/* ─── Countries for Shipping Estimate ─── */
-const SHIPPING_COUNTRIES = [
-    { code: 'US', name: 'United States' },
-    { code: 'CA', name: 'Canada' },
-    { code: 'GB', name: 'United Kingdom' },
-    { code: 'AU', name: 'Australia' },
-    { code: 'DE', name: 'Germany' },
-    { code: 'FR', name: 'France' },
-    { code: 'JP', name: 'Japan' },
-    { code: 'KR', name: 'South Korea' },
-    { code: 'NL', name: 'Netherlands' },
-    { code: 'SE', name: 'Sweden' },
-    { code: 'NO', name: 'Norway' },
-    { code: 'DK', name: 'Denmark' },
-    { code: 'IT', name: 'Italy' },
-    { code: 'ES', name: 'Spain' },
-    { code: 'PT', name: 'Portugal' },
-    { code: 'BE', name: 'Belgium' },
-    { code: 'AT', name: 'Austria' },
-    { code: 'CH', name: 'Switzerland' },
-    { code: 'PL', name: 'Poland' },
-    { code: 'IE', name: 'Ireland' },
-    { code: 'NZ', name: 'New Zealand' },
-    { code: 'FI', name: 'Finland' },
-    { code: 'MX', name: 'Mexico' },
-    { code: 'BR', name: 'Brazil' },
-    { code: 'SG', name: 'Singapore' },
-] as const;
-
-interface ShippingRate {
-    id: string;
-    name: string;
-    rate: string;
-    currency: string;
-    min_delivery_days?: number;
-    max_delivery_days?: number;
-}
 
 /* ─── Component ─── */
 export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
     /* ── Core state ── */
     const [selectedVariant, setSelectedVariant] = useState(product.variants?.[0] || null);
     const [quantity, setQuantity] = useState(1);
-    const [showDescription, setShowDescription] = useState(false);
-
-    /* ── Shipping estimate state ── */
-    const [shippingCountry, setShippingCountry] = useState('');
-    const [shippingRates, setShippingRates] = useState<ShippingRate[]>([]);
-    const [shippingLoading, setShippingLoading] = useState(false);
-    const [shippingError, setShippingError] = useState('');
-    const shippingCache = useRef<Record<string, ShippingRate[]>>({});
-
     const { addToCart, cart } = useCart();
     const isPhysical = product.metadata?.type === 'PHYSICAL';
     const audioPreviewUrl = !isPhysical ? product.metadata?.audio_preview : undefined;
@@ -167,6 +123,16 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
     const selectedParsed = selectedVariant ? parseVariantName(selectedVariant.name) : null;
     const selectedColor = selectedParsed?.color || '';
     const selectedSize = selectedParsed?.size || '';
+    const [activeImage, setActiveImage] = useState(
+        selectedVariant?.image || product.image || ''
+    );
+    const applyVariantSelection = useCallback((variant: ProductVariant | null) => {
+        if (!variant) return;
+        setSelectedVariant(variant);
+        if (variant.image) {
+            setActiveImage(variant.image);
+        }
+    }, []);
 
     /* ── Variant selection handlers ── */
     const handleColorSelect = useCallback((color: string) => {
@@ -176,9 +142,9 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
             parsedVariants.find(v => v.parsed.color === color && v.parsed.size === selectedSize) ||
             parsedVariants.find(v => v.parsed.color === color);
         if (match) {
-            setSelectedVariant(product.variants.find(v => v.id === match.id) || null);
+            applyVariantSelection(product.variants.find(v => v.id === match.id) || null);
         }
-    }, [parsedVariants, selectedSize, product.variants]);
+    }, [applyVariantSelection, parsedVariants, selectedSize, product.variants]);
 
     const handleSizeSelect = useCallback((size: string) => {
         if (!product.variants) return;
@@ -187,9 +153,28 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
             parsedVariants.find(v => v.parsed.size === size && v.parsed.color === selectedColor) ||
             parsedVariants.find(v => v.parsed.size === size);
         if (match) {
-            setSelectedVariant(product.variants.find(v => v.id === match.id) || null);
+            applyVariantSelection(product.variants.find(v => v.id === match.id) || null);
         }
-    }, [parsedVariants, selectedColor, product.variants]);
+    }, [applyVariantSelection, parsedVariants, selectedColor, product.variants]);
+
+    const handleImageSelect = useCallback((imageUrl: string) => {
+        setActiveImage(imageUrl);
+
+        if (!isPhysical || !product.variants?.length) return;
+
+        // Keep size/color in sync when selecting a variant image thumbnail.
+        const variantsForImage = parsedVariants.filter(v => v.image === imageUrl);
+        if (variantsForImage.length === 0) return;
+
+        const match =
+            variantsForImage.find(v => v.parsed.size === selectedSize && (!selectedColor || v.parsed.color === selectedColor)) ||
+            variantsForImage.find(v => v.parsed.size === selectedSize) ||
+            variantsForImage.find(v => v.parsed.color === selectedColor) ||
+            variantsForImage[0];
+
+        if (!match || selectedVariant?.id === match.id) return;
+        applyVariantSelection(product.variants.find(v => v.id === match.id) || null);
+    }, [applyVariantSelection, isPhysical, parsedVariants, product.variants, selectedColor, selectedSize, selectedVariant?.id]);
 
     /* ── Image Gallery ── */
     const galleryImages = useMemo(() => {
@@ -211,17 +196,6 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
         return images;
     }, [product]);
 
-    const [activeImage, setActiveImage] = useState(
-        selectedVariant?.image || product.image || ''
-    );
-
-    // Sync active image when variant changes
-    useEffect(() => {
-        if (selectedVariant?.image) {
-            setActiveImage(selectedVariant.image);
-        }
-    }, [selectedVariant]);
-
     /* ── Cart logic (preserved from original) ── */
     const isInCart = cart.some(item => {
         if (isPhysical) {
@@ -241,6 +215,8 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
         // Block if size is required but not selected
         if (sizes.length > 0 && !selectedSize) return;
 
+        const resolvedCatalogVariantId = selectedVariant.catalog_variant_id ?? selectedVariant.id;
+
         const cartProduct: Product = {
             ...product,
             id: `pf_${product.metadata?.printful_id}_${selectedVariant.id}`,
@@ -249,8 +225,11 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
             metadata: {
                 ...product.metadata,
                 variant_id: String(selectedVariant.id),
+                catalog_variant_id: String(resolvedCatalogVariantId),
                 variant_name: selectedVariant.name,
-            }
+            },
+            selectedVariantId: String(selectedVariant.id),
+            selectedCatalogVariantId: String(resolvedCatalogVariantId),
         };
         addToCart(cartProduct);
     };
@@ -280,7 +259,6 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
 
     /* ── Flags ── */
     const needsSizeSelection = isPhysical && sizes.length > 0 && !selectedSize;
-    const hasVariants = isPhysical && product.variants && product.variants.length > 0;
 
     /* ── Animation ── */
     const containerVariants = {
@@ -327,7 +305,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                             {galleryImages.map((img, i) => (
                                 <button
                                     key={i}
-                                    onClick={() => setActiveImage(img)}
+                                    onClick={() => handleImageSelect(img)}
                                     className={`relative aspect-square w-full overflow-hidden rounded border transition-all duration-200
                                         ${activeImage === img
                                             ? 'border-primary/50 ring-1 ring-primary/20'
@@ -396,7 +374,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                         </span>
                     </motion.div>
 
-                    {/* Short Description */}
+                    {/* Description */}
                     <motion.p variants={itemVariants} className="text-sm text-muted leading-relaxed max-w-prose">
                         {product.description}
                     </motion.p>
@@ -471,7 +449,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                                 {product.variants.map((v) => (
                                     <button
                                         key={v.id}
-                                        onClick={() => setSelectedVariant(v)}
+                                        onClick={() => applyVariantSelection(v)}
                                         className={`h-[38px] px-5 border transition-all font-mono text-[10px] uppercase tracking-[0.14em] rounded-md
                                             ${selectedVariant?.id === v.id
                                                 ? 'border-primary bg-primary/10 text-primary'
@@ -484,199 +462,60 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                             </div>
                         </motion.div>
                     )}
+                    {/* Quantity + CTA Row */}
+                    <motion.div variants={itemVariants} className="space-y-2 pt-1">
+                        <div className="flex items-stretch gap-2.5 md:gap-3">
+                            {/* Quantity Picker */}
+                            <div className="flex items-center border border-border/50 bg-background/35 rounded-md h-[44px] shrink-0">
+                                <button
+                                    onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                                    className="w-10 h-full flex items-center justify-center text-muted hover:text-foreground hover:bg-foreground/[0.03] transition-colors rounded-l-md"
+                                    aria-label="Decrease quantity"
+                                >
+                                    <Minus size={13} />
+                                </button>
+                                <span className="w-9 text-center font-mono text-[13px] text-foreground select-none border-x border-border/30">
+                                    {quantity}
+                                </span>
+                                <button
+                                    onClick={() => setQuantity(q => q + 1)}
+                                    className="w-10 h-full flex items-center justify-center text-muted hover:text-foreground hover:bg-foreground/[0.03] transition-colors rounded-r-md"
+                                    aria-label="Increase quantity"
+                                >
+                                    <Plus size={13} />
+                                </button>
+                            </div>
 
-                    {/* ── Quantity + CTA Row ── */}
-                    <motion.div variants={itemVariants} className="flex items-center gap-3 pt-1">
-                        {/* Quantity Picker */}
-                        <div className="flex items-center border border-border/50 rounded-md h-[48px] shrink-0">
+                            {/* Primary CTA */}
                             <button
-                                onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                                className="w-11 h-full flex items-center justify-center text-muted hover:text-foreground transition-colors rounded-l-md"
-                                aria-label="Decrease quantity"
+                                onClick={handleAddToCart}
+                                disabled={isInCart || needsSizeSelection}
+                                className={`flex-1 h-[44px] px-4 flex items-center justify-center gap-2.5 font-mono text-[9px] md:text-[10px] font-bold tracking-[0.14em] uppercase transition-all duration-300 rounded-md border
+                                    ${isInCart
+                                        ? 'bg-primary/8 border-primary/30 text-primary/70 cursor-default'
+                                        : needsSizeSelection
+                                            ? 'bg-foreground/[0.03] border-border/40 text-muted/80 cursor-default'
+                                            : 'bg-primary text-primary-foreground border-primary/90 hover:brightness-105 active:scale-[0.995] shadow-[0_3px_14px_rgba(var(--primary-rgb),0.18)]'
+                                    }`}
                             >
-                                <Minus size={14} />
-                            </button>
-                            <span className="w-10 text-center font-mono text-sm text-foreground select-none border-x border-border/30">
-                                {quantity}
-                            </span>
-                            <button
-                                onClick={() => setQuantity(q => q + 1)}
-                                className="w-11 h-full flex items-center justify-center text-muted hover:text-foreground transition-colors rounded-r-md"
-                                aria-label="Increase quantity"
-                            >
-                                <Plus size={14} />
+                                <span>
+                                    {isInCart
+                                        ? 'added'
+                                        : needsSizeSelection
+                                            ? 'select size'
+                                            : 'add to cart'}
+                                </span>
+                                {!isInCart && !needsSizeSelection && <span className="opacity-60 text-xs">-&gt;</span>}
                             </button>
                         </div>
 
-                        {/* Primary CTA */}
-                        <button
-                            onClick={handleAddToCart}
-                            disabled={isInCart || needsSizeSelection}
-                            className={`flex-1 h-[48px] flex items-center justify-center gap-3 font-mono text-[10px] font-bold tracking-[0.16em] uppercase transition-all duration-300 rounded-md border
-                                ${isInCart
-                                    ? 'bg-primary/10 border-primary/20 text-primary/60 cursor-default'
-                                    : needsSizeSelection
-                                        ? 'bg-foreground/[0.04] border-border/40 text-muted cursor-default'
-                                        : 'bg-primary text-primary-foreground border-primary hover:brightness-110 active:scale-[0.99] shadow-[0_4px_20px_rgba(var(--primary-rgb),0.2)]'
-                                }`}
-                        >
-                            <span>
-                                {isInCart
-                                    ? 'added'
-                                    : needsSizeSelection
-                                        ? 'select size'
-                                        : 'add to cart'}
-                            </span>
-                            {!isInCart && !needsSizeSelection && <span className="opacity-60 text-base">→</span>}
-                        </button>
+                        <p className="font-mono text-[10px] text-muted/70 uppercase tracking-[0.12em]">
+                            {isPhysical ? 'shipping + tax calculated at checkout' : 'instant delivery after payment'}
+                        </p>
                     </motion.div>
 
-                    {/* ── Shipping Estimate (Physical Products) ── */}
-                    {isPhysical && selectedVariant && (
-                        <motion.div variants={itemVariants} className="space-y-3">
-                            <div className="flex items-center gap-3">
-                                <Truck size={14} className="text-muted shrink-0" />
-                                <p className="font-mono text-[11px] text-foreground/70 uppercase tracking-[0.14em]">
-                                    estimate shipping
-                                </p>
-                            </div>
-                            <div className="flex gap-2">
-                                <select
-                                    value={shippingCountry}
-                                    onChange={async (e) => {
-                                        const country = e.target.value;
-                                        setShippingCountry(country);
-                                        if (!country || !selectedVariant) {
-                                            setShippingRates([]);
-                                            setShippingError('');
-                                            return;
-                                        }
 
-                                        // Check cache first
-                                        const cacheKey = `${selectedVariant.id}_${country}`;
-                                        if (shippingCache.current[cacheKey]) {
-                                            setShippingRates(shippingCache.current[cacheKey]);
-                                            setShippingError('');
-                                            return;
-                                        }
-
-                                        setShippingLoading(true);
-                                        setShippingError('');
-                                        setShippingRates([]);
-
-                                        try {
-                                            const res = await fetch('/api/printful/estimate', {
-                                                method: 'POST',
-                                                headers: { 'Content-Type': 'application/json' },
-                                                body: JSON.stringify({
-                                                    country_code: country,
-                                                    variant_id: String(selectedVariant.id),
-                                                    quantity,
-                                                }),
-                                            });
-
-                                            const data = await res.json();
-
-                                            if (!res.ok) {
-                                                setShippingError(data.error || 'Unable to estimate shipping');
-                                            } else if (data.rates && data.rates.length > 0) {
-                                                setShippingRates(data.rates);
-                                                shippingCache.current[cacheKey] = data.rates;
-                                            } else {
-                                                setShippingError('No shipping options available for this destination');
-                                            }
-                                        } catch {
-                                            setShippingError('Failed to fetch shipping rates');
-                                        } finally {
-                                            setShippingLoading(false);
-                                        }
-                                    }}
-                                    className="flex-1 h-[38px] px-3 border border-border/50 rounded-md bg-background/40 font-mono text-[11px] text-foreground/80 uppercase tracking-[0.1em] appearance-none cursor-pointer focus:outline-none focus:border-primary/40 transition-colors"
-                                >
-                                    <option value="">select country</option>
-                                    {SHIPPING_COUNTRIES.map(c => (
-                                        <option key={c.code} value={c.code}>{c.name}</option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            {/* Shipping Results */}
-                            <AnimatePresence mode="wait">
-                                {shippingLoading && (
-                                    <motion.div
-                                        key="loading"
-                                        initial={{ opacity: 0, height: 0 }}
-                                        animate={{ opacity: 1, height: 'auto' }}
-                                        exit={{ opacity: 0, height: 0 }}
-                                        className="flex items-center gap-2 py-2"
-                                    >
-                                        <Loader2 size={12} className="animate-spin text-muted" />
-                                        <span className="font-mono text-[10px] text-muted uppercase tracking-wider">calculating rates...</span>
-                                    </motion.div>
-                                )}
-
-                                {!shippingLoading && shippingError && (
-                                    <motion.p
-                                        key="error"
-                                        initial={{ opacity: 0, height: 0 }}
-                                        animate={{ opacity: 1, height: 'auto' }}
-                                        exit={{ opacity: 0, height: 0 }}
-                                        className="font-mono text-[10px] text-alert/70 uppercase tracking-wider py-1"
-                                    >
-                                        {shippingError}
-                                    </motion.p>
-                                )}
-
-                                {!shippingLoading && shippingRates.length > 0 && (
-                                    <motion.div
-                                        key="rates"
-                                        initial={{ opacity: 0, height: 0 }}
-                                        animate={{ opacity: 1, height: 'auto' }}
-                                        exit={{ opacity: 0, height: 0 }}
-                                        className="space-y-2"
-                                    >
-                                        {shippingRates.map((rate) => (
-                                            <div
-                                                key={rate.id}
-                                                className="flex items-center justify-between py-2 px-3 border border-border/30 rounded-md bg-background/30"
-                                            >
-                                                <div className="flex flex-col gap-0.5">
-                                                    <span className="font-mono text-[11px] text-foreground/80 uppercase tracking-wider">
-                                                        {rate.name}
-                                                    </span>
-                                                    {(rate.min_delivery_days || rate.max_delivery_days) && (
-                                                        <span className="font-mono text-[9px] text-muted uppercase tracking-wider">
-                                                            {rate.min_delivery_days && rate.max_delivery_days
-                                                                ? `${rate.min_delivery_days}–${rate.max_delivery_days} business days`
-                                                                : rate.max_delivery_days
-                                                                    ? `up to ${rate.max_delivery_days} business days`
-                                                                    : `from ${rate.min_delivery_days} business days`
-                                                            }
-                                                        </span>
-                                                    )}
-                                                </div>
-                                                <span className="font-mono text-[12px] font-semibold text-foreground tracking-tight">
-                                                    {parseFloat(rate.rate) === 0 ? 'free' : `$${parseFloat(rate.rate).toFixed(2)}`}
-                                                </span>
-                                            </div>
-                                        ))}
-
-                                        {/* Total with shipping */}
-                                        <div className="flex items-center justify-between pt-2 border-t border-border/20">
-                                            <span className="font-mono text-[10px] text-muted uppercase tracking-wider">
-                                                estimated total
-                                            </span>
-                                            <span className="font-mono text-[13px] font-bold text-foreground tracking-tight">
-                                                ${(displayPrice * quantity + parseFloat(shippingRates[0].rate)).toFixed(2)}
-                                            </span>
-                                        </div>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </motion.div>
-                    )}
-
-                    {/* ── Audio Preview (Digital Products) ── */}
+                    {/* Audio Preview (Digital Products) */}
                     {audioPreviewUrl && (
                         <motion.div variants={itemVariants}>
                             <button
@@ -700,70 +539,50 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                     {/* ── Divider ── */}
                     <motion.div variants={itemVariants} className="border-t border-border/30" />
 
-                    {/* ── Description Accordion ── */}
-                    <motion.div variants={itemVariants}>
-                        <button
-                            onClick={() => setShowDescription(!showDescription)}
-                            className="w-full flex items-center justify-between py-1 group"
-                        >
-                            <span className="font-mono text-[11px] text-foreground/70 uppercase tracking-[0.14em] group-hover:text-foreground transition-colors">
-                                description
-                            </span>
-                            <ChevronDown
-                                size={16}
-                                className={`text-muted transition-transform duration-300 ${showDescription ? 'rotate-180' : ''}`}
-                            />
-                        </button>
-                        <AnimatePresence>
-                            {showDescription && (
-                                <motion.div
-                                    initial={{ height: 0, opacity: 0 }}
-                                    animate={{ height: 'auto', opacity: 1 }}
-                                    exit={{ height: 0, opacity: 0 }}
-                                    transition={{ duration: 0.3, ease: [0.2, 0.8, 0.2, 1] }}
-                                    className="overflow-hidden"
-                                >
-                                    <p className="text-sm text-muted/80 leading-relaxed pt-3 pb-1 max-w-prose">
-                                        {extendedDescription}
-                                    </p>
 
-                                    {/* Technical Metadata (below the extended description) */}
-                                    {!isPhysical && (
-                                        <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3 py-3 border-t border-border/20">
-                                            {[
-                                                { k: 'format', v: product.metadata?.format || 'WAV' },
-                                                { k: 'size', v: product.metadata?.size || '—' },
-                                                { k: 'depth', v: '24-BIT / 96' },
-                                                { k: 'license', v: 'LIFETIME' },
-                                            ].map((spec) => (
-                                                <div key={spec.k} className="flex flex-col gap-0.5">
-                                                    <span className="text-[9px] text-primary/30 uppercase tracking-wider font-mono">{spec.k}</span>
-                                                    <span className="text-[11px] text-foreground/60 uppercase font-mono">{spec.v}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
+                    {/* Full Description */}
+                    <motion.div variants={itemVariants} className="space-y-4">
+                        <p className="font-mono text-[11px] text-foreground/70 uppercase tracking-[0.14em]">
+                            description
+                        </p>
+                        <p className="text-sm text-muted/80 leading-relaxed max-w-prose">
+                            {extendedDescription}
+                        </p>
 
-                                    {isPhysical && (
-                                        <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3 py-3 border-t border-border/20">
-                                            {[
-                                                { k: 'type', v: 'print on demand' },
-                                                { k: 'options', v: `${product.variants?.length || 0} variants` },
-                                                { k: 'source', v: 'printful' },
-                                            ].map((spec) => (
-                                                <div key={spec.k} className="flex flex-col gap-0.5">
-                                                    <span className="text-[9px] text-primary/30 uppercase tracking-wider font-mono">{spec.k}</span>
-                                                    <span className="text-[11px] text-foreground/60 uppercase font-mono">{spec.v}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
+                        {/* Technical Metadata (below the extended description) */}
+                        {!isPhysical && (
+                            <div className="mt-2 grid grid-cols-2 sm:grid-cols-4 gap-3 py-3 border-t border-border/20">
+                                {[
+                                    { k: 'format', v: product.metadata?.format || 'WAV' },
+                                    { k: 'size', v: product.metadata?.size || '--' },
+                                    { k: 'depth', v: '24-BIT / 96' },
+                                    { k: 'license', v: 'LIFETIME' },
+                                ].map((spec) => (
+                                    <div key={spec.k} className="flex flex-col gap-0.5">
+                                        <span className="text-[9px] text-primary/30 uppercase tracking-wider font-mono">{spec.k}</span>
+                                        <span className="text-[11px] text-foreground/60 uppercase font-mono">{spec.v}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {isPhysical && (
+                            <div className="mt-2 grid grid-cols-2 sm:grid-cols-3 gap-3 py-3 border-t border-border/20">
+                                {[
+                                    { k: 'type', v: 'print on demand' },
+                                    { k: 'options', v: `${product.variants?.length || 0} variants` },
+                                    { k: 'source', v: 'printful' },
+                                ].map((spec) => (
+                                    <div key={spec.k} className="flex flex-col gap-0.5">
+                                        <span className="text-[9px] text-primary/30 uppercase tracking-wider font-mono">{spec.k}</span>
+                                        <span className="text-[11px] text-foreground/60 uppercase font-mono">{spec.v}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </motion.div>
 
-                    {/* ── Trust / Info Badges ── */}
+                    {/* Trust / Info Badges */}
                     <motion.div variants={itemVariants} className="flex flex-wrap gap-x-6 gap-y-2 pt-2 border-t border-border/30">
                         {isPhysical ? (
                             <>

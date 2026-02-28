@@ -11,6 +11,8 @@ export type Product = {
   currency: string;
   amount: number;
   quantity?: number;
+  selectedVariantId?: string;
+  selectedCatalogVariantId?: string;
   metadata: Record<string, string>;
   variants?: Array<{
     id: number;

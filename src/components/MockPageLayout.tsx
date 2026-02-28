@@ -1,9 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
+import PageBreadcrumb from './PageBreadcrumb';
 
 interface MockPageLayoutProps {
     title: string;
@@ -17,6 +15,14 @@ export default function MockPageLayout({ title, subtitle, content, status, child
     return (
         <div className="flex-1 w-full px-4 md:px-7 lg:px-8 py-10">
             <div className="w-full space-y-10">
+                <PageBreadcrumb
+                    items={[
+                        { label: 'store', href: '/' },
+                        { label: subtitle },
+                    ]}
+                    className="mb-2"
+                />
+
                 {/* Header System Line */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-primary/20 pb-8 gap-6">
                     <div className="space-y-1 pt-4">

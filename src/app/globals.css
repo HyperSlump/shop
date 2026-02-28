@@ -306,41 +306,94 @@
     border-radius: var(--radius-md);
   }
 
+  /* Keep browser autofill from forcing system default colors */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--foreground) !important;
+    box-shadow: 0 0 0 1000px var(--card) inset !important;
+    transition: background-color 9999s ease-in-out 0s;
+    caret-color: var(--foreground);
+  }
+
+  html.dark input:-webkit-autofill,
+  html.dark input:-webkit-autofill:hover,
+  html.dark input:-webkit-autofill:focus,
+  html.dark textarea:-webkit-autofill,
+  html.dark textarea:-webkit-autofill:hover,
+  html.dark textarea:-webkit-autofill:focus {
+    -webkit-text-fill-color: #ECECEC !important;
+    box-shadow: 0 0 0 1000px #0B0D0E inset !important;
+    caret-color: #ECECEC;
+  }
+
   /* Google Places Autocomplete dropdown */
-  .pac-container {
+  html body .pac-container {
     z-index: 10000 !important;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.24);
-    font-family: inherit;
-    margin-top: 4px;
+    overflow: hidden;
+    border-radius: 12px !important;
+    border: 1px solid var(--border) !important;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.32) !important;
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif !important;
+    margin-top: 6px !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    backdrop-filter: blur(8px) !important;
   }
 
-  html.dark .pac-container {
-    background-color: #111416;
-    color: #ECECEC;
+  html.dark body .pac-container {
+    background: rgba(13, 16, 18, 0.96) !important;
+    color: #ECECEC !important;
+    border-color: rgba(167, 160, 164, 0.45) !important;
   }
 
-  .pac-item {
-    padding: 8px 12px;
-    font-size: 13px;
-    border-top: 1px solid var(--border);
-    cursor: pointer;
+  html body .pac-container .pac-item {
+    padding: 10px 12px !important;
+    font-size: 13px !important;
+    line-height: 1.35 !important;
+    border-top: 1px solid color-mix(in srgb, var(--border) 70%, transparent) !important;
+    cursor: pointer !important;
+    background: transparent !important;
+    color: var(--foreground) !important;
   }
 
-  html.dark .pac-item {
-    color: #ECECEC;
+  html.dark body .pac-container .pac-item {
+    color: #ECECEC !important;
+    border-top-color: rgba(167, 160, 164, 0.3) !important;
   }
 
-  html.dark .pac-item:hover {
-    background-color: rgba(216, 58, 61, 0.08);
+  html body .pac-container .pac-item:hover,
+  html body .pac-container .pac-item-selected {
+    background: color-mix(in srgb, var(--primary) 12%, transparent) !important;
   }
 
-  html.dark .pac-item-query {
-    color: #ECECEC;
+  html.dark body .pac-container .pac-item:hover,
+  html.dark body .pac-container .pac-item-selected {
+    background-color: rgba(216, 58, 61, 0.12) !important;
   }
 
-  .pac-icon {
-    display: none;
+  html body .pac-container .pac-item-query {
+    font-weight: 600 !important;
+    letter-spacing: 0.01em !important;
+    color: inherit !important;
+  }
+
+  html body .pac-container .pac-matched {
+    color: var(--primary) !important;
+    font-weight: 600 !important;
+  }
+
+  html body .pac-container .pac-icon {
+    display: none !important;
+  }
+
+  /* Keep Google attribution visible while blending with the UI */
+  html body .pac-container.pac-logo:after {
+    opacity: 0.78 !important;
+    filter: grayscale(1) contrast(1.05) !important;
+    transform: scale(0.96) !important;
+    transform-origin: right center !important;
   }
 }
