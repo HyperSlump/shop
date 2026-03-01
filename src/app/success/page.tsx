@@ -36,6 +36,41 @@ export default async function SuccessPage({
         );
     }
 
+    // Free order — skip Stripe lookup, build synthetic session and pull items from Supabase
+    if (session_id?.startsWith('free_')) {
+        const { supabaseAdmin } = await import('@/lib/supabase/admin');
+        const { data: purchases } = await supabaseAdmin
+            .from('purchases')
+            .select('*')
+            .eq('stripe_session_id', session_id);
+
+        const allProducts = await getUnifiedProducts();
+        const downloads = (purchases || []).map((p: any) => {
+            const fileInfo = getProductFile(p.price_id);
+            const catalogProduct = allProducts.find((prod: any) => prod.id === p.price_id);
+            return {
+                id: p.price_id,
+                name: catalogProduct?.name || fileInfo.label,
+                image: catalogProduct?.image,
+                url: fileInfo.url,
+                label: fileInfo.label,
+                amount: catalogProduct?.amount || 0,
+            };
+        });
+
+        const customerEmail = purchases?.[0]?.customer_email || null;
+        const upsellProducts = allProducts.filter((p: any) => p.metadata?.type === 'PHYSICAL').slice(0, 3);
+
+        return (
+            <SuccessClient
+                downloads={downloads}
+                physical={[]}
+                session={{ metadata: {}, customer_details: { email: customerEmail } }}
+                upsellItems={upsellProducts}
+            />
+        );
+    }
+
     // Verify session or payment intent
     let session: any;
     let lineItems: any[] = [];

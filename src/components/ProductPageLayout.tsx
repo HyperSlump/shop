@@ -9,6 +9,8 @@ import MatrixSpace from './MatrixSpace';
 import { useCart, Product } from './CartProvider';
 import { usePreviewPlayer } from './PreviewPlayerProvider';
 import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useIsDarkMode } from '@/hooks/useIsDarkMode';
+import { getThemePreferredPrintfulVariant } from '@/lib/themeAwarePrintfulImage';
 
 interface ProductPageLayoutProps {
     product: Product;
@@ -52,10 +54,13 @@ function parseVariantName(fullName: string): { size: string; color: string; raw:
 /* ─── Component ─── */
 export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
     /* ── Core state ── */
-    const [selectedVariant, setSelectedVariant] = useState(product.variants?.[0] || null);
+    const [selectedVariantId, setSelectedVariantId] = useState<number | null>(null);
+    const [activeImageOverride, setActiveImageOverride] = useState<string | null>(null);
     const [quantity, setQuantity] = useState(1);
     const { addToCart, cart } = useCart();
+    const isDark = useIsDarkMode();
     const isPhysical = product.metadata?.type === 'PHYSICAL';
+    const isDigital = !isPhysical;
     const audioPreviewUrl = !isPhysical ? product.metadata?.audio_preview : undefined;
     const formatLabel = typeof product.metadata?.format === 'string' ? product.metadata.format.toUpperCase() : 'WAV';
     const oneShotCount = typeof product.metadata?.count === 'string' ? product.metadata.count : '140';
@@ -119,18 +124,34 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
         return { colors: colorList, sizes: sizeList };
     }, [parsedVariants]);
 
+    const themePreferredVariant = useMemo(
+        () => {
+            if (!isPhysical || isDark === null) return null;
+            return getThemePreferredPrintfulVariant(product.variants, isDark);
+        },
+        [isDark, isPhysical, product.variants]
+    );
+
+    const selectedVariant = useMemo(() => {
+        if (!product.variants?.length) return null;
+        if (selectedVariantId !== null) {
+            const matchedVariant = product.variants.find((variant) => variant.id === selectedVariantId);
+            if (matchedVariant) return matchedVariant;
+        }
+        return themePreferredVariant || product.variants[0] || null;
+    }, [product.variants, selectedVariantId, themePreferredVariant]);
+
     // Derive selected color/size from the current variant
     const selectedParsed = selectedVariant ? parseVariantName(selectedVariant.name) : null;
     const selectedColor = selectedParsed?.color || '';
     const selectedSize = selectedParsed?.size || '';
-    const [activeImage, setActiveImage] = useState(
-        selectedVariant?.image || product.image || ''
-    );
+    const activeImage = activeImageOverride || selectedVariant?.image || themePreferredVariant?.image || product.image || '';
+
     const applyVariantSelection = useCallback((variant: ProductVariant | null) => {
         if (!variant) return;
-        setSelectedVariant(variant);
+        setSelectedVariantId(variant.id);
         if (variant.image) {
-            setActiveImage(variant.image);
+            setActiveImageOverride(variant.image);
         }
     }, []);
 
@@ -158,7 +179,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
     }, [applyVariantSelection, parsedVariants, selectedColor, product.variants]);
 
     const handleImageSelect = useCallback((imageUrl: string) => {
-        setActiveImage(imageUrl);
+        setActiveImageOverride(imageUrl);
 
         if (!isPhysical || !product.variants?.length) return;
 
@@ -181,7 +202,13 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
         const images: string[] = [];
         const seen = new Set<string>();
 
-        if (product.image) {
+        const preferredImage = themePreferredVariant?.image || product.image;
+        if (preferredImage) {
+            images.push(preferredImage);
+            seen.add(preferredImage);
+        }
+
+        if (product.image && !seen.has(product.image)) {
             images.push(product.image);
             seen.add(product.image);
         }
@@ -194,7 +221,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
         });
 
         return images;
-    }, [product]);
+    }, [product, themePreferredVariant?.image]);
 
     /* ── Cart logic (preserved from original) ── */
     const isInCart = cart.some(item => {
@@ -222,6 +249,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
             id: `pf_${product.metadata?.printful_id}_${selectedVariant.id}`,
             amount: parseFloat(selectedVariant.retail_price),
             image: selectedVariant.image || product.image,
+            quantity,
             metadata: {
                 ...product.metadata,
                 variant_id: String(selectedVariant.id),
@@ -464,54 +492,71 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                     )}
                     {/* Quantity + CTA Row */}
                     <motion.div variants={itemVariants} className="space-y-2 pt-1">
-                        <div className="flex items-stretch gap-2.5 md:gap-3">
-                            {/* Quantity Picker */}
-                            <div className="flex items-center border border-border/50 bg-background/35 rounded-md h-[44px] shrink-0">
+                        {isPhysical ? (
+                            <div className="flex items-stretch gap-2.5 md:gap-3">
+                                {/* Quantity Picker */}
+                                <div className="flex items-center border border-border/50 bg-background/35 rounded-md h-[44px] shrink-0">
+                                    <button
+                                        onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                                        className="w-10 h-full flex items-center justify-center text-muted hover:text-foreground hover:bg-foreground/[0.03] transition-colors rounded-l-md"
+                                        aria-label="Decrease quantity"
+                                    >
+                                        <Minus size={13} />
+                                    </button>
+                                    <span className="w-9 text-center font-mono text-[13px] text-foreground select-none border-x border-border/30">
+                                        {quantity}
+                                    </span>
+                                    <button
+                                        onClick={() => setQuantity(q => Math.min(10, q + 1))}
+                                        className="w-10 h-full flex items-center justify-center text-muted hover:text-foreground hover:bg-foreground/[0.03] transition-colors rounded-r-md"
+                                        aria-label="Increase quantity"
+                                    >
+                                        <Plus size={13} />
+                                    </button>
+                                </div>
+
+                                {/* Primary CTA */}
                                 <button
-                                    onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                                    className="w-10 h-full flex items-center justify-center text-muted hover:text-foreground hover:bg-foreground/[0.03] transition-colors rounded-l-md"
-                                    aria-label="Decrease quantity"
+                                    onClick={handleAddToCart}
+                                    disabled={isInCart || needsSizeSelection}
+                                    className={`flex-1 md:flex-none md:min-w-[220px] lg:min-w-[240px] h-[44px] px-4 md:px-6 flex items-center justify-center gap-2.5 font-mono text-[9px] md:text-[10px] font-bold tracking-[0.14em] uppercase transition-all duration-300 rounded-md border
+                                        ${isInCart
+                                            ? 'bg-primary/8 border-primary/30 text-primary/70 cursor-default'
+                                            : needsSizeSelection
+                                                ? 'bg-foreground/[0.03] border-border/40 text-muted/80 cursor-default'
+                                                : 'bg-primary text-primary-foreground border-primary/90 hover:brightness-105 active:scale-[0.995] shadow-[0_3px_14px_rgba(var(--primary-rgb),0.18)]'
+                                        }`}
                                 >
-                                    <Minus size={13} />
-                                </button>
-                                <span className="w-9 text-center font-mono text-[13px] text-foreground select-none border-x border-border/30">
-                                    {quantity}
-                                </span>
-                                <button
-                                    onClick={() => setQuantity(q => q + 1)}
-                                    className="w-10 h-full flex items-center justify-center text-muted hover:text-foreground hover:bg-foreground/[0.03] transition-colors rounded-r-md"
-                                    aria-label="Increase quantity"
-                                >
-                                    <Plus size={13} />
+                                    <span>
+                                        {isInCart
+                                            ? 'added'
+                                            : needsSizeSelection
+                                                ? 'select size'
+                                                : 'add to cart'}
+                                    </span>
+                                    {!isInCart && !needsSizeSelection && <span className="opacity-60 text-xs">-&gt;</span>}
                                 </button>
                             </div>
-
-                            {/* Primary CTA */}
+                        ) : (
                             <button
                                 onClick={handleAddToCart}
-                                disabled={isInCart || needsSizeSelection}
-                                className={`flex-1 h-[44px] px-4 flex items-center justify-center gap-2.5 font-mono text-[9px] md:text-[10px] font-bold tracking-[0.14em] uppercase transition-all duration-300 rounded-md border
+                                disabled={isInCart}
+                                className={`w-full h-[44px] px-4 md:px-6 flex items-center justify-center gap-2.5 font-mono text-[10px] font-bold tracking-[0.16em] uppercase transition-all duration-300 rounded-md border
                                     ${isInCart
                                         ? 'bg-primary/8 border-primary/30 text-primary/70 cursor-default'
-                                        : needsSizeSelection
-                                            ? 'bg-foreground/[0.03] border-border/40 text-muted/80 cursor-default'
-                                            : 'bg-primary text-primary-foreground border-primary/90 hover:brightness-105 active:scale-[0.995] shadow-[0_3px_14px_rgba(var(--primary-rgb),0.18)]'
+                                        : 'bg-primary text-primary-foreground border-primary/90 hover:brightness-105 active:scale-[0.995] shadow-[0_3px_14px_rgba(var(--primary-rgb),0.18)]'
                                     }`}
                             >
-                                <span>
-                                    {isInCart
-                                        ? 'added'
-                                        : needsSizeSelection
-                                            ? 'select size'
-                                            : 'add to cart'}
-                                </span>
-                                {!isInCart && !needsSizeSelection && <span className="opacity-60 text-xs">-&gt;</span>}
+                                <span>{isInCart ? 'added' : 'add to cart'}</span>
+                                {!isInCart && <span className="opacity-60 text-xs">-&gt;</span>}
                             </button>
-                        </div>
+                        )}
 
-                        <p className="font-mono text-[10px] text-muted/70 uppercase tracking-[0.12em]">
-                            {isPhysical ? 'shipping + tax calculated at checkout' : 'instant delivery after payment'}
-                        </p>
+                        {isDigital && (
+                            <p className="font-mono text-[10px] text-muted/70 uppercase tracking-[0.12em]">
+                                instant delivery after payment
+                            </p>
+                        )}
                     </motion.div>
 
 

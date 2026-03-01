@@ -11,7 +11,7 @@ import { IconShoppingCart } from '@tabler/icons-react';
 
 const navLinks = [
     { label: 'Shop', href: '/', id: 'shop', note: '//MAIN' },
-    { label: 'Blog', href: '/blog', id: 'blog', note: '//SOON' },
+    { label: 'Blog', href: '/blog', id: 'blog', note: '//READ' },
     { label: 'About', href: '/about', id: 'about', note: '//INFO' },
     { label: 'Archive', href: '/archive', id: 'archive', note: '//2026' },
     { label: 'Contact', href: '/contact', id: 'contact', note: '//LINK' },
@@ -43,7 +43,7 @@ export default function HorizontalNav() {
     return (
         <>
             <nav
-                className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 backdrop-blur-[2px] ${navOpacityClass} group/nav`}
+                className={`fixed top-0 left-0 right-0 z-[200] pointer-events-auto transition-all duration-500 backdrop-blur-[2px] ${navOpacityClass} group/nav`}
                 onMouseLeave={() => setHoveredLink(null)}
             >
                 <div className="w-full max-w-[1400px] mx-auto px-3 md:px-5 lg:px-6 h-20 flex items-center justify-between relative">

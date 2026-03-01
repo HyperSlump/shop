@@ -2,11 +2,13 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { IconPlayerPauseFilled, IconPlayerPlayFilled, IconWaveSine } from '@tabler/icons-react';
 
 import type { Product } from './CartProvider';
 import { usePreviewPlayer } from './PreviewPlayerProvider';
+import { useIsDarkMode } from '@/hooks/useIsDarkMode';
+import { getThemeAwareProductImage, getThemePreferredPrintfulVariant } from '@/lib/themeAwarePrintfulImage';
 
 interface ProductCardProps {
     product: Product;
@@ -16,6 +18,7 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, isInCart, onAddToCart }: ProductCardProps) {
     const { playTrack, isTrackActive, isPlaying, isOpen, registerTrack, unregisterTrack } = usePreviewPlayer();
+    const isDark = useIsDarkMode();
 
     useEffect(() => {
         const audioPreviewUrl = typeof product.metadata?.audio_preview === 'string' ? product.metadata.audio_preview : '';
@@ -34,6 +37,20 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
     }, [product, registerTrack, unregisterTrack]);
 
     const isPhysical = product.metadata?.type === 'PHYSICAL';
+    const themePreferredVariant = useMemo(
+        () => {
+            if (!isPhysical || isDark === null) return null;
+            return getThemePreferredPrintfulVariant(product.variants, isDark);
+        },
+        [isPhysical, isDark, product.variants]
+    );
+    const displayImage = useMemo(
+        () => {
+            if (isDark === null) return product.image || 'https://via.placeholder.com/500';
+            return getThemeAwareProductImage(product, isDark) || 'https://via.placeholder.com/500';
+        },
+        [product, isDark]
+    );
     const audioPreviewUrl = !isPhysical && typeof product.metadata?.audio_preview === 'string' ? product.metadata.audio_preview : '';
     const oneShotCount = typeof product.metadata?.count === 'string' ? product.metadata.count : '140';
     const formatLabel = typeof product.metadata?.format === 'string' ? product.metadata.format.toUpperCase() : 'WAV';
@@ -43,7 +60,37 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
     const addToCart = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         event.stopPropagation();
-        onAddToCart(product);
+        if (!isPhysical) {
+            onAddToCart(product);
+            return;
+        }
+
+        const fallbackVariant = product.variants?.[0];
+        const selectedVariant = themePreferredVariant || fallbackVariant;
+        const printfulId = product.metadata?.printful_id;
+
+        if (!selectedVariant || !printfulId) {
+            onAddToCart({ ...product, image: displayImage });
+            return;
+        }
+
+        const resolvedCatalogVariantId = selectedVariant.catalog_variant_id ?? selectedVariant.id;
+        const variantAmount = Number.parseFloat(selectedVariant.retail_price);
+
+        onAddToCart({
+            ...product,
+            id: `pf_${printfulId}_${selectedVariant.id}`,
+            amount: Number.isFinite(variantAmount) ? variantAmount : product.amount,
+            image: selectedVariant.image || displayImage,
+            metadata: {
+                ...product.metadata,
+                variant_id: String(selectedVariant.id),
+                catalog_variant_id: String(resolvedCatalogVariantId),
+                variant_name: selectedVariant.name,
+            },
+            selectedVariantId: String(selectedVariant.id),
+            selectedCatalogVariantId: String(resolvedCatalogVariantId),
+        });
     };
 
     const playPreview = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -92,7 +139,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                                 <Image
                                     alt={product.name}
                                     className="object-contain drop-shadow-[0_12px_28px_rgba(0,0,0,0.34)] rounded-sm"
-                                    src={product.image || 'https://via.placeholder.com/500'}
+                                    src={displayImage}
                                     fill
                                     sizes="(max-width: 768px) 92vw, (max-width: 1200px) 46vw, 31vw"
                                 />

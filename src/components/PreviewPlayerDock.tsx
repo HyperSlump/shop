@@ -47,6 +47,11 @@ export default function PreviewPlayerDock() {
         // setIsPlaylistOpen(false);
     };
 
+    const controlBase =
+        "inline-flex items-center justify-center rounded-sm border border-border bg-background/60 text-foreground/80 " +
+        "hover:text-foreground hover:border-primary/70 hover:shadow-[0_0_0_1px_rgba(var(--primary-rgb),0.4)] " +
+        "transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-0";
+
     return (
         <AnimatePresence>
             {isOpen && currentTrack && (
@@ -150,7 +155,7 @@ export default function PreviewPlayerDock() {
                                         <button
                                             type="button"
                                             onClick={togglePlayback}
-                                            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-sm border border-border bg-background text-foreground transition-colors hover:border-primary hover:text-primary"
+                                            className={`${controlBase} h-10 w-10 shrink-0 hover:-translate-y-[1px]`}
                                             aria-label={isPlaying ? 'Pause preview' : 'Play preview'}
                                         >
                                             {isPlaying ? (
@@ -188,7 +193,7 @@ export default function PreviewPlayerDock() {
                                     <button
                                         type="button"
                                         onClick={closePlayer}
-                                        className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border bg-background/55 text-muted transition-colors hover:border-primary/40 hover:text-foreground md:hidden"
+                                        className={`${controlBase} h-9 w-9 shrink-0 md:hidden hover:-translate-y-[1px]`}
                                         aria-label="Close preview player"
                                     >
                                         <IconX size={16} />
@@ -199,12 +204,9 @@ export default function PreviewPlayerDock() {
                                 <div className="flex items-center lg:border-r lg:border-border/50 lg:pr-4 lg:mr-1">
                                     <button
                                         onClick={() => setIsPlaylistOpen(!isPlaylistOpen)}
-                                        className={`flex items-center gap-2 px-3 py-1.5 rounded-sm font-mono text-[10px] uppercase tracking-[0.15em] transition-all duration-300 group
-                                        ${isPlaylistOpen
-                                                ? 'bg-primary text-primary-foreground shadow-[0_0_15px_rgba(216,58,61,0.2)]'
-                                                : 'bg-background/40 text-muted hover:text-foreground hover:bg-background/60 border border-border/50'}`}
+                                        className={`${controlBase} flex items-center gap-2 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.15em] hover:-translate-y-[1px] ${isPlaylistOpen ? 'bg-primary/15 border-primary/50 text-primary shadow-[0_0_0_1px_rgba(var(--primary-rgb),0.35)]' : ''}`}
                                     >
-                                        <IconPlaylist size={14} stroke={2} className={`${isPlaylistOpen ? 'animate-pulse' : 'group-hover:rotate-12 transition-transform'}`} />
+                                        <IconPlaylist size={14} stroke={2} />
                                         <span className="hidden sm:inline">{isPlaylistOpen ? 'Hide Playlist' : 'Playlist'}</span>
                                         <IconChevronUp
                                             size={12}
@@ -251,7 +253,7 @@ export default function PreviewPlayerDock() {
                                     <button
                                         type="button"
                                         onClick={closePlayer}
-                                        className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border bg-background/55 text-muted transition-colors hover:border-primary/40 hover:text-foreground"
+                                        className={`${controlBase} h-9 w-9 hover:-translate-y-[1px]`}
                                         aria-label="Close preview player"
                                     >
                                         <IconX size={16} />

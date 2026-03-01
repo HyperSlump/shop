@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { loadStripe, type Appearance } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { useCart, type Product } from '@/components/CartProvider';
@@ -11,7 +11,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { IconArrowLeft, IconChevronDown, IconLock, IconTruck, IconAlertTriangle, IconTrash, IconMinus, IconPlus, IconX } from '@tabler/icons-react';
 import AestheticBackground from '@/components/AestheticBackground';
-import PageBreadcrumb from '@/components/PageBreadcrumb';
 
 interface ShippingRateOption {
     id: string;
@@ -21,12 +20,6 @@ interface ShippingRateOption {
     min_delivery_days?: number;
     max_delivery_days?: number;
 }
-
-const ALLOWED_SHIPPING_COUNTRIES: string[] = [
-    'US', 'CA', 'GB', 'AU', 'DE', 'FR', 'JP', 'KR', 'NL', 'SE',
-    'NO', 'DK', 'IT', 'ES', 'PT', 'BE', 'AT', 'CH', 'PL', 'IE',
-    'NZ', 'FI', 'MX', 'BR', 'SG',
-];
 
 const VARIANT_SIZE_SET = new Set([
     'xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl', '4xl', '5xl',
@@ -116,6 +109,7 @@ export default function CheckoutPage() {
     const [taxCost, setTaxCost] = useState(0);
     const [shippingRateOptions, setShippingRateOptions] = useState<ShippingRateOption[]>([]);
     const [selectedShippingId, setSelectedShippingId] = useState<string>('');
+    const [taxCalculationId, setTaxCalculationId] = useState<string>('');
     const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
     const [checkoutAddress, setCheckoutAddress] = useState<ShippingAddress | null>(null);
     const [isCalculating, setIsCalculating] = useState(false);
@@ -128,6 +122,11 @@ export default function CheckoutPage() {
     const [showInvalidQuantityMessage, setShowInvalidQuantityMessage] = useState(false);
     const [showDoneEditingTooltip, setShowDoneEditingTooltip] = useState(false);
     const [doneEditingTooltipNonce, setDoneEditingTooltipNonce] = useState(0);
+    const lastQuotedAddressKeyRef = useRef('');
+    const pendingAddressQuoteKeyRef = useRef('');
+    const quoteSnapshotRef = useRef({ selectedShippingId: '', shippingCost: 0, taxCost: 0 });
+    const taxCostRef = useRef(0);
+    const taxCalculationIdRef = useRef('');
 
     const hasPhysicalItems = cart.some(item => item.metadata?.type === 'PHYSICAL');
     const invalidPhysicalItemIds = cart
@@ -188,9 +187,9 @@ export default function CheckoutPage() {
     const formatVariantDescriptor = useCallback((item: Product, variantName: string): string => {
         const parsed = parseVariantDescriptor(item, variantName);
 
-        if (parsed.color && parsed.size) return `Color ${parsed.color} | Size ${parsed.size}`;
-        if (parsed.color) return `Color ${parsed.color}`;
-        if (parsed.size) return `Size ${parsed.size}`;
+        if (parsed.color && parsed.size) return `${parsed.color.toLowerCase()} | ${parsed.size}`;
+        if (parsed.color) return parsed.color.toLowerCase();
+        if (parsed.size) return parsed.size;
         return parsed.raw;
     }, [parseVariantDescriptor]);
 
@@ -213,72 +212,163 @@ export default function CheckoutPage() {
         const shouldHighlightQuantity = showInvalidQuantityMessage && isZeroQuantity;
         const variants = item.variants ?? [];
         const hasVariants = variants.length > 0;
-        return (
-            <div className="mt-2 w-full max-w-[360px] space-y-1.5">
-                <p className="text-[9px] font-mono uppercase tracking-[0.14em] text-muted/70">
-                    Variant
-                </p>
-                <div className={`grid w-full items-center gap-2 ${hasVariants ? 'grid-cols-[minmax(0,1fr)_82px_24px]' : 'grid-cols-[82px_24px] justify-end'}`}>
-                    {hasVariants && (
-                        <div className="relative min-w-0 flex-1">
-                            <select
-                                value={String(selectedVariantId)}
-                                onChange={(event) => updatePhysicalVariant(item.id, event.target.value)}
-                                className="w-full h-[34px] pl-2.5 pr-8 border border-border/60 rounded-md bg-card/70 text-foreground font-mono text-[10px] uppercase tracking-[0.08em] appearance-none focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20"
-                            >
-                                {variants.map((variant) => (
-                                    <option key={variant.id} value={variant.id}>
-                                        {formatVariantDescriptor(item, variant.name)}
-                                    </option>
-                                ))}
-                            </select>
-                            <IconChevronDown
-                                size={12}
-                                stroke={2}
-                                className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-muted"
-                            />
-                        </div>
-                    )}
 
-                    <div
-                        className={`inline-flex h-[34px] w-[82px] items-center justify-between rounded-md px-2 py-1 transition-colors ${shouldHighlightQuantity
-                            ? 'border border-alert/60 bg-alert/10'
-                            : 'border border-border/40 bg-muted/10'}`}
-                    >
-                        <button
-                            onClick={() => updateQuantity(item.id, Math.max(0, currentQuantity - 1))}
-                            disabled={currentQuantity <= 0}
-                            className={`transition-colors ${currentQuantity <= 0 ? 'text-muted/40 cursor-not-allowed' : 'text-muted hover:text-foreground'}`}
+        // Parse all variants into color/size descriptors
+        const parsed = variants.map(v => ({
+            id: String(v.id),
+            ...parseVariantDescriptor(item, v.name),
+        }));
+
+        // Extract unique colors and sizes
+        const uniqueColors = [...new Set(parsed.map(p => p.color).filter(Boolean))];
+        const uniqueSizes = [...new Set(parsed.map(p => p.size).filter(Boolean))];
+        const hasColors = uniqueColors.length > 0;
+        const hasSizes = uniqueSizes.length > 0;
+
+        // Determine current selection
+        const currentParsed = parsed.find(p => p.id === String(selectedVariantId));
+        const currentColor = currentParsed?.color || uniqueColors[0] || '';
+        const currentSize = currentParsed?.size || uniqueSizes[0] || '';
+
+        // Handler: find the variant matching the new color + current size (or vice versa)
+        const handleColorChange = (newColor: string) => {
+            const match = parsed.find(p => p.color === newColor && p.size === currentSize)
+                || parsed.find(p => p.color === newColor);
+            if (match) updatePhysicalVariant(item.id, match.id);
+        };
+        const handleSizeChange = (newSize: string) => {
+            const match = parsed.find(p => p.size === newSize && p.color === currentColor)
+                || parsed.find(p => p.size === newSize);
+            if (match) updatePhysicalVariant(item.id, match.id);
+        };
+
+
+        return (
+            <div className="mt-2.5 w-full">
+                <div className="flex items-end gap-2 flex-wrap">
+                    {hasVariants && (hasColors || hasSizes) ? (
+                        <>
+                            {hasColors && (
+                                <div className="space-y-1">
+                                    <p className="text-[9px] font-mono uppercase tracking-[0.14em] text-muted/70">
+                                        Color
+                                    </p>
+                                    <div className="relative">
+                                        <select
+                                            value={currentColor}
+                                            onChange={(e) => handleColorChange(e.target.value)}
+                                            className="h-[30px] pl-2 pr-7 border border-border/60 rounded-md bg-card/70 text-foreground font-mono text-[10px] uppercase tracking-[0.08em] appearance-none focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20"
+                                        >
+                                            {uniqueColors.map(color => (
+                                                <option key={color} value={color}>{color}</option>
+                                            ))}
+                                        </select>
+                                        <IconChevronDown
+                                            size={10}
+                                            stroke={2}
+                                            className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-muted"
+                                        />
+                                    </div>
+                                </div>
+                            )}
+                            {hasSizes && (
+                                <div className="space-y-1">
+                                    <p className="text-[9px] font-mono uppercase tracking-[0.14em] text-muted/70">
+                                        Size
+                                    </p>
+                                    <div className="relative">
+                                        <select
+                                            value={currentSize}
+                                            onChange={(e) => handleSizeChange(e.target.value)}
+                                            className="h-[30px] pl-2 pr-7 border border-border/60 rounded-md bg-card/70 text-foreground font-mono text-[10px] uppercase tracking-[0.08em] appearance-none focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20"
+                                        >
+                                            {uniqueSizes.map(size => (
+                                                <option key={size} value={size}>{size}</option>
+                                            ))}
+                                        </select>
+                                        <IconChevronDown
+                                            size={10}
+                                            stroke={2}
+                                            className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-muted"
+                                        />
+                                    </div>
+                                </div>
+                            )}
+                        </>
+                    ) : hasVariants ? (
+                        <div className="space-y-1">
+                            <p className="text-[9px] font-mono uppercase tracking-[0.14em] text-muted/70">
+                                Variant
+                            </p>
+                            <div className="relative">
+                                <select
+                                    value={String(selectedVariantId)}
+                                    onChange={(e) => updatePhysicalVariant(item.id, e.target.value)}
+                                    className="h-[30px] pl-2 pr-7 border border-border/60 rounded-md bg-card/70 text-foreground font-mono text-[10px] uppercase tracking-[0.08em] appearance-none focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20"
+                                >
+                                    {variants.map(v => (
+                                        <option key={v.id} value={v.id}>
+                                            {formatVariantDescriptor(item, v.name)}
+                                        </option>
+                                    ))}
+                                </select>
+                                <IconChevronDown
+                                    size={10}
+                                    stroke={2}
+                                    className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-muted"
+                                />
+                            </div>
+                        </div>
+                    ) : null}
+
+                    <div className="space-y-1">
+                        <p className="text-[9px] font-mono uppercase tracking-[0.14em] text-muted/70">
+                            Qty
+                        </p>
+                        <div
+                            className={`inline-flex h-[30px] items-center gap-1.5 rounded-md px-2 transition-colors ${shouldHighlightQuantity
+                                ? 'border border-alert/60 bg-alert/10'
+                                : 'border border-border/60 bg-card/70'}`}
                         >
-                            <IconMinus size={12} stroke={2} />
-                        </button>
-                        <span className="text-xs font-medium w-4 text-center text-foreground tabular-nums">{currentQuantity}</span>
-                        <button
-                            onClick={() => updateQuantity(item.id, currentQuantity + 1)}
-                            disabled={currentQuantity >= 10}
-                            className={`text-muted transition-colors ${currentQuantity >= 10 ? 'opacity-20 cursor-not-allowed' : 'hover:text-foreground'}`}
-                        >
-                            <IconPlus size={12} stroke={2} />
-                        </button>
-                    </div>
-                    <div className="h-[24px] w-[24px]">
-                        <button
-                            onClick={() => removeFromCart(item.id)}
-                            disabled={!isZeroQuantity}
-                            tabIndex={isZeroQuantity ? 0 : -1}
-                            aria-hidden={!isZeroQuantity}
-                            aria-label={`Remove ${item.name} from order`}
-                            className={`h-[24px] w-[24px] inline-flex items-center justify-center rounded-sm text-muted/60 hover:text-foreground transition-opacity ${isZeroQuantity ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-                        >
-                            <IconX size={12} stroke={2} />
-                        </button>
+                            <button
+                                onClick={() => updateQuantity(item.id, Math.max(0, currentQuantity - 1))}
+                                disabled={currentQuantity <= 0}
+                                className={`transition-colors ${currentQuantity <= 0 ? 'text-muted/40 cursor-not-allowed' : 'text-muted hover:text-foreground'}`}
+                            >
+                                <IconMinus size={10} stroke={2} />
+                            </button>
+                            <span className="text-[10px] font-mono font-medium w-3 text-center text-foreground tabular-nums">{currentQuantity}</span>
+                            <button
+                                onClick={() => updateQuantity(item.id, currentQuantity + 1)}
+                                disabled={currentQuantity >= 10}
+                                className={`text-muted transition-colors ${currentQuantity >= 10 ? 'opacity-20 cursor-not-allowed' : 'hover:text-foreground'}`}
+                            >
+                                <IconPlus size={10} stroke={2} />
+                            </button>
+                        </div>
                     </div>
                 </div>
+
+                {isZeroQuantity && (
+                    <button
+                        onClick={() => removeFromCart(item.id)}
+                        className="mt-2 h-[30px] px-3 bg-alert/5 border border-alert/20 text-alert/80 hover:bg-alert/10 hover:border-alert/40 transition-all rounded-md inline-flex items-center gap-2"
+                    >
+                        <IconTrash size={12} stroke={2} />
+                        <span className="text-[9px] font-mono uppercase tracking-wider">Remove</span>
+                    </button>
+                )}
             </div>
         );
-    }, [formatVariantDescriptor, removeFromCart, showInvalidQuantityMessage, updatePhysicalVariant, updateQuantity]);
+    }, [formatVariantDescriptor, parseVariantDescriptor, removeFromCart, showInvalidQuantityMessage, updatePhysicalVariant, updateQuantity]);
 
-    const refreshIntent = useCallback(async (currentShipping = 0, address: ShippingAddress | null = null, shippingId?: string, taxAmount: number = taxCost) => {
+    const refreshIntent = useCallback(async (
+        currentShipping = 0,
+        address: ShippingAddress | null = null,
+        shippingId?: string,
+        taxAmount: number = taxCostRef.current,
+        taxCalcId: string = taxCalculationIdRef.current
+    ) => {
         try {
             const recipientData = address ? {
                 name: `${address.firstName} ${address.lastName}`.trim(),
@@ -298,7 +388,8 @@ export default function CheckoutPage() {
                     taxAmount: taxAmount,
                     shippingId,
                     recipient: recipientData,
-                    paymentIntentId: paymentIntentId || undefined
+                    paymentIntentId: paymentIntentId || undefined,
+                    taxCalculationId: taxCalcId || undefined,
                 }),
             });
 
@@ -308,18 +399,25 @@ export default function CheckoutPage() {
             }
 
             const data = await response.json();
+            if (data.freeOrder) {
+                // Zero-cost order — email already sent, redirect to success page
+                // Success page clears the cart on mount, so no need to do it here.
+                window.location.href = `/success?session_id=${data.sessionId}`;
+                return;
+            }
             if (data.clientSecret) {
                 setClientSecret(data.clientSecret);
                 setPaymentIntentId(data.id);
                 // Unconditionally update taxCost from the server response
                 // This ensures it resets to 0 if the server says it's 0 (e.g. non-taxable address)
                 setTaxCost(data.amount_tax || 0);
+                setTaxCalculationId(data.tax_calculation_id || '');
             }
         } catch (err: any) {
             console.error('Intent error:', err);
             setError(err.message);
         }
-    }, [cart, paymentIntentId, taxCost]);
+    }, [cart, paymentIntentId]);
 
     useEffect(() => {
         if (cart.length > 0 && hasCheckoutEligibleItems && !clientSecret && !isFreeOrder) {
@@ -332,6 +430,30 @@ export default function CheckoutPage() {
     }, [cart]);
 
     useEffect(() => {
+        lastQuotedAddressKeyRef.current = '';
+        pendingAddressQuoteKeyRef.current = '';
+    }, [cart]);
+
+    useEffect(() => {
+        quoteSnapshotRef.current = { selectedShippingId, shippingCost, taxCost };
+    }, [selectedShippingId, shippingCost, taxCost]);
+
+    useEffect(() => {
+        taxCostRef.current = taxCost;
+    }, [taxCost]);
+
+    useEffect(() => {
+        taxCalculationIdRef.current = taxCalculationId;
+    }, [taxCalculationId]);
+
+    useEffect(() => {
+        if (hasPhysicalItems) return;
+        setTaxCalculationId('');
+        setShippingCost(0);
+        setTaxCost(0);
+    }, [hasPhysicalItems]);
+
+    useEffect(() => {
         if (!hasPhysicalItems) return;
         if (checkoutAddress?.address1) return;
         if (hasSeededEstimate) return;
@@ -342,6 +464,7 @@ export default function CheckoutPage() {
 
         setShippingCost(seededShipping);
         setTaxCost(seededTax);
+        setTaxCalculationId('');
         setShippingError(null);
         setHasSeededEstimate(true);
 
@@ -371,6 +494,7 @@ export default function CheckoutPage() {
         setSelectedShippingId('');
         setShippingCost(0);
         setTaxCost(0);
+        setTaxCalculationId('');
         setClientSecret('');
         setPaymentIntentId('');
     }, [requiresOrderEditBeforeCheckout]);
@@ -413,38 +537,61 @@ export default function CheckoutPage() {
         }
     }, [cart.length]);
 
+    const getAddressQuoteKey = useCallback((address: ShippingAddress): string => {
+        return [
+            (address.address1 || '').trim().toLowerCase(),
+            (address.city || '').trim().toLowerCase(),
+            (address.state_code || '').trim().toUpperCase(),
+            (address.country_code || '').trim().toUpperCase(),
+            (address.zip || '').trim().toUpperCase(),
+        ].join('|');
+    }, []);
+
     const handleAddressChange = useCallback(async (addressValue: ShippingAddress) => {
         if (!hasPhysicalItems) return;
         const normalizedAddress: ShippingAddress = {
             ...addressValue,
+            address1: (addressValue.address1 || '').trim(),
+            address2: (addressValue.address2 || '').trim(),
+            city: (addressValue.city || '').trim(),
+            state_code: (addressValue.state_code || '').trim().toUpperCase(),
+            zip: (addressValue.zip || '').trim(),
             country_code: (addressValue.country_code || '').toUpperCase(),
         };
         setCheckoutAddress(normalizedAddress);
+        const quoteSnapshot = quoteSnapshotRef.current;
+        const hasExistingQuote = Boolean(
+            quoteSnapshot.selectedShippingId ||
+            quoteSnapshot.shippingCost > 0 ||
+            quoteSnapshot.taxCost > 0
+        );
 
         // Clear rates if address is incomplete
         if (!normalizedAddress.address1 || !normalizedAddress.city || !normalizedAddress.country_code || !normalizedAddress.zip) {
             setShippingRateOptions([]);
             setSelectedShippingId('');
-            setShippingCost(0);
-            setTaxCost(0);
+            if (!hasExistingQuote) {
+                setShippingCost(0);
+                setTaxCost(0);
+            }
+            setTaxCalculationId('');
             setHasSeededEstimate(false);
             setShippingError(null);
             setIsRefreshingQuote(false);
+            lastQuotedAddressKeyRef.current = '';
+            pendingAddressQuoteKeyRef.current = '';
             return;
         }
 
-        if (!ALLOWED_SHIPPING_COUNTRIES.includes(normalizedAddress.country_code)) {
-            setShippingRateOptions([]);
-            setSelectedShippingId('');
-            setShippingCost(0);
-            setTaxCost(0);
-            setHasSeededEstimate(false);
-            setShippingError('Shipping is not available for this destination yet.');
-            setIsRefreshingQuote(false);
+        const nextAddressQuoteKey = getAddressQuoteKey(normalizedAddress);
+        if (
+            (nextAddressQuoteKey === lastQuotedAddressKeyRef.current && hasExistingQuote) ||
+            nextAddressQuoteKey === pendingAddressQuoteKeyRef.current
+        ) {
             return;
         }
 
-        const hasExistingQuote = Boolean(selectedShippingId || shippingCost > 0 || taxCost > 0);
+        pendingAddressQuoteKeyRef.current = nextAddressQuoteKey;
         setIsCalculating(true);
         setIsRefreshingQuote(hasExistingQuote);
         setShippingError(null);
@@ -474,6 +621,7 @@ export default function CheckoutPage() {
                     setSelectedShippingId('');
                     setShippingCost(0);
                     setTaxCost(0);
+                    setTaxCalculationId('');
                     if (data.error) setShippingError(data.error);
                 } else {
                     const sorted = [...data.rates].sort(
@@ -485,16 +633,11 @@ export default function CheckoutPage() {
 
                     const cost = parseFloat(cheapest.rate);
                     setShippingCost(cost);
-
-                    if (typeof data.tax === 'number') {
-                        console.log('>>> [CHECKOUT_PAGE] Setting tax cost from Printful:', data.tax);
-                        setTaxCost(data.tax);
-                        await refreshIntent(cost, normalizedAddress, cheapest.id, data.tax);
-                    } else {
-                        // Reset tax if no tax is returned from Printful
-                        setTaxCost(0);
-                        await refreshIntent(cost, normalizedAddress, cheapest.id, 0);
-                    }
+                    const nextTaxAmount = typeof data.tax === 'number' ? data.tax : 0;
+                    setTaxCost(nextTaxAmount);
+                    setTaxCalculationId('');
+                    await refreshIntent(cost, normalizedAddress, cheapest.id, nextTaxAmount, '');
+                    lastQuotedAddressKeyRef.current = nextAddressQuoteKey;
                 }
             } else {
                 const errorData = await res.json().catch(() => ({}));
@@ -507,6 +650,7 @@ export default function CheckoutPage() {
                     setSelectedShippingId('');
                     setShippingCost(0);
                     setTaxCost(0);
+                    setTaxCalculationId('');
                 }
             }
         } catch (err: any) {
@@ -519,22 +663,46 @@ export default function CheckoutPage() {
                 setSelectedShippingId('');
                 setShippingCost(0);
                 setTaxCost(0);
+                setTaxCalculationId('');
             }
         } finally {
+            if (pendingAddressQuoteKeyRef.current === nextAddressQuoteKey) {
+                pendingAddressQuoteKeyRef.current = '';
+            }
             setIsCalculating(false);
             setIsRefreshingQuote(false);
         }
-    }, [hasPhysicalItems, cart, refreshIntent, selectedShippingId, shippingCost, taxCost]);
+    }, [cart, getAddressQuoteKey, hasPhysicalItems, refreshIntent]);
 
 
     const handleRateSelect = async (rate: ShippingRateOption) => {
         if (isCalculating || rate.id === selectedShippingId) return;
         setIsCalculating(true);
-        setSelectedShippingId(rate.id);
-        const cost = parseFloat(rate.rate);
-        setShippingCost(cost);
-        await refreshIntent(cost, checkoutAddress, rate.id);
-        setIsCalculating(false);
+        try {
+            setSelectedShippingId(rate.id);
+            const cost = parseFloat(rate.rate);
+            setShippingCost(cost);
+            const currentAddress = checkoutAddress;
+
+            if (
+                currentAddress &&
+                (currentAddress.address1 || '').trim() &&
+                (currentAddress.city || '').trim() &&
+                (currentAddress.country_code || '').trim() &&
+                (currentAddress.zip || '').trim()
+            ) {
+                const nextTaxAmount = taxCostRef.current;
+                setTaxCost(nextTaxAmount);
+                setTaxCalculationId('');
+                await refreshIntent(cost, currentAddress, rate.id, nextTaxAmount, '');
+            } else {
+                setTaxCost(0);
+                setTaxCalculationId('');
+                await refreshIntent(cost, currentAddress, rate.id, 0);
+            }
+        } finally {
+            setIsCalculating(false);
+        }
     };
 
     const finalTotal = cartTotal + shippingCost + taxCost;
@@ -580,24 +748,16 @@ export default function CheckoutPage() {
         <div className="min-h-screen flex flex-col bg-background text-foreground relative overflow-x-hidden">
 
             <div className="flex-1 flex flex-col lg:flex-row relative z-10">
-                <div className="order-2 lg:order-1 w-full lg:w-[44%] drawer-surface dark:bg-[#0c0d0f] border-b lg:border-b-0 border-border relative overflow-hidden">
+                <div className="order-first lg:order-none w-full lg:w-[44%] drawer-surface dark:bg-[#0c0d0f] border-b lg:border-b-0 border-border relative overflow-hidden">
                     <div className="flex flex-col w-full max-w-[500px] ml-auto px-6 lg:px-12 py-8 lg:py-12">
                         <div className="flex-shrink-0 mb-6 lg:mb-8">
-                            <PageBreadcrumb
-                                items={[
-                                    { label: 'store', href: '/' },
-                                    { label: 'checkout' },
-                                ]}
-                                className="mb-6"
-                            />
-
                             <Link href="/" className="inline-flex items-center gap-3 mb-8 group">
                                 <IconArrowLeft size={14} stroke={2} className="text-muted group-hover:-translate-x-0.5 transition-transform" />
                                 <span
                                     className="brand-logo-jacquard text-[2rem] leading-none tracking-tight text-foreground"
                                     style={{ fontFamily: 'var(--font-heading), "Jacquard 24", "Jacquard 12", system-ui' }}
                                 >
-                                    hyper$lump
+                                    h$
                                 </span>
                                 <span className="text-[9px] bg-slate-500/10 text-slate-500 dark:text-slate-400 px-1.5 py-0.5 rounded font-semibold uppercase tracking-wider">
                                     Test
@@ -605,7 +765,7 @@ export default function CheckoutPage() {
                             </Link>
 
                             <div className="flex items-end justify-between w-full">
-                                <p className="font-sans text-[40px] font-semibold tracking-tight leading-none text-foreground">
+                                <p className="font-sans text-[40px] font-semibold tracking-tight leading-none text-foreground tabular-nums">
                                     ${finalTotal.toFixed(2)}
                                 </p>
                                 {cart.length > 0 && (
@@ -646,7 +806,12 @@ export default function CheckoutPage() {
                                     </div>
                                     <div className="flex-1 min-w-0 flex items-start justify-between gap-3">
                                         <div className="min-w-0 flex-1">
-                                            <p className="text-sm font-medium leading-snug text-foreground truncate">{cart[0].name}</p>
+                                            <Link
+                                                href={`/product/${encodeURIComponent(cart[0].productId || cart[0].id)}`}
+                                                className="block text-sm font-medium leading-snug text-foreground truncate hover:underline"
+                                            >
+                                                {cart[0].name}
+                                            </Link>
                                             <p className="text-[10px] mt-0.5 text-muted font-mono uppercase tracking-[0.12em] truncate">
                                                 {getItemDescriptor(cart[0])}
                                             </p>
@@ -669,7 +834,7 @@ export default function CheckoutPage() {
                                                 <p className="text-xs mt-0.5 text-muted">Qty {cart[0]?.quantity ?? 1}</p>
                                             )}
                                         </div>
-                                        <span className="text-sm font-medium flex-shrink-0 text-foreground pt-0.5 tabular-nums text-right w-[76px]">
+                                        <span className="text-sm font-semibold font-sans tabular-nums flex-shrink-0 text-foreground pt-0.5 text-right w-[96px]">
                                             ${((cart[0]?.amount ?? 0) * (cart[0]?.quantity ?? 1)).toFixed(2)}
                                         </span>
                                     </div>
@@ -719,7 +884,12 @@ export default function CheckoutPage() {
                                                                 </div>
                                                                 <div className="flex-1 min-w-0 flex items-start justify-between gap-3">
                                                                     <div className="min-w-0 flex-1">
-                                                                        <p className="text-sm font-medium leading-snug text-foreground truncate">{item.name}</p>
+                                                                        <Link
+                                                                            href={`/product/${encodeURIComponent(item.productId || item.id)}`}
+                                                                            className="block text-sm font-medium leading-snug text-foreground truncate hover:underline"
+                                                                        >
+                                                                            {item.name}
+                                                                        </Link>
                                                                         <p className="text-[10px] mt-0.5 text-muted font-mono uppercase tracking-[0.12em] truncate">
                                                                             {getItemDescriptor(item)}
                                                                         </p>
@@ -742,7 +912,7 @@ export default function CheckoutPage() {
                                                                             <p className="text-xs mt-0.5 text-muted">Qty {item.quantity ?? 1}</p>
                                                                         )}
                                                                     </div>
-                                                                    <span className="text-sm font-medium flex-shrink-0 text-foreground pt-0.5 tabular-nums text-right w-[76px]">
+                                                                    <span className="text-sm font-semibold font-sans tabular-nums flex-shrink-0 text-foreground pt-0.5 text-right w-[96px]">
                                                                         ${((item.amount ?? 0) * (item.quantity ?? 1)).toFixed(2)}
                                                                     </span>
                                                                 </div>
@@ -770,12 +940,12 @@ export default function CheckoutPage() {
                             <div className="pt-4 space-y-3 border-t border-border">
                                 <div className="flex justify-between text-sm">
                                     <span className="text-muted">Subtotal</span>
-                                    <span className="text-foreground tabular-nums text-right min-w-[96px]">${cartTotal.toFixed(2)}</span>
+                                    <span className="text-foreground font-sans font-semibold tabular-nums text-right min-w-[96px]">${cartTotal.toFixed(2)}</span>
                                 </div>
                                 {hasPhysicalItems && (
                                     <div className="flex justify-between text-sm">
                                         <span className="text-muted">Shipping</span>
-                                        <span className="text-foreground tabular-nums text-right min-w-[96px]">
+                                        <span className="text-foreground font-sans font-semibold tabular-nums text-right min-w-[96px]">
                                             {isEstimatingShipping && !hasSeededEstimate && !checkoutAddress?.address1
                                                 ? '--'
                                                 : shippingDisplayValue}
@@ -784,7 +954,7 @@ export default function CheckoutPage() {
                                 )}
                                 <div className="flex justify-between text-sm">
                                     <span className="text-muted">Tax</span>
-                                    <span className="text-foreground tabular-nums text-right min-w-[96px]">
+                                    <span className="text-foreground font-sans font-semibold tabular-nums text-right min-w-[96px]">
                                         {isEstimatingShipping && !hasSeededEstimate && !checkoutAddress?.address1
                                             ? '--'
                                             : taxDisplayValue}
@@ -792,7 +962,7 @@ export default function CheckoutPage() {
                                 </div>
                                 <div className="flex justify-between text-sm pt-4 font-semibold border-t border-border">
                                     <span className="text-foreground">Total due today</span>
-                                    <span className="text-foreground tabular-nums text-right min-w-[96px]">${finalTotal.toFixed(2)}</span>
+                                    <span className="text-foreground font-sans font-semibold tabular-nums text-right min-w-[96px]">${finalTotal.toFixed(2)}</span>
                                 </div>
                             </div>
                         </div>
@@ -808,7 +978,7 @@ export default function CheckoutPage() {
                 </div>
 
                 <div
-                    className="order-1 lg:order-2 flex-1 bg-background relative z-20"
+                    className="order-last lg:order-none flex-1 bg-background relative z-20"
                     style={{
                         boxShadow: isDark
                             ? '-12px 0 48px -12px rgba(0,0,0,0.5)'
@@ -897,8 +1067,32 @@ function FreeOrderPanel({ cart }: { cart: Product[] }) {
             cart.map(item => ({ id: item.id, name: item.name, image: item.image }))
         ));
 
-        await new Promise(r => setTimeout(r, 400));
-        router.push('/downloads');
+        try {
+            const response = await fetch('/api/create-payment-intent', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    cart,
+                    shippingAmount: 0,
+                    taxAmount: 0,
+                    email,
+                }),
+            });
+
+            const data = await response.json();
+            if (data.freeOrder && data.sessionId) {
+                if (data.downloads) {
+                    localStorage.setItem('hyperslump-download-items-complete', JSON.stringify(data.downloads));
+                }
+                router.push(`/success?session_id=${data.sessionId}`);
+            } else {
+                // Fallback if API didn't return freeOrder
+                router.push('/downloads');
+            }
+        } catch (err) {
+            console.error('Free order submit error:', err);
+            router.push('/downloads');
+        }
     };
 
     return (
@@ -963,10 +1157,10 @@ function FreeOrderPanel({ cart }: { cart: Product[] }) {
                     {submitting ? (
                         <span className="flex items-center justify-center gap-2">
                             <span className="w-4 h-4 border-2 border-transparent border-t-white rounded-full animate-spin" />
-                            preparing_assets
+                            preparing assets
                         </span>
                     ) : (
-                        'complete_order'
+                        'complete order'
                     )}
                 </button>
             </form>

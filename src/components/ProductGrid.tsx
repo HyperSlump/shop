@@ -3,9 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useCart, Product } from './CartProvider';
 import ProductCard from './ProductCard';
+import { useIsDarkMode } from '@/hooks/useIsDarkMode';
+import { getThemePreferredPrintfulVariant } from '@/lib/themeAwarePrintfulImage';
 
 export default function ProductGrid({ products }: { products: Product[] }) {
     const { addToCart, cart } = useCart();
+    const isDark = useIsDarkMode();
     const [barcodeHover, setBarcodeHover] = useState(false);
     const [barcodeOpacities, setBarcodeOpacities] = useState<number[]>([]);
     const [mounted, setMounted] = useState(false);
@@ -28,7 +31,34 @@ export default function ProductGrid({ products }: { products: Product[] }) {
         }
     }, [barcodeHover, mounted]);
 
-    const isInCart = (id: string) => cart.some(item => item.id === id);
+    const isInCart = (product: Product) => {
+        const isPhysical = product.metadata?.type === 'PHYSICAL';
+        if (!isPhysical) {
+            return cart.some(item => item.id === product.id);
+        }
+
+        const printfulId = product.metadata?.printful_id;
+        if (!printfulId) {
+            return cart.some(item => item.id === product.id);
+        }
+
+        // Before theme is known on client mount, treat any variant as in-cart.
+        if (isDark === null) {
+            return cart.some(item => item.metadata?.printful_id === printfulId);
+        }
+
+        const themeVariant = getThemePreferredPrintfulVariant(product.variants, isDark) || product.variants?.[0];
+        if (!themeVariant) {
+            return cart.some(item => item.metadata?.printful_id === printfulId);
+        }
+
+        const targetId = `pf_${printfulId}_${themeVariant.id}`;
+        return cart.some(item =>
+            item.id === targetId ||
+            (item.metadata?.printful_id === printfulId &&
+                String(item.metadata?.variant_id) === String(themeVariant.id))
+        );
+    };
 
     return (
         <div className="mb-8">
@@ -66,7 +96,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
                     >
                         <ProductCard
                             product={product}
-                            isInCart={isInCart(product.id)}
+                            isInCart={isInCart(product)}
                             onAddToCart={(p) => addToCart(p)}
                         />
                     </div>

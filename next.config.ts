@@ -5,6 +5,10 @@ dotenv.config({ path: ".env.local" });
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
+  turbopack: {
+    // Explicitly set project root so Turbopack doesn't pick the parent lockfile
+    root: __dirname,
+  },
   images: {
     remotePatterns: [
       {

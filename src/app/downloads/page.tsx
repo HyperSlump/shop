@@ -39,7 +39,10 @@ export default function DownloadsPage() {
     const [downloading, setDownloading] = useState<Set<string>>(new Set());
     const { clearCart } = useCart();
 
+    const clearedRef = React.useRef(false);
     React.useEffect(() => {
+        if (clearedRef.current) return;
+        clearedRef.current = true;
         clearCart();
     }, [clearCart]);
 

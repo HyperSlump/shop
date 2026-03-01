@@ -35,8 +35,13 @@ Owner intent: Preserve current checkout UX + style while iterating safely.
 - `src/app/api/create-payment-intent/route.ts`
   - Rejects checkout if any physical item has quantity `<= 0`.
   - Recalculates totals server-side using normalized quantity/amount.
+  - When a Stripe Tax calculation is provided, validates subtotal sync and attaches tax hooks.
+- `src/app/api/tax/quote/route.ts`
+  - Generates customer-facing tax quotes via Stripe Tax Calculation API.
+  - Uses destination address + shipping amount + normalized cart lines.
 - `src/app/api/printful/shipping-rates/route.ts`
-  - Ignores physical lines with quantity `<= 0` for shipping/tax quote requests.
+  - Ignores physical lines with quantity `<= 0`.
+  - Returns shipping rates only (`tax` placeholder remains `0` for compatibility).
 
 ## Design System Guardrails
 - Global design lock is defined in `DESIGN_LOCK.md`.
@@ -49,7 +54,8 @@ Owner intent: Preserve current checkout UX + style while iterating safely.
 - Payment submit gating: `src/components/CheckoutForm.tsx`
 - Cart quantity behavior: `src/components/CartProvider.tsx`
 - Payment intent validation: `src/app/api/create-payment-intent/route.ts`
-- Shipping/tax quote adapter: `src/app/api/printful/shipping-rates/route.ts`
+- Stripe tax quote adapter: `src/app/api/tax/quote/route.ts`
+- Printful shipping quote adapter: `src/app/api/printful/shipping-rates/route.ts`
 - Mock shipping logic: `src/lib/services/printfulService.ts`
 
 ## Update-This-Doc Protocol (After Major Changes)
@@ -65,5 +71,5 @@ Then run:
 - Commit doc updates with code in the same commit.
 
 ## Next Planned Workstream
-- International tax behavior across countries (Canada, Mexico, and global destinations).
-- Keep tax display stable with no layout movement while rates are unavailable or pending.
+- Country rollout + registration checks for Stripe Tax (CA, MX, and broader international).
+- Product-level tax code hardening for digital and physical catalog lines.

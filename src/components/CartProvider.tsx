@@ -112,11 +112,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const timer = setTimeout(async () => {
-      setIsEstimatingShipping(true);
-      try {
-        const res = await fetch('/api/printful/shipping-rates', {
-          method: 'POST',
+        const timer = setTimeout(async () => {
+          setIsEstimatingShipping(true);
+          setEstimatedTax(null);
+          try {
+            const res = await fetch('/api/printful/shipping-rates', {
+              method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             recipient: {
@@ -129,7 +130,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
         if (res.ok) {
           const data = await res.json();
-          if (data.rates && data.rates.length > 0) {
+            if (data.rates && data.rates.length > 0) {
             const sorted = [...data.rates].sort((a, b) => parseFloat(a.rate) - parseFloat(b.rate));
             setEstimatedShipping(parseFloat(sorted[0].rate));
             if (typeof data.tax === 'number') {

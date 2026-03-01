@@ -20,18 +20,24 @@ interface SuccessClientProps {
 export default function SuccessClient({ downloads, physical, session, upsellItems = [] }: SuccessClientProps) {
     const router = useRouter();
     const { clearCart } = useCart();
+    const [hydratedDownloads, setHydratedDownloads] = useState<any[]>(downloads);
     const [downloaded, setDownloaded] = useState<Set<string>>(new Set());
     const [downloading, setDownloading] = useState<Set<string>>(new Set());
     const [emailSubmitting, setEmailSubmitting] = useState(false);
     const [emailSuccess, setEmailSuccess] = useState(false);
 
+
+    // Clear the cart exactly once after mount (avoids dependency array size churn + rerender loops)
+    const clearedRef = React.useRef(false);
     useEffect(() => {
-        // Clear the cart on successful order
+        if (clearedRef.current) return;
+        clearedRef.current = true;
         clearCart();
     }, [clearCart]);
 
     useEffect(() => {
         if (downloads.length > 0) {
+            setHydratedDownloads(downloads);
             try {
                 const itemsToStore = downloads.map(d => ({
                     id: d.id,
@@ -46,6 +52,19 @@ export default function SuccessClient({ downloads, physical, session, upsellItem
                 }
             } catch (e) {
                 console.error('Failed to save downloads', e);
+            }
+        } else {
+            // Free orders redirect instantly, Supabase might not have data yet. Fallback to localStorage:
+            try {
+                const stored = localStorage.getItem('hyperslump-download-items-complete');
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        setHydratedDownloads(parsed);
+                    }
+                }
+            } catch (e) {
+                console.error('Failed to parse fallback downloads', e);
             }
         }
     }, [downloads, session]);
@@ -77,9 +96,9 @@ export default function SuccessClient({ downloads, physical, session, upsellItem
         }, 1200);
     };
 
-    const hasDigital = downloads.length > 0;
+    const hasDigital = hydratedDownloads.length > 0;
     const hasPhysical = physical.length > 0;
-    const allDownloaded = hasDigital && downloads.every(item => downloaded.has(item.id));
+    const allDownloaded = hasDigital && hydratedDownloads.every(item => downloaded.has(item.id));
 
     const handleHomeNav = React.useCallback((event: React.MouseEvent<HTMLAnchorElement>) => {
         if (
@@ -103,6 +122,12 @@ export default function SuccessClient({ downloads, physical, session, upsellItem
         }, 250);
     }, [router]);
 
+    const getProductHref = React.useCallback((item: Product) => {
+        // Prefer the full price id (pf_... or price_...) because it maps directly to the product route
+        const targetId = item.id || item.productId;
+        return `/product/${encodeURIComponent(targetId)}`;
+    }, []);
+
     return (
         <div className="relative z-10 max-w-[800px] mx-auto px-5 py-8 lg:py-16">
             {/* Header */}
@@ -115,16 +140,23 @@ export default function SuccessClient({ downloads, physical, session, upsellItem
                     className="mb-6"
                 />
 
-                <Link
-                    href="/"
-                    onClick={handleHomeNav}
-                    className="inline-flex items-center gap-3 mb-10 group relative z-[130] pointer-events-auto"
-                >
-                    <IconArrowLeft size={14} stroke={2} className="text-muted-foreground group-hover:-translate-x-0.5 transition-transform" />
-                    <span className="brand-logo-jacquard text-[2.2rem] leading-none tracking-tight text-foreground">
+                <div className="inline-flex items-center gap-3 mb-10 group relative z-[130] pointer-events-auto">
+                    <Link
+                        href="/"
+                        onClick={handleHomeNav}
+                        aria-label="Back to store"
+                        className="inline-flex items-center"
+                    >
+                        <IconArrowLeft size={14} stroke={2} className="text-muted-foreground group-hover:-translate-x-0.5 transition-transform" />
+                    </Link>
+                    <Link
+                        href="/"
+                        onClick={handleHomeNav}
+                        className="brand-logo-jacquard text-[2.2rem] leading-none tracking-tight text-foreground hover:text-primary transition-colors"
+                    >
                         hyper$lump
-                    </span>
-                </Link>
+                    </Link>
+                </div>
             </motion.div>
 
             {/* Content Area */}
@@ -156,7 +188,7 @@ export default function SuccessClient({ downloads, physical, session, upsellItem
                             )}
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            {downloads.map((item) => {
+                            {hydratedDownloads.map((item) => {
                                 const fileInfo = getProductFile(item.id);
                                 const fileUrl = fileInfo.url || FALLBACK_FILE_URL;
                                 const done = downloaded.has(item.id);
@@ -237,7 +269,7 @@ export default function SuccessClient({ downloads, physical, session, upsellItem
                                 <div className="flex items-center justify-between text-sm">
                                     <span className="text-muted-foreground font-medium uppercase tracking-tight">Subtotal</span>
                                     <span className="text-foreground font-mono">
-                                        ${((session.amount_subtotal || (physical.reduce((s, i) => s + (i.amount || 0), 0) * 100 + downloads.reduce((s, i) => s + (i.amount || 0), 0) * 100)) / 100).toFixed(2)}
+                                        ${((session.amount_subtotal || (physical.reduce((s, i) => s + (i.amount || 0), 0) * 100 + hydratedDownloads.reduce((s, i) => s + (i.amount || 0), 0) * 100)) / 100).toFixed(2)}
                                     </span>
                                 </div>
 
@@ -270,8 +302,9 @@ export default function SuccessClient({ downloads, physical, session, upsellItem
                                 Tracking details will be transmitted to <span className="text-foreground font-medium">{session.customer_details?.email || 'your email address'}</span> once the shipment enters transit.
                             </p>
                         </div>
-                    </div>
-                )}
+                    </div >
+                )
+                }
 
 
                 {/* Newsletter Signup (Stripe Official Style) */}
@@ -306,51 +339,53 @@ export default function SuccessClient({ downloads, physical, session, upsellItem
                 </div>
 
                 {/* Professional Upsell Section */}
-                {upsellItems.length > 0 && (
-                    <div className="pt-8">
-                        <div className="flex items-center justify-between mb-8 px-1">
-                            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
-                                wear the collection
-                            </h2>
-                            <Link href="/" className="text-[11px] font-medium text-primary hover:underline">
-                                Browse All Merch
-                            </Link>
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                            {upsellItems.map((item) => (
-                                <Link
-                                    key={item.id}
-                                    href={`/product/${item.productId}`}
-                                    className="group flex flex-col"
-                                >
-                                    <div className="aspect-square w-full mb-4 relative overflow-hidden rounded-2xl bg-foreground/[0.03] border border-border/20">
-                                        {item.image ? (
-                                            <img
-                                                src={item.image}
-                                                alt={item.name}
-                                                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                                            />
-                                        ) : (
-                                            <div className="flex items-center justify-center w-full h-full text-muted-foreground/20">
-                                                <IconPackage size={32} />
-                                            </div>
-                                        )}
-                                    </div>
-                                    <h3 className="text-[13px] font-medium text-foreground group-hover:text-primary transition-colors truncate">
-                                        {item.name}
-                                    </h3>
-                                    <p className="mt-1 text-[11px] text-muted-foreground">
-                                        ${item.amount.toFixed(2)}
-                                    </p>
+                {
+                    upsellItems.length > 0 && (
+                        <div className="pt-8">
+                            <div className="flex items-center justify-between mb-8 px-1">
+                                <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
+                                    wear the collection
+                                </h2>
+                                <Link href="/" className="text-[11px] font-medium text-primary hover:underline">
+                                    Browse All Merch
                                 </Link>
-                            ))}
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                                {upsellItems.map((item) => (
+                                    <Link
+                                        key={item.id}
+                                        href={getProductHref(item)}
+                                        className="group flex flex-col"
+                                    >
+                                        <div className="aspect-square w-full mb-4 relative overflow-hidden rounded-2xl bg-foreground/[0.03] border border-border/20">
+                                            {item.image ? (
+                                                <img
+                                                    src={item.image}
+                                                    alt={item.name}
+                                                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                                                />
+                                            ) : (
+                                                <div className="flex items-center justify-center w-full h-full text-muted-foreground/20">
+                                                    <IconPackage size={32} />
+                                                </div>
+                                            )}
+                                        </div>
+                                        <h3 className="text-[13px] font-medium text-foreground group-hover:text-primary transition-colors truncate">
+                                            {item.name}
+                                        </h3>
+                                        <p className="mt-1 text-[11px] text-muted-foreground">
+                                            ${item.amount.toFixed(2)}
+                                        </p>
+                                    </Link>
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                )}
-            </motion.div>
+                    )
+                }
+            </motion.div >
 
             {/* Footer */}
-            <motion.div
+            < motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.4, delay: 0.3 }}
@@ -366,7 +401,7 @@ export default function SuccessClient({ downloads, physical, session, upsellItem
                     </div>
                     <span>© hyper$lump. Protocol secure.</span>
                 </div>
-            </motion.div>
-        </div>
+            </motion.div >
+        </div >
     );
 }

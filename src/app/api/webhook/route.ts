@@ -4,6 +4,8 @@ import { stripe } from '@/lib/stripe/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { resend } from '@/lib/resend'
 import { printfulService } from '@/lib/services/printfulService'
+import { getProductFile } from '@/lib/products'
+import { buildDownloadEmail } from '@/lib/email/downloadEmail'
 import Stripe from 'stripe'
 
 export async function POST(req: Request) {
@@ -23,67 +25,80 @@ export async function POST(req: Request) {
     }
 
     if (event.type === 'checkout.session.completed' || event.type === 'payment_intent.succeeded') {
-        const object = event.data.object as any;
-        const isSession = event.type === 'checkout.session.completed';
+        const object = event.data.object as any // eslint-disable-line @typescript-eslint/no-explicit-any
+        const isSession = event.type === 'checkout.session.completed'
 
-        const customerEmail = isSession ? object.customer_details?.email : (object.receipt_email || object.metadata?.email);
-        const metadata = object.metadata || {};
+        const customerEmail = isSession
+            ? object.customer_details?.email
+            : (object.receipt_email || object.metadata?.email)
+        const metadata = object.metadata || {}
 
-        let itemsJson: string | null = '';
+        // Parse item details from metadata (chunked if over Stripe's 500 char limit)
+        let itemsJson: string | null = ''
         if (metadata.item_details) {
-            itemsJson = metadata.item_details;
+            itemsJson = metadata.item_details
         } else {
-            let i = 0;
+            let i = 0
             while (metadata[`item_details_${i}`]) {
-                itemsJson += metadata[`item_details_${i}`];
-                i++;
+                itemsJson += metadata[`item_details_${i}`]
+                i++
             }
         }
+        itemsJson = itemsJson || null
 
-        itemsJson = itemsJson || null;
-
-        let items: any[] = [];
+        let items: any[] = [] // eslint-disable-line @typescript-eslint/no-explicit-any
         if (itemsJson) {
-            try { items = JSON.parse(itemsJson); } catch (e) { console.error('Failed to parse items JSON'); }
+            try { items = JSON.parse(itemsJson) } catch { console.error('Failed to parse items JSON') }
         }
 
-        // 1. Digital Fulfillment (Supabase & Resend)
-        const digitalItems = items.filter((item: any) => item.type === 'DIGITAL');
+        // 1. Digital Fulfillment — Supabase record + branded Resend email
+        const digitalItems = items.filter((item: any) => item.type === 'DIGITAL') // eslint-disable-line @typescript-eslint/no-explicit-any
         if (digitalItems.length > 0 && customerEmail) {
             try {
-                const purchases = digitalItems.map((item: any) => ({
+                // Save purchase records to Supabase
+                const purchases = digitalItems.map((item: any) => ({ // eslint-disable-line @typescript-eslint/no-explicit-any
                     customer_email: customerEmail,
                     stripe_session_id: object.id,
                     price_id: item.id || '',
                     is_verified: true,
-                }));
+                }))
+                await supabaseAdmin.from('purchases').insert(purchases)
 
-                await supabaseAdmin.from('purchases').insert(purchases);
+                // Resolve direct download URLs per item from the product file map
+                const downloadItems = digitalItems.map((item: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
+                    const fileInfo = getProductFile(item.id)
+                    return {
+                        name: item.name,
+                        label: fileInfo.label,
+                        downloadUrl: fileInfo.url,
+                    }
+                })
+
+                const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://hyperslump.com'
+
+                const html = buildDownloadEmail({
+                    customerEmail,
+                    items: downloadItems,
+                    sessionId: object.id,
+                    appUrl,
+                })
 
                 await resend.emails.send({
                     from: 'hyper$lump <onboarding@resend.dev>',
                     to: customerEmail,
-                    subject: 'DECRYPTED: Your Digital Assets',
-                    html: `
-                        <div style="font-family: monospace; background: #000; color: #fff; padding: 40px;">
-                            <h1 style="color: #D83A3D;">ACCESS_GRANTED //</h1>
-                            <p>Your payment has been verified. Secure link established.</p>
-                            <p>Items: ${digitalItems.map((i: any) => i.name).join(', ')}</p>
-                            <a href="${process.env.NEXT_PUBLIC_APP_URL}/success?session_id=${object.id}" 
-                               style="display: inline-block; background: #D83A3D; color: #000; padding: 15px 25px; text-decoration: none; font-weight: bold; margin-top: 20px;">
-                                DOWNLOAD_NOW
-                            </a>
-                        </div>
-                    `,
-                });
+                    subject: 'Your download is ready — hyper$lump',
+                    html,
+                })
+
+                console.log(`>>> [WEBHOOK] Download email sent to ${customerEmail} for ${downloadItems.length} item(s)`)
             } catch (err) {
-                console.error('Digital fulfillment error:', err);
+                console.error('Digital fulfillment error:', err)
             }
         }
 
-        // 2. Physical Fulfillment (Printful)
-        const physicalItems = items.filter((item: any) => item.type === 'PHYSICAL');
-        const shipping = object.shipping;
+        // 2. Physical Fulfillment — Printful draft order
+        const physicalItems = items.filter((item: any) => item.type === 'PHYSICAL') // eslint-disable-line @typescript-eslint/no-explicit-any
+        const shipping = object.shipping
 
         if (physicalItems.length > 0 && shipping) {
             try {
@@ -96,20 +111,20 @@ export async function POST(req: Request) {
                         state_code: shipping.address.state,
                         country_code: shipping.address.country,
                         zip: shipping.address.postal_code,
-                        email: customerEmail
+                        email: customerEmail,
                     },
-                    items: physicalItems.map((item: any) => ({
+                    items: physicalItems.map((item: any) => ({ // eslint-disable-line @typescript-eslint/no-explicit-any
                         sync_variant_id: parseInt(item.variant_id),
-                        quantity: 1
+                        quantity: 1,
                     })),
-                    external_id: object.id
-                };
+                    external_id: object.id,
+                }
 
-                // Create as draft for safety
-                await printfulService.createOrder(orderData, 'draft');
-                console.log('>>> [WEBHOOK] Printful Draft Order Created:', object.id);
+                // Draft order — approve manually in Printful dashboard before fulfillment
+                await printfulService.createOrder(orderData, 'draft')
+                console.log('>>> [WEBHOOK] Printful Draft Order Created:', object.id)
             } catch (err) {
-                console.error('Printful fulfillment error:', err);
+                console.error('Printful fulfillment error:', err)
             }
         }
     }

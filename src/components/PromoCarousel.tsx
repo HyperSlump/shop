@@ -1,357 +1,320 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence, type Variants } from 'framer-motion';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import {
-    IconChevronLeft,
-    IconChevronRight,
-    IconPlayerPlayFilled,
-    IconArrowRight,
-    IconDownload,
-    IconX
-} from '@tabler/icons-react';
 import Link from 'next/link';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import GrainedNoise from './GrainedNoise';
-import { usePreviewPlayer } from './PreviewPlayerProvider';
+import { AnimatePresence, motion } from 'framer-motion';
 
-interface PromoSlide {
-    id: string;
-    title: string;
-    subtitle: string;
-    description: string;
-    image: string;
-    badge: string;
-    accent: string;
+interface Slide {
+  title: string;
+  kicker: string;
+  body: string;
+  image: string;
+  foregroundImage?: string;
+  ctaPrimary: { label: string; href: string };
+  ctaSecondary?: { label: string; href: string };
 }
 
-const promoSlides: PromoSlide[] = [
-    {
-        id: 'prod_RnA5vD8l4LzB1w',
-        title: 'industrial etherea',
-        subtitle: 'collection 001 // v1.2',
-        description: 'High-fidelity cinematic soundscapes and aggressive industrial textures. Engineered for forward-thinking productions.',
-        image: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/ideogram-v3.0_generate_a_2560x1440_abstract_digital_ad_for_edm_sample_packs-0.jpg',
-        badge: 'NEW ARRIVAL',
-        accent: 'rgb(216, 58, 61)'
-    },
-    {
-        id: 'prod_LzB1wRnA5vD8l4',
-        title: 'basement grit',
-        subtitle: 'one-shot series // vol.4',
-        description: 'Authentic analog distortion and raw, unpolished drum hits. Recorded through vintage preamps for maximum heat.',
-        image: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/ideogram-v3.0_Amid_a_pulsating_sea_of_vibrant_colors_and_mesmerizing_patterns_a_2560x1440_digi-0.jpg',
-        badge: 'MOST POPULAR',
-        accent: 'rgb(123, 170, 178)'
-    },
-    {
-        id: 'prod_vD8l4LzB1wRnA5',
-        title: 'chrome pulse',
-        subtitle: 'serum presets // neon',
-        description: 'Liquid wavetables and futuristic modulation. 60+ presets designed for the next wave of electronic music.',
-        image: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/ideogram-v3.0_Amid_a_pulsating_sea_of_vibrant_colors_a_2560x1440_digital_ad_for_top-tier_EDM_s-0%20%282%29.jpg',
-        badge: 'BEST SELLER',
-        accent: 'rgb(200, 106, 131)'
-    },
-    {
-        id: 'prod_liquid_dynamic_04',
-        title: 'liquid state',
-        subtitle: 'texture pack // vol.1',
-        description: 'Viscous, morphing granular textures and liquid sound design recorded directly from experimental hardware.',
-        image: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/Gemini_Generated_Image_unhreuunhreuunhr_cropped_processed_by_imagy.png',
-        badge: 'EXCLUSIVE',
-        accent: 'rgb(180, 180, 180)'
-    },
-    {
-        id: 'prod_analog_artifacts_05',
-        title: 'analog artifact',
-        subtitle: 'glitch & noise // vol.2',
-        description: 'Broken transmissions and beautiful errors. A massive collection of authentic analog video and audio artifacts.',
-        image: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/Gemini_Generated_Image_1ttktb1ttktb1ttk_cropped_processed_by_imagy.png',
-        badge: 'NEW RELEASE',
-        accent: 'rgb(220, 90, 90)'
-    }
+type GraphiteMeta = {
+  image?: string;
+  href?: string;
+};
+
+type CatalogProduct = {
+  id: string;
+  productId?: string;
+  name: string;
+  description?: string;
+  image?: string;
+  amount?: number;
+  currency?: string;
+  metadata?: Record<string, any>;
+};
+
+const SLIDE_DURATION_MS = 10000;
+const PHYSICAL_BACKGROUNDS = [
+  'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/Reimagine_this_35b0e0f374.jpeg',
+  'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/3d_crystaline_shapes_glittery_y2k_background_508a4763f4%20%281%29.jpeg',
+  'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/ChatGPT%20Image%20Feb%2028%2C%202026%2C%2012_27_39%20PM.png',
+  'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/Recreate_black_and_white_5bd8c874bb.jpeg',
+  'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/Gemini_Generated_Image_vdbnj0vdbnj0vdbn.png',
+];
+
+const slides: Slide[] = [
+  {
+    title: 'Archive Hat',
+    kicker: 'Physical Merch // New Drop',
+    body: 'Structured cap with signature hyper embroidery. Printed on demand and shipped worldwide.',
+    image: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/Gemini_Generated_Image_vdbnj0vdbnj0vdbn.png',
+    foregroundImage: 'https://files.cdn.printful.com/files/3a6/3a62f4531060233eb27f1e822b8dc145_preview.png',
+    ctaPrimary: { label: 'Shop This Hat', href: '/product/pf_421731819' },
+    ctaSecondary: { label: 'Browse Catalog', href: '/#catalog' },
+  },
+  {
+    title: 'Graphite Jacket',
+    kicker: 'Physical Merch // Graphite Variant',
+    body: 'Stealth outer layer with reinforced seams and hyper$lump detailing. Printed on demand and ships worldwide.',
+    image: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/Gemini_Generated_Image_pe9bazpe9bazpe9b.png',
+    ctaPrimary: { label: 'Shop Jacket', href: '/product/pf_graphite_jacket' },
+    ctaSecondary: { label: 'Browse Catalog', href: '/#catalog' },
+  },
+  {
+    title: 'Industrial Etherea',
+    kicker: 'Sample Pack // Collection 001',
+    body: 'High-fidelity cinematic soundscapes and aggressive industrial textures engineered for forward-thinking productions.',
+    image: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/Gemini_Generated_Image_unhreuunhreuunhr_cropped_processed_by_imagy.png',
+    ctaPrimary: { label: 'Get The Pack', href: '/product/prod_RnA5vD8l4LzB1w' },
+    ctaSecondary: { label: 'Listen Preview', href: '/#catalog' },
+  },
+  {
+    title: 'Chrome Pulse',
+    kicker: 'Serum Presets // Neon',
+    body: 'Liquid wavetables and futuristic modulation. 60+ presets designed for the next wave of electronic music.',
+    image: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/ideogram-v3.0_Amid_a_pulsating_sea_of_vibrant_colors_a_2560x1440_digital_ad_for_top-tier_EDM_s-0%20%282%29.jpg',
+    ctaPrimary: { label: 'Preview Presets', href: '/#catalog' },
+  },
+  {
+    title: 'Basement Grit',
+    kicker: 'One-Shot Series // Vol. 4',
+    body: 'Analog distortion and raw drum hits recorded through vintage preamps for maximum heat.',
+    image: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/ideogram-v3.0_Amid_a_pulsating_sea_of_vibrant_colors_and_mesmerizing_patterns_a_2560x1440_digi-0.jpg',
+    ctaPrimary: { label: 'Get One-Shots', href: '/#catalog' },
+  },
+  {
+    title: 'Signal Relic',
+    kicker: 'Hero Visual // Feb 2026',
+    body: 'Fresh cinematic key visual anchoring the current storefront campaign.',
+    image: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/ChatGPT%20Image%20Feb%2028%2C%202026%2C%2012_27_39%20PM.png',
+    ctaPrimary: { label: 'Shop Feature', href: '/#catalog' },
+  },
+  {
+    title: 'Analog Artifact',
+    kicker: 'Glitch & Noise // Vol. 2',
+    body: 'Broken transmissions and beautiful errors. A massive collection of authentic analog video and audio artifacts.',
+    image: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/Gemini_Generated_Image_1ttktb1ttktb1ttk_cropped_processed_by_imagy.png',
+    ctaPrimary: { label: 'Explore Artifacts', href: '/#catalog' },
+  },
+  {
+    title: 'Etherea Abstract',
+    kicker: 'Background Visual // Storefront',
+    body: 'High-contrast abstract gradient generated for immersive hero backdrops.',
+    image: 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/ideogram-v3.0_generate_a_2560x1440_abstract_digital_ad_for_edm_sample_packs-0.jpg',
+    ctaPrimary: { label: 'View Collection', href: '/#catalog' },
+  },
 ];
 
 export default function PromoCarousel() {
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [direction, setDirection] = useState(0);
-    const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-    const [isAtTop, setIsAtTop] = useState(true);
-    const router = useRouter();
-    const { isOpen: isDockOpen } = usePreviewPlayer();
+  const [index, setIndex] = useState(0);
+  const [graphite, setGraphite] = useState<GraphiteMeta>({});
+  const [catalogSlides, setCatalogSlides] = useState<Slide[]>([]);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsAtTop(window.scrollY < 20);
-        };
-        window.addEventListener('scroll', handleScroll);
-        handleScroll();
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+  const shuffleArray = <T,>(list: T[]): T[] => [...list].sort(() => Math.random() - 0.5);
 
-    useEffect(() => {
-        if (!isAutoPlaying) return;
-        const timer = setInterval(() => {
-            setDirection(1);
-            setCurrentIndex((prev) => (prev + 1) % promoSlides.length);
-        }, 8000);
-        return () => clearInterval(timer);
-    }, [isAutoPlaying]);
-
-    const handlePrev = () => {
-        setIsAutoPlaying(false);
-        setDirection(-1);
-        setCurrentIndex((prev) => (prev === 0 ? promoSlides.length - 1 : prev - 1));
-    };
-
-    const handleNext = () => {
-        setIsAutoPlaying(false);
-        setDirection(1);
-        setCurrentIndex((prev) => (prev + 1) % promoSlides.length);
-    };
-
-    // Touch swipe support for mobile
-    const [touchStart, setTouchStart] = useState<number | null>(null);
-
-    const handleTouchStart = (e: React.TouchEvent) => {
-        setTouchStart(e.touches[0].clientX);
-    };
-
-    const handleTouchEnd = (e: React.TouchEvent) => {
-        if (touchStart === null) return;
-        const diff = touchStart - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 50) {
-            if (diff > 0) handleNext();
-            else handlePrev();
+  useEffect(() => {
+    fetch('/api/catalog')
+      .then(res => (res.ok ? res.json() : null))
+      .then((data: CatalogProduct[] | null) => {
+        if (!data || !Array.isArray(data)) return;
+        const shuffled = shuffleArray(data);
+        let physicalIndex = 0;
+        const mapped = shuffled
+          .map<Slide | null>((product) => {
+            const isPhysical = (product.metadata?.type || '').toUpperCase() === 'PHYSICAL';
+            const bg = isPhysical
+              ? PHYSICAL_BACKGROUNDS[physicalIndex++ % PHYSICAL_BACKGROUNDS.length]
+              : product.image || PHYSICAL_BACKGROUNDS[0];
+            const fg = product.image || bg;
+            if (!bg) return null;
+            return {
+              title: product.name || 'Catalog Item',
+              kicker: isPhysical ? 'Physical Merch // Catalog' : 'Digital Release // Catalog',
+              body: product.description || (isPhysical
+                ? 'Exclusive physical drop with refreshed mock imagery.'
+                : 'Updated digital release featuring the newest mock product art.'),
+              image: bg,
+              foregroundImage: fg,
+              ctaPrimary: { label: isPhysical ? 'View Product' : 'Get Release', href: `/product/${encodeURIComponent(product.id)}` },
+              ctaSecondary: { label: 'Browse Catalog', href: '/#catalog' },
+            };
+          })
+          .filter((slide): slide is Slide => slide !== null);
+        if (mapped.length) {
+          setCatalogSlides(mapped);
         }
-        setTouchStart(null);
-    };
+      })
+      .catch(() => {
+        /* swallow errors to avoid blocking hero */
+      });
+  }, []);
 
-    const activePromo = promoSlides[currentIndex];
+  useEffect(() => {
+    let mounted = true;
+    fetch('/api/catalog/graphite-jacket')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (!mounted || !data?.found) return;
+        setGraphite({
+          image: data.image,
+          href: data.href,
+        });
+      })
+      .catch(() => { /* ignore */ });
+    return () => { mounted = false; };
+  }, []);
 
-    const variants: Variants = {
-        enter: (direction: number) => ({
-            x: direction > 0 ? 1000 : -1000,
-            opacity: 0,
-            scale: 0.95
-        }),
-        center: {
-            zIndex: 1,
-            x: 0,
-            opacity: 1,
-            scale: 1,
-            transition: {
-                x: { type: 'spring' as const, stiffness: 300, damping: 30 },
-                opacity: { duration: 0.4 },
-                scale: { duration: 0.4 }
-            } as any
+  const baseSlides = useMemo(() => {
+    return slides.map((slide) => {
+      if (slide.title !== 'Graphite Jacket') return slide;
+      return {
+        ...slide,
+        foregroundImage: graphite.image || slide.foregroundImage || slide.image,
+        ctaPrimary: {
+          ...slide.ctaPrimary,
+          href: graphite.href || slide.ctaPrimary.href,
         },
-        exit: (direction: number) => ({
-            zIndex: 0,
-            x: direction < 0 ? 1000 : -1000,
-            opacity: 0,
-            scale: 0.95,
-            transition: {
-                x: { type: 'spring' as const, stiffness: 300, damping: 30 },
-                opacity: { duration: 0.2 }
-            } as any
-        })
-    };
+      };
+    });
+  }, [graphite]);
 
-    const ctaButtonClass = activePromo.accent.includes('216')
-        ? 'bg-primary hover:bg-primary/90'
-        : activePromo.accent.includes('123')
-            ? 'bg-[#7BAAB2] hover:bg-[#7BAAB2]/90'
-            : 'bg-[#C86A83] hover:bg-[#C86A83]/90';
+  const renderedSlides = useMemo(() => {
+    if (catalogSlides.length) return catalogSlides;
+    return baseSlides;
+  }, [baseSlides, catalogSlides]);
 
-    const secondaryCtaClass = activePromo.accent.includes('216')
-        ? 'border-primary/30 text-primary hover:bg-primary/5'
-        : activePromo.accent.includes('123')
-            ? 'border-[#7BAAB2]/30 text-[#7BAAB2] hover:bg-[#7BAAB2]/5'
-            : 'border-[#C86A83]/30 text-[#C86A83] hover:bg-[#C86A83]/5';
+  useEffect(() => {
+    if (!renderedSlides.length) return;
+    const id = setInterval(() => setIndex((prev) => (prev + 1) % renderedSlides.length), SLIDE_DURATION_MS);
+    return () => clearInterval(id);
+  }, [renderedSlides.length]);
 
-    return (
+  useEffect(() => {
+    if (index >= renderedSlides.length) {
+      setIndex(0);
+    }
+  }, [renderedSlides.length, index]);
+
+  const total = renderedSlides.length || 1;
+  const displayIndex = total ? (index % total) + 1 : 1;
+
+  return (
+    <div className="relative h-full w-full overflow-hidden bg-black">
+      {renderedSlides.map((slide, i) => (
         <div
-            className="relative w-full h-full group/carousel flex flex-col items-center justify-center overflow-hidden"
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
+          key={slide.title}
+          className={`absolute inset-0 transition-opacity duration-[1200ms] ${i === index ? 'opacity-100' : 'opacity-0'}`}
+          aria-hidden={i !== index}
         >
-            {/* DYNAMIC BACKGROUND GRADIENT */}
-            <div
-                className="absolute inset-0 z-0 transition-opacity duration-1000"
-                style={{
-                    background: `radial-gradient(circle at 12% 10%, ${activePromo.accent}22 0%, transparent 40%),
-                                 radial-gradient(circle at 88% 12%, ${activePromo.accent}11 0%, transparent 40%)`
-                }}
-            />
-
-            <AnimatePresence initial={false} custom={direction}>
-                <motion.div
-                    key={currentIndex}
-                    custom={direction}
-                    variants={variants}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    className="absolute inset-0 z-10"
-                >
-                    {/* FULL-BLEED BACKGROUND IMAGE */}
-                    <div className="absolute inset-0">
-                        <Image
-                            src={activePromo.image}
-                            alt={activePromo.title}
-                            fill
-                            priority
-                            className="object-cover saturate-[0.10] brightness-[0.8] contrast-[1.1]"
-                            sizes="100vw"
-                        />
-                        {/* Dark gradient overlay for text legibility */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/30" />
-                        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
-                        <GrainedNoise />
-                    </div>
-
-                    {/* DISTRIBUTED HUD OVERLAY */}
-                    <div className="relative h-full w-full pointer-events-none">
-                        {/* TOP LEFT METADATA */}
-                        <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 1.0, duration: 0.8 }}
-                            className="absolute top-24 md:top-32 left-6 md:left-12 lg:left-24 flex items-center gap-4 opacity-60"
-                        >
-                            <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-white">
-                                [SYS.VER.1.2 // STATUS: ACTIVE]
-                            </span>
-                            <span className="font-mono text-[9px] text-primary tracking-[0.2em] hidden md:block">
-                                ID: {activePromo.id.split('_')[1]}
-                            </span>
-                        </motion.div>
-
-                        {/* RIGHT EDGE BARCODE / ROTATED TEXT */}
-                        <motion.div
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 1.2, duration: 0.8 }}
-                            className="absolute top-1/2 -translate-y-1/2 right-6 md:right-12 lg:right-24 hidden lg:flex flex-col items-end gap-12 opacity-30 origin-right"
-                        >
-                            <div className="font-mono text-[10px] tracking-[0.4em] text-white" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
-                                {activePromo.subtitle}
-                            </div>
-                        </motion.div>
-
-                        {/* LEFT EDGE ROTATED HUD */}
-                        <motion.div
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 1.2, duration: 0.8 }}
-                            className="absolute top-1/2 -translate-y-1/2 left-6 md:left-12 lg:left-8 hidden lg:flex flex-col items-center gap-8 opacity-40"
-                        >
-                            <div className="font-mono text-[8px] tracking-[0.5em] text-primary" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
-                                {activePromo.badge}
-                            </div>
-                        </motion.div>
-
-                        {/* UNIFIED HUD CONTENT CONTAINER - CENTERED AT 50% VH ON MOBILE */}
-                        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center md:block px-6 md:px-0 transition-all duration-500 pointer-events-none">
-
-                            {/* TITLE BLOCK */}
-                            <div className={`w-full md:w-auto md:absolute md:left-24 lg:left-32 text-center md:text-left transition-all duration-300 
-                                ${(isDockOpen && isAtTop) ? 'md:top-[40%] md:-translate-y-1/2' : 'md:top-[45%] md:-translate-y-1/2'}`}>
-                                <motion.div className="relative inline-block max-w-[90vw] md:max-w-[80vw]">
-                                    <motion.h2
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" }}
-                                        className="font-mono text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight text-white leading-none whitespace-normal"
-                                        style={{
-                                            textShadow: '0 4px 24px rgba(0,0,0,0.9)'
-                                        }}
-                                    >
-                                        {activePromo.title}
-                                    </motion.h2>
-                                </motion.div>
-                            </div>
-
-                            {/* CTA BLOCK */}
-                            <div className={`w-full md:w-[500px] lg:w-[600px] mt-8 md:mt-0 md:absolute md:left-24 lg:left-32 pointer-events-auto transition-all duration-300
-                                ${(isDockOpen && isAtTop) ? 'bottom-[12rem] md:bottom-48 lg:bottom-40' : 'bottom-[5.5rem] md:bottom-24 lg:bottom-24'}`}>
-                                <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.6, duration: 0.6 }}
-                                    className="flex flex-col gap-4 md:gap-5 items-center md:items-start max-w-full"
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <p className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.25em] text-primary font-bold text-center md:text-left">
-                                            24-BIT MASTERED / IMMEDIATE DELIVERY
-                                        </p>
-                                    </div>
-
-                                    <p className="text-white/80 text-[14px] md:text-[16px] leading-relaxed font-sans tracking-tight bg-black/40 backdrop-blur-sm p-4 rounded-sm border-l-2 border-primary/50 shadow-xl text-center md:text-left">
-                                        {activePromo.description}
-                                    </p>
-
-                                    <div className="flex flex-wrap justify-center md:justify-start items-center gap-x-6 gap-y-2 opacity-50 mt-1">
-                                        {['INSTANT DOWNLOAD', 'LIFETIME LICENSE', 'SECURE CHECKOUT'].map((tag) => (
-                                            <span key={tag} className="font-mono text-[8px] md:text-[9px] uppercase tracking-[0.2em] text-white">[{tag}]</span>
-                                        ))}
-                                    </div>
-
-                                    <div className="flex flex-col sm:flex-row items-center gap-4 mt-2 w-full md:w-auto">
-                                        <button
-                                            onClick={() => router.push(`/product/${activePromo.id}`)}
-                                            className="w-full sm:w-auto h-[48px] px-10 rounded-sm bg-primary text-white font-mono text-[11px] uppercase tracking-[0.2em] font-bold hover:brightness-110 transition-all shadow-[0_0_30px_rgba(216,58,61,0.3)] flex items-center justify-center relative group overflow-hidden"
-                                        >
-                                            <span className="relative z-10">Get Instant Access</span>
-                                            <div className="absolute inset-0 bg-white/20 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300" />
-                                        </button>
-                                        <Link
-                                            href="/#catalog"
-                                            className="w-full sm:w-auto h-[48px] px-10 rounded-sm border border-white/20 bg-black/40 backdrop-blur-md text-white font-mono text-[11px] uppercase tracking-[0.2em] hover:bg-white/10 hover:border-white/40 transition-all flex items-center justify-center gap-2"
-                                        >
-                                            Browse Catalog
-                                            <IconArrowRight size={14} className="opacity-50" />
-                                        </Link>
-                                    </div>
-                                </motion.div>
-                            </div>
-                        </div>
-                    </div>
-                </motion.div>
-            </AnimatePresence>
-
-            {/* BOTTOM PAGINATION & ARROWS */}
-            <div className={`absolute left-0 right-0 z-20 px-6 md:px-12 lg:px-24 flex justify-end pointer-events-none transition-all duration-300 ${(isDockOpen && isAtTop) ? 'bottom-36 md:bottom-32 lg:bottom-28' : 'bottom-12'}`}>
-                <div className="flex flex-col items-end gap-3 pointer-events-auto">
-                    <div className="hidden md:flex items-center gap-2">
-                        <button
-                            onClick={handlePrev}
-                            className="w-12 h-12 flex items-center justify-center rounded-sm bg-black/40 border border-white/10 text-white/60 hover:text-white hover:border-white/30 transition-all"
-                        >
-                            <IconChevronLeft size={24} stroke={1.5} />
-                        </button>
-                        <button
-                            onClick={handleNext}
-                            className="w-12 h-12 flex items-center justify-center rounded-sm bg-black/40 border border-white/10 text-white/60 hover:text-white hover:border-white/30 transition-all"
-                        >
-                            <IconChevronRight size={24} stroke={1.5} />
-                        </button>
-                    </div>
-
-                    <div className="flex items-center gap-3 font-mono text-[8px] tracking-[0.2em] px-2 lg:px-0">
-                        <span className="text-white font-bold">
-                            {String(currentIndex + 1).padStart(2, '0')}
-                        </span>
-                        <span className="text-white/10">//</span>
-                        <span className="text-white/30">
-                            {String(promoSlides.length).padStart(2, '0')}
-                        </span>
-                    </div>
-                </div>
-            </div>
+          <Image
+            src={slide.image}
+            alt={slide.title}
+            fill
+            priority={i === index}
+            className="object-cover scale-[1.02] saturate-0 brightness-[0.78] contrast-[1.08] blur-[1.2px] md:blur-[1.6px]"
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/75" />
+          <GrainedNoise />
         </div>
-    );
+      ))}
+
+      <div className="relative z-10 h-full w-full max-w-6xl mx-auto px-6 md:px-10 lg:px-12 py-12 md:py-16 flex flex-col md:flex-row items-center gap-10 md:gap-14">
+        {/* Text column */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`text-${index}`}
+            initial={{ opacity: 0, x: -28 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            transition={{ duration: 0.55, ease: 'easeOut' }}
+            className="flex-1 max-w-xl space-y-5 text-white"
+          >
+            <div className="inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-white/80">
+              <span>{renderedSlides[index].kicker}</span>
+            </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.02] drop-shadow-[0_8px_24px_rgba(0,0,0,0.5)]">
+              {renderedSlides[index].title}
+            </h1>
+            <p className="text-sm sm:text-base text-white/80 leading-relaxed max-w-lg">
+              {renderedSlides[index].body}
+            </p>
+            <div className="flex flex-wrap items-center gap-3 pt-1">
+              <Link
+                href={renderedSlides[index].ctaPrimary.href}
+                className="inline-flex h-12 items-center justify-center rounded-md bg-white text-black px-5 text-[11px] font-bold uppercase tracking-[0.18em] shadow-[0_10px_30px_rgba(0,0,0,0.25)] hover:brightness-95 transition"
+              >
+                {renderedSlides[index].ctaPrimary.label}
+              </Link>
+              {renderedSlides[index].ctaSecondary && (
+                <Link
+                  href={renderedSlides[index].ctaSecondary.href}
+                  className="inline-flex h-12 items-center justify-center rounded-md border border-white/30 px-5 text-[11px] font-bold uppercase tracking-[0.18em] text-white hover:bg-white/10 transition"
+                >
+                  {renderedSlides[index].ctaSecondary.label}
+                </Link>
+              )}
+            </div>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Product visual */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`visual-${index}`}
+            initial={{ opacity: 0, x: 26, scale: 0.97 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: -18, scale: 0.98 }}
+            transition={{ duration: 0.55, ease: 'easeOut' }}
+            className="flex-1 w-full max-w-[520px]"
+          >
+            <div className="relative aspect-square rounded-3xl border border-white/12 bg-white/5 backdrop-blur-md overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.55)]">
+              <Image
+                src={renderedSlides[index].foregroundImage || renderedSlides[index].image}
+                alt={`${renderedSlides[index].title} visual`}
+                fill
+                className="object-cover"
+                sizes="520px"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Minimal counter */}
+      <div className="pointer-events-none absolute bottom-7 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2">
+        <div className="font-mono text-[10px] tracking-[0.24em] text-white/70">
+          {String(displayIndex).padStart(2, '0')} / {String(total).padStart(2, '0')}
+        </div>
+        <div className="w-28 h-[2px] bg-white/15 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-white transition-all duration-500"
+            style={{ width: `${(displayIndex / total) * 100}%` }}
+          />
+        </div>
+      </div>
+
+      {/* Side navigation arrows */}
+      <div className="absolute inset-y-0 left-4 md:left-6 flex items-center z-10">
+        <button
+          aria-label="Previous slide"
+          onClick={() => setIndex((prev) => (prev === 0 ? renderedSlides.length - 1 : prev - 1))}
+          className="h-12 w-12 rounded-full border border-border/70 bg-background/70 text-foreground/80 backdrop-blur-md transition-all duration-200 flex items-center justify-center hover:-translate-y-[1px] hover:border-primary/70 hover:text-foreground hover:shadow-[0_0_0_1px_rgba(var(--primary-rgb),0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-0"
+        >
+          <IconChevronLeft size={22} />
+        </button>
+      </div>
+      <div className="absolute inset-y-0 right-4 md:right-6 flex items-center z-10">
+        <button
+          aria-label="Next slide"
+          onClick={() => setIndex((prev) => (prev + 1) % renderedSlides.length)}
+          className="h-12 w-12 rounded-full border border-border/70 bg-background/70 text-foreground/80 backdrop-blur-md transition-all duration-200 flex items-center justify-center hover:-translate-y-[1px] hover:border-primary/70 hover:text-foreground hover:shadow-[0_0_0_1px_rgba(var(--primary-rgb),0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-0"
+        >
+          <IconChevronRight size={22} />
+        </button>
+      </div>
+    </div>
+  );
 }
