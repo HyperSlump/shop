@@ -162,7 +162,8 @@ export default function PromoCarousel() {
         let physicalIndex = 0;
         const mapped = shuffled
           .map<Slide | null>((product) => {
-            const isPhysical = (product.metadata?.type || '').toUpperCase() === 'PHYSICAL';
+            const productType = typeof product.metadata?.type === 'string' ? product.metadata.type : '';
+            const isPhysical = productType.toUpperCase() === 'PHYSICAL';
             const bg = isPhysical
               ? PHYSICAL_BACKGROUNDS[physicalIndex++ % PHYSICAL_BACKGROUNDS.length]
               : product.image || PHYSICAL_BACKGROUNDS[0];
