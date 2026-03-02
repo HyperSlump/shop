@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type TouchEvent as ReactTouchEvent } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
@@ -34,7 +34,8 @@ type CatalogProduct = {
   metadata?: Record<string, unknown>;
 };
 
-const SLIDE_DURATION_MS = 10000;
+const SLIDE_DURATION_MS = 15000;
+const SWIPE_THRESHOLD_PX = 52;
 const PHYSICAL_BACKGROUNDS = [
   'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/Reimagine_this_35b0e0f374.jpeg',
   'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/3d_crystaline_shapes_glittery_y2k_background_508a4763f4%20%281%29.jpeg',
@@ -150,6 +151,10 @@ export default function PromoCarousel() {
   const [index, setIndex] = useState(0);
   const [graphite, setGraphite] = useState<GraphiteMeta>({});
   const [catalogSlides, setCatalogSlides] = useState<Slide[]>([]);
+  const touchStartXRef = useRef<number | null>(null);
+  const touchStartYRef = useRef<number | null>(null);
+  const touchDeltaXRef = useRef(0);
+  const touchDeltaYRef = useRef(0);
 
   const shuffleArray = <T,>(list: T[]): T[] => [...list].sort(() => Math.random() - 0.5);
 
@@ -230,9 +235,11 @@ export default function PromoCarousel() {
 
   useEffect(() => {
     if (!renderedSlides.length) return;
-    const id = setInterval(() => setIndex((prev) => (prev + 1) % renderedSlides.length), SLIDE_DURATION_MS);
-    return () => clearInterval(id);
-  }, [renderedSlides.length]);
+    const id = window.setTimeout(() => {
+      setIndex((prev) => (prev + 1) % renderedSlides.length);
+    }, SLIDE_DURATION_MS);
+    return () => window.clearTimeout(id);
+  }, [index, renderedSlides.length]);
 
   useEffect(() => {
     if (index >= renderedSlides.length) {
@@ -240,11 +247,83 @@ export default function PromoCarousel() {
     }
   }, [renderedSlides.length, index]);
 
+  const goToPrevious = () => {
+    setIndex((prev) => {
+      if (!renderedSlides.length) return 0;
+      return prev === 0 ? renderedSlides.length - 1 : prev - 1;
+    });
+  };
+
+  const goToNext = () => {
+    setIndex((prev) => {
+      if (!renderedSlides.length) return 0;
+      return (prev + 1) % renderedSlides.length;
+    });
+  };
+
+  const resetTouchTracking = () => {
+    touchStartXRef.current = null;
+    touchStartYRef.current = null;
+    touchDeltaXRef.current = 0;
+    touchDeltaYRef.current = 0;
+  };
+
+  const handleTouchStart = (event: ReactTouchEvent<HTMLDivElement>) => {
+    if (event.touches.length !== 1) {
+      resetTouchTracking();
+      return;
+    }
+    const touch = event.touches[0];
+    touchStartXRef.current = touch.clientX;
+    touchStartYRef.current = touch.clientY;
+    touchDeltaXRef.current = 0;
+    touchDeltaYRef.current = 0;
+  };
+
+  const handleTouchMove = (event: ReactTouchEvent<HTMLDivElement>) => {
+    if (touchStartXRef.current === null || touchStartYRef.current === null) {
+      return;
+    }
+
+    const touch = event.touches[0];
+    touchDeltaXRef.current = touch.clientX - touchStartXRef.current;
+    touchDeltaYRef.current = touch.clientY - touchStartYRef.current;
+
+    const horizontalIntent = Math.abs(touchDeltaXRef.current) > Math.abs(touchDeltaYRef.current) && Math.abs(touchDeltaXRef.current) > 12;
+    if (horizontalIntent) {
+      event.preventDefault();
+    }
+  };
+
+  const handleTouchEnd = () => {
+    const deltaX = touchDeltaXRef.current;
+    const deltaY = touchDeltaYRef.current;
+
+    const isSwipe = Math.abs(deltaX) >= SWIPE_THRESHOLD_PX && Math.abs(deltaX) > Math.abs(deltaY) * 1.2;
+    if (isSwipe) {
+      if (deltaX < 0) {
+        goToNext();
+      } else {
+        goToPrevious();
+      }
+    }
+
+    resetTouchTracking();
+  };
+
   const total = renderedSlides.length || 1;
   const displayIndex = total ? (index % total) + 1 : 1;
+  const isWelcomeSlide = renderedSlides[index]?.title === 'welcome to hyper$lump';
 
   return (
-    <div className="relative h-full min-h-[560px] sm:min-h-[620px] w-full overflow-hidden bg-black">
+    <div
+      className="relative h-full min-h-[520px] sm:min-h-[620px] w-full overflow-hidden bg-black"
+      style={{ touchAction: 'pan-y' }}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={resetTouchTracking}
+    >
       {renderedSlides.map((slide, i) => (
         <div
           key={slide.title}
@@ -256,16 +335,70 @@ export default function PromoCarousel() {
             alt={slide.title}
             fill
             priority={i === index}
-            className="object-cover scale-[1.02] saturate-0 brightness-[0.78] contrast-[1.08] blur-[0.5px] sm:blur-[1.1px] md:blur-[1.6px]"
+            className="object-cover scale-[1.02] saturate-0 brightness-[0.74] contrast-[1.08] blur-[0.5px] sm:blur-[1.1px] md:blur-[1.6px]"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/75" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/72 via-black/44 to-black/78" />
           <GrainedNoise />
         </div>
       ))}
 
-      <div className="relative z-10 h-full w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-10 lg:px-12 py-7 sm:py-10 md:py-16 flex flex-col md:flex-row items-center gap-6 sm:gap-9 md:gap-14">
-        {/* Text column */}
+      <div className="relative z-10 h-full w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 pt-24 sm:pt-28 lg:pt-16 pb-24 sm:pb-10 flex flex-col justify-center lg:justify-center lg:flex-row items-center lg:items-center gap-4 sm:gap-6 lg:gap-14">
+        {/* Mobile + tablet unified content card */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`unified-${index}`}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 18 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            className="w-full lg:hidden max-w-[22rem] sm:max-w-[26rem] md:max-w-[30rem] mx-auto"
+          >
+            <div className="p-2 sm:p-3 text-white text-center">
+              <div className="relative aspect-[4/3] overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.45)]">
+                <Image
+                  src={renderedSlides[index].foregroundImage || renderedSlides[index].image}
+                  alt={`${renderedSlides[index].title} visual`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 640px) 90vw, (max-width: 1024px) 70vw, 520px"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
+              </div>
+
+              <div className="mt-4 sm:mt-5 space-y-3.5 sm:space-y-4.5">
+                <div className="max-w-full text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.19em] sm:tracking-[0.24em] text-white/70">
+                  <span>{renderedSlides[index].kicker}</span>
+                </div>
+                <h1 className={`jacquard-24-regular font-bold drop-shadow-[0_8px_24px_rgba(0,0,0,0.5)] ${isWelcomeSlide ? 'text-6xl leading-[0.82]' : 'text-[1.52rem] sm:text-[1.7rem] md:text-[1.86rem] leading-[1.08]'}`}>
+                  {renderedSlides[index].title}
+                </h1>
+                <p className="text-[12px] sm:text-[13px] md:text-[14px] text-white/80 leading-relaxed line-clamp-4 mx-auto max-w-[34ch]">
+                  {renderedSlides[index].body}
+                </p>
+                <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2.5 sm:gap-3 pt-1">
+                  <Link
+                    href={renderedSlides[index].ctaPrimary.href}
+                    className="inline-flex h-11 sm:h-12 min-w-[150px] sm:min-w-[164px] items-center justify-center rounded-none bg-white text-black px-4 sm:px-5 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] shadow-[0_10px_30px_rgba(0,0,0,0.25)] hover:brightness-95 transition"
+                  >
+                    {renderedSlides[index].ctaPrimary.label}
+                  </Link>
+                  {renderedSlides[index].ctaSecondary && (
+                    <Link
+                      href={renderedSlides[index].ctaSecondary.href}
+                      className="inline-flex h-11 sm:h-12 min-w-[150px] sm:min-w-[164px] items-center justify-center rounded-none border border-white/30 px-4 sm:px-5 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-white hover:bg-white/10 transition"
+                    >
+                      {renderedSlides[index].ctaSecondary.label}
+                    </Link>
+                  )}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Desktop text column */}
         <AnimatePresence mode="wait">
           <motion.div
             key={`text-${index}`}
@@ -273,28 +406,28 @@ export default function PromoCarousel() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
             transition={{ duration: 0.55, ease: 'easeOut' }}
-            className="w-full flex-1 max-w-xl space-y-4 sm:space-y-5 text-white"
+            className="hidden lg:block w-full flex-1 max-w-xl space-y-5 text-white"
           >
-            <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/20 bg-white/5 px-2.5 sm:px-3 py-1 text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.19em] sm:tracking-[0.24em] text-white/80">
+            <div className="inline-flex max-w-full items-center gap-2 rounded-none border border-white/20 bg-white/5 px-2.5 sm:px-3 py-1 text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.19em] sm:tracking-[0.24em] text-white/80">
               <span>{renderedSlides[index].kicker}</span>
             </div>
-            <h1 className="text-[2rem] leading-[1.03] sm:text-5xl lg:text-6xl font-bold drop-shadow-[0_8px_24px_rgba(0,0,0,0.5)]">
+            <h1 className={`jacquard-24-regular font-bold drop-shadow-[0_8px_24px_rgba(0,0,0,0.5)] ${isWelcomeSlide ? 'text-6xl md:text-8xl leading-[0.82]' : 'text-[3.12rem] lg:text-[3.9rem] leading-[1.04]'}`}>
               {renderedSlides[index].title}
             </h1>
-            <p className="text-[13px] sm:text-base text-white/80 leading-relaxed max-w-lg">
+            <p className="text-base text-white/80 leading-relaxed max-w-lg">
               {renderedSlides[index].body}
             </p>
             <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3 pt-1">
               <Link
                 href={renderedSlides[index].ctaPrimary.href}
-                className="inline-flex h-11 sm:h-12 w-full sm:w-auto items-center justify-center rounded-md bg-white text-black px-4 sm:px-5 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] shadow-[0_10px_30px_rgba(0,0,0,0.25)] hover:brightness-95 transition"
+                className="inline-flex h-11 sm:h-12 w-full sm:w-auto items-center justify-center rounded-none bg-white text-black px-4 sm:px-5 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] shadow-[0_10px_30px_rgba(0,0,0,0.25)] hover:brightness-95 transition"
               >
                 {renderedSlides[index].ctaPrimary.label}
               </Link>
               {renderedSlides[index].ctaSecondary && (
                 <Link
                   href={renderedSlides[index].ctaSecondary.href}
-                  className="inline-flex h-11 sm:h-12 w-full sm:w-auto items-center justify-center rounded-md border border-white/30 px-4 sm:px-5 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-white hover:bg-white/10 transition"
+                  className="inline-flex h-11 sm:h-12 w-full sm:w-auto items-center justify-center rounded-none border border-white/30 px-4 sm:px-5 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-white hover:bg-white/10 transition"
                 >
                   {renderedSlides[index].ctaSecondary.label}
                 </Link>
@@ -311,9 +444,9 @@ export default function PromoCarousel() {
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: -18, scale: 0.98 }}
             transition={{ duration: 0.55, ease: 'easeOut' }}
-            className="flex-1 w-full max-w-[260px] sm:max-w-[360px] md:max-w-[520px]"
+            className="hidden lg:block flex-1 w-full max-w-[520px]"
           >
-            <div className="relative aspect-square rounded-2xl sm:rounded-3xl border border-white/12 bg-white/5 backdrop-blur-md overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.5)] sm:shadow-[0_30px_80px_rgba(0,0,0,0.55)]">
+            <div className="relative aspect-square rounded-none border border-white/12 bg-white/5 backdrop-blur-md overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.5)] sm:shadow-[0_30px_80px_rgba(0,0,0,0.55)]">
               <Image
                 src={renderedSlides[index].foregroundImage || renderedSlides[index].image}
                 alt={`${renderedSlides[index].title} visual`}
@@ -330,53 +463,34 @@ export default function PromoCarousel() {
 
       {/* Minimal counter */}
       <div className="pointer-events-none absolute bottom-4 sm:bottom-7 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1.5 sm:gap-2">
-        <div className="font-mono text-[9px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.24em] text-white/70">
-          {String(displayIndex).padStart(2, '0')} / {String(total).padStart(2, '0')}
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <button
+            aria-label="Previous slide"
+            onClick={goToPrevious}
+            className="hidden lg:flex pointer-events-auto h-6 w-6 items-center justify-center text-white/65 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/45 focus-visible:ring-offset-0"
+          >
+            <IconChevronLeft size={16} />
+          </button>
+          <div className="font-mono text-[9px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.24em] text-white/70">
+            {String(displayIndex).padStart(2, '0')} / {String(total).padStart(2, '0')}
+          </div>
+          <button
+            aria-label="Next slide"
+            onClick={goToNext}
+            className="hidden lg:flex pointer-events-auto h-6 w-6 items-center justify-center text-white/65 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/45 focus-visible:ring-offset-0"
+          >
+            <IconChevronRight size={16} />
+          </button>
         </div>
         <div className="w-20 sm:w-28 h-[2px] bg-white/15 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-white transition-all duration-500"
-            style={{ width: `${(displayIndex / total) * 100}%` }}
+          <motion.div
+            key={`progress-${index}-${total}`}
+            className="h-full bg-white"
+            initial={{ width: '0%' }}
+            animate={{ width: '100%' }}
+            transition={{ duration: SLIDE_DURATION_MS / 1000, ease: 'linear' }}
           />
         </div>
-      </div>
-
-      {/* Mobile navigation */}
-      <div className="sm:hidden absolute bottom-4 right-4 z-10 flex items-center gap-2">
-        <button
-          aria-label="Previous slide"
-          onClick={() => setIndex((prev) => (prev === 0 ? renderedSlides.length - 1 : prev - 1))}
-          className="h-9 w-9 rounded-full border border-border/70 bg-background/70 text-foreground/80 backdrop-blur-md transition-all duration-200 flex items-center justify-center active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-0"
-        >
-          <IconChevronLeft size={18} />
-        </button>
-        <button
-          aria-label="Next slide"
-          onClick={() => setIndex((prev) => (prev + 1) % renderedSlides.length)}
-          className="h-9 w-9 rounded-full border border-border/70 bg-background/70 text-foreground/80 backdrop-blur-md transition-all duration-200 flex items-center justify-center active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-0"
-        >
-          <IconChevronRight size={18} />
-        </button>
-      </div>
-
-      {/* Side navigation arrows */}
-      <div className="absolute inset-y-0 left-2 sm:left-4 md:left-6 hidden sm:flex items-center z-10">
-        <button
-          aria-label="Previous slide"
-          onClick={() => setIndex((prev) => (prev === 0 ? renderedSlides.length - 1 : prev - 1))}
-          className="h-10 w-10 md:h-12 md:w-12 rounded-full border border-border/70 bg-background/70 text-foreground/80 backdrop-blur-md transition-all duration-200 flex items-center justify-center hover:-translate-y-[1px] hover:border-primary/70 hover:text-foreground hover:shadow-[0_0_0_1px_rgba(var(--primary-rgb),0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-0"
-        >
-          <IconChevronLeft size={20} />
-        </button>
-      </div>
-      <div className="absolute inset-y-0 right-2 sm:right-4 md:right-6 hidden sm:flex items-center z-10">
-        <button
-          aria-label="Next slide"
-          onClick={() => setIndex((prev) => (prev + 1) % renderedSlides.length)}
-          className="h-10 w-10 md:h-12 md:w-12 rounded-full border border-border/70 bg-background/70 text-foreground/80 backdrop-blur-md transition-all duration-200 flex items-center justify-center hover:-translate-y-[1px] hover:border-primary/70 hover:text-foreground hover:shadow-[0_0_0_1px_rgba(var(--primary-rgb),0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-0"
-        >
-          <IconChevronRight size={20} />
-        </button>
       </div>
     </div>
   );
