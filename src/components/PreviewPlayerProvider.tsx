@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Product } from './CartProvider';
 
 export type PreviewTrack = {
     id: string;
@@ -8,6 +9,7 @@ export type PreviewTrack = {
     subtitle?: string;
     image?: string;
     audioUrl: string;
+    cartProduct?: Product;
 };
 
 type PreviewPlayerContextType = {
@@ -43,7 +45,7 @@ export function PreviewPlayerProvider({ children }: { children: React.ReactNode 
     useEffect(() => {
         const audio = new Audio();
         audio.preload = 'metadata';
-        audio.volume = volume;
+        audio.volume = 0.75;
         audioRef.current = audio;
 
         const onPlay = () => setIsPlaying(true);

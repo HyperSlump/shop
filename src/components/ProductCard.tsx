@@ -19,9 +19,10 @@ interface ProductCardProps {
 export default function ProductCard({ product, isInCart, onAddToCart }: ProductCardProps) {
     const { playTrack, isTrackActive, isPlaying, isOpen, registerTrack, unregisterTrack } = usePreviewPlayer();
     const isDark = useIsDarkMode();
+    const isPhysical = product.metadata?.type === 'PHYSICAL';
 
     useEffect(() => {
-        const audioPreviewUrl = typeof product.metadata?.audio_preview === 'string' ? product.metadata.audio_preview : '';
+        const audioPreviewUrl = !isPhysical && typeof product.metadata?.audio_preview === 'string' ? product.metadata.audio_preview : '';
         if (audioPreviewUrl) {
             const oneShotCount = typeof product.metadata?.count === 'string' ? product.metadata.count : '140';
             const formatLabel = typeof product.metadata?.format === 'string' ? product.metadata.format.toUpperCase() : 'WAV';
@@ -31,12 +32,11 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 subtitle: `${formatLabel} / ${oneShotCount} one-shots`,
                 image: product.image,
                 audioUrl: audioPreviewUrl,
+                cartProduct: product,
             });
         }
         return () => unregisterTrack(product.id);
-    }, [product, registerTrack, unregisterTrack]);
-
-    const isPhysical = product.metadata?.type === 'PHYSICAL';
+    }, [isPhysical, product, registerTrack, unregisterTrack]);
     const themePreferredVariant = useMemo(
         () => {
             if (!isPhysical || isDark === null) return null;
@@ -105,6 +105,7 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
             subtitle: `${formatLabel} / ${oneShotCount} one-shots`,
             image: product.image,
             audioUrl: audioPreviewUrl,
+            cartProduct: product,
         });
     };
 

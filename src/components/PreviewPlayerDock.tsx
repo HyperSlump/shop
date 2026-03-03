@@ -13,6 +13,7 @@ import {
 } from '@tabler/icons-react';
 
 import { usePreviewPlayer, type PreviewTrack } from './PreviewPlayerProvider';
+import { useCart } from './CartProvider';
 import { useState } from 'react';
 
 function formatTime(value: number) {
@@ -23,6 +24,7 @@ function formatTime(value: number) {
 }
 
 export default function PreviewPlayerDock() {
+    const { addToCart, cart } = useCart();
     const {
         currentTrack,
         isOpen,
@@ -43,14 +45,23 @@ export default function PreviewPlayerDock() {
 
     const handleTrackSelect = (track: PreviewTrack) => {
         playTrack(track);
-        // We could keep the playlist open or close it
-        // setIsPlaylistOpen(false);
+    };
+
+    const isTrackInCart = (track: PreviewTrack) => {
+        const cartId = track.cartProduct?.id || track.id;
+        return cart.some((item) => item.id === cartId);
+    };
+
+    const handleAddTrackToCart = (track: PreviewTrack) => {
+        if (!track.cartProduct) return;
+        addToCart(track.cartProduct);
     };
 
     const controlBase =
         "inline-flex items-center justify-center rounded-sm border border-border bg-background/60 text-foreground/80 " +
         "hover:text-foreground hover:border-primary/70 hover:shadow-[0_0_0_1px_rgba(var(--primary-rgb),0.4)] " +
         "transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-0";
+    const currentTrackInCart = currentTrack ? isTrackInCart(currentTrack) : false;
 
     return (
         <AnimatePresence>
@@ -91,54 +102,73 @@ export default function PreviewPlayerDock() {
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 overflow-y-auto max-h-[320px] pr-1 custom-scrollbar">
                                             {discoveredTracks.map((track) => {
                                                 const isActive = isTrackActive(track.id);
+                                                const isInCart = isTrackInCart(track);
                                                 return (
-                                                    <button
+                                                    <div
                                                         key={track.id}
-                                                        onClick={() => handleTrackSelect(track)}
                                                         className={`flex items-center gap-3 p-2 rounded-lg transition-all duration-200 text-left group
                                                             ${isActive
                                                                 ? 'bg-primary/10 border border-primary/30'
                                                                 : 'bg-background/40 border border-border/40 hover:bg-foreground/[0.03] hover:border-border/80'}`}
                                                     >
-                                                        <div className="relative w-10 h-10 flex-shrink-0 overflow-hidden rounded border border-border/60">
-                                                            {track.image ? (
-                                                                <Image
-                                                                    src={track.image}
-                                                                    alt=""
-                                                                    fill
-                                                                    className={`object-cover transition-all duration-500 ${isActive ? 'scale-110' : 'grayscale-[0.3] group-hover:grayscale-0'}`}
-                                                                />
-                                                            ) : (
-                                                                <div className="w-full h-full flex items-center justify-center bg-muted/20 text-muted">
-                                                                    <IconWaveSine size={14} />
-                                                                </div>
-                                                            )}
-                                                            {isActive && isPlaying && (
-                                                                <div className="absolute inset-0 bg-primary/20 flex items-center justify-center">
-                                                                    <div className="flex gap-0.5 items-end h-3">
-                                                                        <motion.div animate={{ height: [4, 12, 6] }} transition={{ repeat: Infinity, duration: 0.6 }} className="w-0.5 bg-primary" />
-                                                                        <motion.div animate={{ height: [8, 4, 10] }} transition={{ repeat: Infinity, duration: 0.5 }} className="w-0.5 bg-primary" />
-                                                                        <motion.div animate={{ height: [6, 12, 8] }} transition={{ repeat: Infinity, duration: 0.7 }} className="w-0.5 bg-primary" />
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleTrackSelect(track)}
+                                                            className="group flex min-w-0 flex-1 items-center gap-3 text-left"
+                                                        >
+                                                            <div className="relative w-10 h-10 flex-shrink-0 overflow-hidden rounded border border-border/60">
+                                                                {track.image ? (
+                                                                    <Image
+                                                                        src={track.image}
+                                                                        alt=""
+                                                                        fill
+                                                                        className={`object-cover transition-all duration-500 ${isActive ? 'scale-110' : 'grayscale-[0.3] group-hover:grayscale-0'}`}
+                                                                    />
+                                                                ) : (
+                                                                    <div className="w-full h-full flex items-center justify-center bg-muted/20 text-muted">
+                                                                        <IconWaveSine size={14} />
                                                                     </div>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                        <div className="min-w-0 flex-1">
-                                                            <p className={`text-[13px] font-medium truncate ${isActive ? 'text-primary' : 'text-foreground'}`}>
-                                                                {track.title}
-                                                            </p>
-                                                            <p className="font-mono text-[9px] uppercase tracking-wider text-muted truncate mt-0.5">
-                                                                {track.subtitle}
-                                                            </p>
-                                                        </div>
-                                                        <div className="mr-1">
-                                                            {isActive && isPlaying ? (
-                                                                <IconPlayerPauseFilled size={14} className="text-primary" />
-                                                            ) : (
-                                                                <IconPlayerPlayFilled size={14} className={`transition-opacity ${isActive ? 'opacity-100 text-primary' : 'opacity-0 group-hover:opacity-100 text-muted'}`} />
-                                                            )}
-                                                        </div>
-                                                    </button>
+                                                                )}
+                                                                {isActive && isPlaying && (
+                                                                    <div className="absolute inset-0 bg-primary/20 flex items-center justify-center">
+                                                                        <div className="flex gap-0.5 items-end h-3">
+                                                                            <motion.div animate={{ height: [4, 12, 6] }} transition={{ repeat: Infinity, duration: 0.6 }} className="w-0.5 bg-primary" />
+                                                                            <motion.div animate={{ height: [8, 4, 10] }} transition={{ repeat: Infinity, duration: 0.5 }} className="w-0.5 bg-primary" />
+                                                                            <motion.div animate={{ height: [6, 12, 8] }} transition={{ repeat: Infinity, duration: 0.7 }} className="w-0.5 bg-primary" />
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                            <div className="min-w-0 flex-1">
+                                                                <p className={`text-[13px] font-medium truncate ${isActive ? 'text-primary' : 'text-foreground'}`}>
+                                                                    {track.title}
+                                                                </p>
+                                                                <p className="font-mono text-[9px] uppercase tracking-wider text-muted truncate mt-0.5">
+                                                                    {track.subtitle}
+                                                                </p>
+                                                            </div>
+                                                            <div className="mr-1">
+                                                                {isActive && isPlaying ? (
+                                                                    <IconPlayerPauseFilled size={14} className="text-primary" />
+                                                                ) : (
+                                                                    <IconPlayerPlayFilled size={14} className={`transition-opacity ${isActive ? 'opacity-100 text-primary' : 'opacity-0 group-hover:opacity-100 text-muted'}`} />
+                                                                )}
+                                                            </div>
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleAddTrackToCart(track)}
+                                                            disabled={!track.cartProduct || isInCart}
+                                                            className={`shrink-0 inline-flex h-8 items-center justify-center rounded-xs border px-2.5 font-mono text-[9px] uppercase tracking-[0.12em] transition-all ${isInCart
+                                                                ? 'cursor-default border-primary/30 bg-primary/10 text-primary/75'
+                                                                : !track.cartProduct
+                                                                    ? 'cursor-not-allowed border-border/40 bg-background/30 text-muted/50'
+                                                                    : 'border-primary/60 bg-primary/12 text-primary hover:brightness-110 active:scale-[0.99]'
+                                                                }`}
+                                                        >
+                                                            {isInCart ? 'added' : 'add'}
+                                                        </button>
+                                                    </div>
                                                 );
                                             })}
                                         </div>
@@ -149,22 +179,9 @@ export default function PreviewPlayerDock() {
 
                         <div className="overflow-hidden border-t border-border/40 bg-card/40 shadow-[0_-8px_30px_rgba(0,0,0,0.2)] backdrop-blur-2xl">
                             <div className="flex flex-col gap-2 p-3 md:flex-row md:items-center md:gap-4 px-5 md:px-10 py-3 lg:px-16">
-                                {/* Top row for mobile (Controls + Info + Close) / Left section for desktop */}
+                                {/* Top row for mobile (Info + Close) / Left section for desktop */}
                                 <div className="flex items-center justify-between md:w-auto md:justify-start md:gap-4">
                                     <div className="flex items-center gap-3">
-                                        <button
-                                            type="button"
-                                            onClick={togglePlayback}
-                                            className={`${controlBase} h-10 w-10 shrink-0 hover:-translate-y-[1px]`}
-                                            aria-label={isPlaying ? 'Pause preview' : 'Play preview'}
-                                        >
-                                            {isPlaying ? (
-                                                <IconPlayerPauseFilled size={16} />
-                                            ) : (
-                                                <IconPlayerPlayFilled size={16} className="translate-x-[1px]" />
-                                            )}
-                                        </button>
-
                                         <div className="hidden h-10 w-10 shrink-0 overflow-hidden rounded-md border border-border bg-background/70 sm:block">
                                             {currentTrack.image ? (
                                                 <Image
@@ -186,6 +203,19 @@ export default function PreviewPlayerDock() {
                                             <p className="truncate font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
                                                 {currentTrack.subtitle || 'audio preview'}
                                             </p>
+                                            {currentTrack.cartProduct && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleAddTrackToCart(currentTrack)}
+                                                    disabled={currentTrackInCart}
+                                                    className={`mt-1.5 inline-flex items-center justify-center rounded-sm border px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.13em] transition-all ${currentTrackInCart
+                                                        ? 'cursor-default border-primary/30 bg-primary/10 text-primary/75'
+                                                        : 'border-primary/60 bg-primary/12 text-primary hover:brightness-110 active:scale-[0.99]'
+                                                        }`}
+                                                >
+                                                    {currentTrackInCart ? 'added' : 'add to cart'}
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
 
@@ -213,6 +243,21 @@ export default function PreviewPlayerDock() {
                                             stroke={2.5}
                                             className={`transition-transform duration-500 sm:ml-0 ${isPlaylistOpen ? 'rotate-180' : ''}`}
                                         />
+                                    </button>
+                                </div>
+
+                                <div className="flex items-center">
+                                    <button
+                                        type="button"
+                                        onClick={togglePlayback}
+                                        className={`${controlBase} h-9 w-9 shrink-0 hover:-translate-y-[1px]`}
+                                        aria-label={isPlaying ? 'Pause preview' : 'Play preview'}
+                                    >
+                                        {isPlaying ? (
+                                            <IconPlayerPauseFilled size={14} />
+                                        ) : (
+                                            <IconPlayerPlayFilled size={14} className="translate-x-[1px]" />
+                                        )}
                                     </button>
                                 </div>
 

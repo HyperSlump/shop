@@ -76,6 +76,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                 subtitle: `${formatLabel} / ${oneShotCount} one-shots`,
                 image: product.image,
                 audioUrl: audioPreviewUrl,
+                cartProduct: product,
             });
         }
         return () => unregisterTrack(product.id);
@@ -91,6 +92,7 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
             subtitle: `${formatLabel} / ${oneShotCount} one-shots`,
             image: product.image,
             audioUrl: audioPreviewUrl,
+            cartProduct: product,
         });
     };
 
