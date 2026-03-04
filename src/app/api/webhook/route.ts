@@ -8,6 +8,12 @@ import { getProductFile } from '@/lib/products'
 import { buildDownloadEmail } from '@/lib/email/downloadEmail'
 import Stripe from 'stripe'
 
+function resolveEmailUiMode(modeLike?: string): 'dark' | 'light' {
+    const mode = String(modeLike || '').trim().toLowerCase()
+    if (mode === 'light' || mode === 'stripe' || mode === 'day') return 'light'
+    return 'dark'
+}
+
 export async function POST(req: Request) {
     const body = await req.text()
     const headersList = await headers()
@@ -32,6 +38,7 @@ export async function POST(req: Request) {
             ? object.customer_details?.email
             : (object.receipt_email || object.metadata?.email)
         const metadata = object.metadata || {}
+        const uiMode = resolveEmailUiMode(metadata.ui_mode || metadata.theme)
 
         // Parse item details from metadata (chunked if over Stripe's 500 char limit)
         let itemsJson: string | null = ''
@@ -74,13 +81,14 @@ export async function POST(req: Request) {
                     }
                 })
 
-                const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://hyperslump.com'
+                const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://hyperslump.xyz'
 
                 const html = buildDownloadEmail({
                     customerEmail,
                     items: downloadItems,
                     sessionId: object.id,
                     appUrl,
+                    uiMode,
                 })
 
                 await resend.emails.send({

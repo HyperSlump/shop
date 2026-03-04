@@ -1,6 +1,6 @@
 /**
- * Branded Resend email template for hyper$lump digital download delivery.
- * Pure HTML string — no react-email dependency needed.
+ * Transactional email template for hyper$lump digital downloads.
+ * Kept intentionally simple for broad email-client compatibility.
  */
 
 interface DownloadItem {
@@ -14,104 +14,136 @@ interface EmailOptions {
     items: DownloadItem[];
     sessionId: string;
     appUrl: string;
+    uiMode?: string;
 }
 
-export function buildDownloadEmail({ items, sessionId, appUrl }: EmailOptions): string {
-    const successUrl = `${appUrl}/success?session_id=${sessionId}`;
+function escapeHtml(value: string): string {
+    return value
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+}
 
-    const itemRows = items.map((item) => `
-        <tr>
-            <td style="padding: 16px 0; border-bottom: 1px solid #1a1a1a;">
-                <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                    <tr>
-                        <td style="padding-right: 16px; vertical-align: top; width: 40px;">
-                            <div style="width: 40px; height: 40px; background: #111; border: 1px solid #222; border-radius: 6px; display: flex; align-items: center; justify-content: center;">
-                                <span style="font-family: monospace; color: #444; font-size: 10px;">//</span>
-                            </div>
-                        </td>
-                        <td style="vertical-align: middle;">
-                            <div style="font-family: monospace; font-size: 11px; color: #888; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px;">${item.label}</div>
-                            <div style="font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 15px; font-weight: 600; color: #ffffff;">${item.name}</div>
-                        </td>
-                        <td style="vertical-align: middle; text-align: right; white-space: nowrap; padding-left: 16px;">
-                            <a href="${item.downloadUrl}"
-                               style="display: inline-block; background: #ffffff; color: #000000; padding: 8px 18px; text-decoration: none; font-family: monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; border-radius: 4px;">
-                                DOWNLOAD
-                            </a>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    `).join('');
+export function buildDownloadEmail({ customerEmail, items, sessionId, appUrl }: EmailOptions): string {
+    const normalizedAppUrl = appUrl.replace(/\/$/, '');
+    const successUrl = `${normalizedAppUrl}/success?session_id=${sessionId}`;
+    const safeCustomerEmail = escapeHtml(customerEmail);
+    const safeSuccessUrl = escapeHtml(successUrl);
+    const logoUrl = 'https://gusukas6vq4zp6uu.public.blob.vercel-storage.com/Adobe%20Express%20-%20file.png';
+    const safeLogoUrl = escapeHtml(logoUrl);
+
+    const itemRows = items.length > 0
+        ? items.map((item) => {
+            const safeName = escapeHtml(item.name);
+            const safeDownloadUrl = escapeHtml(item.downloadUrl);
+            const safeLabel = escapeHtml(item.label || 'download');
+
+            return `
+                <tr>
+                    <td style="padding:0 0 10px 0;">
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #e5e5e5; border-radius:8px; background:#ffffff;">
+                            <tr>
+                                <td style="padding:14px 14px; vertical-align:middle;">
+                                    <div style="font-size:15px; line-height:1.35; font-weight:600; color:#111111;">
+                                        ${safeName}
+                                    </div>
+                                    <div style="font-size:11px; line-height:1.4; color:#666666; text-transform:uppercase; letter-spacing:0.06em;">
+                                        ${safeLabel}
+                                    </div>
+                                </td>
+                                <td style="padding:14px 14px; width:1%; white-space:nowrap; text-align:right; vertical-align:middle;">
+                                    <a
+                                        href="${safeDownloadUrl}"
+                                        style="display:inline-block; background:#111111; color:#ffffff; text-decoration:none; font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding:10px 14px; border-radius:6px;"
+                                    >
+                                        Download
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            `;
+        }).join('')
+        : `
+            <tr>
+                <td style="padding:0 0 10px 0; font-size:14px; line-height:1.6; color:#666666;">
+                    No digital files were attached to this order.
+                </td>
+            </tr>
+        `;
 
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>hyper$lump — Download Ready</title>
+    <title>Your hyper$lump files are ready</title>
 </head>
-<body style="margin: 0; padding: 0; background-color: #000000; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #000000; min-height: 100vh;">
+<body style="margin:0; padding:0; background:#f3f3f3; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#111111;">
+    <div style="display:none; max-height:0; overflow:hidden; opacity:0;">
+        Your hyper$lump files are ready to download.
+    </div>
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f3f3f3;">
         <tr>
-            <td align="center" style="padding: 48px 16px;">
-                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 520px; background-color: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 12px; overflow: hidden;">
-
-                    <!-- Header -->
+            <td align="center" style="padding:28px 16px 40px;">
+                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;">
                     <tr>
-                        <td style="padding: 32px 32px 24px 32px; border-bottom: 1px solid #1a1a1a;">
-                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                                <tr>
-                                    <td>
-                                        <div style="font-family: monospace; font-size: 28px; font-weight: 900; color: #ffffff; letter-spacing: -0.02em;">h$</div>
-                                    </td>
-                                    <td style="text-align: right;">
-                                        <span style="font-family: monospace; font-size: 9px; color: #444; letter-spacing: 0.2em; text-transform: uppercase;">ACCESS_GRANTED</span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <!-- Main Content -->
-                    <tr>
-                        <td style="padding: 32px 32px 0 32px;">
-                            <div style="font-size: 22px; font-weight: 700; color: #ffffff; margin-bottom: 8px; letter-spacing: -0.01em;">
-                                Your files are ready.
-                            </div>
-                            <div style="font-size: 14px; color: #666666; line-height: 1.6; margin-bottom: 28px;">
-                                Payment confirmed. Download your files directly below — links don't expire.
-                            </div>
-
-                            <!-- Download Items -->
-                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                                <tbody>
-                                    ${itemRows}
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <!-- CTA -->
-                    <tr>
-                        <td style="padding: 24px 32px 0 32px;">
-                            <a href="${successUrl}"
-                               style="display: block; text-align: center; border: 1px solid #222; color: #666; padding: 12px; text-decoration: none; font-family: monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; border-radius: 6px;">
-                                View Order Summary →
+                        <td align="center" style="padding:0 0 20px;">
+                            <a href="https://hyperslump.xyz" style="text-decoration:none;" target="_blank" rel="noopener noreferrer">
+                                <img
+                                    src="${safeLogoUrl}"
+                                    alt="hyper$lump"
+                                    width="56"
+                                    style="display:block; width:56px; height:auto; border:0; outline:none; text-decoration:none;"
+                                />
                             </a>
                         </td>
                     </tr>
-
-                    <!-- Footer -->
                     <tr>
-                        <td style="padding: 24px 32px 32px 32px; border-top: 1px solid #1a1a1a; margin-top: 24px;">
-                            <div style="margin-top: 24px; font-family: monospace; font-size: 9px; color: #333; letter-spacing: 0.1em; text-transform: uppercase; text-align: center;">
-                                hyper$lump · All rights reserved · <a href="${appUrl}" style="color: #444; text-decoration: none;">hyperslump.com</a>
-                            </div>
+                        <td style="padding:0 0 16px; font-size:24px; line-height:1.25; font-weight:700; color:#111111;">
+                            Thank you for your order.
                         </td>
                     </tr>
-
+                    <tr>
+                        <td style="padding:0 0 16px; font-size:16px; line-height:1.6; color:#333333;">
+                            Hi,
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:0 0 16px; font-size:16px; line-height:1.6; color:#333333;">
+                            Your payment is confirmed. Download links are available below. A receipt was sent to
+                            <span style="font-weight:600; color:#111111;">${safeCustomerEmail}</span>.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:0 0 18px;">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                ${itemRows}
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:0 0 26px;">
+                            <a
+                                href="${safeSuccessUrl}"
+                                style="color:#0b63ce; text-decoration:none; font-size:14px; line-height:1.4;"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                View order summary
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border-top:1px solid #dddddd; padding:20px 0 0; font-size:13px; line-height:1.6; color:#777777;">
+                            Need help? Contact <a href="mailto:hyperslumpdub@gmail.com" style="color:#0b63ce; text-decoration:none;">hyperslumpdub@gmail.com</a>.
+                            <br />
+                            &copy; ${new Date().getFullYear()} hyper$lump. All rights reserved.
+                        </td>
+                    </tr>
                 </table>
             </td>
         </tr>

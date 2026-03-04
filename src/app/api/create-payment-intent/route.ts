@@ -6,6 +6,7 @@ export async function POST(req: Request) {
     try {
         const body = await req.json();
         const { cart, shippingAmount, taxAmount, recipient, shippingId, taxCalculationId } = body;
+        const uiMode = body.uiMode === 'light' ? 'light' : 'dark';
 
         console.log('>>> [STRIPE_API] Payload received:', JSON.stringify({ cart, shippingAmount, taxAmount, recipient, shippingId, taxCalculationId }, null, 2));
 
@@ -100,8 +101,14 @@ export async function POST(req: Request) {
                         return { name: item.name, label: fileInfo.label, downloadUrl: fileInfo.url };
                     });
 
-                    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://hyperslump.com';
-                    const html = buildDownloadEmail({ customerEmail, items: downloadItems, sessionId: freeSessionId, appUrl });
+                    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://hyperslump.xyz';
+                    const html = buildDownloadEmail({
+                        customerEmail,
+                        items: downloadItems,
+                        sessionId: freeSessionId,
+                        appUrl,
+                        uiMode,
+                    });
 
                     await resend.emails.send({
                         from: 'hyper$lump <onboarding@resend.dev>',
@@ -149,6 +156,7 @@ export async function POST(req: Request) {
         const metadata: any = {
             items: cart.slice(0, 3).map((item: any) => `${(item.name || 'Item').substring(0, 20)}`).join(', ') + (cart.length > 3 ? '...' : ''),
             shipping_id: shippingId || 'STANDARD',
+            ui_mode: uiMode,
         };
         if (resolvedTaxCalculationId) {
             metadata.tax_calculation_id = resolvedTaxCalculationId;

@@ -390,6 +390,7 @@ export default function CheckoutPage() {
                     recipient: recipientData,
                     paymentIntentId: paymentIntentId || undefined,
                     taxCalculationId: taxCalcId || undefined,
+                    uiMode: isDark ? 'dark' : 'light',
                 }),
             });
 
@@ -417,7 +418,7 @@ export default function CheckoutPage() {
             console.error('Intent error:', err);
             setError(err.message);
         }
-    }, [cart, paymentIntentId]);
+    }, [cart, paymentIntentId, isDark]);
 
     useEffect(() => {
         if (cart.length > 0 && hasCheckoutEligibleItems && !clientSecret && !isFreeOrder) {
@@ -1001,7 +1002,7 @@ export default function CheckoutPage() {
                                 </div>
                             </div>
                         ) : isFreeOrder ? (
-                            <FreeOrderPanel cart={cart} />
+                            <FreeOrderPanel cart={cart} isDark={isDark} />
                         ) : clientSecret ? (
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
                                 {hasPhysicalItems && (
@@ -1049,7 +1050,7 @@ export default function CheckoutPage() {
     );
 }
 
-function FreeOrderPanel({ cart }: { cart: Product[] }) {
+function FreeOrderPanel({ cart, isDark }: { cart: Product[]; isDark: boolean }) {
     const { clearCart } = useCart();
     const [email, setEmail] = useState('');
     const [newsletter, setNewsletter] = useState(true);
@@ -1076,6 +1077,7 @@ function FreeOrderPanel({ cart }: { cart: Product[] }) {
                     shippingAmount: 0,
                     taxAmount: 0,
                     email,
+                    uiMode: isDark ? 'dark' : 'light',
                 }),
             });
 
