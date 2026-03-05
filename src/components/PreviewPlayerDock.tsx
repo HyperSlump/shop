@@ -29,10 +29,12 @@ export default function PreviewPlayerDock() {
         currentTrack,
         isOpen,
         isPlaying,
+        isLoopEnabled,
         currentTime,
         duration,
         volume,
         togglePlayback,
+        toggleLoop,
         closePlayer,
         seekTo,
         setVolume,
@@ -178,11 +180,10 @@ export default function PreviewPlayerDock() {
                         </AnimatePresence>
 
                         <div className="overflow-hidden border-t border-border/40 bg-card/40 shadow-[0_-8px_30px_rgba(0,0,0,0.2)] backdrop-blur-2xl">
-                            <div className="flex flex-col gap-2 p-3 md:flex-row md:items-center md:gap-4 px-5 md:px-10 py-3 lg:px-16">
-                                {/* Top row for mobile (Info + Close) / Left section for desktop */}
-                                <div className="flex items-center justify-between md:w-auto md:justify-start md:gap-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="hidden h-10 w-10 shrink-0 overflow-hidden rounded-md border border-border bg-background/70 sm:block">
+                            <div className="flex flex-col gap-2 px-4 py-3 md:flex-row md:items-center md:gap-4 md:px-10 lg:px-16">
+                                <div className="flex min-w-0 items-center justify-between gap-3 md:w-auto md:justify-start md:gap-4">
+                                    <div className="flex min-w-0 items-center gap-3">
+                                        <div className="h-10 w-10 shrink-0 overflow-hidden rounded-md border border-border bg-background/70">
                                             {currentTrack.image ? (
                                                 <Image
                                                     src={currentTrack.image}
@@ -198,28 +199,14 @@ export default function PreviewPlayerDock() {
                                             )}
                                         </div>
 
-                                        <div className="min-w-0 pr-2">
+                                        <div className="min-w-0">
                                             <p className="truncate text-sm font-semibold text-foreground">{currentTrack.title}</p>
                                             <p className="truncate font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
                                                 {currentTrack.subtitle || 'audio preview'}
                                             </p>
-                                            {currentTrack.cartProduct && (
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleAddTrackToCart(currentTrack)}
-                                                    disabled={currentTrackInCart}
-                                                    className={`mt-1.5 inline-flex items-center justify-center rounded-sm border px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.13em] transition-all ${currentTrackInCart
-                                                        ? 'cursor-default border-primary/30 bg-primary/10 text-primary/75'
-                                                        : 'border-primary/60 bg-primary/12 text-primary hover:brightness-110 active:scale-[0.99]'
-                                                        }`}
-                                                >
-                                                    {currentTrackInCart ? 'added' : 'add to cart'}
-                                                </button>
-                                            )}
                                         </div>
                                     </div>
 
-                                    {/* Close button visible on mobile here, moved to end on desktop */}
                                     <button
                                         type="button"
                                         onClick={closePlayer}
@@ -230,8 +217,50 @@ export default function PreviewPlayerDock() {
                                     </button>
                                 </div>
 
-                                {/* Playlist Toggle Button */}
-                                <div className="flex items-center lg:border-r lg:border-border/50 lg:pr-4 lg:mr-1">
+                                <div className="flex items-center gap-2 md:hidden">
+                                    <button
+                                        onClick={() => setIsPlaylistOpen(!isPlaylistOpen)}
+                                        className={`${controlBase} h-9 w-9 shrink-0 hover:-translate-y-[1px] ${isPlaylistOpen ? 'bg-primary/15 border-primary/50 text-primary shadow-[0_0_0_1px_rgba(var(--primary-rgb),0.35)]' : ''}`}
+                                        aria-label={isPlaylistOpen ? 'Hide playlist' : 'Show playlist'}
+                                    >
+                                        <IconPlaylist size={14} stroke={2} />
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={togglePlayback}
+                                        className={`${controlBase} h-9 w-9 shrink-0 hover:-translate-y-[1px]`}
+                                        aria-label={isPlaying ? 'Pause preview' : 'Play preview'}
+                                    >
+                                        {isPlaying ? (
+                                            <IconPlayerPauseFilled size={14} />
+                                        ) : (
+                                            <IconPlayerPlayFilled size={14} className="translate-x-[1px]" />
+                                        )}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={toggleLoop}
+                                        className={`${controlBase} h-9 px-2.5 font-mono text-[9px] uppercase tracking-[0.13em] hover:-translate-y-[1px] ${isLoopEnabled ? 'border-primary/50 bg-primary/10 text-primary' : ''}`}
+                                        aria-label={isLoopEnabled ? 'Disable preview loop' : 'Enable preview loop'}
+                                    >
+                                        {isLoopEnabled ? 'loop on' : 'loop off'}
+                                    </button>
+                                    {currentTrack.cartProduct && (
+                                        <button
+                                            type="button"
+                                            onClick={() => handleAddTrackToCart(currentTrack)}
+                                            disabled={currentTrackInCart}
+                                            className={`inline-flex h-9 min-w-0 flex-1 items-center justify-center rounded-sm border px-2.5 font-mono text-[9px] uppercase tracking-[0.13em] transition-all ${currentTrackInCart
+                                                ? 'cursor-default border-primary/30 bg-primary/10 text-primary/75'
+                                                : 'border-primary/60 bg-primary/12 text-primary hover:brightness-110 active:scale-[0.99]'
+                                                }`}
+                                        >
+                                            {currentTrackInCart ? 'added' : 'add to cart'}
+                                        </button>
+                                    )}
+                                </div>
+
+                                <div className="hidden items-center lg:mr-1 lg:border-r lg:border-border/50 lg:pr-4 md:flex">
                                     <button
                                         onClick={() => setIsPlaylistOpen(!isPlaylistOpen)}
                                         className={`${controlBase} flex items-center gap-2 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.15em] hover:-translate-y-[1px] ${isPlaylistOpen ? 'bg-primary/15 border-primary/50 text-primary shadow-[0_0_0_1px_rgba(var(--primary-rgb),0.35)]' : ''}`}
@@ -246,7 +275,7 @@ export default function PreviewPlayerDock() {
                                     </button>
                                 </div>
 
-                                <div className="flex items-center">
+                                <div className="hidden items-center md:flex">
                                     <button
                                         type="button"
                                         onClick={togglePlayback}
@@ -261,8 +290,7 @@ export default function PreviewPlayerDock() {
                                     </button>
                                 </div>
 
-                                {/* Center section: Progress Bar */}
-                                <div className="flex-1 space-y-1.5 pt-1 md:pt-0">
+                                <div className="flex-1 space-y-1.5 pt-0.5 md:pt-0">
                                     <input
                                         type="range"
                                         min={0}
@@ -279,8 +307,30 @@ export default function PreviewPlayerDock() {
                                     </div>
                                 </div>
 
-                                {/* Right section for desktop (Volume + Close) */}
                                 <div className="hidden items-center justify-end gap-3 md:flex">
+                                    <button
+                                        type="button"
+                                        onClick={toggleLoop}
+                                        className={`${controlBase} h-9 px-2.5 font-mono text-[9px] uppercase tracking-[0.13em] hover:-translate-y-[1px] ${isLoopEnabled ? 'border-primary/50 bg-primary/10 text-primary' : ''}`}
+                                        aria-label={isLoopEnabled ? 'Disable preview loop' : 'Enable preview loop'}
+                                    >
+                                        {isLoopEnabled ? 'loop on' : 'loop off'}
+                                    </button>
+
+                                    {currentTrack.cartProduct && (
+                                        <button
+                                            type="button"
+                                            onClick={() => handleAddTrackToCart(currentTrack)}
+                                            disabled={currentTrackInCart}
+                                            className={`inline-flex h-9 items-center justify-center rounded-sm border px-2.5 font-mono text-[9px] uppercase tracking-[0.13em] transition-all ${currentTrackInCart
+                                                ? 'cursor-default border-primary/30 bg-primary/10 text-primary/75'
+                                                : 'border-primary/60 bg-primary/12 text-primary hover:brightness-110 active:scale-[0.99]'
+                                                }`}
+                                        >
+                                            {currentTrackInCart ? 'added' : 'add to cart'}
+                                        </button>
+                                    )}
+
                                     <div className="flex items-center gap-2">
                                         <IconVolume size={15} className="text-muted" />
                                         <input

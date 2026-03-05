@@ -16,11 +16,13 @@ type PreviewPlayerContextType = {
     currentTrack: PreviewTrack | null;
     isOpen: boolean;
     isPlaying: boolean;
+    isLoopEnabled: boolean;
     duration: number;
     currentTime: number;
     volume: number;
     playTrack: (track: PreviewTrack) => void;
     togglePlayback: () => void;
+    toggleLoop: () => void;
     closePlayer: () => void;
     seekTo: (time: number) => void;
     setVolume: (value: number) => void;
@@ -37,6 +39,7 @@ export function PreviewPlayerProvider({ children }: { children: React.ReactNode 
     const [currentTrack, setCurrentTrack] = useState<PreviewTrack | null>(null);
     const [isOpen, setIsOpen] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [isLoopEnabled, setIsLoopEnabled] = useState(true);
     const [duration, setDuration] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
     const [volume, setVolumeState] = useState(0.75);
@@ -46,6 +49,7 @@ export function PreviewPlayerProvider({ children }: { children: React.ReactNode 
         const audio = new Audio();
         audio.preload = 'metadata';
         audio.volume = 0.75;
+        audio.loop = true;
         audioRef.current = audio;
 
         const onPlay = () => setIsPlaying(true);
@@ -82,6 +86,12 @@ export function PreviewPlayerProvider({ children }: { children: React.ReactNode 
         if (!audio) return;
         audio.volume = volume;
     }, [volume]);
+
+    useEffect(() => {
+        const audio = audioRef.current;
+        if (!audio) return;
+        audio.loop = isLoopEnabled;
+    }, [isLoopEnabled]);
 
     const resolveUrl = (url: string) => {
         if (typeof window === 'undefined') return url;
@@ -134,6 +144,10 @@ export function PreviewPlayerProvider({ children }: { children: React.ReactNode 
         }
     }, [currentTrack]);
 
+    const toggleLoop = useCallback(() => {
+        setIsLoopEnabled(prev => !prev);
+    }, []);
+
     const closePlayer = useCallback(() => {
         const audio = audioRef.current;
         if (audio) audio.pause();
@@ -173,11 +187,13 @@ export function PreviewPlayerProvider({ children }: { children: React.ReactNode 
         currentTrack,
         isOpen,
         isPlaying,
+        isLoopEnabled,
         duration,
         currentTime,
         volume,
         playTrack,
         togglePlayback,
+        toggleLoop,
         closePlayer,
         seekTo,
         setVolume,
@@ -185,7 +201,7 @@ export function PreviewPlayerProvider({ children }: { children: React.ReactNode 
         discoveredTracks,
         registerTrack,
         unregisterTrack,
-    }), [closePlayer, currentTime, currentTrack, duration, isOpen, isPlaying, isTrackActive, playTrack, seekTo, setVolume, togglePlayback, volume, discoveredTracks, registerTrack, unregisterTrack]);
+    }), [closePlayer, currentTime, currentTrack, duration, isLoopEnabled, isOpen, isPlaying, isTrackActive, playTrack, seekTo, setVolume, toggleLoop, togglePlayback, volume, discoveredTracks, registerTrack, unregisterTrack]);
 
     return (
         <PreviewPlayerContext.Provider value={value}>
