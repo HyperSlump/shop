@@ -375,6 +375,26 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                                 />
                             </motion.div>
                         </AnimatePresence>
+                        {audioPreviewUrl && (
+                            <button
+                                type="button"
+                                onClick={playPreview}
+                                className={`absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 rounded-full border border-border/80 bg-card/88 px-4 py-2.5 backdrop-blur-md transition-all duration-200 ${isActivePreview
+                                    ? 'text-primary shadow-[0_8px_24px_rgba(0,0,0,0.35)]'
+                                    : 'text-foreground/90 shadow-[0_8px_24px_rgba(0,0,0,0.25)] hover:text-primary'
+                                    }`}
+                                aria-label={`${isActivePreview && isPlaying ? 'Pause' : 'Play'} preview for ${product.name}`}
+                            >
+                                <span className="inline-flex items-center gap-2 font-mono text-[10px] font-semibold uppercase tracking-[0.16em]">
+                                    {isActivePreview && isPlaying ? (
+                                        <IconPlayerPauseFilled size={12} />
+                                    ) : (
+                                        <IconPlayerPlayFilled size={12} />
+                                    )}
+                                    {isActivePreview && isPlaying ? 'playing' : 'preview'}
+                                </span>
+                            </button>
+                        )}
                         <div className="absolute inset-0 z-10 opacity-[0.02] pointer-events-none">
                             <MatrixSpace isVisible={true} />
                         </div>
@@ -560,28 +580,6 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                             </p>
                         )}
                     </motion.div>
-
-
-                    {/* Audio Preview (Digital Products) */}
-                    {audioPreviewUrl && (
-                        <motion.div variants={itemVariants}>
-                            <button
-                                onClick={playPreview}
-                                className={`w-full h-[44px] flex items-center justify-center gap-3 font-mono text-[10px] font-semibold tracking-[0.16em] uppercase transition-all duration-300 rounded-md border
-                                    ${isActivePreview && isPlaying
-                                        ? 'bg-primary/15 text-primary border-primary/40'
-                                        : 'border-border/50 bg-background/40 text-foreground/85 hover:border-primary/40 hover:text-primary'
-                                    }`}
-                            >
-                                {isActivePreview && isPlaying ? (
-                                    <IconPlayerPauseFilled size={13} />
-                                ) : (
-                                    <IconPlayerPlayFilled size={13} />
-                                )}
-                                <span>{isActivePreview && isPlaying ? 'playing' : 'play audio demo'}</span>
-                            </button>
-                        </motion.div>
-                    )}
 
                     {/* ── Divider ── */}
                     <motion.div variants={itemVariants} className="border-t border-border/30" />
