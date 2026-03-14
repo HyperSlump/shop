@@ -4,6 +4,11 @@ import Link from 'next/link';
 import SuccessClient from '@/components/SuccessClient';
 import { getUnifiedProducts } from '@/lib/services/catalog';
 
+function toPlain<T>(value: T): T {
+    if (value === null || value === undefined) return value;
+    return JSON.parse(JSON.stringify(value)) as T;
+}
+
 export default async function SuccessPage({
     searchParams,
 }: {
@@ -111,8 +116,8 @@ export default async function SuccessPage({
     // Fetch all products to pick some physical ones for upsell AND for fallback image matching
     const allProducts = await getUnifiedProducts();
 
-    const digitalItems = [];
-    const physicalItems = [];
+    const digitalItems: Array<Record<string, any>> = []; // eslint-disable-line @typescript-eslint/no-explicit-any
+    const physicalItems: Array<Record<string, any>> = []; // eslint-disable-line @typescript-eslint/no-explicit-any
 
     // Try to get items from metadata first (richer data including images and types)
     const metaJson = getChunkedMetadata(session?.metadata, 'item_details');
@@ -120,29 +125,50 @@ export default async function SuccessPage({
         try {
             const parsed = JSON.parse(metaJson);
             for (const item of parsed) {
-                const catalogProduct = allProducts.find(p =>
-                    p.id === item.id ||
-                    p.productId === item.id ||
-                    p.id === item.v_id ||
-                    p.productId === item.v_id
-                );
+                const variantIdFromCompositeId = typeof item.id === 'string' && item.id.startsWith('pf_')
+                    ? item.id.split('_').pop()
+                    : undefined;
+                const variantId = item.v_id ?? item.variant_id ?? variantIdFromCompositeId;
+                const itemId = item.id || item.price_id || '';
+                const explicitType = String(item.type || '').toUpperCase();
+                const inferredPhysical = explicitType === 'PHYSICAL' || String(itemId).startsWith('pf_') || Boolean(variantId);
 
-                const itemData = {
-                    id: item.id,
-                    name: item.name || catalogProduct?.name || 'Item',
-                    image: item.image || catalogProduct?.image,
-                    amount: item.amount || catalogProduct?.amount || 0,
-                    quantity: item.qty || 1
-                };
+                if (inferredPhysical) {
+                    const physicalCatalog = allProducts.find((p) =>
+                        p.metadata?.type === 'PHYSICAL' && (
+                            p.id === itemId ||
+                            p.productId === itemId ||
+                            p.variants?.some((v) => String(v.id) === String(variantId))
+                        )
+                    );
+                    const matchedVariant = physicalCatalog?.variants?.find((v) => String(v.id) === String(variantId));
+                    const resolvedAmount = Number(
+                        item.amount ??
+                        matchedVariant?.retail_price ??
+                        physicalCatalog?.amount ??
+                        0
+                    );
+                    const parsedQuantity = Number(item.qty ?? item.quantity ?? 1);
 
-                if (item.type === 'PHYSICAL') {
-                    physicalItems.push(itemData);
-                } else {
-                    digitalItems.push({
-                        ...itemData,
-                        id: item.id || item.price_id,
+                    physicalItems.push({
+                        id: itemId || physicalCatalog?.id || String(variantId || 'physical_item'),
+                        name: item.name || physicalCatalog?.name || 'Physical item',
+                        image: item.image || matchedVariant?.image || physicalCatalog?.image,
+                        amount: Number.isFinite(resolvedAmount) ? resolvedAmount : 0,
+                        quantity: Number.isFinite(parsedQuantity) ? Math.max(1, parsedQuantity) : 1,
                     });
+                    continue;
                 }
+
+                const catalogProduct = allProducts.find((p) =>
+                    p.metadata?.type !== 'PHYSICAL' && (p.id === itemId || p.productId === itemId)
+                );
+                digitalItems.push({
+                    id: itemId,
+                    name: item.name || catalogProduct?.name || 'Digital item',
+                    image: item.image || catalogProduct?.image,
+                    amount: Number(item.amount || catalogProduct?.amount || 0),
+                });
             }
         } catch (e) {
             console.error('Metadata parse error:', e);
@@ -154,7 +180,7 @@ export default async function SuccessPage({
     // Fallback/enrich with Stripe's actual line items if metadata is empty or missing
     if (physicalItems.length === 0 && digitalItems.length === 0 && lineItems.length > 0) {
         for (const item of lineItems) {
-            const type = item.metadata?.type || 'DIGITAL';
+            const type = item.metadata?.type || (String(item.price?.id || '').startsWith('pf_') ? 'PHYSICAL' : 'DIGITAL');
             let productImage: string | undefined;
 
             // Check if product is expanded
@@ -176,6 +202,7 @@ export default async function SuccessPage({
                 name: item.description || 'Unknown Item',
                 amount: (item.amount_total || 0) / 100,
                 image: productImage,
+                quantity: item.quantity || 1,
             };
 
             if (type === 'PHYSICAL') {
@@ -203,10 +230,10 @@ export default async function SuccessPage({
 
     return (
         <SuccessClient
-            downloads={downloads}
-            physical={physical}
-            session={session}
-            upsellItems={upsellProducts}
+            downloads={toPlain(downloads)}
+            physical={toPlain(physical)}
+            session={toPlain(session)}
+            upsellItems={toPlain(upsellProducts)}
         />
     );
 }

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { IconArrowLeft, IconCircleCheck, IconDownload, IconPackage, IconArrowRight, IconMail } from '@tabler/icons-react';
+import { IconArrowLeft, IconCircleCheck, IconDownload, IconPackage, IconArrowRight } from '@tabler/icons-react';
 import { getProductFile, FALLBACK_FILE_URL } from '@/lib/products';
 import { Product, useCart } from '@/components/CartProvider';
 import { downloadAsset } from '@/lib/clientDownloads';
@@ -54,6 +54,10 @@ export default function SuccessClient({ downloads, physical, session, upsellItem
                 console.error('Failed to save downloads', e);
             }
         } else {
+            if (physical.length > 0) {
+                setHydratedDownloads([]);
+                return;
+            }
             // Free orders redirect instantly, Supabase might not have data yet. Fallback to localStorage:
             try {
                 const stored = localStorage.getItem('hyperslump-download-items-complete');
@@ -67,7 +71,7 @@ export default function SuccessClient({ downloads, physical, session, upsellItem
                 console.error('Failed to parse fallback downloads', e);
             }
         }
-    }, [downloads, session]);
+    }, [downloads, session, physical.length]);
 
     const markDownloaded = (id: string) => {
         setDownloaded(prev => new Set(prev).add(id));
@@ -97,7 +101,6 @@ export default function SuccessClient({ downloads, physical, session, upsellItem
     };
 
     const hasDigital = hydratedDownloads.length > 0;
-    const hasPhysical = physical.length > 0;
     const allDownloaded = hasDigital && hydratedDownloads.every(item => downloaded.has(item.id));
 
     const handleHomeNav = React.useCallback((event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -230,81 +233,7 @@ export default function SuccessClient({ downloads, physical, session, upsellItem
                     </div>
                 )}
 
-                {/* Order Summary / Physical Items */}
-                {hasPhysical && (
-                    <div className="space-y-6">
-                        <div className="flex items-center justify-between px-1">
-                            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
-                                Physical Order Summary
-                            </h2>
-                        </div>
-
-                        <div className="space-y-1">
-                            {physical.map((item, idx) => (
-                                <div key={idx} className="flex items-center justify-between py-6 border-b border-border/40 last:border-0 group transition-colors">
-                                    <div className="flex items-center gap-5">
-                                        <div className="relative w-16 h-16 bg-foreground/[0.03] border border-border/20 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0">
-                                            {item.image ? (
-                                                <img src={item.image} alt={item.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                                            ) : (
-                                                <IconPackage size={20} className="text-muted-foreground/30" />
-                                            )}
-                                        </div>
-                                        <div>
-                                            <p className="text-[15px] font-semibold text-foreground leading-tight mb-1.5">{item.name}</p>
-                                            <div className="flex items-center gap-2">
-                                                <p className="text-[10px] text-muted-foreground font-mono uppercase tracking-widest bg-foreground/[0.03] px-1.5 py-0.5 rounded border border-border/10">Qty {item.quantity || 1}</p>
-                                                <p className="text-[10px] text-muted-foreground font-mono uppercase tracking-widest opacity-60">Merchandise Item</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="text-[15px] font-bold text-foreground">${(item.amount || 0).toFixed(2)}</p>
-                                    </div>
-                                </div>
-                            ))}
-
-                            {/* Summary Totals - Minimalist Style */}
-                            <div className="pt-8 space-y-4">
-                                <div className="flex items-center justify-between text-sm">
-                                    <span className="text-muted-foreground font-medium uppercase tracking-tight">Subtotal</span>
-                                    <span className="text-foreground font-mono">
-                                        ${((session.amount_subtotal || (physical.reduce((s, i) => s + (i.amount || 0), 0) * 100 + hydratedDownloads.reduce((s, i) => s + (i.amount || 0), 0) * 100)) / 100).toFixed(2)}
-                                    </span>
-                                </div>
-
-                                {((session.total_details?.amount_shipping || 0) > 0) && (
-                                    <div className="flex items-center justify-between text-sm">
-                                        <span className="text-muted-foreground font-medium uppercase tracking-tight">Shipping</span>
-                                        <span className="text-foreground font-mono">${((session.total_details?.amount_shipping || 0) / 100).toFixed(2)}</span>
-                                    </div>
-                                )}
-
-                                {((session.total_details?.amount_tax || 0) > 0) && (
-                                    <div className="flex items-center justify-between text-sm">
-                                        <span className="text-muted-foreground font-medium uppercase tracking-tight">Tax</span>
-                                        <span className="text-foreground font-mono">${((session.total_details?.amount_tax || 0) / 100).toFixed(2)}</span>
-                                    </div>
-                                )}
-
-                                <div className="pt-6 mt-2 border-t border-border/40 flex items-center justify-between">
-                                    <span className="text-[14px] font-bold text-foreground uppercase tracking-[0.2em]">Total</span>
-                                    <span className="text-[24px] font-bold text-foreground font-mono">
-                                        ${((session.amount_total || session.amount || 0) / 100).toFixed(2)}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="flex items-start gap-3 px-2 border-l-2 border-primary/20 bg-primary/[0.02] py-4 rounded-r-xl">
-                            <IconMail size={16} className="text-primary mt-0.5" />
-                            <p className="text-[11px] text-muted-foreground/80 leading-relaxed italic">
-                                Tracking details will be transmitted to <span className="text-foreground font-medium">{session.customer_details?.email || 'your email address'}</span> once the shipment enters transit.
-                            </p>
-                        </div>
-                    </div >
-                )
-                }
+                {/* Physical order summary removed per request */}
 
 
                 {/* Newsletter Signup (Stripe Official Style) */}
@@ -384,24 +313,7 @@ export default function SuccessClient({ downloads, physical, session, upsellItem
                 }
             </motion.div >
 
-            {/* Footer */}
-            < motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.4, delay: 0.3 }}
-                className="mt-20 pt-8 border-t border-border/40"
-            >
-                <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-[10px] text-muted-foreground/40 font-mono uppercase tracking-[0.1em]">
-                    <div className="flex items-center gap-1.5">
-                        <span>Powered by</span>
-                        <span className="font-bold text-muted-foreground">stripe</span>
-                        <span className="mx-1">|</span>
-                        <a href="#" className="hover:underline">Terms</a>
-                        <a href="#" className="hover:underline">Privacy</a>
-                    </div>
-                    <span>© hyper$lump. Protocol secure.</span>
-                </div>
-            </motion.div >
+            {/* Footer removed per request */}
         </div >
     );
 }

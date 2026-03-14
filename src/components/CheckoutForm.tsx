@@ -11,12 +11,15 @@ import {
     useElements,
 } from '@stripe/react-stripe-js';
 import { IconLock } from '@tabler/icons-react';
+import type { ShippingAddress } from './ShippingForm';
 
 interface CheckoutFormProps {
     amount: number;
     billingSameAsShipping: boolean;
     setBillingSameAsShipping: (val: boolean) => void;
-    checkoutAddress: any | null;
+    checkoutAddress: ShippingAddress | null;
+    requiresShipping?: boolean;
+    shippingReady?: boolean;
     isDark?: boolean;
     hasInvalidPhysicalQuantities?: boolean;
     onInvalidQuantityAttempt?: () => void;
@@ -27,6 +30,8 @@ export default function CheckoutForm({
     billingSameAsShipping,
     setBillingSameAsShipping,
     checkoutAddress,
+    requiresShipping = false,
+    shippingReady = true,
     isDark = true,
     hasInvalidPhysicalQuantities = false,
     onInvalidQuantityAttempt,
@@ -42,10 +47,15 @@ export default function CheckoutForm({
     const divider = 'bg-border';
     const errorBox = 'bg-alert/10 border border-alert/30 text-alert';
     const submitButton = 'bg-primary text-primary-foreground shadow-[0_0_0_1px_rgba(255,255,255,0.1),0_2px_8px_rgba(0,0,0,0.24)] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.2),0_4px_16px_rgba(0,0,0,0.34)]';
+    const shippingBlocked = requiresShipping && !shippingReady;
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!stripe || !elements) return;
+        if (shippingBlocked) {
+            setMessage('Enter shipping details and wait for a shipping quote before completing payment.');
+            return;
+        }
         if (hasInvalidPhysicalQuantities) {
             setMessage('Choose a quantity above 0 or remove the highlighted item(s).');
             onInvalidQuantityAttempt?.();
@@ -73,6 +83,10 @@ export default function CheckoutForm({
 
     const onExpressCheckoutConfirm = async () => {
         if (!stripe || !elements) return;
+        if (shippingBlocked) {
+            setMessage('Enter shipping details and wait for a shipping quote before completing payment.');
+            return;
+        }
         if (hasInvalidPhysicalQuantities) {
             setMessage('Choose a quantity above 0 or remove the highlighted item(s).');
             onInvalidQuantityAttempt?.();
@@ -93,29 +107,33 @@ export default function CheckoutForm({
 
     return (
         <form id="payment-form" onSubmit={handleSubmit} className="font-sans antialiased">
-            <div className="mb-8">
-                <ExpressCheckoutElement
-                    onConfirm={onExpressCheckoutConfirm}
-                    options={{
-                        buttonType: {
-                            applePay: 'buy',
-                            googlePay: 'buy',
-                        },
-                        buttonTheme: {
-                            applePay: isDark ? 'white-outline' : 'black',
-                            googlePay: isDark ? 'white' : 'black',
-                        }
-                    }}
-                />
-            </div>
+            {!requiresShipping && (
+                <>
+                    <div className="mb-8">
+                        <ExpressCheckoutElement
+                            onConfirm={onExpressCheckoutConfirm}
+                            options={{
+                                buttonType: {
+                                    applePay: 'buy',
+                                    googlePay: 'buy',
+                                },
+                                buttonTheme: {
+                                    applePay: isDark ? 'white-outline' : 'black',
+                                    googlePay: isDark ? 'white' : 'black',
+                                }
+                            }}
+                        />
+                    </div>
 
-            <div className="flex items-center gap-4 mb-8">
-                <div className={`flex-1 h-px ${divider}`} />
-                <span className={`text-[13px] whitespace-nowrap font-medium ${mutedText}`}>
-                    Or pay another way
-                </span>
-                <div className={`flex-1 h-px ${divider}`} />
-            </div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <div className={`flex-1 h-px ${divider}`} />
+                        <span className={`text-[13px] whitespace-nowrap font-medium ${mutedText}`}>
+                            Or pay another way
+                        </span>
+                        <div className={`flex-1 h-px ${divider}`} />
+                    </div>
+                </>
+            )}
 
             <div className="mb-8">
                 <label className={`block text-sm font-medium mb-3 ${labelText}`}>
@@ -203,7 +221,7 @@ export default function CheckoutForm({
             )}
 
             <button
-                disabled={isLoading || !stripe || !elements}
+                disabled={isLoading || !stripe || !elements || shippingBlocked}
                 type="submit"
                 className={`group relative w-full h-[48px] rounded-md font-mono text-[11px] font-bold uppercase tracking-[0.2em] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer ${submitButton}`}
             >

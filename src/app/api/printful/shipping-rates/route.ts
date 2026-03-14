@@ -68,6 +68,7 @@ export async function POST(req: Request) {
             };
 
             const catalogCandidates = [
+                item.catalog_variant_id,
                 item.metadata?.catalog_variant_id,
                 item.selectedCatalogVariantId,
                 item.variants?.find((v: any) => String(v.id) === String(item.selectedVariantId))?.catalog_variant_id,
@@ -77,6 +78,7 @@ export async function POST(req: Request) {
                 .filter((value) => value !== undefined) as number[];
 
             const syncCandidates = [
+                item.sync_variant_id,
                 item.metadata?.variant_id,
                 item.selectedVariantId,
                 item.variants?.[0]?.id

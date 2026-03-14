@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { IconArrowLeft, IconChevronDown, IconLock, IconTruck, IconAlertTriangle, IconTrash, IconMinus, IconPlus, IconX } from '@tabler/icons-react';
 import AestheticBackground from '@/components/AestheticBackground';
+import { buildPrintfulShippingItems } from '@/lib/printful/shippingPayload';
 
 interface ShippingRateOption {
     id: string;
@@ -112,6 +113,7 @@ export default function CheckoutPage() {
     const [taxCalculationId, setTaxCalculationId] = useState<string>('');
     const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
     const [checkoutAddress, setCheckoutAddress] = useState<ShippingAddress | null>(null);
+    const [isIntentShippingSynced, setIsIntentShippingSynced] = useState(false);
     const [isCalculating, setIsCalculating] = useState(false);
     const [isRefreshingQuote, setIsRefreshingQuote] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -127,6 +129,7 @@ export default function CheckoutPage() {
     const quoteSnapshotRef = useRef({ selectedShippingId: '', shippingCost: 0, taxCost: 0 });
     const taxCostRef = useRef(0);
     const taxCalculationIdRef = useRef('');
+    const refreshIntentSeqRef = useRef(0);
 
     const hasPhysicalItems = cart.some(item => item.metadata?.type === 'PHYSICAL');
     const invalidPhysicalItemIds = cart
@@ -369,6 +372,7 @@ export default function CheckoutPage() {
         taxAmount: number = taxCostRef.current,
         taxCalcId: string = taxCalculationIdRef.current
     ) => {
+        const requestSeq = ++refreshIntentSeqRef.current;
         try {
             const recipientData = address ? {
                 name: `${address.firstName} ${address.lastName}`.trim(),
@@ -378,6 +382,16 @@ export default function CheckoutPage() {
                 zip: address.zip,
                 country_code: address.country_code
             } : null;
+            const hasShippingPayload = Boolean(
+                recipientData?.address1 &&
+                recipientData?.city &&
+                recipientData?.zip &&
+                recipientData?.country_code &&
+                shippingId
+            );
+            if (hasPhysicalItems && !hasShippingPayload) {
+                setIsIntentShippingSynced(false);
+            }
 
             const response = await fetch('/api/create-payment-intent', {
                 method: 'POST',
@@ -400,6 +414,9 @@ export default function CheckoutPage() {
             }
 
             const data = await response.json();
+            if (requestSeq !== refreshIntentSeqRef.current) {
+                return;
+            }
             if (data.freeOrder) {
                 // Zero-cost order — email already sent, redirect to success page
                 // Success page clears the cart on mount, so no need to do it here.
@@ -413,12 +430,18 @@ export default function CheckoutPage() {
                 // This ensures it resets to 0 if the server says it's 0 (e.g. non-taxable address)
                 setTaxCost(data.amount_tax || 0);
                 setTaxCalculationId(data.tax_calculation_id || '');
+                if (hasPhysicalItems) {
+                    setIsIntentShippingSynced(hasShippingPayload);
+                }
             }
         } catch (err: any) {
             console.error('Intent error:', err);
             setError(err.message);
+            if (hasPhysicalItems) {
+                setIsIntentShippingSynced(false);
+            }
         }
-    }, [cart, paymentIntentId, isDark]);
+    }, [cart, paymentIntentId, isDark, hasPhysicalItems]);
 
     useEffect(() => {
         if (cart.length > 0 && hasCheckoutEligibleItems && !clientSecret && !isFreeOrder) {
@@ -449,6 +472,7 @@ export default function CheckoutPage() {
 
     useEffect(() => {
         if (hasPhysicalItems) return;
+        setIsIntentShippingSynced(false);
         setTaxCalculationId('');
         setShippingCost(0);
         setTaxCost(0);
@@ -571,6 +595,7 @@ export default function CheckoutPage() {
         if (!normalizedAddress.address1 || !normalizedAddress.city || !normalizedAddress.country_code || !normalizedAddress.zip) {
             setShippingRateOptions([]);
             setSelectedShippingId('');
+            setIsIntentShippingSynced(false);
             if (!hasExistingQuote) {
                 setShippingCost(0);
                 setTaxCost(0);
@@ -592,8 +617,25 @@ export default function CheckoutPage() {
             return;
         }
 
+        const shippingItems = buildPrintfulShippingItems(cart);
+        if (shippingItems.length === 0) {
+            setShippingRateOptions([]);
+            setSelectedShippingId('');
+            setIsIntentShippingSynced(false);
+            setShippingCost(0);
+            setTaxCost(0);
+            setTaxCalculationId('');
+            setHasSeededEstimate(false);
+            setShippingError('Unable to calculate shipping for the selected items.');
+            setIsRefreshingQuote(false);
+            lastQuotedAddressKeyRef.current = '';
+            pendingAddressQuoteKeyRef.current = '';
+            return;
+        }
+
         pendingAddressQuoteKeyRef.current = nextAddressQuoteKey;
         setIsCalculating(true);
+        setIsIntentShippingSynced(false);
         setIsRefreshingQuote(hasExistingQuote);
         setShippingError(null);
         try {
@@ -608,7 +650,7 @@ export default function CheckoutPage() {
                         country_code: normalizedAddress.country_code,
                         zip: normalizedAddress.zip
                     },
-                    items: cart
+                    items: shippingItems
                 })
             });
 
@@ -641,12 +683,28 @@ export default function CheckoutPage() {
                     lastQuotedAddressKeyRef.current = nextAddressQuoteKey;
                 }
             } else {
-                const errorData = await res.json().catch(() => ({}));
-                console.error('>>> [CHECKOUT_PAGE] API Error:', errorData);
+                const errorText = await res.text();
+                let errorData: any = null;
+                let errorMessage = res.statusText || 'Failed to calculate shipping';
+                if (errorText) {
+                    try {
+                        errorData = JSON.parse(errorText);
+                        if (errorData?.error) {
+                            errorMessage = errorData.error;
+                        }
+                    } catch {
+                        errorMessage = errorText;
+                    }
+                }
+                console.error('>>> [CHECKOUT_PAGE] API Error:', {
+                    status: res.status,
+                    statusText: res.statusText,
+                    body: errorData ?? errorText
+                });
                 if (hasExistingQuote) {
                     setShippingError('Unable to refresh shipping quote. Showing last known quote.');
                 } else {
-                    setShippingError(errorData.error || 'Failed to calculate shipping');
+                    setShippingError(errorMessage || 'Failed to calculate shipping');
                     setShippingRateOptions([]);
                     setSelectedShippingId('');
                     setShippingCost(0);
@@ -679,6 +737,7 @@ export default function CheckoutPage() {
     const handleRateSelect = async (rate: ShippingRateOption) => {
         if (isCalculating || rate.id === selectedShippingId) return;
         setIsCalculating(true);
+        setIsIntentShippingSynced(false);
         try {
             setSelectedShippingId(rate.id);
             const cost = parseFloat(rate.rate);
@@ -707,6 +766,23 @@ export default function CheckoutPage() {
     };
 
     const finalTotal = cartTotal + shippingCost + taxCost;
+    const hasCompleteShippingAddress = Boolean(
+        checkoutAddress &&
+        (checkoutAddress.firstName || '').trim() &&
+        (checkoutAddress.lastName || '').trim() &&
+        (checkoutAddress.address1 || '').trim() &&
+        (checkoutAddress.city || '').trim() &&
+        (checkoutAddress.state_code || '').trim() &&
+        (checkoutAddress.country_code || '').trim() &&
+        (checkoutAddress.zip || '').trim()
+    );
+    const shippingReadyForPayment = !hasPhysicalItems || (
+        hasCompleteShippingAddress &&
+        Boolean(selectedShippingId) &&
+        !isCalculating &&
+        !isEstimatingShipping &&
+        isIntentShippingSynced
+    );
     const showingPrefillEstimate = hasPhysicalItems && !checkoutAddress?.address1 && (hasSeededEstimate || isEstimatingShipping);
     const hasQuoteContext = Boolean(checkoutAddress?.address1 || hasSeededEstimate);
     const shippingDisplayValue = (isCalculating && !isRefreshingQuote)
@@ -1027,6 +1103,8 @@ export default function CheckoutPage() {
                                         billingSameAsShipping={billingSameAsShipping}
                                         setBillingSameAsShipping={setBillingSameAsShipping}
                                         checkoutAddress={checkoutAddress}
+                                        requiresShipping={hasPhysicalItems}
+                                        shippingReady={shippingReadyForPayment}
                                         hasInvalidPhysicalQuantities={hasInvalidPhysicalQuantities}
                                         onInvalidQuantityAttempt={handleInvalidQuantityAttempt}
                                     />

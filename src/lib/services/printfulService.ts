@@ -212,14 +212,18 @@ class PrintfulService {
             });
 
             if (!response.ok) {
-                throw new Error(`Printful API error: ${response.statusText}`);
+                const errText = await response.text();
+                throw new Error(`Printful API error: ${response.status} - ${errText}`);
             }
 
             const data = await response.json();
+            if (!data?.result) {
+                throw new Error('Printful API returned empty order result');
+            }
             return data.result;
-        } catch (error) {
-            console.error('Failed to create Printful order:', error);
-            return null;
+        } catch (error: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
+            console.error('Failed to create Printful order:', error?.message || error);
+            throw error;
         }
     }
 }

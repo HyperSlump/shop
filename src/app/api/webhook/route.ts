@@ -106,31 +106,63 @@ export async function POST(req: Request) {
 
         // 2. Physical Fulfillment — Printful draft order
         const physicalItems = items.filter((item: any) => item.type === 'PHYSICAL') // eslint-disable-line @typescript-eslint/no-explicit-any
-        const shipping = object.shipping
+        const shippingDetails = isSession ? object.shipping_details : object.shipping
+        const fallbackAddress = object.customer_details?.address
+        const shippingAddress = shippingDetails?.address || fallbackAddress
+        const shippingName = shippingDetails?.name || object.customer_details?.name || object.shipping?.name
+        const hasShippingAddress = Boolean(
+            shippingAddress?.line1 &&
+            shippingAddress?.city &&
+            shippingAddress?.country &&
+            shippingAddress?.postal_code
+        )
 
-        if (physicalItems.length > 0 && shipping) {
+        if (physicalItems.length > 0 && !hasShippingAddress) {
+            console.error('>>> [WEBHOOK] Missing shipping payload for physical order:', {
+                id: object.id,
+                type: event.type,
+            })
+        }
+
+        if (physicalItems.length > 0 && hasShippingAddress) {
             try {
+                const printfulItems = physicalItems.map((item: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
+                    const rawVariantId = item.v_id ?? item.variant_id
+                    const parsedVariantId = Number.parseInt(String(rawVariantId), 10)
+                    if (!Number.isFinite(parsedVariantId)) {
+                        throw new Error(`Invalid Printful sync_variant_id for item ${item.id || item.name || 'unknown'}`)
+                    }
+
+                    const rawQuantity = item.qty ?? item.quantity ?? 1
+                    const parsedQuantity = Number.parseInt(String(rawQuantity), 10)
+                    const quantity = Number.isFinite(parsedQuantity)
+                        ? Math.max(1, Math.min(10, parsedQuantity))
+                        : 1
+
+                    return {
+                        sync_variant_id: parsedVariantId,
+                        quantity,
+                    }
+                })
+
                 const orderData = {
                     shipping: metadata.shipping_id || 'STANDARD',
                     recipient: {
-                        name: shipping.name,
-                        address1: shipping.address.line1,
-                        city: shipping.address.city,
-                        state_code: shipping.address.state,
-                        country_code: shipping.address.country,
-                        zip: shipping.address.postal_code,
+                        name: shippingName,
+                        address1: shippingAddress.line1,
+                        city: shippingAddress.city,
+                        state_code: shippingAddress.state,
+                        country_code: shippingAddress.country,
+                        zip: shippingAddress.postal_code,
                         email: customerEmail,
                     },
-                    items: physicalItems.map((item: any) => ({ // eslint-disable-line @typescript-eslint/no-explicit-any
-                        sync_variant_id: parseInt(item.variant_id),
-                        quantity: 1,
-                    })),
+                    items: printfulItems,
                     external_id: object.id,
                 }
 
-                // Draft order — approve manually in Printful dashboard before fulfillment
-                await printfulService.createOrder(orderData, 'draft')
-                console.log('>>> [WEBHOOK] Printful Draft Order Created:', object.id)
+                // Auto-fulfill in Printful (creates order as pending)
+                const createdOrder = await printfulService.createOrder(orderData, 'pending')
+                console.log('>>> [WEBHOOK] Printful Order Created (pending):', object.id, '->', createdOrder?.id)
             } catch (err) {
                 console.error('Printful fulfillment error:', err)
             }

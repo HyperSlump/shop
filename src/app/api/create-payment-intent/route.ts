@@ -146,12 +146,18 @@ export async function POST(req: Request) {
         console.log('>>> [STRIPE_API] Requesting PaymentIntent from Stripe...');
 
         let paymentIntent;
-        const itemDetailsStr = JSON.stringify(cart.map((item: any) => ({
-            id: item.id,
-            type: item.metadata?.type || 'DIGITAL',
-            v_id: item.metadata?.variant_id || item.selectedVariantId,
-            qty: normalizeLineQuantity(item)
-        })));
+        const itemDetailsStr = JSON.stringify(cart.map((item: any) => {
+            const variantId = item.metadata?.variant_id || item.selectedVariantId || null;
+            const quantity = normalizeLineQuantity(item);
+            return {
+                id: item.id,
+                type: item.metadata?.type || 'DIGITAL',
+                v_id: variantId,
+                variant_id: variantId,
+                qty: quantity,
+                quantity,
+            };
+        }));
 
         const metadata: any = {
             items: cart.slice(0, 3).map((item: any) => `${(item.name || 'Item').substring(0, 20)}`).join(', ') + (cart.length > 3 ? '...' : ''),

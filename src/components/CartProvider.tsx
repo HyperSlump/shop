@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { buildPrintfulShippingItems } from '@/lib/printful/shippingPayload';
 
 export type Product = {
   id: string; // This is the Price ID or pf_id
@@ -105,8 +106,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   // Handle estimated shipping
   useEffect(() => {
-    const physicalItems = cart.filter(item => item.metadata?.type === 'PHYSICAL');
-    if (!isMounted || physicalItems.length === 0 || !locationEstimate) {
+    const shippingItems = buildPrintfulShippingItems(cart);
+    if (!isMounted || shippingItems.length === 0 || !locationEstimate) {
       setEstimatedShipping(null);
       setEstimatedTax(null);
       return;
@@ -124,7 +125,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
               country_code: locationEstimate.country,
               state_code: locationEstimate.region,
             },
-            items: cart
+            items: shippingItems
           })
         });
 
