@@ -8,6 +8,7 @@ import { IconPlayerPauseFilled, IconPlayerPlayFilled, IconWaveSine } from '@tabl
 import type { Product } from './CartProvider';
 import { usePreviewPlayer } from './PreviewPlayerProvider';
 import { useIsDarkMode } from '@/hooks/useIsDarkMode';
+import { getPreviewAudioConfig } from '@/lib/previewAudio';
 import { getThemeAwareProductImage, getThemePreferredPrintfulVariant } from '@/lib/themeAwarePrintfulImage';
 
 interface ProductCardProps {
@@ -20,9 +21,13 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
     const { playTrack, isTrackActive, isPlaying, isOpen, registerTrack, unregisterTrack } = usePreviewPlayer();
     const isDark = useIsDarkMode();
     const isPhysical = product.metadata?.type === 'PHYSICAL';
+    const previewAudio = useMemo(
+        () => (!isPhysical ? getPreviewAudioConfig(product.metadata) : null),
+        [isPhysical, product.metadata]
+    );
+    const audioPreviewUrl = previewAudio?.audioUrl ?? '';
 
     useEffect(() => {
-        const audioPreviewUrl = !isPhysical && typeof product.metadata?.audio_preview === 'string' ? product.metadata.audio_preview : '';
         if (audioPreviewUrl) {
             const oneShotCount = typeof product.metadata?.count === 'string' ? product.metadata.count : '140';
             const formatLabel = typeof product.metadata?.format === 'string' ? product.metadata.format.toUpperCase() : 'WAV';
@@ -32,11 +37,13 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
                 subtitle: `${formatLabel} / ${oneShotCount} one-shots`,
                 image: product.image,
                 audioUrl: audioPreviewUrl,
+                loopStart: previewAudio?.loopStart,
+                loopEnd: previewAudio?.loopEnd,
                 cartProduct: product,
             });
         }
         return () => unregisterTrack(product.id);
-    }, [isPhysical, product, registerTrack, unregisterTrack]);
+    }, [audioPreviewUrl, previewAudio?.loopEnd, previewAudio?.loopStart, product, registerTrack, unregisterTrack]);
     const themePreferredVariant = useMemo(
         () => {
             if (!isPhysical || isDark === null) return null;
@@ -51,7 +58,6 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
         },
         [product, isDark]
     );
-    const audioPreviewUrl = !isPhysical && typeof product.metadata?.audio_preview === 'string' ? product.metadata.audio_preview : '';
     const oneShotCount = typeof product.metadata?.count === 'string' ? product.metadata.count : '140';
     const formatLabel = typeof product.metadata?.format === 'string' ? product.metadata.format.toUpperCase() : 'WAV';
     const href = `/product/${product.id}`;
@@ -105,6 +111,8 @@ export default function ProductCard({ product, isInCart, onAddToCart }: ProductC
             subtitle: `${formatLabel} / ${oneShotCount} one-shots`,
             image: product.image,
             audioUrl: audioPreviewUrl,
+            loopStart: previewAudio?.loopStart,
+            loopEnd: previewAudio?.loopEnd,
             cartProduct: product,
         });
     };

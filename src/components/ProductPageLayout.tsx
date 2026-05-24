@@ -10,6 +10,7 @@ import { useCart, Product } from './CartProvider';
 import { usePreviewPlayer } from './PreviewPlayerProvider';
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useIsDarkMode } from '@/hooks/useIsDarkMode';
+import { getPreviewAudioConfig } from '@/lib/previewAudio';
 import { getThemePreferredPrintfulVariant } from '@/lib/themeAwarePrintfulImage';
 
 interface ProductPageLayoutProps {
@@ -61,7 +62,11 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
     const isDark = useIsDarkMode();
     const isPhysical = product.metadata?.type === 'PHYSICAL';
     const isDigital = !isPhysical;
-    const audioPreviewUrl = !isPhysical ? product.metadata?.audio_preview : undefined;
+    const previewAudio = useMemo(
+        () => (!isPhysical ? getPreviewAudioConfig(product.metadata) : null),
+        [isPhysical, product.metadata]
+    );
+    const audioPreviewUrl = previewAudio?.audioUrl;
     const formatLabel = typeof product.metadata?.format === 'string' ? product.metadata.format.toUpperCase() : 'WAV';
     const oneShotCount = typeof product.metadata?.count === 'string' ? product.metadata.count : '140';
 
@@ -76,11 +81,13 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
                 subtitle: `${formatLabel} / ${oneShotCount} one-shots`,
                 image: product.image,
                 audioUrl: audioPreviewUrl,
+                loopStart: previewAudio?.loopStart,
+                loopEnd: previewAudio?.loopEnd,
                 cartProduct: product,
             });
         }
         return () => unregisterTrack(product.id);
-    }, [product, audioPreviewUrl, formatLabel, oneShotCount, registerTrack, unregisterTrack]);
+    }, [audioPreviewUrl, formatLabel, oneShotCount, previewAudio?.loopEnd, previewAudio?.loopStart, product, registerTrack, unregisterTrack]);
 
     const isActivePreview = isOpen && isTrackActive(product.id);
 
@@ -92,6 +99,8 @@ export default function ProductPageLayout({ product }: ProductPageLayoutProps) {
             subtitle: `${formatLabel} / ${oneShotCount} one-shots`,
             image: product.image,
             audioUrl: audioPreviewUrl,
+            loopStart: previewAudio?.loopStart,
+            loopEnd: previewAudio?.loopEnd,
             cartProduct: product,
         });
     };
